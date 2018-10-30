@@ -1,5 +1,8 @@
 <template>
 	<div class="search-wrap">
+		<div class="status-bar">
+			
+		</div>
 		<div class="search-container">
 			<i class="iconfont icon-left" @click="this.$Tool.goBack"></i>
 			<div class="search-box">
@@ -15,7 +18,7 @@
 		</ul>
 		<!-- 热词 -->
 		<ul class="search-key" v-show="!searchResult.length">
-			<li class="hotkey-li" v-for="(item,index) in hotKeywords" @click="quickSearch(item.keyword)">
+			<li class="hotkey-li oe" v-for="(item,index) in hotKeywords" @click="quickSearch(item.keyword)">
 				{{item.keyword}}
 			</li>
 		</ul>
@@ -278,6 +281,11 @@ export default {
 	.hotkey-li {
 		flex: 1;
 		border-right: .04em solid #e8e8e8;
+		padding:0 3px;
+		overflow: hidden;
+	}
+	.hotkey-li:nth-child(3n){
+		border: 0;
 	}
 	.search-key a:last-child{
 		border: none;

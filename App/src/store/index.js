@@ -15,6 +15,7 @@ function State(){
   this.newVersion = 0; //0 已最新 1有更新
   this.currentVersion = null;
   this.forbidSwiper = true;
+  this.notWifi = false;//费WIFI网络播放提示
 }
 // let state = {
 //   token:window.localStorage.getItem('token'),

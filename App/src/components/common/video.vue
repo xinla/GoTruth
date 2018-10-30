@@ -20,6 +20,7 @@
 </template>
 <script>
 import config from '@/lib/config/config'
+import netUtil from "@/service/util/netUtil"
 import articleFileService from '@/service/article_fileService'
 import articleCommentService from '@/service/article_commentService'
 import userService from '@/service/userService'
@@ -109,7 +110,31 @@ export default {
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
 		onPlayerPlay(e){
-			this.$emit("allPause",this.whi);
+			if (this.$store.state.notWifi) {
+				this.$emit("allPause",this.whi);				
+			}else{
+				this.pause();
+				let _this = this,
+					net = {};
+				try{
+					net = netUtil.getNetInfo();					
+				}catch(e){
+
+				}
+				if (net.network !="WiFi网络") {
+					this.$vux.confirm.show({
+						title:"温馨提示",
+						content:"当前处于非WIFI网络下，是否继续播放",
+						onConfirm(){
+							_this.$store.state.notWifi = true;
+							_this.onPlayerPlay();
+						}
+					})					
+				}else{
+					this.$store.state.notWifi = true;
+					this.onPlayerPlay();
+				}
+			}
 		},
 		pause(){
 			this.$refs.videoPlayer.player.pause();
@@ -164,21 +189,5 @@ export default {
 		height:50px;
 	    font-size: 50px;
 	    color: #666;		
-	}
-</style>
-<style>	
-	.vjs-custom-skin > .video-js .vjs-big-play-button{
-		width: 1rem;
-		height: 1rem !important;
-	    font-size: .6rem !important;
-		border-radius: 50%;
-		/*margin: 0 !important;*/
-		transform: translate(-50%,-50%);
-		line-height: 1rem !important;
-		border: 2px solid #eee;
-	}
-	/*去除音量按钮*/
-	.video-js .vjs-volume-panel{
-		display: none !important;
 	}
 </style>

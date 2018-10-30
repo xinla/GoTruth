@@ -23,7 +23,6 @@
 				</div>
 			</div>
 			<div class="main" ref="main">
-				<loading-main v-show="ifLoad"></loading-main>
 				<swiper v-model="classifyIndex" :height="swiperHeight + 'px'" :show-dots="false" :threshold="150" >
 			        <swiper-item>
 			          	<listArticle :show="0 == classifyIndex"></listArticle>
@@ -62,7 +61,6 @@ import articleClassifyService from '@/service/article_classifyService'
 		data(){
 			return {
 				showMore:false,
-				ifLoad:true,
 				classifyList:[
 					{	
 						classifycode:1,
@@ -111,7 +109,6 @@ import articleClassifyService from '@/service/article_classifyService'
 	    			this.classifyList = JSON.parse(localStorage.classify);
 	    		}
 	    	})
-    		this.ifLoad = false;
 	    },
 		methods:{
 			//导航栏添加弹出popup

@@ -93,7 +93,6 @@ export default {
   activated() {
   	this.$nextTick(()=>{
       this.loadUser();
-      this.loadDayNight();     
   	})  
   },
   data() {

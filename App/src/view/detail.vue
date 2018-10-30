@@ -35,7 +35,8 @@
 							<video-player class="video-player vjs-custom-skin" 
 								ref="videoPlayer"
 							 	:playsinline="true"
-							  	:options="playerOptions">							  	
+							  	:options="playerOptions"
+							  	@play="onPlayerPlay()">	  	
 							</video-player>	
 							<!-- :src="fileRoot + ArticleFile[0].url"			 -->
 						</div>
@@ -1179,8 +1180,32 @@ export default {
 		textShow(){
 			this.popList.show = true;
 			this.$refs.popFocus.focus();
+		},
+		onPlayerPlay(){
+			if (!this.$store.state.notWifi) {
+				this.pause();
+				let _this = this,
+					net = {};
+				try{
+					net = netUtil.getNetInfo();					
+				}catch(e){
+
+				}
+				if (net.network !="WiFi网络") {
+					this.$vux.confirm.show({
+						title:"温馨提示",
+						content:"当前处于非WIFI网络下，是否继续播放",
+						onConfirm(){
+							_this.$store.state.notWifi = true;
+							_this.onPlayerPlay();
+						}
+					})					
+				}
+			}
+		},
+		pause(){
+			this.$refs.videoPlayer.player.pause();
 		}
-		
 	},
 	watch:{
 		id(){
@@ -1202,7 +1227,7 @@ export default {
 <style lang="less" scoped>
 	.detail{
 		position: relative;
-		height: calc(100% - .87rem);
+		height: calc(100% - 1.5rem);
 		overflow: hidden;
 		overflow-y: auto;
 		padding: 0 .3rem .88rem .3rem;

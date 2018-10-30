@@ -1,20 +1,33 @@
 <template>
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
 		<div>				
-			<loading-main v-show="!arcList.length"></loading-main>
+			<prompt-blank v-if="ifNet" mes="断网啦..."></prompt-blank>
+			<loading-main v-else-if="!arcList.length"></loading-main>
 			<multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
-			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>		
+			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>
 		</div>
 	</downRefresh>
 </template>
 
 <script>
+import netUtil from "@/service/util/netUtil"
 import downRefresh from '@/components/common/downRefresh'
-
 import articleService from '@/service/articleService'
 export default {
 	components:{
 		downRefresh,
+	},
+	data(){
+		return {
+			arcList:[],
+			page:1,
+			lock:false,
+			ifLoad:true,
+			scrollTop:0,	
+			total:0,
+			ifNew:false,
+			ifNet:false,	
+		}
 	},
 	props:{
 		classify:{
@@ -28,21 +41,20 @@ export default {
 	},
 	mounted () {
 		this.$nextTick(()=>{
+			let net = {}
+			try{
+				net = netUtil.getNetInfo();					
+			}catch(e){
+
+			}
+			if (net.network == "未连接网络") {
+				this.ifNet = true;
+				return;
+			}
 			if (!this.classify) {
 				this.init();				
 			}
 		})
-	},
-	data(){
-		return {
-			arcList:[],
-			page:1,
-			lock:false,
-			ifLoad:true,
-			scrollTop:0,	
-			total:0,
-			ifNew:false,		
-		}
 	},
 	methods:{
 		init(){

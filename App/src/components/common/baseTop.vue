@@ -43,7 +43,7 @@ export default{
 	}
 	.router-view {
 		width: 100%;
-	    height: calc(100vh - 0.87rem);
+	    height: calc(100vh - 1.3rem) !important;
 		position: absolute;
 		transition: all .3s cubic-bezier(.55,0,.1,1);
 	}

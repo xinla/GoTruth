@@ -352,6 +352,7 @@
 				})
 			},
 			uploadAvatar(e){
+				debugger
 				let file = e.target.files[0]; 
 				// console.log(file)  
 				if (!file) {return;}
@@ -382,7 +383,8 @@
 					this.photOption.img = data;
 					this.uploadImgName = file.name;
 				}
-				fileReader.onerror = function(){
+				fileReader.onerror = ()=>{
+					this.$vux.loading.hide();
 			    	this.$vux.alert.show({
 					  content:'文件读取失败，请重试',
 					})
@@ -590,6 +592,9 @@
 </script>
 
 <style lang="less" scoped>
+	.mask{
+		z-index:999;
+	}
 	.editInfo-wrap{
 		// margin-top: @topHeigth + .18rem;
 		height: calc( 100vh - .87rem);

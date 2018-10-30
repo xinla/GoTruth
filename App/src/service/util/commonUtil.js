@@ -1,9 +1,19 @@
+import netUitl from "./netUtil"
 const util ={
 	// test: controller+'/test'
 }
 
 util.ajaxAsync = function(url,params){
-	var res = null;
+	let res = null,net = {};
+	try{
+		net = netUtil.getNetInfo();					
+	}catch(e){
+
+	}
+	if (net.network == "未连接网络") {
+		res = "网络断开啦";
+		return res;
+	}
 
 	$.ajax({
 		url: url,
@@ -20,7 +30,19 @@ util.ajaxAsync = function(url,params){
 
 }
 util.ajax = function(url,params,call){
+	let res = null,net = {};
+	try{
+		net = netUtil.getNetInfo();					
+	}catch(e){
 
+	}
+	if (net.network == "未连接网络") {
+		res = "网络断开啦";
+		if (call) {
+			call(res);		
+		}
+		return;
+	}
 	$.post(url,params,function(data){
 		if (call) {
 			call(data);		

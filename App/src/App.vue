@@ -168,10 +168,11 @@ export default {
   #app,.router-view-app {
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   .status-bar{
     padding-top: 22px;
+    background: #aaa;
   }
 .router-view-app {
   position: absolute;
@@ -189,4 +190,19 @@ export default {
 .weui-toast_text .weui-toast__content{
   line-height: 22px;
 }
+/*video paly UI设置*/
+.vjs-custom-skin > .video-js .vjs-big-play-button{
+    width: 1rem;
+    height: 1rem !important;
+      font-size: .6rem !important;
+    border-radius: 50%;
+    /*margin: 0 !important;*/
+    transform: translate(-50%,-50%);
+    line-height: 1rem !important;
+    border: 2px solid #eee;
+  }
+  /*去除音量按钮*/
+  .video-js .vjs-volume-panel{
+    display: none !important;
+  }
 </style>
