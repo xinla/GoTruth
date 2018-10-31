@@ -56,7 +56,7 @@ export default {
 		},
 		getHotKeywords(){
 			searchService.getHotKeyword(data=>{
-				if (data && data.status == "success") { 
+				if (data && data.status == "success") {
 					this.keywords = data.recordList;
 				}
 			});
@@ -115,18 +115,18 @@ export default {
 				width: 2.72rem;
 				position: absolute;
 				right: .14rem;
-				top: 1.08rem;
+				top: 1.52rem;
 				border-radius: .14rem;
 				background-color:#595959;
 				z-index: 12;
 				.arrow-tip{
-					width: 0;   
-					height: 0;   
-					border-left: .2rem solid transparent;  
-					border-right: .19rem solid transparent; 
+					width: 0;
+					height: 0;
+					border-left: .2rem solid transparent;
+					border-right: .19rem solid transparent;
 					border-bottom: .2rem solid #595959;
-					font-size: 0;  
-					line-height: 0;  
+					font-size: 0;
+					line-height: 0;
 					position: absolute;
 					top: -.2rem;
 					left: 2.2rem;
