@@ -24,7 +24,7 @@ sysUtil.getNetInfo = function(){
 	    types[plus.networkinfo.CONNECTION_CELL3G] = "3G蜂窝网络";
 	    types[plus.networkinfo.CONNECTION_CELL4G] = "4G蜂窝网络";
 	    resMap.network = types[plus.networkinfo.getCurrentType()];
-	    return JSON.stringify(resMap);
+	    return resMap;
 				 
 }
 export default sysUtil

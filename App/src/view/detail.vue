@@ -320,7 +320,7 @@ import config from '@/lib/config/config'
 import like from '@/components/common/like'
 // import share from '@/components/common/share'
 import memberList from '@/components/common/memberList'
-
+import netUtil from "@/service/util/netUtil"
 import listUtil from '@/service/util/listUtil'
 import userService from '@/service/userService'
 import followService from '@/service/followService'
@@ -507,7 +507,11 @@ export default {
 		}
 	},
 	mounted(){
-		shareService.init();
+		try{
+			shareService.init();			
+		}catch(e){
+
+		}
 	},	
 	activated(){
 		this.id = this.$route.query.id;
@@ -1183,21 +1187,20 @@ export default {
 		},
 		onPlayerPlay(){
 			if (!this.$store.state.notWifi) {
-				this.pause();
 				let _this = this,
 					net = {};
 				try{
-					net = netUtil.getNetInfo();					
+					net = netUtil.getNetInfo();
 				}catch(e){
-
 				}
 				if (net.network !="WiFi网络") {
+					this.pause();
 					this.$vux.confirm.show({
 						title:"温馨提示",
 						content:"当前处于非WIFI网络下，是否继续播放",
 						onConfirm(){
 							_this.$store.state.notWifi = true;
-							_this.onPlayerPlay();
+							//_this.onPlayerPlay();//无效
 						}
 					})					
 				}

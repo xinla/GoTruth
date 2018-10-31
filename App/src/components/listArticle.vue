@@ -1,10 +1,10 @@
 <template>
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
-		<div>				
-			<prompt-blank v-if="ifNet" mes="断网啦..."></prompt-blank>
-			<loading-main v-else-if="!arcList.length"></loading-main>
+		<div>			
+			<prompt-blank style="margin-top:100px;" v-if="ifNet" mes="断网啦..."></prompt-blank>
+			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
 			<multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
-			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>
+			<load-more v-show="arcList.length && ifLoad" :show-loading="ifLoading" :tip="tip"></load-more>
 		</div>
 	</downRefresh>
 </template>
@@ -22,11 +22,13 @@ export default {
 			arcList:[],
 			page:1,
 			lock:false,
-			ifLoad:true,
+			ifLoad:false,
 			scrollTop:0,	
 			total:0,
 			ifNew:false,
-			ifNet:false,	
+			ifNet:false,
+			ifLoading:true,
+			tip:"正在加载",	
 		}
 	},
 	props:{
@@ -42,19 +44,24 @@ export default {
 	mounted () {
 		this.$nextTick(()=>{
 			let net = {}
-			try{
-				net = netUtil.getNetInfo();					
-			}catch(e){
-
+			function getNet() {
+				net = netUtil.getNetInfo();	
+				if (net.network == "未连接网络") {
+					this.ifNet = true;
+					return;
+				}
 			}
-			if (net.network == "未连接网络") {
-				this.ifNet = true;
-				return;
+			try{
+				document.addEventListener('plusready', getNet.bind(this));
+				document.removeEventListener('plusready', getNet.bind(this));
+			}catch(e){
+				// console.log(e)
 			}
 			if (!this.classify) {
 				this.init();				
 			}
 		})
+
 	},
 	methods:{
 		init(){
@@ -78,10 +85,22 @@ export default {
 				}				
 			}finally{	
 				this.lock = false;
-				this.ifLoad = false;			
+				// this.ifLoad = false;			
 			}
 		},
 		doRefresh(){
+			let net = {};
+			try{
+				net = netUtil.getNetInfo();	
+			}catch(e){
+				// console.log(e)
+			}
+			if (net.network == "未连接网络") {
+				this.ifNet = true;
+				return;
+			}else{
+				this.ifNet = false;
+			}
 			this.page = 1;
 			this.init();
 			if (this.ifNew) {
@@ -94,8 +113,8 @@ export default {
 			}
 		},
 		getMore(){
+			// debugger
 			this.lock = true;
-			this.ifLoad = true;
 			let resArticlePage;
 			try{
 				if(this.classify == 0){
@@ -108,22 +127,26 @@ export default {
 					if (resArticlePage.recordPage.list.length) {
 						this.page++;						
 					}else{
-						this.$vux.toast.show({
-							type:"text",
-							time:800,
-							text: '暂无更多，不妨到我隔壁去看看吧~',
-							width:"auto",
-						});						
+						// this.$vux.toast.show({
+						// 	type:"text",
+						// 	time:800,
+						// 	text: '暂无更多，不妨到我隔壁去看看吧~',
+						// 	width:"auto",
+						// });
+						this.ifLoading = false;
+						this.tip = "你看到我的底线啦";
 					}
 					// console.log(this.arcList);
-				}				
+				}		
 			}finally{
 				this.lock = false;
-				this.ifLoad = false;				
 			}
 		},
 		loadMore(e){
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) >= e.target.scrollHeight) {
+			if (!this.ifLoad) {
+				this.ifLoad = true;
+			}
+			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 1) >= e.target.scrollHeight) {
 				this.getMore();
 			}
 			this.scrollTop = $(e.target).scrollTop();
@@ -134,7 +157,7 @@ export default {
 		$route(){
 			$(".main-content").eq(this.classify).scrollTop(this.scrollTop);
 		},
-		show(){
+		show(){			
 			this.init();				
 		}
 	}

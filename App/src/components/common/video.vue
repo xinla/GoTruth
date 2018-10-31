@@ -110,10 +110,8 @@ export default {
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
 		onPlayerPlay(e){
-			if (this.$store.state.notWifi) {
-				this.$emit("allPause",this.whi);				
-			}else{
-				this.pause();
+			this.$emit("allPause",this.whi);				
+			if (!this.$store.state.notWifi) {
 				let _this = this,
 					net = {};
 				try{
@@ -122,17 +120,15 @@ export default {
 
 				}
 				if (net.network !="WiFi网络") {
+					this.pause();
 					this.$vux.confirm.show({
 						title:"温馨提示",
 						content:"当前处于非WIFI网络下，是否继续播放",
 						onConfirm(){
 							_this.$store.state.notWifi = true;
-							_this.onPlayerPlay();
+							// _this.onPlayerPlay();无效
 						}
 					})					
-				}else{
-					this.$store.state.notWifi = true;
-					this.onPlayerPlay();
 				}
 			}
 		},
