@@ -128,7 +128,7 @@ export default {
 					font-size: 0;
 					line-height: 0;
 					position: absolute;
-					top: -.2rem;
+					top: -.18rem;
 					left: 2.2rem;
 					z-index: 9999;
 				}

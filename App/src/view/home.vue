@@ -53,7 +53,7 @@ import articleClassifyService from '@/service/article_classifyService'
 		components:{
 			homeHeader,
 			homeMore,
-			Swiper, 
+			Swiper,
 			SwiperItem,
 			listArticle,
 			Popup,
@@ -62,22 +62,22 @@ import articleClassifyService from '@/service/article_classifyService'
 			return {
 				showMore:false,
 				classifyList:[
-					{	
+					{
 						classifycode:1,
 						classifyname:"揭秘"
-					},{	
+					},{
 						classifycode:2,
 						classifyname:"防骗"
-					},{	
+					},{
 						classifycode:3,
 						classifyname:"打假"
-					},{	
+					},{
 						classifycode:4,
 						classifyname:"寻亲"
-					},{	
+					},{
 						classifycode:5,
 						classifyname:"普法"
-					},{	
+					},{
 						classifycode:6,
 						classifyname:"聚焦"
 					}
@@ -90,18 +90,17 @@ import articleClassifyService from '@/service/article_classifyService'
 		},
 		mounted () {
 	    	// var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
-	    	
 	    	// window.addEventListener(resizeEvt, this.recalc, false);
 	    	// document.addEventListener('DOMContentLoaded', this.recalc, false);
 	    	// this.recalc();
-	    	// 
+	    	//
 	    	this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;
 	    	this.$nextTick(()=>{
 	    		//获取分类
 	    		if (!localStorage.classify) {
 		    		articleClassifyService.getArticleClassifyList(data=>{
 						if (data && data.status == "success") {
-							this.classifyList = data.result.classfyList;	
+							this.classifyList = data.result.classfyList;
 							localStorage.classify = JSON.stringify(data.result.classfyList);
 						}
 					});

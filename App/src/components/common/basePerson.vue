@@ -5,14 +5,11 @@
 		</top>
 		<div class="member-msg">
 			<div class="member-msg-header">
-				<!-- <div class="member-msg-image" v-for="(item, index) in list" @click="show(index)">
-					<img class="previewer-demo-img" :src="item.src">
-				</div>
-				<div v-transfer-dom>
-			      <previewer :list="list" ref="previewer" :options="options"></previewer>
-			    </div> -->
-			    <div class="member-msg-image">
-					<img :src="userPhoto" >
+			    <!-- <div class="member-msg-image">
+					<img  :src="userPhoto" >
+				</div> -->
+				<div class="member-msg-image">
+					<img  v-for="(img,index) in imgs" v-preview="img.url"  :src="img.url">
 				</div>
 				<div class="member-msg-modal">
 					<ul class="member-msg-list">
@@ -37,7 +34,6 @@
 						<!-- 访客所见 -->
 					</div>
 				</div>
-				
 			</div>
 		</div>
 		<div class="member-tab">
@@ -84,6 +80,11 @@ export default {
 			userId:0,
 			current:0,
 			currentName:"全部",
+			imgs: [
+                {
+                  url: require('@/assets/images/user_head.jpg'),
+                }
+            ],
 			// list:[{
 			// 	src:require('@/assets/images/user_head.jpg'),
 			// }],
@@ -117,19 +118,19 @@ export default {
 	methods:{
 		init(){
 			if (localStorage.id && localStorage.id == this.userId) {
-	    		let userImg = localStorage.userImg;	
-				this.title = localStorage.userName;	
+	    		let userImg = localStorage.userImg;
+				this.title = localStorage.userName;
 				 if(userImg == 'undefined') {
-			          this.userPhoto =  require('@/assets/images/user_head.jpg');
+			          this.imgs[0].url =  require('@/assets/images/user_head.jpg');
 			          return;
 			        }else{
-			        	this.userPhoto = config.fileRoot + '/' + userImg;
-			        }	
+			        	this.imgs[0].url = config.fileRoot + '/' + userImg;
+			        }
 			}else{
 				let res = userService.getUserById(this.userId);
 				if (res && res.status == "success") {
 					if (res.result.user.imageurl) {
-						this.userPhoto = config.fileRoot + '/' + res.result.user.imageurl;
+						this.imgs[0].url = config.fileRoot + '/' + res.result.user.imageurl;
 					}
 					this.title = res.result.user.username;
 				}
@@ -138,8 +139,8 @@ export default {
 			//获取文章数量
 			articleService.getUserArticleCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {
-					this.publidsedNum = data.result.count;			
-				}			
+					this.publidsedNum = data.result.count;
+				}
 			});
 			// console.log(resArticleCount)
 			//获取粉丝数量
@@ -147,7 +148,7 @@ export default {
 				if (data && data.status == "success" ) {
 					this.fansNum = data.result.count;
 				}
-			});		
+			});
 			//获取关注数量
 			followService.getUserFollowCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {
@@ -161,6 +162,11 @@ export default {
 			this.init();
 		}
 	},
+	activated() {
+  	this.$nextTick(()=>{
+      this.init();
+  	})
+  },
 	beforeRouteEnter (to, from, next) {
     	if (!GoTruth.$route.query.userId && !localStorage.id) { 
             GoTruth.$vux.alert.show({
@@ -173,7 +179,7 @@ export default {
 	    	if (!vm.userId){
 	    		vm.userId = localStorage.id;
 	    	}
-			vm.current = Number(vm.$route.query.current || vm.current);	    		
+			vm.current = Number(vm.$route.query.current || vm.current);
 	      	// vm.init();
 		});
 	},
@@ -274,5 +280,11 @@ export default {
 	    height: calc(100% - 190px);
 	    overflow-y: auto;
 		background: #fff;
+	}
+</style>
+
+<style>
+	.lg-preview-nav-right,.lg-preview-nav-left{
+		display: none !important;
 	}
 </style>

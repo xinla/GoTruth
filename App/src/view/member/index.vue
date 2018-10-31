@@ -57,7 +57,7 @@
               <span>消息通知</span>
               <i class="iconfont icon-arrow-right arrow-item"></i>
               <div class="fr">
-              <badge :text="$store.state.newMes" v-if="$store.state.newMes"></badge>              
+              <badge :text="$store.state.newMes" v-if="$store.state.newMes"></badge>
               </div>
             </div>
           </li>

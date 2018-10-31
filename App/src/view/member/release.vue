@@ -4,13 +4,13 @@
 		<div class="release-type clearfix" v-model="record.classify">
 			<div class="release-select clearfix" @click="handleType">
 				<span class="release-keys fl" :value="defaultVal">{{defaultType}}</span>
-				<i class="iconfont icon-down fr"></i>	
+				<i class="iconfont icon-down fr"></i>
 			</div>
 			 <transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-				<div class="release-mask" v-show="optionShow" @click="handleCloseMask"></div>
+				<div class="release-mask" v-show="optionShow" @click="handleCloseMask" style="animation-duration: 300ms"></div>
 			</transition>
 			 <transition  enter-active-class="animated fadeInLeft" leave-active-class=" animated fadeOutLeft">
-				<div class="release-option" v-show="optionShow">
+				<div class="release-option" v-show="optionShow" style="animation-duration: 300ms">
 					<ul class="release-list">
 						<li class="release-item" :value="item.classifycode" v-for="item in classfyList" @click="handleItem(item)">
 							{{ item.classifyname }}
@@ -18,7 +18,7 @@
 					</ul>
 				</div>
 			</transition>
-		</div>	
+		</div>
 		<!-- 标题 -->
 		<div class="release-title">
 			<input type="text" v-model="record.title" placeholder="请输入标题" v-focus>
@@ -39,10 +39,8 @@
 					<i class="iconfont icon-add"></i>
 					<input type="file" id="upImg" accept="image/*" multiple @change="uploadFile" style="display: none;">
 				</div>
-				
 			</div>
 		</div>
-		
 		<!-- 上传视频 -->
 		<div class="release-upload-video clearfix" v-if="record.type==2">
 			<div class="release-video fl" v-for="(item,index) in record_file">
@@ -121,7 +119,7 @@ export default{
 		}
 	},
 	activated(){
-		this.record.type = this.$route.query.sort;	
+		this.record.type = this.$route.query.sort;
 		this.record.selectedpublishname = localStorage.position || "不显示";
 		this.record.selectedpublishaddress = localStorage.selectedpublishaddress || 0;
 
@@ -172,7 +170,6 @@ export default{
 
 				}
 			})
-			// 
 		},
 
 		handleRemoveVideo(item){
@@ -193,7 +190,7 @@ export default{
 			})
 		},
 		uploadFile(e){
-			let file = e.target.files[0];           
+			let file = e.target.files[0];
 		    if (this.record.type==1 && !this.$Tool.checkPic(file.name)) {
 		    	this.$vux.alert.show({
 				  content:'格式错误',
@@ -207,7 +204,7 @@ export default{
 			    return;
 			 }
 			this.$loading.open(2);
-		    let param = new FormData(); //创建form对象        	
+		    let param = new FormData(); //创建form对象
 		    param.append('file',file,file.name);//通过append向form对象添加数据
 		    if(this.record.type==1){
 			    fileService.uploadPic(param,(data)=>{
@@ -261,7 +258,7 @@ export default{
 			Object.assign(this.record,this.position);
 			let res;
 			if (this.record.type == 1) {
-				res = articleService.publishArticle(this.record,this.record_file);	
+				res = articleService.publishArticle(this.record,this.record_file);
 			} else if (this.record.type == 2) {
 				// debugger;
 				res = articleService.publishArticle(this.record,this.record_file);
@@ -293,15 +290,15 @@ export default{
 	},
 	watch:{
 		"$route"(){
-			this.record.type = this.$route.query.sort;	
+			this.record.type = this.$route.query.sort;
 		}
 	},
 	beforeRouteEnter (to, from, next) {
-		if (!localStorage.id) { 
-            GoTruth.$Tool.loginPrompt(); 
+		if (!localStorage.id) {
+            GoTruth.$Tool.loginPrompt();
         }else{
           next();
-        } 
+        }
 	}
 }
 </script>
@@ -365,7 +362,7 @@ export default{
 		}
 		.release-title{
 			width: 100%;
-			height: .8rem;	
+			height: .8rem;
 			margin-top: 1.2rem;
 			margin-bottom: .4rem;
 			input{
@@ -378,7 +375,6 @@ export default{
 			}
 		}
 		.release-content{
-			
 			.content{
 				width: 100%;
 				height: 3rem;
@@ -430,7 +426,6 @@ export default{
 						top: 0;
 						width: 100%;
 						height: 100%;
-						
 						line-height: 1.86rem;
 					}
 					.iconfont{
@@ -444,7 +439,6 @@ export default{
 					}
 				}
 			}
-			
 		}
 		.release-upload-video{
 			padding: .2rem 0;
@@ -485,7 +479,6 @@ export default{
 				top: 0;
 				width: 100%;
 				height: 100%;
-				
 				line-height: 1.86rem;
 			}
 			.iconfont{

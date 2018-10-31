@@ -2,10 +2,11 @@
   <div id="app">
     <transition :name="transitionName">
       <keep-alive v-if="!$route.meta.keepAlive">
-        <router-view  class="router-view-app"></router-view> 
-      </keep-alive>      
-      <router-view v-else class="router-view-app"></router-view> 
+        <router-view  class="router-view-app"></router-view>
+      </keep-alive>
+      <router-view v-else class="router-view-app"></router-view>
     </transition>
+    <lg-preview></lg-preview>
   </div>
 </template>
 
