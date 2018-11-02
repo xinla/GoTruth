@@ -19,7 +19,7 @@
 							<i class="iconfont icon-close"></i>
 						</div>
 						<home-more></home-more>
-					</popup>	
+					</popup>
 				</div>
 			</div>
 			<div class="main" ref="main">
@@ -36,7 +36,7 @@
 	</div>
 </template>
 
-<script>	
+<script>
 import { TransferDom,Swiper,SwiperItem, Popup } from 'vux'
 import homeHeader from '@/components/headerBar'
 import homeMore from'@/components/more'

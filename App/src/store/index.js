@@ -9,7 +9,7 @@ function State(){
   this.id = null;
   this.logid = null;
   this.userName = null;
-  this.usetImg = "";
+  this.userImg = "";
   this.userMobile = null;
   this.newMes = 0;
   this.newVersion = 0; //0 已最新 1有更新
@@ -28,7 +28,7 @@ function State(){
 let state = new State();
 //创建改变状态的方法
 const mutations = {
-  LOGIN(state,data) {   
+  LOGIN(state,data) {
     state.token = data;
     window.localStorage.setItem('token', data);
   },
