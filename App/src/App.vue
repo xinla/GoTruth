@@ -1,10 +1,13 @@
 <template>
   <div id="app">
     <transition :name="transitionName">
-      <keep-alive v-if="!$route.meta.keepAlive">
+      <keep-alive>
+        <router-view class="router-view-app"></router-view>
+      </keep-alive>
+      <!-- <keep-alive v-if="!$route.meta.keepAlive">
         <router-view  class="router-view-app"></router-view>
       </keep-alive>
-      <router-view v-else class="router-view-app"></router-view>
+      <router-view v-else class="router-view-app"></router-view> -->
     </transition>
     <lg-preview></lg-preview>
   </div>
@@ -144,7 +147,7 @@ export default {
   	//监听路由
   	$route(to,from) {
   		// 前进后退转场动画
-      if (this.$router['isBack'] == undefined) {
+      if (this.$router['isBack'] === undefined) {
         this.$router['isBack'] = false;return;
       }
       this.transitionName = this.$router['isBack'] ? 'slide-right' : 'slide-left';

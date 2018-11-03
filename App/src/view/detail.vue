@@ -27,11 +27,11 @@
 		            <p v-html="article.content"></p>
 		          </div>
 					<div class="phone-content clearfix">
-						<div v-if="1 == article.type"  class="phone-img fl">
+						<div v-if="1 === article.type" class="phone-img fl">
 							<!-- <img  :src="fileRoot + item.url" :alt="item.filename">							 -->
 							<img v-for="(item,index) in ArticleFile"  :src="fileRoot + item.url" :alt="item.filename">							
 						</div>
-						<div v-else-if="2 == article.type">
+						<div v-else-if="2 === article.type">
 							<video-player class="video-player vjs-custom-skin" 
 								ref="videoPlayer"
 							 	:playsinline="true"
