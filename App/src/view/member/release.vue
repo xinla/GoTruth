@@ -402,7 +402,7 @@ export default{
 						display: block;
 						width: 100%;
 						height: 100%;
-						filter: brightness(0.50);
+						filter: brightness(0.7);
 						object-fit: cover;
 					}
 					.iconfont{
@@ -508,7 +508,7 @@ export default{
 				margin-right: 1rem;
 				width: 1.4rem;
 				height: .7rem;
-				line-height: .7rem;
+				line-height: .75rem;
 				letter-spacing: .02rem;
 				border-radius: .08rem;
 				text-align: center;

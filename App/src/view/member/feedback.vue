@@ -8,8 +8,8 @@
 		<div class="feedback-tab feedback-fankui" v-show="nowIndex===0">
 			<h3 class="feedback-tit">您的反馈内容:</h3>
 			<div class="feedback-textarea">
-				<textarea 
-					v-focus 
+				<textarea
+					v-focus
 					:placeholder="placeholder" 
 					maxlength="120"
 					v-model="textDesc"
@@ -26,13 +26,10 @@
 					<i class="iconfont icon-camera"></i>
 					<span class="upload-desc">上传图片</span>
 				</div>
-				<div class="feedback-img fl" v-show="imgShow"  v-for="(item, index) in list" @click="show(index)">
+				<div class="feedback-img fl" v-show="imgShow"  v-for="(img,index) in imgs">
 					<i class="iconfont icon-remove" @click.stop="handleRemove"></i>
-					<img :src="item.src" class="previewer-demo-img">
+					<img v-preview="img.url"  :src="img.url" class="previewer-demo-img">
 				</div>
-				<div v-transfer-dom>
-			      <previewer :list="list" ref="previewer" :options="options"></previewer>
-			    </div>
 				<input type="file" class="upload-input" id="uploadImg" accept="image/*" @change="handleUploadFile">
 			</div>
 			<button type="button" class="feedback-btn" @click="handleSubmit">提交反馈</button>
@@ -107,7 +104,7 @@ export default{
 			uploadImg:'',
 			uploadShow:true,
 			imgShow:false,
-			list:[{src:''}],
+			imgs: [{url:''}],
 			options: {
 				getThumbBoundsFn (index) {
 					let thumbnail = document.querySelectorAll('.previewer-demo-img')[index]
@@ -122,9 +119,6 @@ export default{
 
 	},
 	methods:{
-		show(index){
-			 this.$refs.previewer.show(index);
-		},
 		// 选项卡切换
 		handleTab(index){
 			this.nowIndex=index;
@@ -184,10 +178,10 @@ export default{
 				});
 				return;
 			}
-			let feedbackData = feedbackService.submitFeedback(this.textDesc,this.list[0].src);
+			let feedbackData = feedbackService.submitFeedback(this.textDesc,this.imgs[0].url);
 			if(feedbackData && feedbackData.status == "success") {
 				this.textDesc = "";
-				this.list[0].src = "";
+				this.imgs[0].url = "";
 				this.$vux.alert.show({
 					content: "反馈成功",
 					onHide () {
@@ -231,7 +225,7 @@ export default{
 					text: '正在上传...'
 				});
 				setTimeout(()=>{
-					this.list[0].src = e.target.result;
+					this.imgs[0].url = e.target.result;
 					this.uploadShow = false;
 					this.imgShow = true;
 						if(e.target.result) {
@@ -439,4 +433,9 @@ export default{
 		}
 	}
 
+</style>
+<style>
+	.lg-preview-nav-right,.lg-preview-nav-left{
+		display: none !important;
+	}
 </style>
