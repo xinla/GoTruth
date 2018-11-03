@@ -18,7 +18,10 @@ export default {
 	        endX: '',
 	        startY: '',
 	        endY: '',
-	        moveDistance: 0,
+	        // lineHeight: 0,
+	        lockX:false,
+	        lockY:false,
+
 		}
 	},
 	mounted(){
@@ -40,25 +43,39 @@ export default {
 	        this.tipText = '下拉刷新';
 		},
 		_touchMove(e){
+			if (this.lockX) {
+				return;
+			}					
+			this.lockY && e.stopPropagation();
 			let touch = e.changedTouches[0]; 
 			// console.log(touch.clientX)
 			let moveX = touch.clientX - this.startX;
-		    if (Math.abs(moveX) > 40) {
-				this.$el.style.overflow = "hidden";	
-				return;	    	
-		    }
+			let moveY = touch.clientY - this.startY;
+			 // direction judge
+			if (this.lockX === false && this.lockY === false) {
+				if (Math.abs(moveY) - Math.abs(moveX)>1) {
+					this.lockY = true;
+				}else{
+					this.lockX = true;
+					this.$el.style.overflow = "hidden";
+				}
+			}
+		  //   if (Math.abs(moveX) > 40) {
+				// this.$el.style.overflow = "hidden";	
+				// return;	    	
+		  //   }
 			if (this.$el.scrollTop > 0) { return;}
 			if (moveX < 20) {
 		        // 获取下拉的距离
 				let move = touch.clientY - this.startY;
 		         //这里主要是让内容区随着下拉操作而往下滚动 
 		         //_move>0是指往下滑动(下拉),_move<100是给一个上限,不然一直下拉的话整个内容区就会随着下拉距离一直增大,用户体验不是很好         //这里下拉操作主要是显示出顶上的一层tipText         
-				if (move > 0 && move < 100) {           
+				if (move > 10 && move < 100) {           
 					//滑动时需禁止页面滚动，否则会导致滑动事件转换为页面滚动事件
 					this.$el.style.overflow = "hidden";
-					this.lineHeight = move;           //记录下下拉的距离
-					this.moveDistance = move;           
-					if (move > 50) {             
+					this.lineHeight = move - 10;           //记录下下拉的距离
+					// this.lineHeight = move;
+					if (this.lineHeight > 60) {             
 						this.tipText = '松开即可刷新';       
 					}else{
 						this.tipText = "下拉刷新";
@@ -66,7 +83,9 @@ export default {
 				}
 			}
 		},
-		_touchEnd(e){       
+		_touchEnd(e){   
+			this.lockY = false;
+			this.lockX = false;
 			// this.$store.dispatch("setForbidSwiper",true);
 
 			//解除禁止页面滚动
@@ -75,7 +94,7 @@ export default {
 			let touch = e.changedTouches[0];        
 			this.endX = touch.clientX;        
 			this.endY = touch.clientY;        
-			if (this.moveDistance > 50) {
+			if (this.lineHeight > 50) {
 				this.tipText = '正在拼命加载';
 				setTimeout(()=>{
 					this.$emit("refresh");
@@ -84,12 +103,12 @@ export default {
 					this.tipText = "加载完毕";
 					this.animate = true;
 					this.lineHeight = 0;
-					this.moveDistance = 0;
+					// this.lineHeight = 0;
 				},1000);
 			}else{
 				this.animate = true;
 				this.lineHeight = 0;
-				this.moveDistance = 0;				
+				// this.lineHeight = 0;				
 			}
 			// this.tipText = "";
 		},

@@ -143,22 +143,35 @@ export default {
 			}
 		},
 		loadMore(e){
+			this.throttle(this._loadMore,this,e);
+		},
+		throttle(method,context,arg) {
+			let cur = +new Date();
+			if (cur - (method.last || 0) > 20) {
+				method.call(context,arg);
+				method.last = cur;
+			}
+		},
+		_loadMore(e){
 			if (!this.ifLoad) {
 				this.ifLoad = true;
 			}
 			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 1) >= e.target.scrollHeight) {
 				this.getMore();
 			}
-			this.scrollTop = $(e.target).scrollTop();
-		},
+			this.scrollTop = $(e.target).scrollTop();	
+			// console.log(this.scrollTop)			
+		}
 
 	},
 	watch:{
 		$route(){
 			$(".main-content").eq(this.classify).scrollTop(this.scrollTop);
 		},
-		show(){			
-			this.init();				
+		show(){	
+			this.$nextTick(()=>{		
+				this.init();
+			})				
 		}
 	}
 }
