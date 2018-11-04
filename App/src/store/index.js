@@ -16,6 +16,7 @@ function State(){
   this.currentVersion = null;
   this.forbidSwiper = true;
   this.notWifi = false;//费WIFI网络播放提示
+  this.transitionName = "";
 }
 // let state = {
 //   token:window.localStorage.getItem('token'),

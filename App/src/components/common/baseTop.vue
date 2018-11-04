@@ -3,11 +3,14 @@
 		<top @hrefTo="this.$Tool.goBack">
 			<template slot="title">{{title}}</template>
 		</top>
-		 <transition :name="transitionName">
-		 	<keep-alive v-if="!$route.meta.keepAlive">
+		 <transition :name="$store.state.transitionName">
+		 	<keep-alive>
+		        <router-view  class="router-view"></router-view> 
+	     	</keep-alive>
+		 	<!-- <keep-alive v-if="!$route.meta.keepAlive">
 		        <router-view  class="router-view"></router-view> 
 	     	</keep-alive>      
-		      	<router-view v-else class="router-view"></router-view>
+		      	<router-view v-else class="router-view"></router-view> -->
 		</transition>
 	</div>
 </template>
@@ -23,36 +26,29 @@ export default{
 	mounted(){
 		this.title = this.$route.query.title;
 	},
-	watch:{
-		$route(to,from){
-			let par = this.$route.query.title;
-			this.title = par;		
-			if (this.$router['isBack'] == undefined) {
-				this.$router['isBack'] = false;return;
-			}
-			this.transitionName = this.$router['isBack'] ? 'slide-right' : 'slide-left';
-			this.$router['isBack'] = false;	
-		}
-	},	
+	activated(){
+		this.title = this.$route.query.title;
+	},
 }
 </script>
 
-<style rel="stylesheet" scoped>
+<style scoped>
 	.hreficon{
 		width: 30px;
 	}
 	.router-view {
-		width: 100%;
-	    height: calc(100vh - 1.3rem) !important;
 		position: absolute;
-		transition: all .3s cubic-bezier(.55,0,.1,1);
+		width: 100%;
+		left: 0;
+	    height: calc(100vh - 1.3rem) !important;
+	    background: #f4f5f6;
+		transition: transform .3s cubic-bezier(.55,0,.1,1);
 	}
-	.slide-left-enter, .slide-right-leave-active {
-		opacity: 0;
+	/*.slide-left1-enter, .slide-right1-leave-active {
 		transform: translate(200px, 0);
 	}
-	.slide-left-leave-active, .slide-right-enter {
+	.slide-left1-leave-active, .slide-right1-enter {
 		opacity: 0;
 		transform: translate(-200px, 0);
-	}
+	}*/
 </style>

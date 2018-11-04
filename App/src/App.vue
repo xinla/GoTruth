@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition :name="transitionName">
+    <transition :name="$store.state.transitionName">
       <keep-alive>
         <router-view class="router-view-app"></router-view>
       </keep-alive>
@@ -147,17 +147,17 @@ export default {
   	//监听路由
   	$route(to,from) {
   		// 前进后退转场动画
-      if (this.$router['isBack'] === undefined) {
+      if (this.$router['isBack'] == undefined) {
         this.$router['isBack'] = false;return;
       }
-      this.transitionName = this.$router['isBack'] ? 'slide-right' : 'slide-left';
+      // debugger
+      this.$store.state.transitionName = this.$router['isBack'] ? 'slide-right' : 'slide-left';
       this.$router['isBack'] = false;
     }
   },
 }
 </script>
 <style>
-
   html,body{
     background-color: #f4f5f6;
     width: 100%;
@@ -178,27 +178,31 @@ export default {
     padding-top: 22px;
     background: #aaa;
   }
-.router-view-app {
-  position: absolute;
-  transition: all .3s cubic-bezier(.55,0,.1,1);
-}
-.slide-left-enter, .slide-right-leave-active {
-  opacity: 0;
-  transform: translate(200px, 0);
-}
-.slide-left-leave-active, .slide-right-enter {
-  opacity: 0;
-  transform: translate(-200px, 0);
-}
-/*添加vux toast 行高*/
-.weui-toast_text .weui-toast__content{
-  line-height: 22px;
-}
-/*video paly UI设置*/
-.vjs-custom-skin > .video-js .vjs-big-play-button{
+  .router-view-app {
+    position: absolute;
+    background: #f4f5f6;
+    transition: all 1.3s cubic-bezier(.55,0,.1,1);
+  }
+  .slide-left-enter, .slide-right-leave-active {
+    transform: translate(100%, 0);
+    z-index: 9;
+  }
+  .slide-right-leave-active{
+
+  }
+  /*.slide-left-leave-active, .slide-right-enter {
+    opacity: 0;
+    transform: translate(-100%, 0);
+  }*/
+  /*添加vux toast 行高*/
+  .weui-toast_text .weui-toast__content{
+    line-height: 22px;
+  }
+  /*video paly UI设置*/
+  .vjs-custom-skin > .video-js .vjs-big-play-button{
     width: 1rem;
     height: 1rem !important;
-      font-size: .6rem !important;
+    font-size: .6rem !important;
     border-radius: 50%;
     /*margin: 0 !important;*/
     transform: translate(-50%,-50%);

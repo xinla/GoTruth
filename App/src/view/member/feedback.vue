@@ -240,13 +240,13 @@ export default{
 			};
 			e.target.value = "";
 		},
-		beforeRouteEnter (to, from, next) {
+	},
+	beforeRouteEnter (to, from, next) {
 		if (!localStorage.id ) { 
             GoTruth.$Tool.loginPrompt(); 
         }else{
           next();
         } 
-	}
 	}
 }
 
@@ -263,7 +263,7 @@ export default{
 			position: relative;
 			top: 0;
 			left: 0;
-			z-index: 999;
+			// z-index:0;
 			background-color: #fff;
 			.feedback-item{
 				display: inline-block;

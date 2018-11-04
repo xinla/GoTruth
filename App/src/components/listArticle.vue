@@ -183,6 +183,7 @@ export default {
 		height: calc(100vh - 2.7rem);
 		overflow: hidden;
 		overflow-y: auto;
+		-webkit-overflow-scrolling:touch;
 		/*// padding: 0 .3rem;
 		// padding-bottom: .3rem;*/
 	}

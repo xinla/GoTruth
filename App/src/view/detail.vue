@@ -3,7 +3,9 @@
 		<top @hrefTo="this.$Tool.goBack">
 			<template slot="title">{{ '文章详情' }}</template>
 		</top>
-		<loading-main v-show="ifLoad"></loading-main>
+		<div class="mask" v-show="ifLoad">
+			<loading-main></loading-main>			
+		</div>
 		<div class="detail" @scroll="loadScroll">
 			<section class="content-wrap" v-if="!proFail1">
 				<h1 class="article-title">{{ article.title }}</h1>
@@ -374,7 +376,6 @@ export default {
 				placeholder:'请文明发言，遵守评论规则...',
 				popupActive:false
 			},
-			ifLoad:true,
 			ifLoadMore:false,
 			userId:localStorage.id,
 			id:0,//文章id =>article.id
@@ -1213,9 +1214,11 @@ export default {
 	watch:{
 		id(){
 			// debugger
-			this.$nextTick(()=>{
-				this.init();				
-			})
+			this.ifLoad = true;
+			setTimeout(()=>{
+				this.init();
+				this.ifLoad = false;
+			},350)
 		}
 	},
 	// beforeRouteEnter(to,from,next){
@@ -1228,6 +1231,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+	.mask{
+		position: absolute;
+		bottom: initial;
+		background: #fafafa;
+	}
 	.detail{
 		position: relative;
 		height: calc(100% - 1.5rem);
