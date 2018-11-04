@@ -102,7 +102,6 @@ export default {
                           width:"auto",
                         },1000);                             
                       })
-                      dtask.start();
                       let dtask = plus.downloader.createDownload(data.result.newlink, {
                       }, function (down, status) {
                           if (status == 200) {
@@ -115,6 +114,7 @@ export default {
                               });
                           }
                       });
+                      dtask.start();
                     }
                   });
                 }                  
@@ -181,7 +181,7 @@ export default {
   .router-view-app {
     position: absolute;
     background: #f4f5f6;
-    transition: all 1.3s cubic-bezier(.55,0,.1,1);
+    transition: all .3s cubic-bezier(.55,0,.1,1);
   }
   .slide-left-enter, .slide-right-leave-active {
     transform: translate(100%, 0);

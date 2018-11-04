@@ -188,7 +188,6 @@ export default{
 		                        width:"auto",
 		                      },1000);       
 		                    })
-	                      dtask.start();
 	                      let dtask = plus.downloader.createDownload(data.result.newlink, {
 	                      }, function (down, status) {
 	                          if (status == 200) {
@@ -201,6 +200,7 @@ export default{
 	                              });
 	                          }
 	                      });
+	                      dtask.start();
 	                    }
 	                  });
 	                }else {
