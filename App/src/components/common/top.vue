@@ -27,11 +27,6 @@ export default {
 			default:false,
 		}
 	},
-	data(){
-		return{
-
-		}
-	},
 }	
 </script>
 <style lang="less" scoped>
@@ -49,7 +44,7 @@ export default {
 	position: relative;
 	left: 0;
 	top: 0;
-	z-index: 9;
+	// z-index: 9;
 	justify-content: space-between;
 	.top-back-icon{
 		width: .4rem;

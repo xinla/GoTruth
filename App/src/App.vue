@@ -181,15 +181,15 @@ export default {
   .router-view-app {
     position: absolute;
     background: #f4f5f6;
-    transition: all .3s cubic-bezier(.55,0,.1,1);
+    transition: transform .3s cubic-bezier(.55,0,.1,1);
   }
   .slide-left-enter, .slide-right-leave-active {
     transform: translate(100%, 0);
     z-index: 9;
   }
-  .slide-right-leave-active{
-
-  }
+/*  .slide-right-enter-active,.slide-left-leave-active{
+  
+  }*/
   /*.slide-left-leave-active, .slide-right-enter {
     opacity: 0;
     transform: translate(-100%, 0);

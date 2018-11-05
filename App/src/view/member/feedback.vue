@@ -9,7 +9,6 @@
 			<h3 class="feedback-tit">您的反馈内容:</h3>
 			<div class="feedback-textarea">
 				<textarea
-					v-focus
 					:placeholder="placeholder" 
 					maxlength="120"
 					v-model="textDesc"
@@ -83,12 +82,12 @@ import { Previewer, TransferDom } from 'vux'
 export default{
 	directives: {
 		TransferDom,
-		focus: {
-		// 指令的定义
-			inserted: function (el) {
-				el.focus()
-			}
-		}
+		// focus: {
+		// // 指令的定义
+		// 	update: function (el) {
+		// 			el.focus()					
+		// 	}
+		// }
 	},
 	components: {
 		Previewer
@@ -260,9 +259,9 @@ export default{
 		.feedback-list{
 			width: 100%;
 			border-bottom: .02rem solid @borderColor;
-			position: relative;
-			top: 0;
-			left: 0;
+			// position: relative;
+			// top: 0;
+			// left: 0;
 			// z-index:0;
 			background-color: #fff;
 			.feedback-item{

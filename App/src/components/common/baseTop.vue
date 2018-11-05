@@ -26,9 +26,11 @@ export default{
 	mounted(){
 		this.title = this.$route.query.title;
 	},
-	activated(){
-		this.title = this.$route.query.title;
-	},
+	watch:{
+		$route(){
+			this.title = this.$route.query.title;
+		}
+	}
 }
 </script>
 
