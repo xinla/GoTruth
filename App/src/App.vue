@@ -182,6 +182,7 @@ export default {
     position: absolute;
     background: #f4f5f6;
     transition: transform .3s cubic-bezier(.55,0,.1,1);
+    /*注：动画时长其他组件延迟加载时长（450）有关联，需小于，不可随意更改*/
   }
   .slide-left-enter, .slide-right-leave-active {
     transform: translate(100%, 0);

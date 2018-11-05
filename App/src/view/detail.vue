@@ -1207,9 +1207,9 @@ export default {
 				}
 			}
 		},
-		pause(){
-			this.$refs.videoPlayer.player.pause();
-		}
+		// pause(){
+		// 	this.$refs.videoPlayer.player.pause();
+		// }
 	},
 	watch:{
 		id(){
@@ -1218,7 +1218,8 @@ export default {
 			setTimeout(()=>{
 				this.init();
 				this.ifLoad = false;
-			},350)
+			},450)
+			//注：延迟时长必须在动画大于切换动画（300）
 		}
 	},
 	// beforeRouteEnter(to,from,next){

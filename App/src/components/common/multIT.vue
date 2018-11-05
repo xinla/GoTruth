@@ -1,5 +1,5 @@
 <template>
-	<div class="bfc-o" v-if="ArticleFile.length || imgList.length"  @click="$Tool.goPage({ name:'detail',query:{id:article.id,detailType,}})">
+	<div class="bfc-o" v-if="ArticleFile.length || imgList.length"  @click="goDetail">
 		<div class="article-wrap">
 			<div class="article-item clearfix">
 
@@ -130,6 +130,11 @@ export default {
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);	
 			if (this.article.type == 3) {
 				this.imgList = this.$Tool.extractImg(this.article.content,3);				
+			}
+		},
+		goDetail(){
+			if (!this.$store.state.isScolling) {
+				this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType}})				
 			}
 		}
 	}

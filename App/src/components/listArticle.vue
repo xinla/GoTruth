@@ -1,6 +1,6 @@
 <template>
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
-		<div>			
+		<div @click="$store.dispatch('setIsScolling',false);">			
 			<prompt-blank style="margin-top:100px;" v-if="ifNet" mes="断网啦..."></prompt-blank>
 			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
 			<multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
@@ -145,6 +145,7 @@ export default {
 		loadMore(e){
 			this.throttle(this._loadMore,this,e);
 		},
+		//函数节流控制
 		throttle(method,context,arg) {
 			let cur = +new Date();
 			if (cur - (method.last || 0) > 20) {
@@ -155,6 +156,9 @@ export default {
 		_loadMore(e){
 			if (!this.ifLoad) {
 				this.ifLoad = true;
+			}
+			if (!this.isScolling) {
+				this.$store.dispatch('setIsScolling',true);
 			}
 			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 1) >= e.target.scrollHeight) {
 				this.getMore();
@@ -172,6 +176,11 @@ export default {
 			this.$nextTick(()=>{		
 				this.init();
 			})				
+		}
+	},
+	computed:{
+		isScolling(){
+			return this.$store.state.isScolling;
 		}
 	}
 }
