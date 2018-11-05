@@ -18,7 +18,6 @@
 						@keydown="show($event)"
 						@focus="handleFocus1"
 						ref="mobileFocus"
-						v-focus
 						v-model="mobileDesc"
 						maxlength="13"
 						placeholder="请输入手机号">
@@ -45,27 +44,31 @@
 			<div class="login-line">一键登录</div>
 			<div class="login-way">
 				<ul class="login-way-list">
-					<li class="login-icon-item"><i class="iconfont icon-qq"></i></li>
-					<li class="login-icon-item"><i class="iconfont icon-weixin1"></i></li>
-					<li class="login-icon-item"><i class="iconfont icon-weibo1"></i></li>
+					<li class="login-icon-item" @click="authLogin(2)"><i class="iconfont icon-qq"></i></li>
+					<li class="login-icon-item" @click="authLogin(1)"><i class="iconfont icon-weixin1"></i></li>
+					<li class="login-icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo1"></i></li>
 				</ul>
 			</div>
-			<p class="login-desc">登录即代表您已阅读并同意<span>服务条款</span>和<span>隐私政策</span></p>
+			<p class="login-desc">登录即代表您已阅读并同意
+				<span>服务条款</span>和
+				<span>隐私政策</span>
+			</p>
 		</div>
 	</div>
 </template>
 
 <script>
+import authUtil from '@/service/util/authUtil'
 import userService from '@/service/userService'
 export default{
-	directives: {
-	  focus: {
-	    // 指令的定义
-	    inserted: function (el) {
-	      el.focus()
-	    }
-	  }
-	},
+	// directives: {
+	//   focus: {
+	//     // 指令的定义
+	//     inserted: function (el) {
+	//       el.focus()
+	//     }
+	//   }
+	// },
 	data(){
 		return{
 			docmHeight: document.documentElement.clientHeight,  //默认屏幕高度
@@ -92,6 +95,10 @@ export default{
 			return(()=>{
 				this.showHeight = document.body.clientHeight;
 			})()
+		}
+		try{
+			authUtil.init();			
+		}catch(err){
 
 		}
 	},
@@ -250,6 +257,86 @@ export default{
 						this.codeDesc = "";
 					}
 				})
+			}
+		},
+		//第三方登录
+		authLogin(type){
+			switch (type){
+				case 1://微信登录
+				authUtil.loginByWx(function(resMap){
+					if(resMap.status === "success"){
+					 	var params = resMap.result.wx_user;
+						/*{
+							"sex":"男",
+							"wx_openid":"oRrdQt6Rx5HoGnbKAgG_Wpl0zK44",
+							"wx_nikname":"董春林",
+							"wx_image":"http://thirdwx.qlogo.cn/mmopen/vi_32/KRO0TRAmL5XvPXia9icPstUkNKMlHSYOdhiahX5UBbNuibOhZGcxZcsRxmQtAAqFX2nLL5cwyc4fkLVJnKibiaN1qzJg/132",
+							"wx_unionid":"oU5YytwqdJBWqmL6dNXsjsYAS_MM"
+						}*/
+						userService.loginByWx(params,data=>{})
+					}
+					
+				});
+				break;
+				case 2://QQ登录
+				authUtil.loginByQQ(function(resMap){
+					
+					console.log(resMap.status);
+					
+					if(resMap.status != "success"){
+						return;
+					}
+					console.log(JSON.stringify(resMap.result));
+					
+					var params = resMap.result.qq_user;
+				
+					console.log(JSON.stringify(params) );
+				})
+				break;
+				case 3://新浪登录
+				authUtil.loginByXl(function(resMap){
+					
+					console.log(resMap.status);
+					
+					if(resMap.status != "success"){
+						return;
+					}
+					
+					console.log(JSON.stringify(resMap.result));
+					
+					var params = resMap.result.xl_user;
+				
+					console.log(JSON.stringify(params) );
+				})
+				break;
+				default:
+				console.log("授权出错")
+			}
+		},
+		userInfoStore(data){
+			if(data && data.status == "success") {
+				this.$vux.loading.hide();
+				let token = data.result.token;
+				let id = data.result.user.id;
+				let logid = data.result.user.logid;
+				let userImg = data.result.user.imageurl;
+				let userName = data.result.user.username;
+				let userMobile = data.result.user.mobile;
+				localStorage.inviteCode = data.result.user.invitecode;
+				this.$store.dispatch('userLogin',token);
+				this.$store.dispatch('userId',id);
+				this.$store.dispatch('userLogid',logid);
+				this.$store.dispatch('userImg',userImg);
+				this.$store.dispatch('userName',userName);
+				this.$store.dispatch('userMobile',userMobile);
+				this.$Tool.goPage({name: 'home',replace:true});
+				location.reload();
+			}
+			else if(data && data.status == "error") {
+				this.tip.codeTip = data.result.tip;
+				this.tip.active2 = true;
+				this.tip.close2 = false;
+				this.codeDesc = "";
 			}
 		}
 	}

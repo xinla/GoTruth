@@ -16,7 +16,7 @@ authUtil.init = function(){
 		for(var i in services){
 			var service=services[i];
 			auths[service.id]=service;
-			console.log(service.id);
+			// console.log(service.id);
 		}
 			
 	},function(e){
@@ -40,14 +40,15 @@ authUtil.loginByWx = function(call){
 		return;
 	}
 	auth.login(function(){
-			console.log("登录认证成功：");
-			console.log(JSON.stringify(auth.authResult));
+			// console.log("登录认证成功：");
+			// console.log(JSON.stringify(auth.authResult));
+			// {"openid":"oRrdQt6Rx5HoGnbKAgG_Wpl0zK44","scope":"snsapi_userinfo","refresh_token":"15_7154LP5HATQGV6dpH6oHLUxicB2hFNwXXMOPYhQgdzZRTjjHakfhejh9n5hQRX8KMGW7RfMfCwdP8aXaQm12f6YvIODe7LE2ZTKs8PMvoyY","code":"033DTL4d1x8dwt0xFw3d1s6B4d1DTL4N","unionid":"oU5YytwqdJBWqmL6dNXsjsYAS_MM","access_token":"15_6EC6T6cX3m0cAJA-FO2OJLvmwdfHoayP9KnOFi5p3mBTGsaauxe5sr5i3i_koQhKkpGRBJqQ8TIKmvlgFpLVG0mVb-lZxuqcJAOHjpDTRSI","expires_in":7200}
 			
-			
-			console.log("----- 获取用户信息 -----");
+			// console.log("----- 获取用户信息 -----");
 			auth.getUserInfo(function(){
-				console.log("获取用户信息成功：");
-				console.log(JSON.stringify(auth.userInfo));
+				// console.log("获取用户信息成功：");
+				// console.log(JSON.stringify(auth.userInfo));
+				// {"openid":"oRrdQt6Rx5HoGnbKAgG_Wpl0zK44","city":"Chizhou","country":"China","nickname":"董春林","privilege":[],"language":"zh_CN","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/KRO0TRAmL5XvPXia9icPstUkNKMlHSYOdhiahX5UBbNuibOhZGcxZcsRxmQtAAqFX2nLL5cwyc4fkLVJnKibiaN1qzJg/132","unionid":"oU5YytwqdJBWqmL6dNXsjsYAS_MM","sex":1,"province":"Anhui"}
 				var nickname=auth.userInfo.nickname||auth.userInfo.name||auth.userInfo.miliaoNick;
 			//	plus.nativeUI.alert("欢迎“"+nickname+"”登录！");
 				var userInfo = auth.userInfo; 
@@ -84,8 +85,8 @@ authUtil.loginByWx = function(call){
 			});
 		},function(e){
 			
-			console.log("登录认证失败：");
-			console.log("["+e.code+"]："+e.message);
+			// console.log("登录认证失败：");
+			// console.log("["+e.code+"]："+e.message);
 			plus.nativeUI.alert("详情错误信息请参考授权登录(OAuth)规范文档：http://www.html5plus.org/#specification#/specification/OAuth.html",null,"登录失败["+e.code+"]："+e.message);
 		});
 	

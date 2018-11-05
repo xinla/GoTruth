@@ -17,7 +17,7 @@ service.getCode = function(mobile,call){
 	})
 }
 
-//用户登录
+//手机号登录
 service.loginByMobile = function(mobile,code,call){
 
 	axios.get(controller+'/loginByMobile',{params:{
@@ -30,7 +30,55 @@ service.loginByMobile = function(mobile,code,call){
 		console.log(error);
 	})
 }
+//微信登录
+service.loginByWx = function(params,call) {
+	
+	/*var params = {
+		wx_openid,//:"微信标识",
+		wx_nikname,//:"微信昵称",
+		wx_image,//:"微信头像地址",
+		wx_unionid,//:"微信uid"
+	};*/
+	if (call) {
+		commonUtil.ajax(controller+'/loginByWx',params,call);
+		return;
+	}
+	var resUserInfo = commonUtil.ajaxAsync(controller+'/loginByWx',params);
 
+	return resUserInfo;
+}
+// QQ登录
+service.loginByQQ = function(qq_openid,qq_nikname,qq_image,call) {
+	
+	var params = {
+		qq_openid,//:"qq标识",
+		qq_nikname,//:"qq昵称",
+		qq_image,//:"qq头像地址"
+	};
+	if (call) {
+		commonUtil.ajax(controller+'/loginByQQ',params,call);
+		return;
+	}
+	var resUserInfo = commonUtil.ajaxAsync(controller+'/loginByQQ',params);
+
+	return resUserInfo;
+}
+//新浪登录
+service.loginByXl = function(xl_openid,xl_nikname,xl_image,call) {
+	
+	var params = {
+		xl_openid,//:"新浪微博标识",
+		xl_nikname,//:"新浪昵称",
+		xl_image,//:"新浪头像地址"
+	};
+	if (call) {
+		commonUtil.ajax(controller+'/loginByXl',params,call);
+		return;
+	}
+	var resUserInfo = commonUtil.ajaxAsync(controller+'/loginByXl',params);
+
+	return resUserInfo;
+}
 //获取用户的信息
 service.getUserById = function(targetuserid,call) {
 	

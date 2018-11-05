@@ -1,6 +1,6 @@
 <template>
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
-		<div @click="$store.dispatch('setIsScolling',false);">			
+		<div>			
 			<prompt-blank style="margin-top:100px;" v-if="ifNet" mes="断网啦..."></prompt-blank>
 			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
 			<multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
@@ -29,6 +29,7 @@ export default {
 			ifNet:false,
 			ifLoading:true,
 			tip:"正在加载",	
+			timeId:0,
 		}
 	},
 	props:{
@@ -157,6 +158,7 @@ export default {
 			if (!this.ifLoad) {
 				this.ifLoad = true;
 			}
+			//防止用户滚动中点击跳转
 			if (!this.isScolling) {
 				this.$store.dispatch('setIsScolling',true);
 			}
@@ -164,7 +166,12 @@ export default {
 				this.getMore();
 			}
 			this.scrollTop = $(e.target).scrollTop();	
-			// console.log(this.scrollTop)			
+			// console.log(this.scrollTop)	
+			// 滚动结束500ms后解禁滚动状态
+			clearTimeout(this.timeId);
+			this.timeId = setTimeout(()=>{
+				this.$store.dispatch('setIsScolling',false);
+			},500)	
 		}
 
 	},
