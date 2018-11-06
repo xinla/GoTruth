@@ -1,3 +1,4 @@
+import config from '@/lib/config/config'
 const tool = {
   //前往某一个页面
   goPage(p) {
@@ -180,8 +181,8 @@ const tool = {
     var reg = /[^\w\s\u4e00-\u9fa5\(\)\（\）\-]/g;
     return String(val).replace(reg,""); //返回替换后合法的字串
   },
-  /*发布时间格式化
-  @dateString:2018-1-6 15:25:42
+  /**发布时间格式化
+  * @dateString:2018-1-6 15:25:42
   */
   publishTimeFormat(dateString){
     let pubDate = new Date(String(dateString).replace(/-/g,'/')),
@@ -208,21 +209,22 @@ const tool = {
   },
   //图片格式判断
   checkPic(str){
+    if ( typeof str !== "string" ) {retrun;}
     let reg = /\.(jpg|png|jpeg|gif)$/i;
-    str = String(str);
     return reg.test(str);
   },
   //视频格式判断
   checkVideo(str){
-    str = String(str);
+    if ( typeof str !== "string" ) {retrun;}
     let reg = /\.(mp4)$/i;
     return reg.test(str);
   },
-  //提取图片
-  //@str 图文内容
-  //@num 图片最大数量
-  extractImg(str,num){
-    str = String(str);
+  /**提取图片
+  * @str 图文内容
+  * @num 图片最大数量
+  */
+  extractImg(str,num = 3){
+    if ( typeof str !== "string" ) {retrun;}
     let reg = /<img[^(img)]*src=[\'\"]?([^\'\"]*)[\'\"]?/gi,
         arr = str.match(reg),
         srcList = [];
@@ -234,7 +236,19 @@ const tool = {
     }
     return srcList;     
   },
-  // 未登录提示 //
+  /**
+   * 头像URL过滤处理
+   * @param  {[string]} url [description]
+   * @return {[string]}     [处理后的URL]
+   */
+  headerImgFilter(url){
+    let reg = /^http/i;
+    if (!reg.test(url)) {
+      url = url ? config.fileRoot + '/' + url : require('@/assets/images/user_head.jpg');
+    }
+    return url;
+  },
+  // 未登录提示 
   loginPrompt(back){
     GoTruth.$vux.confirm.show({
       content:"您还没登录哦！",

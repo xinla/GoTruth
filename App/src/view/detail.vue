@@ -11,7 +11,7 @@
 				<h1 class="article-title">{{ article.title }}</h1>
 				<div class="publisher bfc-o clearfix">
 					<router-link :to="{name:'published',query:{userId:article.author}}">
-						<img :src="artUser.imageurl?(fileRoot+artUser.imageurl):imgurl" alt="" class="uphoto uphoto-big fl">
+						<img :src="$Tool.headerImgFilter(artUser.imageurl)" alt="" class="uphoto uphoto-big fl">
 						<div class="article-time-name fl">
 							<div class="uname">
 								{{ artUser.username}}
@@ -74,7 +74,7 @@
 					<ul class="hot-list">
 						<li class="hot-item clearfix" v-for="(item,index) in commentList">
 							<div class="hot-userphoto fl">
-								<img :src="item.imageurl?(fileRoot+item.imageurl):imgurl">
+								<img :src="$Tool.headerImgFilter(item.imageurl)">
 							</div>
 							<div class="hot-wrap fl">
 								<div class="hot-header clearfix">
@@ -202,7 +202,7 @@
 					<div class="reply-body">
 						<div class="reply-container reply-first clearfix">
 							<div class="reply-img fl"> 
-								<img :src="replyobj.imageurl?(fileRoot+replyobj.imageurl):imgurl">
+								<img :src="$Tool.headerImgFilter(replyobj.imageurl)">
 							</div>
 							<div class="reply-content fr">
 								<div class="header clearfix">
@@ -225,7 +225,7 @@
 									<div class="reply-footer-wrap fl clearfix" v-show="noZan">	
 										<ul class="reply-list clearfix fl">
 											<li class="reply-item">
-												<img :src="replyobj.imageurl?(fileRoot+replyobj.imageurl):imgurl" alt="">
+												<img :src="$Tool.headerImgFilter(replyobj.imageurl)" alt="">
 											</li>
 											
 										</ul>
@@ -252,7 +252,7 @@
 							<div class="reply-discuss">全部评论</div>
 							<div class="reply-box clearfix" v-for="(item,index) in replyList">
 								<div class="reply-img fl">
-									<img :src="item.imageurl?(fileRoot+item.imageurl):imgurl">
+									<img :src="$Tool.headerImgFilter(item.imageurl)">
 								</div>
 								<div class="reply-content fr">
 									<div class="header clearfix">
@@ -380,7 +380,7 @@ export default {
 			userId:localStorage.id,
 			id:0,//文章id =>article.id
 			detailType:0,
-			imgurl:require('@/assets/images/userPhoto.jpg'),
+			// imgurl:require('@/assets/images/userPhoto.jpg'),
 			fileRoot:config.fileRoot+'/',
 			focusState:false,
 			article:{

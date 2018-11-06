@@ -113,7 +113,7 @@ export default {
       inviteCode:0,
       userName: '用户名',
       ifLogin: false,
-      userPhoto: require('@/assets/images/user_head.jpg'),
+      userPhoto:"",
       focusNum: 0,
       fansNum: 0,
     }
@@ -129,18 +129,18 @@ export default {
         this.ifLogin = false;
         return;
       }
-      let userImg = localStorage.userImg;
+      this.userPhoto = localStorage.userImg;
       this.userName = localStorage.userName;
       this.inviteCode = localStorage.inviteCode;
       this.ifLogin = true;
-      let reg = /^http/i;
+      /*let reg = /^http/i;
       if (!reg.test(userImg)) {
         if (userImg) {
           this.userPhoto = config.fileRoot + '/' + userImg;         
         }else{
           this.userPhoto = require('@/assets/images/user_head.jpg');
         }
-      }
+      }*/
       //获取粉丝数量
       followService.getUserVermicelliCount(this.userId,data=>{
         if (data && data.status == "success" ) {

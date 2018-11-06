@@ -237,7 +237,7 @@
 					city:'',
 					mobile:Number
 				},
-				imgurl:require('@/assets/images/user_head.jpg'),
+				imgurl:localStorage.userImg,
 				popList:{
 					show:false,
 					desc:'',
@@ -264,15 +264,23 @@
 			this.$nextTick(()=>{
 				if (!localStorage.id) {return;}
 				let data = userService.getCurentUser();
-				if(data&&data.status == 'success') {
+				if(data && data.status == 'success') {
 					this.user = data.result.user;
 					// localStorage.userData = JSON.stringify(data.result.user);
 				}
 				//判断用户头像
-				if(this.user.imageurl != null) {
-					this.imgurl = config.fileRoot +'/'+ this.user.imageurl;
-					this.$store.dispatch('userImg',this.user.imageurl);
-				}
+				// let tempImg = this.user.imageurl;
+				// if(tempImg != null) {
+				// 	let reg = /^http/i;
+				// 	//判断是否为第三方源头像
+				// 	if (!reg.test(tempImg)) {
+				// 		if (tempImg) {
+				// 			this.imgurl = config.fileRoot + '/' + tempImg;
+				// 		}
+				// 	}
+				// 	this.imgurl = config.fileRoot +'/'+ this.user.imageurl;
+				// 	this.$store.dispatch('userImg',this.imgurl);
+				// }
 				//个人介绍
 				if(this.$data.user.introduce == null) {
 					this.user.introduce = "这个人很懒、暂无个性签名"
@@ -331,15 +339,15 @@
 				fileService.uploadHeadImage(param,(data)=>{
 		          	if (data && data.status == "success") {
 			          	let src = data.result.url;
-			          	this.$vux.loading.hide();
-			          	this.$vux.toast.show({
-						 text: '头像上传成功'
-						});
-			          	this.imgurl = config.fileRoot +'/'+ src;
-			          	this.user.imageurl=src;
+			          	this.user.imageurl = src;
 			          	let res = userService.updateUser(this.user);
 			          	if(res && res.status == "success"){
-				          	this.$store.dispatch('userImg',src);
+				          	this.imgurl = config.fileRoot +'/'+ src;
+				          	this.$vux.loading.hide();
+				          	this.$store.dispatch('userImg',this.imgurl);
+				          	this.$vux.toast.show({
+							 text: '头像上传成功'
+							});
 			          	}	          		
 		          	} else {
 			          	this.$vux.loading.hide();
@@ -352,7 +360,7 @@
 				})
 			},
 			uploadAvatar(e){
-				debugger
+				// debugger
 				let file = e.target.files[0]; 
 				// console.log(file)  
 				if (!file) {return;}

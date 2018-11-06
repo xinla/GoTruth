@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import config from '@/lib/config/config'
 import authUtil from '@/service/util/authUtil'
 import userService from '@/service/userService'
 export default{
@@ -329,13 +330,21 @@ export default{
 		userInfoStore(data){
 			if(data && data.status === "success") {
 				this.$vux.loading.hide();
-				let token = data.result.token,
+				let reg = /^http/i,
+					token = data.result.token,
 					user = data.result.user,
 					id = user.id,
 					logid = user.logid,
-					userImg = user.imageurl,
+					userImg = this.$Tool.headerImgFilter(user.imageurl),
 					userName = user.username,
 					userMobile = user.mobile;
+				/*if (!reg.test(userImg)) {
+					if (userImg) {
+						userImg = config.fileRoot + '/' + userImg;
+					}else{
+			          userImg = require('@/assets/images/user_head.jpg');
+			        }
+				}*/
 				localStorage.inviteCode = user.invitecode;
 				this.$store.dispatch('userLogin',token);
 				this.$store.dispatch('userId',id);
@@ -353,6 +362,13 @@ export default{
 				this.codeDesc = "";
 				// console.log("error")
 			}
+		}
+	},
+	beforeRouteEnter(to, from, next){
+		if (!localStorage.id) {
+			next();
+		}else{
+			GoTruth.$Tool.goPage({name:"member",replace:"replace"})
 		}
 	}
 }
