@@ -90,11 +90,6 @@ import config from '@/lib/config/config'
 import followService from '@/service/followService'
 
 export default {
-  activated() {
-  	this.$nextTick(()=>{
-      this.loadUser();
-  	})  
-  },
   data() {
     return {
       loginArr: [
@@ -115,13 +110,18 @@ export default {
       ],
       loginLink: '/topBase/login',
       userId:localStorage.id,
-      inviteCode:localStorage.inviteCode || 66,
+      inviteCode:0,
       userName: '用户名',
       ifLogin: false,
       userPhoto: require('@/assets/images/user_head.jpg'),
       focusNum: 0,
       fansNum: 0,
     }
+  },
+  activated() {
+    this.$nextTick(()=>{
+      this.loadUser();
+    })  
   },
   methods: {
     loadUser(){    
@@ -131,14 +131,14 @@ export default {
       }
       let userImg = localStorage.userImg;
       this.userName = localStorage.userName;
+      this.inviteCode = localStorage.inviteCode;
       this.ifLogin = true;
-      if (userImg) {
-        try {
-          this.userPhoto = config.fileRoot + '/' + userImg;
-        } catch (err) {
-        }
-        if(userImg == 'undefined') {
-          this.userPhoto =  require('@/assets/images/user_head.jpg');
+      let reg = /^http/i;
+      if (!reg.test(userImg)) {
+        if (userImg) {
+          this.userPhoto = config.fileRoot + '/' + userImg;         
+        }else{
+          this.userPhoto = require('@/assets/images/user_head.jpg');
         }
       }
       //获取粉丝数量
@@ -204,17 +204,17 @@ export default {
       }
     }
   },
-  // watch:{
-  //   "$store"(){
-  //     console.log(this.$store);
-  //     this.loadUser();
-  //   }
-  // },
-  // beforeRouteEnter (to, from, next) {
-  //   next(vm=>{
-  //     vm.loadUser();
-  //   })
-  // }
+ /* watch:{
+    "$store"(){
+      console.log(this.$store);
+      this.loadUser();
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm=>{
+      vm.loadUser();
+    })
+  }*/
 }
 
 </script>

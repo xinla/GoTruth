@@ -113,35 +113,32 @@ export default{
 			logined:true
 		}
 	},
-	mounted(){
+	activated(){
 		this.$nextTick(()=>{
 			if(!localStorage.id) {
 				this.notlogin = true;
 				this.logined = false;
 				this.setupShow= false;
 				return;
-			}
-			let data = userService.getCurentUser();
-			if(data && data.status == "success") {
-				this.username = data.result.user.username;
+			}else{
+				this.username = localStorage.userName;
 				this.notlogin = false;
 				this.logined = true;
 			}
-
 		});
 	},
 	methods:{
 		handleExit(){
-			let thiz = this;
+			let _this = this;
 			this.$vux.confirm.show({
 				content:'确定要退出吗？',
 				onConfirm(){
-					temp.call(thiz);
+					temp.call(_this);
 				}
 			})
 			function temp (){
 				let resLogOut = userService.logOut();
-				if (resLogOut && resLogOut.status=="success") {
+				if (resLogOut && resLogOut.status === "success") {
 					this.$store.dispatch("userLogout")
 					this.$Tool.goPage({name:"home"});
 					this.$vux.alert.show({
@@ -154,9 +151,15 @@ export default{
 						this.$vux.alert.hide();
 					},1000)			
 				} else {
-					this.$vux.alert.show({
-						content:'退出失败',
-					})	
+					this.$vux.confirm.show({
+						content:`退出失败
+						需要强制退出吗？`,
+						confirmText:"强制退出",
+	                    cancelText:"以后再说",
+						onConfirm(){
+							_this.$store.dispatch("userLogout")
+						}
+					})
 				}				
 			}
 		},
@@ -219,7 +222,7 @@ export default{
 			} catch(e) {
               	_this.$vux.loading.hide();
               	_this.$vux.alert.show({
-                  title:'手机配置太低，请稍候再试',
+                  title:'手机配置太低，不支持该动作',
                 });	
 			}
 		},

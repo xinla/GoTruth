@@ -231,41 +231,20 @@ export default{
 		handleLogin(){
 			if(this.isOpacity == true) {
 				this.$vux.loading.show({text: '正在登录中...'});
-				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,(data)=>{
-					if(data && data.status == "success") {
-						this.$vux.loading.hide();
-						let token = data.result.token;
-						let id = data.result.user.id;
-						let logid = data.result.user.logid;
-						let userImg = data.result.user.imageurl;
-						let userName = data.result.user.username;
-						let userMobile = data.result.user.mobile;
-						localStorage.inviteCode = data.result.user.invitecode;
-						this.$store.dispatch('userLogin',token);
-						this.$store.dispatch('userId',id);
-						this.$store.dispatch('userLogid',logid);
-						this.$store.dispatch('userImg',userImg);
-						this.$store.dispatch('userName',userName);
-						this.$store.dispatch('userMobile',userMobile);
-						this.$Tool.goPage({name: 'home',replace:true});
-						location.reload();
-					}
-					else if(data && data.status == "error") {
-						this.tip.codeTip = data.result.tip;
-						this.tip.active2 = true;
-						this.tip.close2 = false;
-						this.codeDesc = "";
-					}
-				})
+				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,this.userInfoStore)
 			}
 		},
-		//第三方登录
+		/**
+		 * 第三方登录
+		 * @param  {[type]} type [description]
+		 */
 		authLogin(type){
+			const _this = this;
 			switch (type){
 				case 1://微信登录
 				authUtil.loginByWx(function(resMap){
 					if(resMap.status === "success"){
-					 	var params = resMap.result.wx_user;
+					 	let params = resMap.result.wx_user;
 						/*{
 							"sex":"男",
 							"wx_openid":"oRrdQt6Rx5HoGnbKAgG_Wpl0zK44",
@@ -273,56 +252,91 @@ export default{
 							"wx_image":"http://thirdwx.qlogo.cn/mmopen/vi_32/KRO0TRAmL5XvPXia9icPstUkNKMlHSYOdhiahX5UBbNuibOhZGcxZcsRxmQtAAqFX2nLL5cwyc4fkLVJnKibiaN1qzJg/132",
 							"wx_unionid":"oU5YytwqdJBWqmL6dNXsjsYAS_MM"
 						}*/
-						userService.loginByWx(params,data=>{})
+						userService.loginByWx(params,_this.userInfoStore)
 					}
 					
 				});
 				break;
 				case 2://QQ登录
-				authUtil.loginByQQ(function(resMap){
-					
-					console.log(resMap.status);
-					
-					if(resMap.status != "success"){
-						return;
+				authUtil.loginByQQ(function(resMap){					
+					if(resMap.status === "success"){
+						let params = resMap.result.qq_user;
+						userService.loginByQQ(params,_this.userInfoStore)
 					}
-					console.log(JSON.stringify(resMap.result));
-					
-					var params = resMap.result.qq_user;
-				
-					console.log(JSON.stringify(params) );
+					// console.log("resMap.result" + JSON.stringify(resMap.result));
+					/*{
+						"qq_user":{
+							"qq_openid":"F6DC81D7DEA4AA7AC94A2C6E57F96C09",
+							"qq_nikname":"被博士",
+							"qq_image":"http://qzapp.qlogo.cn/qzapp/1104455702/F6DC81D7DEA4AA7AC94A2C6E57F96C09/30",
+							"sex":"男"
+						}
+					}*/
+
 				})
 				break;
 				case 3://新浪登录
 				authUtil.loginByXl(function(resMap){
-					
-					console.log(resMap.status);
-					
-					if(resMap.status != "success"){
-						return;
+					// console.log(JSON.stringify(resMap.result));
+					// {"xl_user":{"sex":"男","xl_nikname":"用户6311798622","xl_image":"http://tvax3.sinaimg.cn/default/images/default_avatar_male_50.gif"}}
+					if(resMap.status === "success"){
+						let params = resMap.result.xl_user;
+						userService.loginByXl(params,_this.userInfoStore)
 					}
 					
-					console.log(JSON.stringify(resMap.result));
-					
-					var params = resMap.result.xl_user;
-				
-					console.log(JSON.stringify(params) );
 				})
 				break;
 				default:
 				console.log("授权出错")
 			}
 		},
+		/**
+		 * login callback 存储登录用户信息 
+		 * @param  {[Object]} data [服务器返回的用户信息]
+		 * {
+				"result":{
+					"token":"f24235e463ee4d80a40e0effd3179d94",
+					"user":{
+						"birthday":null,
+						"sex":null,
+						"updatetime":null,
+						"truename":null,
+						"qq_image":"http://qzapp.qlogo.cn/qzapp/1104455702/F6DC81D7DEA4AA7AC94A2C6E57F96C09/30",
+						"xl_nikname":null,"registertime":null,
+						"wx_image":null,
+						"introduce":null,
+						"city":null,"id":30,
+						"username":"被博士",
+						"area":null,
+						"province":null,
+						"imageurl":"http://qzapp.qlogo.cn/qzapp/1104455702/F6DC81D7DEA4AA7AC94A2C6E57F96C09/30",
+						"xl_image":null,
+						"wx_nikname":null,
+						"qq_openid":"F6DC81D7DEA4AA7AC94A2C6E57F96C09",
+						"qq_nikname":"被博士",
+						"xl_openid":null,
+						"logid":84,
+						"islock":0,
+						"invitecode":"ec5s8bawdm",
+						"wx_unionid":null,
+						"wx_openid":null,
+						"mobile":null
+					}
+				},
+				"status":"success"
+			}
+		 */
 		userInfoStore(data){
-			if(data && data.status == "success") {
+			if(data && data.status === "success") {
 				this.$vux.loading.hide();
-				let token = data.result.token;
-				let id = data.result.user.id;
-				let logid = data.result.user.logid;
-				let userImg = data.result.user.imageurl;
-				let userName = data.result.user.username;
-				let userMobile = data.result.user.mobile;
-				localStorage.inviteCode = data.result.user.invitecode;
+				let token = data.result.token,
+					user = data.result.user,
+					id = user.id,
+					logid = user.logid,
+					userImg = user.imageurl,
+					userName = user.username,
+					userMobile = user.mobile;
+				localStorage.inviteCode = user.invitecode;
 				this.$store.dispatch('userLogin',token);
 				this.$store.dispatch('userId',id);
 				this.$store.dispatch('userLogid',logid);
@@ -330,13 +344,14 @@ export default{
 				this.$store.dispatch('userName',userName);
 				this.$store.dispatch('userMobile',userMobile);
 				this.$Tool.goPage({name: 'home',replace:true});
-				location.reload();
+				// location.reload();
 			}
 			else if(data && data.status == "error") {
 				this.tip.codeTip = data.result.tip;
 				this.tip.active2 = true;
 				this.tip.close2 = false;
 				this.codeDesc = "";
+				// console.log("error")
 			}
 		}
 	}

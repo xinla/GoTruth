@@ -25,7 +25,7 @@ service.loginByMobile = function(mobile,code,call){
 		code:code
 	}}).then(function(res){
 		call(res.data);
-		console.log(res.data);
+		// console.log(res.data);
 	}).catch(function(error){
 		console.log(error);
 	})
@@ -48,13 +48,13 @@ service.loginByWx = function(params,call) {
 	return resUserInfo;
 }
 // QQ登录
-service.loginByQQ = function(qq_openid,qq_nikname,qq_image,call) {
+service.loginByQQ = function(params,call) {
 	
-	var params = {
+	/*var params = {
 		qq_openid,//:"qq标识",
 		qq_nikname,//:"qq昵称",
 		qq_image,//:"qq头像地址"
-	};
+	};*/
 	if (call) {
 		commonUtil.ajax(controller+'/loginByQQ',params,call);
 		return;
@@ -64,13 +64,13 @@ service.loginByQQ = function(qq_openid,qq_nikname,qq_image,call) {
 	return resUserInfo;
 }
 //新浪登录
-service.loginByXl = function(xl_openid,xl_nikname,xl_image,call) {
+service.loginByXl = function(params,call) {
 	
-	var params = {
+	/*var params = {
 		xl_openid,//:"新浪微博标识",
 		xl_nikname,//:"新浪昵称",
 		xl_image,//:"新浪头像地址"
-	};
+	};*/
 	if (call) {
 		commonUtil.ajax(controller+'/loginByXl',params,call);
 		return;
