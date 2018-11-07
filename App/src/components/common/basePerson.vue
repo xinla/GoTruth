@@ -9,7 +9,8 @@
 					<img  :src="userPhoto" >
 				</div> -->
 				<div class="member-msg-image">
-					<img  v-for="(img,index) in imgs" v-preview="img.url"  :src="img.url">
+					 <img  v-for="(img,index) in imgs" v-preview="img.url"  :src="img.url">
+					<!--<img :src="userPhoto">-->
 				</div>
 				<div class="member-msg-modal">
 					<ul class="member-msg-list">
@@ -59,7 +60,6 @@
 		<keep-alive>
 			<router-view class="router-view"></router-view>
 		</keep-alive>
-	
 	</div>
 </template>
 
@@ -77,27 +77,16 @@ export default {
 	data(){
 		return {
 			loginUserId:localStorage.id || 0,
-			userId:0,
+			userId:localStorage.id,
 			current:0,
 			currentName:"全部",
 			imgs: [
                 {
-                  url: require('@/assets/images/user_head.jpg'),
+                  url: "",
                 }
             ],
-			// list:[{
-			// 	src:require('@/assets/images/user_head.jpg'),
-			// }],
-			// options: {
-			// 	getThumbBoundsFn (index) {
-			// 		let thumbnail = document.querySelectorAll('.previewer-demo-img')[index]
-			// 		let pageYScroll = window.pageYOffset || document.documentElement.scrollTop
-			// 		let rect = thumbnail.getBoundingClientRect()
-			// 		return {x: rect.left, y: rect.top + pageYScroll, w: rect.width}
-			// 	}
-			// },
 			title:'',
-			userPhoto:require('@/assets/images/user_head.jpg'),
+			userPhoto:'',
 			focusNum:0,
 			fansNum:0,
 			publidsedNum:0,
@@ -117,25 +106,28 @@ export default {
 	},
 	methods:{
 		init(){
-			if (localStorage.id && localStorage.id == this.userId) {
-	    		let userImg = localStorage.userImg;
-				this.title = localStorage.userName;
-				 if(userImg == 'undefined') {
-			          this.imgs[0].url =  require('@/assets/images/user_head.jpg');
-			          return;
-			        }else{
-			        	this.imgs[0].url = config.fileRoot + '/' + userImg;
-			        }
-			}else{
-				let res = userService.getUserById(this.userId);
-				if (res && res.status == "success") {
-					if (res.result.user.imageurl) {
-						this.imgs[0].url = config.fileRoot + '/' + res.result.user.imageurl;
-					}
-					this.title = res.result.user.username;
-				}
+			// if (localStorage.id && localStorage.id == this.userId) {
+	  //   		this.userPhoto = localStorage.userImg;
+			// 	this.title = localStorage.userName;
+			// 	 if(userImg == 'undefined') {
+			//           this.imgs[0].url =  require('@/assets/images/user_head.jpg');
+			//           return;
+			//         }else{
+			//         	this.imgs[0].url = config.fileRoot + '/' + userImg;
+			//         }
+			// }else{
+			// 	let res = userService.getUserById(this.userId);
+			// 	if (res && res.status == "success") {
+			// 		if (res.result.user.imageurl) {
+			// 			this.imgs[0].url = config.fileRoot + '/' + res.result.user.imageurl;
+			// 		}
+			// 		this.title = res.result.user.username;
+			// 	}
+			// }
+			if(!localStorage.getItem('token')){
+				return;
 			}
-			// console.log(userImg); 
+			this.imgs[0].url = localStorage.userImg;
 			//获取文章数量
 			articleService.getUserArticleCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {
