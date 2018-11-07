@@ -138,9 +138,18 @@ export default {
   },
   methods:{
     subRecalc(){
+      this.debounce(this._subRecalc);
+    },
+    _subRecalc(){
       var docEl=document.documentElement,
       clientWidth = Math.min( window.innerWidth , docEl.clientWidth );
       docEl.style.fontSize = ( clientWidth / 750 * 100)+"px";
+    },
+    debounce(method){
+      clearTimeout(method.tId);
+      method.tId = setTimeout(()=>{
+        method.call()
+      },300)
     }
   },
   watch: {

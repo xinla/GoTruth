@@ -4,27 +4,27 @@
 			<div class="article-item clearfix">
 
 				<!-- 浮动单图片 -->
-				<img class="float-img a" v-if="3 == article.type && imgList.length == 1" :src="imgList[0] || imgurl" >
-				<img class="float-img" v-else-if="1 == article.type && ArticleFile.length == 1" :src="ArticleFile[0].url?(fileRoot+ArticleFile[0].url):imgurl">					
+				<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
+				<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">					
 				<!-- 公共标题 -->
 				<h2 class="article-title">{{article.title}}</h2>
 				<!-- 二或三图 -->
-				<div class="multiple-img-wrap" v-if="3 == article.type && imgList.length > 1">
+				<div class="multiple-img-wrap" v-if="3 === article.type && imgList.length > 1">
 					<div class="multiple-img" v-for="(item,index) in imgList">
-						<img :src="item?item:imgurl">
+						<img :src="item">
 					</div>
 				</div>
-				<div class="multiple-img-wrap" v-else-if="1 == article.type && ArticleFile.length > 1">
+				<div class="multiple-img-wrap" v-else-if="1 === article.type && ArticleFile.length > 1">
 					<div class="multiple-img" v-for="(item, index) in ArticleFile" v-if="index < 3">
-						<img :src="item.url?(fileRoot+item.url):imgurl" >
+						<img :src="fileRoot+item.url" >
 					</div>
 				</div>
 				<!-- 视频大图 -->
-				<div class="article-video" v-else-if="2 == article.type && ArticleFile.length">
+				<div class="article-video" v-else-if="2 === article.type && ArticleFile.length">
 					<div class="article-play cc">
 						<i class="iconfont icon-bofang1"></i>
 					</div>
-					<img :src="ArticleFile[0].thumbnail?(fileRoot + ArticleFile[0].thumbnail):imgurl">
+					<img :src="fileRoot + ArticleFile[0].thumbnail">
 				</div>
 				<!-- 文章评论 -->
 				<div class="article-footer clearfix">
@@ -51,7 +51,6 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-			imgurl:require('@/assets/images/userPhoto.jpg'),
 			ArticleFile:[
 				// {
 				// 	thumbnail:"",
@@ -229,6 +228,10 @@ export default {
 				}
 			}
 		}
+	}
+	img{
+		background: @bgColor url('../../assets/images/imgErrorBg.png') center no-repeat;
+		background-size: 50%;
 	}
 	.multiple-img{
 		flex: 1;

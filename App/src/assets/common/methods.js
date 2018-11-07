@@ -181,15 +181,17 @@ const tool = {
     var reg = /[^\w\s\u4e00-\u9fa5\(\)\（\）\-]/g;
     return String(val).replace(reg,""); //返回替换后合法的字串
   },
-  /**发布时间格式化
-  * @dateString:2018-1-6 15:25:42
+  /**
+  * 发布时间格式化
+  * @dateString:"2018-1-6 15:25:42"
   */
   publishTimeFormat(dateString){
-    let pubDate = new Date(String(dateString).replace(/-/g,'/')),
+    if (typeof dateString !== "string") {return;}
+    let pubDate = new Date(dateString.replace(/-/g,'/')),
         curDate = new Date(),
-        pubMillis = pubDate.getTime(),
+        pubMillis = +pubDate,
         pubYear = pubDate.getFullYear(),
-        curMillis = curDate.getTime(),
+        curMillis = +curDate,
         curYear = curDate.getFullYear(),
         difference = curMillis - pubMillis;
     if (difference < 4.32e+7) { //12小时内
