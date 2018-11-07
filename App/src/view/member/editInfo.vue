@@ -256,12 +256,15 @@
 				showAlert:false,
 				alertDesc:'',
 				inputMobile:'',
-				inputCode:''
+				inputCode:'',
+				// test:"test"
 			}
 		},
 		
 		mounted(){
 			this.$nextTick(()=>{
+				// console.log("editInfo mounted " + this.test)
+				// this.test = "refresh test"
 				if (!localStorage.id) {return;}
 				let data = userService.getCurentUser();
 				if(data && data.status == 'success') {
@@ -434,19 +437,29 @@
 				}
 			},
 			handleSubmitOne(){
-				if (this.popList.desc == "" || !this.$Tool.checkInput(this.popList.desc) || this.popList.desc.
-					match(/直击真相/g)) {
-					this.popList.desc = this.$Tool.replaceNo(this.popList.desc);
-					this.popList.desc = this.popList.desc.replace(/直击真相/g,"");
+				let temp = this.popList.desc;
+				if (temp === "") {return;}
+				if (!this.$Tool.checkInput(temp) || temp.match(/直击真相/g)) {
+					temp = this.$Tool.replaceNo(temp);
+					temp = temp.replace(/直击真相/g,"");
 					this.$vux.alert.show({
 					  content:'内容不合法，已为您删除，请确认！',
 					})
 					return;
 				}
-				this.$data.user.username = this.popList.desc;
+				let res = userService.testUserName(temp);				
+				if (res && res.status === "success") {
+					if (res.exist === "1") {
+						this.$vux.alert.show({
+						  content:'用户名已存在！',
+						})
+						return;						
+					}
+				}
+				this.user.username = temp;
 				this.descfunc((data)=>{
 					if(data && data.status == "success") {
-						this.$store.dispatch('userName',this.popList.desc);
+						this.$store.dispatch('userName',temp);
 					}
 				});
 			},
@@ -466,25 +479,27 @@
 			},
 			
 			handleSubmitTwo(){
-				if (this.popList.desc == "" || !this.$Tool.checkInput(this.popList.desc) || this.popList.desc.
-					match(/直击真相/g)) {
-					this.popList.desc = this.$Tool.replaceNo(this.popList.desc);
-					this.popList.desc = this.popList.desc.replace(/直击真相/g,"");
+				let temp = this.popList.desc;
+				if (temp === "") {return;}
+				if ( !this.$Tool.checkInput(temp) || temp.match(/直击真相/g)) {
+					temp = this.$Tool.replaceNo(temp);
+					temp = temp.replace(/直击真相/g,"");
 					this.$vux.alert.show({
 					  content:'内容不合法，已为您删除，请确认！',
 					})
 					return;
 				}
-				this.$data.user.introduce = this.popList.desc;
+				this.user.introduce = temp;
 				this.descfunc(()=>{});	
 			},
 			//限制文字字数
 			handleDesc(){
-				let descNum = this.popList.length - this.popList.desc.length;
-				if(descNum >= this.popList.length) {
-					this.popList.btnToggle = false;
+				let temp = this.popList;
+				let descNum = temp.length - temp.desc.length;
+				if(descNum >= temp.length) {
+					temp.btnToggle = false;
 				}else{
-					this.popList.btnToggle = true;
+					temp.btnToggle = true;
 				}	
 			},
 
@@ -540,6 +555,15 @@
 					})
 					return;
 				}else if(val.length == 11) {
+					let res = userService.testMobile(val);				
+					if (res && res.status === "success") {
+						if (res.exist === "1") {
+							this.$vux.alert.show({
+							  content:'改号码已被绑定！',
+							})
+							return;						
+						}
+					}
 					userService.getCode(val,(data)=>{
 						if(data.status == "success") {
 							this.inputMobile = val;

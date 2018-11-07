@@ -128,6 +128,31 @@ service.logOut = function(){
 
 	return resLogOut;
 }
+/**
+ * 判断用户名是否存在
+ * @param  {[type]} username [description]
+ * @return {status:"success" exist:"是否存在"  0:不存在，1:存在}
+ */
+service.testUserName = function(username){
+	let params = {
+		username,
+	}
+	let resMap = commonUtil.ajaxAsync(controller+'/testUserName',params);
 
+	return resMap;
+}
+/**
+ * 判断手机号是否注册
+ * @param  {[type]} username [description]
+ * @return {status:"success" exist:"是否存在"  0:不存在，1:存在}
+ */
+service.testMobile = function(mobile){
+	let params = {
+		mobile,
+	}
+	let resMap = commonUtil.ajaxAsync(controller+'/testMobile',params);
+
+	return resMap;
+}
 export default service
 

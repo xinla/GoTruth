@@ -50,8 +50,8 @@
 				</ul>
 			</div>
 			<p class="login-desc">登录即代表您已阅读并同意
-				<span>服务条款</span>和
-				<span>隐私政策</span>
+				<span @click="$Tool.goPage({name:'agreement',query:{title:'服务条款'}})">服务条款</span>和
+				<span @click="$Tool.goPage({name:'privacy',query:{title:'隐私政策'}})">隐私政策</span>
 			</p>
 		</div>
 	</div>
