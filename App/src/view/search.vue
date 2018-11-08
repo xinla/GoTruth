@@ -5,7 +5,7 @@
 			<i class="iconfont icon-left fl" @click="this.$Tool.goBack"></i>
 			<div class="search-input fl clearfix">
 				<i class="iconfont icon-search fl"></i>
-				<input type="search" class="fl" v-model="keywords"  ref="searchInput"  @keyup="getMatchkeywords" placeholder="请输入关键词" v-focus>
+				<input type="search" class="fl" v-model="keywords"  ref="searchInput"  @keyup="getMatchkeywords" placeholder="请输入关键词">
 				<i class="iconfont icon-close-circle fr" @click="reset()"></i>
 			</div>
 			<div class="search-btn fr" @click="search">搜索</div>
@@ -68,14 +68,6 @@ import searchService from '@/service/searchService'
 import articleService from '@/service/articleService'
 
 export default {
-	directives: {
-	  focus: {
-	    // 指令的定义
-	    inserted: function (el) {
-	      el.focus()
-	    }
-	  }
-	},
 	data() {
 		return {
 			guessList:[],

@@ -1207,9 +1207,9 @@ export default {
 				}
 			}
 		},
-		// pause(){
-		// 	this.$refs.videoPlayer.player.pause();
-		// }
+		pause(){
+			this.$refs.videoPlayer.player.pause();
+		}
 	},
 	watch:{
 		id(){

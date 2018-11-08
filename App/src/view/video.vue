@@ -96,7 +96,7 @@ export default {
 		doAllPause(whi){
 			this.$refs['zjzx-video'].forEach((item,index)=>{
 				if (whi != index) {
-					item.pause();					
+					item.pause();
 				}
 			});
 		},
@@ -120,8 +120,8 @@ export default {
 
 <style rel="stylesheet" scoped>
 	.main-content{
-		height: calc(100vh - 110px);
+		height: 100vh;
 		overflow-y: auto;
-		background: #fff;
+		background: #66c;
 	}
 </style>

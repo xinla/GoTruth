@@ -21,7 +21,7 @@
 		</div>
 		<!-- 标题 -->
 		<div class="release-title">
-			<input type="text" v-model="record.title" placeholder="请输入标题" v-focus>
+			<input type="text" v-model="record.title" placeholder="请输入标题">
 		</div>
 		<!-- 内容 -->
 		<div class="release-content" v-if="record.type==1 || record.type == 3">
@@ -79,12 +79,6 @@ import { Previewer, TransferDom } from 'vux'
 export default{
 	directives: {
 		TransferDom,
-	  focus: {
-	    // 指令的定义
-	    inserted: function (el) {
-	      el.focus()
-	    }
-	  }
 	},
 	components:{
 		Previewer
