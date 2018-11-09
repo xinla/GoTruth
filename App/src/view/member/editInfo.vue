@@ -257,14 +257,11 @@
 				alertDesc:'',
 				inputMobile:'',
 				inputCode:'',
-				// test:"test"
 			}
 		},
 		
 		mounted(){
 			this.$nextTick(()=>{
-				// console.log("editInfo mounted " + this.test)
-				// this.test = "refresh test"
 				if (!localStorage.id) {return;}
 				let data = userService.getCurentUser();
 				if(data && data.status == 'success') {

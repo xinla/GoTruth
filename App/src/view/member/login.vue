@@ -340,13 +340,6 @@ export default{
 					userImg = this.$Tool.headerImgFilter(user.imageurl),
 					userName = user.username,
 					userMobile = user.mobile;
-				/*if (!reg.test(userImg)) {
-					if (userImg) {
-						userImg = config.fileRoot + '/' + userImg;
-					}else{
-			          userImg = require('@/assets/images/user_head.jpg');
-			        }
-				}*/
 				localStorage.inviteCode = user.invitecode;
 				this.$store.dispatch('userLogin',token);
 				this.$store.dispatch('userId',id);
@@ -355,7 +348,7 @@ export default{
 				this.$store.dispatch('userName',userName);
 				this.$store.dispatch('userMobile',userMobile);
 				this.$Tool.goPage({name: 'home',replace:true});
-				// location.reload();
+				location.reload();
 			}
 			else if(data && data.status == "error") {
 				this.tip.codeTip = data.result.tip;
