@@ -260,7 +260,7 @@
 			}
 		},
 		
-		mounted(){
+		activated(){
 			this.$nextTick(()=>{
 				if (!localStorage.id) {return;}
 				let data = userService.getCurentUser();
