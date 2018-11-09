@@ -117,7 +117,6 @@ export default {
 	mounted(){
 		this.$nextTick(()=>{
 			this.init();
-      console.log('this is current player instance object', this.player)
 		})
 	},	
 	watch:{
@@ -149,11 +148,19 @@ export default {
             this.countShow = false;
           }
 				}
+
+        let commentStr = String(this.CommentNum);
+        let commentLength = commentStr.length;
+        if(commentLength >= 5) {
+          let commentDie = commentStr/10000;
+          let commentResult = (commentDie.toFixed(1)) + 'w';
+          this.CommentNum = commentResult;
+          // console.log(commentResult);
+        }
 			});
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
 		onPlayerPlay(player){
-		  console.log('player')
       this.titleShow = false;
 			this.$emit("allPause",this.whi);
 			if (!this.$store.state.notWifi) {
