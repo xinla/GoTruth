@@ -40,7 +40,7 @@
 					<span class="desc">{{user.sex}}</span>
 				</div>
 			</li>
-			<router-link :to="{path:'province',query:{title:'选择城市'}}" class="editInfo-item clearfix" tag="li">
+			<router-link :to="{path:'province',query:{title:'选择地区'}}" class="editInfo-item clearfix" tag="li">
 				<span class="editInfo-tit fl">地区</span>
 				<i class="iconfont icon-arrow-right fr"></i>
 				<div class="editInfo-desc editInfo-area fr">
