@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<home-header></home-header>
-		<down-refresh @refresh="init()" class="main-content" @scrolling="loadMore">
+		<down-refresh @refresh="init()" class="main-content" @scrolling="loadMore" ref="srcoll">
 			<div >
 				<prompt-blank style="margin-top:100px;" v-if="ifNet" mes="断网啦..."></prompt-blank>
 				<loading-main v-if="!ifNet && !arcList.length"></loading-main>
@@ -73,7 +73,7 @@ export default {
 			// 	resArticlePage = articleService.articlePage(this.page,15,this.classify);	
 			// }
 			if (resArticlePage && resArticlePage.status == "success") {
-				this.arcList = [...this.arcList,...resArticlePage.recordPage.list];
+				this.arcList = this.arcList.concat(resArticlePage.recordPage.list);
 				if (resArticlePage.recordPage.list.length) {
 					this.page++;						
 				}else{
@@ -88,8 +88,14 @@ export default {
 			if (!this.ifLoad) {
 				this.ifLoad = true;
 			}
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-350) {
-				this.init();
+			//防止用户滚动中点击跳转
+			if (!this.isScolling) {
+				this.$store.dispatch('setIsScolling',true);
+			}
+			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 1) > e.target.scrollHeight) {
+				setTimeout(()=>{
+					this.init();					
+				},300)
 			}
 			this.scrollTop = $(e.target).scrollTop();
 		},
@@ -112,7 +118,7 @@ export default {
 	},
 	watch:{
 		$route(){
-			$(".main-content").scrollTop(this.scrollTop);
+			$(this.$refs["srcoll"].$el).scrollTop(this.scrollTop);
 		}
 	}
 }
@@ -120,8 +126,7 @@ export default {
 
 <style rel="stylesheet" scoped>
 	.main-content{
-		height: 100vh;
+		height:calc( 100vh - 2.3rem );
 		overflow-y: auto;
-		background: #66c;
 	}
 </style>

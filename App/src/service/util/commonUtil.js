@@ -4,16 +4,19 @@ const util ={
 }
 
 util.ajaxAsync = function(url,params){
-	let res = null,net = {};
+	let res = {};
+	/*let res = {}
+		net = {};
 	try{
 		net = netUtil.getNetInfo();					
 	}catch(e){
 
 	}
 	if (net.network == "未连接网络") {
-		res = "网络断开啦";
+		res.status = "notnet";
+		res.mes = "网络已断开"
 		return res;
-	}
+	}*/
 
 	$.ajax({
 		url: url,
@@ -30,19 +33,22 @@ util.ajaxAsync = function(url,params){
 
 }
 util.ajax = function(url,params,call){
-	let res = null,net = {};
+	let res = {};
+	/*let res = {},
+		net = {};
 	try{
 		net = netUtil.getNetInfo();					
 	}catch(e){
 
 	}
 	if (net.network == "未连接网络") {
-		res = "网络断开啦";
+		res.status = "notnet";
+		res.mes = "网络已断开"
 		if (call) {
 			call(res);		
 		}
 		return;
-	}
+	}*/
 	$.post(url,params,function(data){
 		if (call) {
 			call(data);		

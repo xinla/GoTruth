@@ -38,7 +38,7 @@ export default {
     window.addEventListener(resizeEvt, this.subRecalc, false);
     document.addEventListener('DOMContentLoaded', this.subRecalc, false);
     //night
-    if (localStorage.dayNight&&localStorage.dayNight=='night') {
+    if (localStorage.dayNight && localStorage.dayNight === 'night') {
         let head = document.getElementsByTagName("head")[0];
         let link = document.createElement('link');
         link.setAttribute('rel','stylesheet');
@@ -46,7 +46,6 @@ export default {
         link.setAttribute('href','./static/night.css');
         head.appendChild(link);
     }
-
   },
   mounted(){
     //监测物理返回键
@@ -138,19 +137,10 @@ export default {
   },
   methods:{
     subRecalc(){
-      this.debounce(this._subRecalc);
-    },
-    _subRecalc(){
       var docEl=document.documentElement,
       clientWidth = Math.min( window.innerWidth , docEl.clientWidth );
       docEl.style.fontSize = ( clientWidth / 750 * 100)+"px";
     },
-    debounce(method){
-      clearTimeout(method.tId);
-      method.tId = setTimeout(()=>{
-        method.call()
-      },300)
-    }
   },
   watch: {
   	//监听路由
@@ -172,7 +162,7 @@ export default {
     width: 100%;
     height: 100%;
   }
-  html {overflow-x: hidden;height: 100%;font-size: 50px;}
+  html {overflow-x: hidden;height: 100%;}
   body{
     font-size: .28em;
     line-height: 1;

@@ -1,5 +1,5 @@
 <template>
-	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
+	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="srcoll">
 		<div>			
 			<prompt-blank style="margin-top:100px;" v-if="ifNet" mes="断网啦..."></prompt-blank>
 			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
@@ -124,7 +124,7 @@ export default {
 					resArticlePage = articleService.articlePage(this.page,15,this.classify);
 				}
 				if (resArticlePage && resArticlePage.status == "success") {
-					this.arcList = [...this.arcList,...resArticlePage.recordPage.list];	
+					this.arcList = this.arcList.concat(resArticlePage.recordPage.list);	
 					if (resArticlePage.recordPage.list.length) {
 						this.page++;						
 					}else{
@@ -177,7 +177,7 @@ export default {
 	},
 	watch:{
 		$route(){
-			$(".main-content").eq(this.classify).scrollTop(this.scrollTop);
+			$(this.$refs["srcoll"].$el).scrollTop(this.scrollTop);
 		},
 		show(){	
 			this.$nextTick(()=>{		
