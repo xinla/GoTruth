@@ -19,12 +19,15 @@
 	</div>-->
   <div class="video-wrap">
     <div class="video-content">
-      <h3 class="video-title" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
+      <transition  enter-active-class="animated fadeInDown" leave-active-class=" animated fadeOutUp">
+      <h3 class="video-title" v-show="titleShow" style="animation-duration: 800ms" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
+      </transition>
       <video-player class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
                     :options="playerOptions"
-                    @play="onPlayerPlay()">
+                    @play="onPlayerPlay($event)"
+                    @pause="onPlayerPause($event)">
       </video-player>
     </div>
     <div class="video-footer clearfix">
@@ -35,7 +38,7 @@
         <span class="username">{{ artUser.username}}</span>
       </div>
       <div class="right fr">
-        <div class="video-msg">
+        <div class="video-msg" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">
           <i class="iconfont icon-xiaoxi"></i>
           <span class="msg-num" v-if="countShow">{{CommentNum}}</span>
         </div>
@@ -71,6 +74,7 @@ export default {
 			fileRoot:config.fileRoot+'/',
 			// publisher:"",
       countShow:false,
+      titleShow:true,
       artUser:{
         username:'',
         imageurl:'',
@@ -144,17 +148,27 @@ export default {
             this.countShow = false;
           }
 				}
+
+        let commentStr = String(this.CommentNum);
+        let commentLength = commentStr.length;
+        if(commentLength >= 5) {
+          let commentDie = commentStr/10000;
+          let commentResult = (commentDie.toFixed(1)) + 'w';
+          this.CommentNum = commentResult;
+          // console.log(commentResult);
+        }
 			});
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
-		onPlayerPlay(e){
-			this.$emit("allPause",this.whi);				
+		onPlayerPlay(player){
+      this.titleShow = false;
+			this.$emit("allPause",this.whi);
 			if (!this.$store.state.notWifi) {
 				let _this = this,
 					net = {};
 				try{
-					net = netUtil.getNetInfo();					
-				}catch(e){
+					net = netUtil.getNetInfo();
+				}catch(player){
 
 				}
 				if (net.network !="WiFi网络") {
@@ -166,12 +180,17 @@ export default {
 							_this.$store.state.notWifi = true;
 							// _this.onPlayerPlay();无效
 						}
-					})					
+					})
 				}
 			}
 		},
+    onPlayerPause(player){
+      this.titleShow = true;
+      this.$refs.videoPlayer.player.pause();
+    },
+
 		pause(){
-			this.$refs.videoPlayer.player.pause();
+    this.$refs.videoPlayer.player.pause();
 		}
 	}
 }
@@ -186,7 +205,7 @@ export default {
         top: 0;
         left: 0;
         z-index: 1;
-        padding: .2rem .3rem;
+        padding: .2rem .3rem 0 .3rem;
         border-radius: 0 0 .1rem .1rem;
         font-size: .32rem;
         letter-spacing: .04rem;
@@ -194,6 +213,10 @@ export default {
         background-color: rgba(0,0,0,0.4);
         box-shadow:0 .3rem .5rem rgba(0,0,0,0.4);
         color: #fff;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
     }
     .video-footer{
@@ -216,6 +239,12 @@ export default {
             border-radius: 50%;
             border: .02rem solid @borderColor;
           }
+        }
+        .username{
+          max-width: 2.8rem;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
         }
       }
       .right{

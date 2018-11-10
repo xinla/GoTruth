@@ -19,7 +19,7 @@
 						@focus="handleFocus1"
 						ref="mobileFocus"
 						v-model="mobileDesc"
-						maxlength="13"
+						maxlength="11"
 						placeholder="请输入手机号">
 					<span class="login-close" v-show="tip.close1" @click="handleClose(1)">x</span>
 					<span class="login-code" @click="handlegetCodeDesc" :class="{codeColor:tip.codeColor}">{{tip.getCodeDesc}}</span>
@@ -121,7 +121,7 @@ export default{
 		isOpacity(){
 			if(!this.mobileDesc) return;
 			
-			if(this.mobileDesc.length != 13 || this.codeDesc.length < 4) {
+			if(this.mobileDesc.length != 11 || this.codeDesc.length < 4) {
 				this.disabled = true;
 				return false;
 			}else {
@@ -139,7 +139,7 @@ export default{
 
 		//用户名输入事件
 		handeleMobile(){
-			this.mobileDesc = this.$Tool.mobileInput(this.mobileDesc);
+			// this.mobileDesc = this.$Tool.mobileInput(this.mobileDesc);
 			if(this.mobileDesc) {
 				this.tip.close1 = true;
 				this.tip.active1 = false;
