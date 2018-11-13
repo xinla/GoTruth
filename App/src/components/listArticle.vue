@@ -59,13 +59,17 @@ export default {
 				// console.log(e)
 			}
 			if (!this.classify) {
-				this.init();				
+				this.init();
+				if (this.arcList.length) {
+					this.ifLoad = true;
+				}			
 			}
 		})
 
 	},
 	methods:{
 		init(){
+			this.page = 1;
 			let resArticlePage;
 			try{
 				if(this.classify == 0){
@@ -79,14 +83,16 @@ export default {
 					if (this.total == resArticlePage.recordPage.totalRow) {
 						this.ifNew = true;
 					}else{
-						this.total = resArticlePage.recordPage.totalRow;			
+						this.total = resArticlePage.recordPage.totalRow;
+						this.ifNew = false;	
 					}
-						this.page++;						
+					this.page++;						
 					// console.log(this.arcList);
 				}				
 			}finally{	
-				this.lock = false;
-				// this.ifLoad = false;			
+				// this.lock = false;
+				// this.ifLoad = false;	
+						
 			}
 		},
 		doRefresh(){
@@ -102,18 +108,44 @@ export default {
 			}else{
 				this.ifNet = false;
 			}
-			this.page = 1;
 			this.init();
 			if (this.ifNew) {
 				this.$vux.toast.show({
 					type:"text",
 					time:800,
-					text:"已经是最新内容啦",
+					text:"已经是最新内容了",
 					width:"50%",
 				});				
 			}
+		},		
+		loadMore(e){
+			this.throttle(this._loadMore,this,e);
 		},
-		getMore(){
+		//函数节流控制
+		throttle(method,context,arg) {
+			let cur = +new Date();
+			if (cur - (method.last || 0) > 20) {
+				method.call(context,arg);
+				method.last = cur;
+			}
+		},
+		_loadMore(e){			
+			//防止用户滚动中点击跳转
+			if (!this.isScolling) {
+				this.$store.dispatch('setIsScolling',true);
+			}
+			this.scrollTop = $(e.target).scrollTop();	
+			// console.log(this.scrollTop)	
+			// 滚动结束200ms后解禁滚动状态
+			clearTimeout(this.timeId);
+			this.timeId = setTimeout(()=>{
+				if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) >= e.target.scrollHeight) {
+					this.getMoreActicle();
+				}
+				this.$store.dispatch('setIsScolling',false);
+			},200)	
+		},
+		getMoreActicle(){
 			// debugger
 			this.lock = true;
 			let resArticlePage;
@@ -143,36 +175,6 @@ export default {
 				this.lock = false;
 			}
 		},
-		loadMore(e){
-			this.throttle(this._loadMore,this,e);
-		},
-		//函数节流控制
-		throttle(method,context,arg) {
-			let cur = +new Date();
-			if (cur - (method.last || 0) > 20) {
-				method.call(context,arg);
-				method.last = cur;
-			}
-		},
-		_loadMore(e){
-			if (!this.ifLoad) {
-				this.ifLoad = true;
-			}
-			//防止用户滚动中点击跳转
-			if (!this.isScolling) {
-				this.$store.dispatch('setIsScolling',true);
-			}
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 1) >= e.target.scrollHeight) {
-				this.getMore();
-			}
-			this.scrollTop = $(e.target).scrollTop();	
-			// console.log(this.scrollTop)	
-			// 滚动结束500ms后解禁滚动状态
-			clearTimeout(this.timeId);
-			this.timeId = setTimeout(()=>{
-				this.$store.dispatch('setIsScolling',false);
-			},500)	
-		}
 
 	},
 	watch:{

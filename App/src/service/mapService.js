@@ -15,6 +15,18 @@ service.getPoiList = function(page_num,latitude,longitude,call){
 	})
 
 }
+service.getPoiListByKeyword = function(page_num,latitude,longitude,keywords,call){
+	// debugger;
+	// debugger;
+	axios.get(controller+'/getPoiList',{params:{
+		page_num:page_num,
+		latitude:latitude,
+		longitude:longitude,
+		key:keywords
+	}}).then(function(res){
+		call(res.data);
+	})
 
+}
 export default service
 

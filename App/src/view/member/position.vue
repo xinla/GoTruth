@@ -21,19 +21,22 @@ export default{
         return {
             keywords:'',
             siteList:[],
+            longitude:0,
+            longitude:0
         }
     },
     mounted(){
         this.$nextTick(()=>{
-            let page_num = 0;
+            // let page = 0;
             mapUtil.getPosition((data)=>{
-                let aa = data.citycode;
-                let longitude = data.longitude;
-                let latitude = data.latitude;
-
-                mapService.getPoiList(page_num,latitude,longitude,(data2)=>{
-                    this.siteList=data2.results;
-                    page_num++;
+                // let aa = data.citycode;
+                this.longitude = data.longitude;
+                this.latitude = data.latitude;
+                // console.log(data)
+                mapService.getPoiList(0,this.latitude,this.longitude,(data2)=>{
+                    this.siteList = data2.results;
+                    // console.log(data2)
+                    // page++;
                 })
             })
             
@@ -47,20 +50,20 @@ export default{
     methods:{
         search(keywords){
          
-            let page_num = 0;
+            // let page = 0;
+                mapService.getPoiListByKeyword(0,this.latitude,this.longitude,keywords,(data2)=>{                    
+                        this.siteList=data2.results;
+                        // page++;
 
-            mapUtil.getPosition((data)=>{
+                })
+
+            /*mapUtil.getPosition((data)=>{
               
-                let aa = data.citycode;
+                // let aa = data.citycode;
                 let longitude = data.longitude;
                 let latitude = data.latitude;
 
-                mapService.getPoiList(page_num,latitude,longitude,keywords,(data2)=>{                    
-                        this.siteList=data2.results;
-                        page_num++;
-
-                })
-            })
+            })*/
         },
         positionBack(pn,pa){
             window.history.back();

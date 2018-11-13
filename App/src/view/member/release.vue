@@ -12,7 +12,7 @@
 			 <transition  enter-active-class="animated fadeInLeft" leave-active-class=" animated fadeOutLeft">
 				<div class="release-option" v-show="optionShow" style="animation-duration: 300ms">
 					<ul class="release-list">
-						<li class="release-item" :value="item.classifycode" v-for="item in classfyList" @click="handleItem(item)">
+						<li class="release-item" :value="item.classifycode" v-for="item in classifyList" @click="handleItem(item)">
 							{{ item.classifyname }}
 						</li>
 					</ul>
@@ -74,7 +74,7 @@ import mapUtil from '@/service/util/mapUtil'
 import mapService from '@/service/mapService'
 import fileService from '@/service/fileService'
 import articleService from '@/service/articleService'
-import articleClassifyService from '@/service/article_classifyService'
+// import articleClassifyService from '@/service/article_classifyService'
 import { Previewer, TransferDom } from 'vux'
 export default{
 	directives: {
@@ -90,7 +90,7 @@ export default{
 			defaultVal:null,
 			defaultType:'请选择分类',
 			fileRoot:config.fileRoot +'/',
-	        classfyList:[],
+	        classifyList:[],
 	        push:[],
 			position:{},
 			record:{
@@ -117,19 +117,18 @@ export default{
 		this.record.selectedpublishname = localStorage.position || "不显示";
 		this.record.selectedpublishaddress = localStorage.selectedpublishaddress || 0;
 
-		let resArcClass = articleClassifyService.getArticleClassifyList();
-		this.classfyList = resArcClass.result.classfyList;
+		// let resArcClass = articleClassifyService.getArticleClassifyList();
+		this.classifyList = JSON.parse(localStorage.classify)
 
 		let page_num = 0;
 		mapUtil.getPosition((data)=>{
-			let aa = data.citycode;
+			// let aa = data.citycode;
 			let longitude = data.longitude;
 			let latitude = data.latitude;
 			this.position = data;
 			mapService.getPoiList(page_num,latitude,longitude,(data2)=>{
 					page_num++;
 			})
-
 		})
 	},
 	methods:{
@@ -226,7 +225,6 @@ export default{
 
 		},
 		publish(){
-
 			if(!localStorage.id){
 				this.$vux.alert.show({
 				  content:'你还未登录呢，亲先登录再发布哦',

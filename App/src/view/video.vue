@@ -40,18 +40,24 @@ export default {
 			lock:false,
 			ifLoad:false,
 			ifNet:false,
+			ifNew:false,
 			scrollTop:0,
 			ifLoading:true,
 			tip:"正在加载",
+			timeId:0,
 		}
 	},
 	mounted(){
-		this.$nextTick(()=>{
+		setTimeout(()=>{
 			this.init();
-		})
+			if (this.arcList.length) {
+				this.ifLoad = true;
+			}
+		},100)
 	},
 	methods:{
 		init(){
+			this.page = 1;
 			let net = {};
 			try{
 				net = netUtil.getNetInfo();	
@@ -64,6 +70,60 @@ export default {
 			}else{
 				this.ifNet = false;
 			}
+			let resArticlePage;
+				resArticlePage = articleService.articlePage(this.page,15,'',2);
+			// if(this.classify == 0){
+			// }
+			// else{
+			// 	resArticlePage = articleService.articlePage(this.page,15,this.classify);	
+			// }
+			if (resArticlePage && resArticlePage.status == "success") {
+				this.arcList = resArticlePage.recordPage.list;
+				if (resArticlePage.recordPage.list.length) {
+					this.page++;	
+					this.ifNew = false;						
+				}else{
+					this.ifNew = true;
+				}
+				// console.log(this.arcList);articlePage
+				if (this.ifNew) {
+					this.$vux.toast.show({
+						type:"text",
+						time:800,
+						text:"已经是最新内容了",
+						width:"50%",
+					});				
+				}
+			}
+		},
+		loadMore(e){
+			this.throttle(this._loadMore,this,e);
+		},
+		//函数节流控制
+		throttle(method,context,arg) {
+			let cur = +new Date();
+			if (cur - (method.last || 0) > 20) {
+				method.call(context,arg);
+				method.last = cur;
+			}
+		},
+		_loadMore(e){
+			//防止用户滚动中点击跳转
+			if (!this.isScolling) {
+				this.$store.dispatch('setIsScolling',true);
+			}
+			this.scrollTop = $(e.target).scrollTop();
+			// 滚动结束200ms后解禁滚动状态
+			clearTimeout(this.timeId);
+			this.timeId = setTimeout(()=>{
+				if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) > e.target.scrollHeight) {
+						this.getMoreActicle();					
+					// setTimeout(()=>{
+					// },300)
+				}
+			},200)
+		},		
+		getMoreActicle(){
 			this.lock = true;
 			let resArticlePage;
 				resArticlePage = articleService.articlePage(this.page,15,'',2);
@@ -83,21 +143,6 @@ export default {
 				this.lock = false;
 				// console.log(this.arcList);articlePage
 			}
-		},
-		loadMore(e){
-			if (!this.ifLoad) {
-				this.ifLoad = true;
-			}
-			//防止用户滚动中点击跳转
-			if (!this.isScolling) {
-				this.$store.dispatch('setIsScolling',true);
-			}
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 1) > e.target.scrollHeight) {
-				setTimeout(()=>{
-					this.init();					
-				},300)
-			}
-			this.scrollTop = $(e.target).scrollTop();
 		},
 		doAllPause(whi){
 			this.$refs['zjzx-video'].forEach((item,index)=>{
