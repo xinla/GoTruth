@@ -1,7 +1,7 @@
 <template>
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="srcoll">
-		<div>			
-			<prompt-blank style="margin-top:100px;" v-if="ifNet" mes="断网啦..."></prompt-blank>
+		<div>		
+			<prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
 			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
 			<multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
 			<load-more v-show="arcList.length && ifLoad" :show-loading="ifLoading" :tip="tip"></load-more>
@@ -44,7 +44,7 @@ export default {
 	},
 	mounted () {
 		this.$nextTick(()=>{
-			let net = {}
+			/*let net = {}
 			function getNet() {
 				net = netUtil.getNetInfo();	
 				if (net.network == "未连接网络") {
@@ -57,7 +57,7 @@ export default {
 				document.removeEventListener('plusready', getNet.bind(this));
 			}catch(e){
 				// console.log(e)
-			}
+			}*/
 			if (!this.classify) {
 				this.init();
 				if (this.arcList.length) {
@@ -102,7 +102,13 @@ export default {
 			}catch(e){
 				// console.log(e)
 			}
-			if (net.network == "未连接网络") {
+			if (net.network === "未连接网络") {
+				this.$vux.toast.show({
+					type:"text",
+					time:800,
+					text:"网络竟然崩潰了",
+					width:"50%",
+				});
 				this.ifNet = true;
 				return;
 			}else{
@@ -185,12 +191,15 @@ export default {
 			this.$nextTick(()=>{		
 				this.init();
 			})				
+		},
+		"$store.state.isNetwork"(val){
+			this.ifNet = val;
 		}
 	},
 	computed:{
 		isScolling(){
 			return this.$store.state.isScolling;
-		}
+		},
 	}
 }
 </script>

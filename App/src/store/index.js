@@ -18,15 +18,8 @@ function State(){
   this.notWifi = false;//费WIFI网络播放提示
   this.transitionName = "";
   this.isScolling = false;
+  this.isNetwork = false; // 是否连网
 }
-// let state = {
-//   token:window.localStorage.getItem('token'),
-//   id:null,
-//   logid:null,
-//   username:null,
-//   usetImg:"",
-//   userMobile:null,
-// }
 let state = new State();
 //创建改变状态的方法
 const mutations = {

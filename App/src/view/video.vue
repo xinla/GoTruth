@@ -70,31 +70,31 @@ export default {
 			}else{
 				this.ifNet = false;
 			}
-			let resArticlePage;
-				resArticlePage = articleService.articlePage(this.page,15,'',2);
+			articleService.articleVideoPage(this.page,15,'',2,data=>{
+				if (data && data.status == "success") {
+					this.arcList = data.recordPage.list;
+					if (data.recordPage.list.length) {
+						this.page++;	
+						this.ifNew = false;						
+					}else{
+						this.ifNew = true;
+					}
+					// console.log(this.arcList);articlePage
+					if (this.ifNew) {
+						this.$vux.toast.show({
+							type:"text",
+							time:800,
+							text:"已经是最新内容了",
+							width:"50%",
+						});				
+					}
+				}					
+			});
 			// if(this.classify == 0){
 			// }
 			// else{
 			// 	resArticlePage = articleService.articlePage(this.page,15,this.classify);	
 			// }
-			if (resArticlePage && resArticlePage.status == "success") {
-				this.arcList = resArticlePage.recordPage.list;
-				if (resArticlePage.recordPage.list.length) {
-					this.page++;	
-					this.ifNew = false;						
-				}else{
-					this.ifNew = true;
-				}
-				// console.log(this.arcList);articlePage
-				if (this.ifNew) {
-					this.$vux.toast.show({
-						type:"text",
-						time:800,
-						text:"已经是最新内容了",
-						width:"50%",
-					});				
-				}
-			}
 		},
 		loadMore(e){
 			this.throttle(this._loadMore,this,e);

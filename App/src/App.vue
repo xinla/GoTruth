@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import netUtil from "@/service/util/netUtil"
 import versionService from "@/service/versionService"
 import messageService from '@/service/messageService'
 
@@ -33,10 +34,13 @@ export default {
     },3000);
     //html font-size 
     var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
-    // document.querySelector('html').setAttribute("data-dpr",1);
-    // // document.querySelector('meta[name="viewport"]').setAttribute("content","width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no");
-    window.addEventListener(resizeEvt, this.subRecalc, false);
-    document.addEventListener('DOMContentLoaded', this.subRecalc, false);
+    window.addEventListener(resizeEvt, subRecalc, false);
+    document.addEventListener('DOMContentLoaded', subRecalc, false);
+    function subRecalc(){
+      var docEl=document.documentElement,
+      clientWidth = Math.min( window.innerWidth , docEl.clientWidth );
+      docEl.style.fontSize = ( clientWidth / 750 * 100)+"px";
+    }
     //night
     if (localStorage.dayNight && localStorage.dayNight === 'night') {
         let head = document.getElementsByTagName("head")[0];
@@ -48,10 +52,12 @@ export default {
     }
   },
   mounted(){
-    //监测物理返回键
     try{
       let _this = this;
       document.addEventListener('plusready', function() {
+        // 判断是否连网
+        _this.$store.state.isNetwork = netUtil.getNetInfo().network === "未连接网络";
+        //监测物理返回键
         plus.key.addEventListener('backbutton', function() {
           if (_this.mainRoute.includes(_this.$route.name)) {
             _this.$Tool.goPage({name:"home",replace:true,});
@@ -121,7 +127,10 @@ export default {
             });          
          });          
         }
-        appUpdate();
+        // 判断系统，非Android不执行检测更新
+        if (navigator.userAgent.indexOf('Android') > -1) {         
+          appUpdate();
+        }
       },false);  
     }catch(e){
 
@@ -134,13 +143,6 @@ export default {
         }
       })
     }
-  },
-  methods:{
-    subRecalc(){
-      var docEl=document.documentElement,
-      clientWidth = Math.min( window.innerWidth , docEl.clientWidth );
-      docEl.style.fontSize = ( clientWidth / 750 * 100)+"px";
-    },
   },
   watch: {
   	//监听路由

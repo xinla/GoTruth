@@ -133,14 +133,6 @@ new Vue({
   render: h => h(App),
 }).$mount('#app');
 
-// router.beforeEach((to, from, next) => {
-//   next()
-//   // console.log("bb")
-
-// })
-// router.afterEach((to, from) => {
-//   // console.log("aa")
-// })
 
 
 

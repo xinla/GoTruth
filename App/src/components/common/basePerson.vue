@@ -106,28 +106,18 @@ export default {
 	},
 	methods:{
 		init(){
-			// if (localStorage.id && localStorage.id == this.userId) {
-	  //   		this.userPhoto = localStorage.userImg;
-			// 	this.title = localStorage.userName;
-			// 	 if(userImg == 'undefined') {
-			//           this.imgs[0].url =  require('@/assets/images/user_head.jpg');
-			//           return;
-			//         }else{
-			//         	this.imgs[0].url = config.fileRoot + '/' + userImg;
-			//         }
-			// }else{
-			// 	let res = userService.getUserById(this.userId);
-			// 	if (res && res.status == "success") {
-			// 		if (res.result.user.imageurl) {
-			// 			this.imgs[0].url = config.fileRoot + '/' + res.result.user.imageurl;
-			// 		}
-			// 		this.title = res.result.user.username;
-			// 	}
-			// }
-			if(!localStorage.getItem('token')){
-				return;
+			if (localStorage.id && localStorage.id == this.userId) {
+	    		this.userPhoto = localStorage.userImg;
+				this.title = localStorage.userName;
+				this.imgs[0].url = this.userPhoto;
+			}else{
+				let res = userService.getUserById(this.userId);
+				if (res && res.status == "success") {
+					this.userPhoto =  this.$Tool.headerImgFilter(res.result.user.imageurl);
+					this.title = res.result.user.username;
+					this.imgs[0].url = this.userPhoto;
+				}
 			}
-			this.imgs[0].url = localStorage.userImg;
 			//获取文章数量
 			articleService.getUserArticleCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {
@@ -160,18 +150,18 @@ export default {
   	})
   },
 	beforeRouteEnter (to, from, next) {
-    	if (!GoTruth.$route.query.userId && !localStorage.id) { 
+    	if (!to.query.userId && !localStorage.id) { 
             GoTruth.$vux.alert.show({
 			  content:'您还未登录',
 			})
 			return false;
         }
 	    next((vm)=>{
-	      	vm.userId = vm.$route.query.userId;
+	      	vm.userId = to.query.userId;
 	    	if (!vm.userId){
 	    		vm.userId = localStorage.id;
 	    	}
-			vm.current = Number(vm.$route.query.current || vm.current);
+			vm.current = Number(to.query.current || vm.current);
 	      	// vm.init();
 		});
 	},

@@ -1,22 +1,4 @@
 <template>
-	<!--<div class="text-wrap bfc-o">
-		<div>
-			<h1 @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h1>
-			<video-player class="video-player vjs-custom-skin" 
-				ref="videoPlayer"
-			 	:playsinline="true"
-			  	:options="playerOptions"
-			  	@play="onPlayerPlay()"
-			  	>
-			</video-player>	
-		</div>
-		<p class="pub" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">
-			<span v-if="ifPublisher">{{publisher}}</span>
-			<span>{{CommentNum}}评</span>
-			<span>{{publishtime}}</span>
-			<small class="delete fr" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">X</small>
-		</p>
-	</div>-->
   <div class="video-wrap">
     <div class="video-content">
       <transition  enter-active-class="animated fadeInDown" leave-active-class=" animated fadeOutUp">
