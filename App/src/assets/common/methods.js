@@ -173,12 +173,12 @@ const tool = {
   //输入区内容合法验证
   checkInput(val){
     val = String(val);
-    var reg = /[^(script|href|on|iframe|frameset)]/gi;
+    var reg = /[(script|href|on|iframe|frameset)]/gi;
     return !reg.test(val); //合法返回true
   },
   // 非法字符替换
   replaceNo(val){
-    var reg = /[^(script|href|on|iframe|frameset)]/gi;
+    var reg = /[(script|href|on|iframe|frameset)]/gi;
     return String(val).replace(reg,""); //返回替换后合法的字串
   },
   /**
