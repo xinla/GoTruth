@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<keep-alive>
-			<router-view></router-view>			
+			<router-view></router-view>
 		</keep-alive>
 		<div class="footer-nav">
 			<div class="footer-item">
 				<router-link to="/home" exact>
-					<i class="iconfont icon-index footer-icon"></i>
+					<i class="iconfont icon-gruth footer-icon"></i>
 					<span class="footer-text">首页</span>
 				</router-link>
 			</div>
@@ -18,12 +18,12 @@
 			</div>
 			<div class="footer-item">
 				<router-link :to="{path:'/video'}" exact>
-					<i class="iconfont icon-shipin footer-icon"></i>
+					<i class="iconfont icon-faxian footer-icon"></i>
 					<span class="footer-text">今日真相</span>
 				</router-link>
 			</div>
 			<div class="footer-item">
-				<router-link :to="{path:'/member'}" exact>				
+				<router-link :to="{path:'/member'}" exact>
 					<i class="iconfont icon-wode footer-icon">
 						<badge :text="newMes" class="bfc-p" v-if="newMes"></badge>
 					</i>
@@ -35,11 +35,6 @@
 </template>
 <script>
 export default{
-	// data(){
-	// 	return{
-	// 		newMes:''
-	// 	}
-	// }
 	computed:{
 		newMes(){
 			return this.$store.state.newMes || this.$store.state.newVersion;
@@ -51,7 +46,7 @@ export default{
 	.footer-nav{
 		width: 100%;
 		position: fixed;
-    z-index: 9;
+    	z-index: 9;
 		left: 0;
 		bottom: 0;
 		text-align: center;
@@ -62,15 +57,15 @@ export default{
 			float: left;
 			width: 25%;
 			height: .88rem;
-      color: #666;
+      		color: #666;
 			.footer-icon {
-        padding-top: .08rem;
+        		padding-top: .08rem;
 				display: block;
 				font-size: .4rem;
 			}
 			.footer-text{
-        display: block;
-        margin-top: .05rem;
+		        display: block;
+		        margin-top: .05rem;
 				font-size: .24rem;
 
 			}

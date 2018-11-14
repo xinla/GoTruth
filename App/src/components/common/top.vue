@@ -12,9 +12,9 @@
 			</div>		
 			<div class="top-back-nav">
 				<slot name="nav">
-					<i class="iconfont icon-more">
-					</i>				
-				</slot>				
+					<!-- <i class="iconfont icon-more">
+					</i> -->
+				</slot>
 			</div>
 		</div>
 	</div>

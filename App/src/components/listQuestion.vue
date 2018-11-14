@@ -2,15 +2,14 @@
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
 		<div>				
 			<loading-main v-show="!arcList.length"></loading-main>
-			<question v-for="(item,index) in arcList" :article="item" :key="index"></question>
-			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>		
+			<!--<question v-for="(item,index) in arcList" :article="item" :key="index"></question>-->
+			<question></question>
+			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>
 		</div>
 	</downRefresh>
 </template>
-
 <script>
 import downRefresh from '@/components/common/downRefresh'
-
 import articleService from '@/service/articleService'
 import interlocutionService from '@/service/interlocutionService'
 export default {
@@ -29,7 +28,7 @@ export default {
 	},
 	mounted () {
 		this.$nextTick(()=>{
-			this.init();			
+			this.init();
 		})
 	},
 	data(){

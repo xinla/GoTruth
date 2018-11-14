@@ -25,7 +25,7 @@
 			<div class="main" ref="main">
 				<swiper v-model="classifyIndex" :height="swiperHeight + 'px'" :show-dots="false" :threshold="150" >
 			        <swiper-item>
-			          	<listQuestion :show="0 == classifyIndex"></listQuestion>
+			          	<listQuestion></listQuestion>
 			        </swiper-item>
 			        <swiper-item v-for="(item,index) in classifyList" :key="index">
 			          	<listQuestion :classify="item.classifycode" :show="item.classifycode == classifyIndex?showArr[classifyIndex] = true:showArr[item.classifycode]"></listQuestion>

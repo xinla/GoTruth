@@ -3,7 +3,7 @@
 	<div class="index">
 		<home-header></home-header>
 		<div class="main-wrap">
-			<div class="bfc-o">
+			<div class="bfc-o main-box">
 				<tab :line-width=2 active-color='#fc378c' v-model="classifyIndex">
 					<tab-item :selected="currentClassiftyName == '推荐'" @click="currentClassiftyName = '推荐'">推荐
 					</tab-item>
@@ -99,11 +99,11 @@ import articleClassifyService from '@/service/article_classifyService'
 	    		//获取分类
 	    		if (!localStorage.classify) {
 		    		articleClassifyService.getArticleClassifyList(data=>{
-						if (data && data.status == "success") {
-							this.classifyList = data.result.classfyList;
-							localStorage.classify = JSON.stringify(data.result.classfyList);
-						}
-					});
+              if (data && data.status == "success") {
+                this.classifyList = data.result.classfyList;
+                localStorage.classify = JSON.stringify(data.result.classfyList);
+              }
+            });
 	    		}else{
 	    			this.classifyList = JSON.parse(localStorage.classify);
 	    		}
@@ -223,6 +223,9 @@ import articleClassifyService from '@/service/article_classifyService'
 		width: 100%;
 		background: #fff;
 		overflow: hidden;
+    .main-box{
+      border-bottom: .02rem solid @borderColor;
+    }
 		.main{
 			height: calc(100% - 90px);
 			overflow-y:auto;

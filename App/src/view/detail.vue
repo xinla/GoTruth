@@ -4,8 +4,15 @@
 			<template slot="title">{{ '文章详情' }}</template>
 		</top>
 		<div class="mask" v-show="ifLoad">
-			<loading-main></loading-main>			
+			<loading-main></loading-main>
 		</div>
+		<div class="audio-box" style="display: none;">
+			<audio controls class="myAudios"  preload="auto" ref="audioPlayer" v-for="item in audioSrc" :src="fileRoot + item"></audio>
+		</div>
+		<div class="playAudio" @click="handleAudio" v-if="iconShow">
+			<i class="iconfont" :class="icon"></i>
+		</div>
+		<!-- <div id="audioBox"></div> -->
 		<div class="detail" @scroll="loadScroll">
 			<section class="content-wrap" v-if="!proFail1">
 				<h1 class="article-title">{{ article.title }}</h1>
@@ -28,19 +35,19 @@
 					<div class="article-content">
 		            <p v-html="article.content"></p>
 		          </div>
-					<div class="phone-content clearfix">
-						<div v-if="1 === article.type" class="phone-img fl">
-							<!-- <img  :src="fileRoot + item.url" :alt="item.filename">							 -->
-							<img v-for="(item,index) in ArticleFile"  :src="fileRoot + item.url" :alt="item.filename">							
+					<div class="phone-content">
+						<div v-if="1 === article.type" class="phone-img clearfix">
+							<div class="tel-img fl" v-for="(item,index) in ArticleFile">
+								<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url">
+							</div>
 						</div>
 						<div v-else-if="2 === article.type">
-							<video-player class="video-player vjs-custom-skin" 
+							<video-player class="video-player vjs-custom-skin"
 								ref="videoPlayer"
 							 	:playsinline="true"
 							  	:options="playerOptions"
-							  	@play="onPlayerPlay()">	  	
-							</video-player>	
-							<!-- :src="fileRoot + ArticleFile[0].url"			 -->
+							  	@play="onPlayerPlay()">
+							</video-player>
 						</div>
 					</div>
 					<a :href="article.sourceurl" class="see-text" v-if="sourceShow">查看原文</a>
@@ -50,9 +57,9 @@
 					<span v-for="item in article.keywords">{{ item }}</span>
 				</div> -->
 			</section>
-			<prompt-blank v-if="proFail1" :mes="failMes1"></prompt-blank>		
+			<prompt-blank v-if="proFail1" :mes="failMes1"></prompt-blank>
 			<ul class="article-change clearfix" v-if="!detailType">
-				<li class="item" @click="handleFabulous(1)" :class="{'likeActive':likeStatus}"> 
+				<li class="item" @click="handleFabulous(1)" :class="{'likeActive':likeStatus}">
 					{{likeNum}}
 					<like :likeStatus="likeStatus"></like>
 				</li>
@@ -60,7 +67,7 @@
 					<span>不喜欢</span>
 					<i class="iconfont icon-lajixiang"></i>
 				</li>
-			</ul>	
+			</ul>
 
 			<ul class="article-menu" v-else>
 				<li :class="{current:current == 1}" @click="handleSwitch(1)">评论</li>
@@ -132,9 +139,7 @@
 				</div>
 			</div>
 		</div>
-		
 		<div class="pop-mask" v-show="popMask" @click="handleCancel">
-			
 		</div>
 		<div v-transfer-dom class="transdom">
 			<popup v-model="popList.show" style="z-index: 588;">
@@ -227,7 +232,6 @@
 											<li class="reply-item">
 												<img :src="$Tool.headerImgFilter(replyobj.imageurl)" alt="">
 											</li>
-											
 										</ul>
 										<div class="reply-footer-desc fl">
 											<span class="num">{{replyobj.likeNum}}</span>人赞过 
@@ -241,7 +245,6 @@
 										{{replyobj.likeNum}}
 										<like :likeStatus="likeStatus"></like>
 									</div>
-								
 								</div>
 
 							</div>
@@ -275,7 +278,6 @@
 												<var>{{item.replyCount}}</var>
 												<span class="reply-replys">回复</span>
 											</div>
-											
 										</div>
 										<span class="reply-delete fr" v-if="item.douserid == userId" @click="handleDelete(item.id,index,2)">删除</span>
 									</div>
@@ -287,7 +289,6 @@
 				</div>
 			</popup>
 		</div>
-		
 		<!-- 举报框 -->
 		<div v-transfer-dom style="z-index: 988;">
 			<popup v-model="reportShow" style="z-index: 999;">
@@ -342,6 +343,7 @@ import { Group, TransferDom, Popup} from 'vux'
 export default {
 	directives:{
 		TransferDom,
+
 	},
 	components:{
 		like,
@@ -385,8 +387,8 @@ export default {
 			focusState:false,
 			article:{
 				id:Number,
-				title:"标题",
-				content:"内容",
+				title:"",
+				content:"",
 				author:Number,
 				type:2,
 				sourceurl:'',
@@ -451,6 +453,11 @@ export default {
 			pageNum1:1,
 			//回复加载分页
 			pageNum2:1,
+     		audioSrc:[],
+     		index:0,
+     		iconShow:false,
+     		icon:'icon-touting',
+     		tag:false,
 			//是否加载
 			ifLoad:false,
 			//加载锁
@@ -488,7 +495,7 @@ export default {
 				reporttime:'',//"举报时间" ,
 				// itemid:'',//"对象id",
 				// reportuserid:'',//"被举报人id",
-				// type:'',//"类型"  1.文章举报  
+				// type:'',//"类型"  1.文章举报
 			},
 			//转发，点赞列表
 			listMember:[],
@@ -508,12 +515,13 @@ export default {
 		}
 	},
 	mounted(){
+
 		try{
-			shareService.init();			
+			shareService.init();
 		}catch(e){
 
 		}
-	},	
+	},
 	activated(){
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
@@ -534,9 +542,19 @@ export default {
 			// }
 			//获取文章信息
 			let resArticleDetail = articleService.getArticleById(this.id);
-
+			// if(resArticleDetail && resArticleDetail.status == "success") {
+	        let audioStr =  resArticleDetail.record.audio;
+	        let audioArr = audioStr.split(',');
+	        this.audioSrc = audioArr;
+			// }
 			if (resArticleDetail&&resArticleDetail.status == "success") {
 				this.article = resArticleDetail.record;
+				console.log(this.article.content);
+				if(!this.article.content){
+					this.iconShow = false;
+				}else{
+					this.iconShow = true;
+				}
 				if(this.article.sourceurl == null) {
 					this.sourceShow = false;
 				}else{
@@ -545,7 +563,7 @@ export default {
 			} else {
 				this.proFail1 = true;
 			}
-			// console.log(resArticleDetail)
+
 			//获取发布人信息
 			let resUserInfo = userService.getUserById(this.article.author);
 			if (resUserInfo && resUserInfo.status == "success") {
@@ -561,28 +579,27 @@ export default {
 						} else {
 							this.focusState = false;
 						}
-					}						
+					}
 				});
 			}
-			// 文章附件
+			// 文章附件 图片
 			if (this.article.type != 3) {
-				articleFileService.getFileByArticle(this.article.id,data=>{
+				articleFileService.getFileByArticle(this.article.id,(data)=>{
 					if (data && data.status == "success") {
 						if (this.article.type == 1) {
-							this.ArticleFile = data.result.filelist;				
+							this.ArticleFile = data.result.filelist;
 						}else if(this.article.type == 2){
 							this.playerOptions.sources[0].src = this.fileRoot + data.result.filelist[0].url;
 							this.playerOptions.poster = this.fileRoot + data.result.filelist[0].thumbnail;
 						}
-
-					}				
-				});				
+					}
+				});
 			}
 			//获取文章点赞量
 			praiseService.getPraiseCount(this.id,1,(data)=>{
 				if (data && data.status == "success") {
 					this.likeNum = data.result.count;
-				}		
+				}
 			});
 			//用户是否给文章点赞
 			praiseService.testPraise(this.id,1,(data)=>{
@@ -592,12 +609,13 @@ export default {
 					} else {
 						this.likeStatus = false;
 					}
-				}			
+				}
 			});
 			//获取评论数量
 			articleCommentService.getArticleCommentCount(this.id,(data)=>{
 				if (data.status == "success") {
 					this.commentNum = data.result.count;
+
 					if(this.commentNum == 0) {
 						this.badgeShow = false;
 					}else{
@@ -615,9 +633,9 @@ export default {
 						this.commentNum = commentResult;
 						// console.log(commentResult);
 					}
-				}			
+				}
 			});
-			
+
 			// console.log(resArticleCommentList)
 			// console.log(this.commentList)
 			//是否收藏
@@ -626,19 +644,60 @@ export default {
 					if (data.result == 1 ) {
 						this.collectToggle.notCollect = false;
 						this.collectToggle.collected = true;
-						// this.ifCollect = true;				
+						// this.ifCollect = true;
 					} else {
-						// this.ifCollect = false;		
+						// this.ifCollect = false;
 						this.collectToggle.notCollect = true;
-						this.collectToggle.collected = false;		
+						this.collectToggle.collected = false;
 					}
-				}		
+				}
 			});
 			//评论滚动近底部，自动加载 一屏1080
 			this.loadComment();
 			this.ifLoad = false;
+
+
 		},
 		// 弹出评论框
+	    ended(){
+	    	console.log(111);
+	    },
+	    handleAudio(){
+	    	if(!this.tag){
+	    		this.icon = "icon-ziyuanldpi";
+	    		this.playerAudio();
+
+	    		this.tag=true;
+	    	}else{
+	    		this.icon = "icon-touting";
+	    		this.pauseAudio();
+	    		this.tag=false;
+	    	}
+	    },
+	    playerAudio(){
+	    	let audios = document.getElementsByClassName("myAudios");
+			let index = 0;
+	    	function play() {
+				var caudio = audios[index];
+				if(!caudio){
+					index =0;
+					// play();
+				}
+				caudio.play();
+				caudio.addEventListener("ended", function() {
+					console.log("播放完毕")
+					index ++;
+					// play()
+				});
+			}
+			play();
+	    },
+	    pauseAudio(){
+	    	let audios = document.getElementsByClassName("myAudios");
+	    	if(audios!==null){
+	    		alert(audios.paused);
+	    	}
+	    },
 		handleOpenInput(){
 			this.textShow();
 			if(this.replyShow){
@@ -776,9 +835,9 @@ export default {
 				if(this.commentType == 1) {
 
 					// 执行发送评论
-					let resArticleComment = articleCommentService.articleComment(this.id,this.popList.desc,userId,this.article.author,1);	
+					let resArticleComment = articleCommentService.articleComment(this.id,this.popList.desc,userId,this.article.author,1);
 					if(resArticleComment && resArticleComment.status == "success") {
-						this.lock = false; 
+						this.lock = false;
 						this.pageNum1 = 1;
 						this.loadComment();
 						setTimeout(()=>{
@@ -807,7 +866,7 @@ export default {
 				}else{
 					let comment = this.commentConAdd?(this.popList.desc + this.commentConAdd):this.popList.desc;
 					// 执行发送评论回复
-					let resACommentReply = articleCommentService.articleComment(this.id,comment,userId,this.replyUserId,2,this.replyCommentId);	
+					let resACommentReply = articleCommentService.articleComment(this.id,comment,userId,this.replyUserId,2,this.replyCommentId);
 					if(resACommentReply && resACommentReply.status == "success") {
 						setTimeout(()=>{
 							this.$vux.toast.show({
@@ -862,7 +921,7 @@ export default {
 								thiz.$vux.loading.hide();
 								thiz.$vux.toast.show({
 									text:'删除成功'
-								});	
+								});
 								if(thiz.commentList.length <= 0) {
 									thiz.proFail2 = true;
 									thiz.ifLoadMore = false;
@@ -874,7 +933,7 @@ export default {
 								thiz.$vux.loading.hide();
 								thiz.$vux.toast.show({
 									text:'删除成功'
-								});	
+								});
 								let resReplyList = articleCommentService.getReplyList(thiz.replyCommentId,1,10)
 								if(resReplyList.recordPage.list.length <= 0){
 									thiz.noComment = true;
@@ -892,34 +951,31 @@ export default {
 
 		//收藏---取消收藏
 		handleCollect(articleid){
-			if (!localStorage.id ) { this.$Tool.loginPrompt(); return; }			
+			if (!localStorage.id ) { this.$Tool.loginPrompt(); return; }
 			let resArticleCollect = articleCollectService.articleCollect(articleid);
 			if (resArticleCollect && resArticleCollect.status == "success") {
-				
 				if (resArticleCollect.result == 1 ) {
 					this.$vux.toast.show({
 					  text:'收藏成功',
 					  type:'succes'
 					});
-					
 					//给发布人发送消息
 					messageService.sendMessage(this.article.author,"collect",this.id,1);
 					setTimeout(()=>{
 						this.$vux.alert.hide();
-					},1000);			
+					},1000);
 					this.collectToggle.notcollect = false;
 					this.collectToggle.collected = true;
 				} else {
 					this.$vux.toast.text('取消收藏', 'middle')
 					setTimeout(()=>{
 						this.$vux.alert.hide();
-					},1000)	
+					},1000);
 					this.collectToggle.notcollect = true;
-					this.collectToggle.collected = false;		
+					this.collectToggle.collected = false;
 				}
 			}
 		},
-
 		// 分享
 		handleShare(){
 			this.shareShow= true;
@@ -942,8 +998,7 @@ export default {
 			}else{
 				this.shareDesc['thumbs'] = [this.fileRoot + this.playerOptions.poster];
 			}
-
-		}, 
+		},
 
 		//分享到第三方
 		handleGiveShare(type){
@@ -980,7 +1035,7 @@ export default {
 			this.commentType = 2;
 			this.replyUserId = replyUserId;	//回复评论人id
 			this.replyCommentId = commentid; //回复评论的id
-			this.commentIndex = commentIndex;//指定评论数组中某条评论的索引值 
+			this.commentIndex = commentIndex;//指定评论数组中某条评论的索引值
 			//展开评论回复是顶部当前索引使用
 			// 是否关注发布人
 			// debugger;
@@ -1038,7 +1093,6 @@ export default {
 		handleChooseReport(item,index){
 			item.show = !item.show;
 			this.reportInfo.reportreasion = index;
-			
 		},
 
 		// 提交举报
@@ -1203,7 +1257,7 @@ export default {
 							_this.$store.state.notWifi = true;
 							//_this.onPlayerPlay();//无效
 						}
-					})					
+					})
 				}
 			}
 		},
@@ -1236,6 +1290,16 @@ export default {
 		position: absolute;
 		bottom: initial;
 		background: #fafafa;
+	}
+	.playAudio{
+		position: absolute;
+		display: inline-block;
+		top: .7rem;
+		right: .3rem;
+		.iconfont{
+			font-size: .46rem;
+			font-weight: 500;
+		}
 	}
 	.detail{
 		position: relative;
@@ -1321,19 +1385,22 @@ export default {
 				}
 				.phone-content{
 					padding-bottom: .4rem;
-					// display: flex;
 					.phone-img{
-						width: 33%;
-						height: 1.2rem;
-						margin-right: .4%;
-						margin-bottom: 1%;
-						&:nth-child(3n){
-							margin-right: 0;
-						}
-						img{
-							display: block;
-							width: 100%;
-							height: 100%;
+						width: 100%;
+						.tel-img{
+							width: 32.5%;
+							height: 2.1rem;
+							margin-right: .086rem;
+							margin-bottom: .086rem;
+							&:nth-child(3n){
+								margin-right: 0;
+							}
+							img{
+								display: block;
+								width: 100%;
+								height: 100%;
+								object-fit: cover;
+							}
 						}
 					}
 				}
@@ -1357,7 +1424,6 @@ export default {
 					color: #999;
 					background-color: #f5f7f9;
 				}
-				
 			}
 		}
 	}
@@ -1902,6 +1968,9 @@ export default {
 		margin: 0 !important;
 		transform: translate(-50%,-50%);
 	}
+	.lg-preview-title{
+		display: none !important;
+	}
 </style>
 
 <style scoped>
@@ -1920,5 +1989,6 @@ export default {
 	.vux-popup-show{
 		/*z-index: 999 !important;*/
 	}
+
 
 </style>	

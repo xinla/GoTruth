@@ -37,10 +37,17 @@ export default new Router({
         },
         //问答
         {
-          path: 'questionAnswer',
+          path: '/questionAnswer',
           name: 'questionAnswer',
           component: (resolve)=>{
             require(['@/view/questionAnswer.vue'],resolve)
+          }
+        },
+        {
+          path: '/answerSubject',
+          name: 'answerSubject',
+          component: (resolve)=>{
+            require(['@/components/common/answerSubject.vue'],resolve)
           }
         },
         //视频
