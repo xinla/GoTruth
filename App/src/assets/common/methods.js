@@ -211,13 +211,13 @@ const tool = {
   },
   //图片格式判断
   checkPic(str){
-    if ( typeof str !== "string" ) {retrun;}
+    if ( typeof str !== "string" ) {return;}
     let reg = /\.(jpg|png|jpeg|gif)$/i;
     return reg.test(str);
   },
   //视频格式判断
   checkVideo(str){
-    if ( typeof str !== "string" ) {retrun;}
+    if ( typeof str !== "string" ) {return;}
     let reg = /\.(mp4)$/i;
     return reg.test(str);
   },
@@ -226,7 +226,7 @@ const tool = {
   * @num 图片最大数量
   */
   extractImg(str,num = 3){
-    if ( typeof str !== "string" ) {retrun;}
+    if ( typeof str !== "string" ) {return;}
     let reg = /<img[^(img)]*src=[\'\"]?([^\'\"]*)[\'\"]?/gi,
         arr = str.match(reg),
         srcList = [];
@@ -270,7 +270,7 @@ const tool = {
    * @return String/Number    [description]
    */
   numConvertText(num){
-    if (typeof num === "number") {retrun;}
+    if (typeof num !== "number") {return;}
     if (num >= 1000) {
       if (num >= 10000) {
         return (num/10000).toFixed(1) + 'k';
