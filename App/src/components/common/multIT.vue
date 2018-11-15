@@ -30,7 +30,7 @@
 				<div class="article-footer clearfix">
 					<div class="fl">
 						<span v-if="ifPublisher">{{publisher}}</span>
-						<span>{{CommentNum}}评论</span>
+						<span>{{commentNum}}评论</span>
 						<span>{{publishtime}}</span>
 					</div>
 					<div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event]);" v-if="ifDel">
@@ -56,7 +56,7 @@ export default {
 				// 	thumbnail:"",
 				// }
 			],
-			CommentNum:0,
+			commentNum:0,
 			publishtime:"",
 			fileRoot:config.fileRoot+'/',
 			publisher:"",
@@ -120,9 +120,7 @@ export default {
 			// 获取文章评论数量
 			articleCommentService.getArticleCommentCount(this.article.id,data=>{
 				if (data.status == "success") {
-					this.CommentNum = data.result.count;		
-				}else{
-					this.CommentNum = 0;
+					this.commentNum = this.$Tool.numConvertText(data.result.count);
 				}					
 			});
 

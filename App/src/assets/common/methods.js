@@ -263,6 +263,21 @@ const tool = {
         }
       }
     })
+  },
+  /**
+   * 大数字转换为K/W简写
+   * @param  Number num [description]
+   * @return String/Number    [description]
+   */
+  numConvertText(num){
+    if (typeof num === "number") {retrun;}
+    if (num >= 1000) {
+      if (num >= 10000) {
+        return (num/10000).toFixed(1) + 'k';
+      }
+      return (num/1000).toFixed(1) + 'w';
+    }
+    return num;
   }
 }
 

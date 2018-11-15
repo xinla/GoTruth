@@ -434,7 +434,7 @@ export default {
 			//文章点赞量
 			likeNum:0,
 			//评论总量
-			commentNum:999,
+			commentNum:0,
 			//点赞状态
 			likeStatus:false,
 			//举报显隐
@@ -598,7 +598,7 @@ export default {
 			//获取文章点赞量
 			praiseService.getPraiseCount(this.id,1,(data)=>{
 				if (data && data.status == "success") {
-					this.likeNum = data.result.count;
+					this.likeNum = this.$Tool.numConvertText(data.result.count);
 				}
 			});
 			//用户是否给文章点赞
@@ -614,8 +614,7 @@ export default {
 			//获取评论数量
 			articleCommentService.getArticleCommentCount(this.id,(data)=>{
 				if (data.status == "success") {
-					this.commentNum = data.result.count;
-
+					this.commentNum = this.$Tool.numConvertText(data.result.count);
 					if(this.commentNum == 0) {
 						this.badgeShow = false;
 					}else{
@@ -624,7 +623,7 @@ export default {
 					// if(this.commentNum >= 1){
 					// 	this.commentNum = 19345;
 					// }
-					let commentStr = String(this.commentNum);
+					/*let commentStr = String(this.commentNum);
 					let commentLength = commentStr.length;
 					// console.log(commentLength);
 					if(commentLength >= 5) {
@@ -632,7 +631,7 @@ export default {
 						let commentResult = (commentDie.toFixed(1)) + 'w';
 						this.commentNum = commentResult;
 						// console.log(commentResult);
-					}
+					}*/
 				}
 			});
 

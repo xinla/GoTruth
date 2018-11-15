@@ -22,7 +22,7 @@
       <div class="right fr">
         <div class="video-msg" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">
           <i class="iconfont icon-xiaoxi"></i>
-          <span class="msg-num" v-if="countShow">{{CommentNum}}</span>
+          <span class="msg-num" v-if="countShow">{{commentNum}}</span>
         </div>
         <span class="video-time">{{publishtime}}</span>
         <div class="video-del" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">
@@ -48,7 +48,7 @@ export default {
 					thumbnail:"",
 				}
 			],
-			CommentNum:{
+			commentNum:{
 				type:Number,
 				// default:0,
 			},
@@ -125,20 +125,20 @@ export default {
 			articleCommentService.getArticleCommentCount(this.article.id,(data)=>{
 				if (data.status == "success") {
 				  this.countShow = true;
-					this.CommentNum = data.result.count;
-					if(this.CommentNum == 0) {
+          this.commentNum = this.$Tool.numConvertText(data.result.count);
+					if(this.commentNum == 0) {
             this.countShow = false;
           }
 				}
 
-        let commentStr = String(this.CommentNum);
+        /*let commentStr = String(this.commentNum);
         let commentLength = commentStr.length;
         if(commentLength >= 5) {
           let commentDie = commentStr/10000;
           let commentResult = (commentDie.toFixed(1)) + 'w';
-          this.CommentNum = commentResult;
+          this.commentNum = commentResult;
           // console.log(commentResult);
-        }
+        }*/
 			});
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
