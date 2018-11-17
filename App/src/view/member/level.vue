@@ -2,9 +2,12 @@
 	<div class="level">
 		<div class="level-header">
 			<div class="level-top">
-				<div class="level-bg">
-					<img src="@/assets/images/header.jpeg">
-					<h4 class="level-name">真相官方</h4>
+				<div class="level-bg" v-for="(item, index) in record" v-if="index===0">
+          <div class="level-king">
+            <img :src="$Tool.headerImgFilter(item.imageurl)">
+          </div>
+
+					<h4 class="level-name">{{item.username}}</h4>
 				</div>
 			</div>
 		</div>
@@ -18,11 +21,11 @@
 						<td>
 							<div class="level-user">
 								<div class="level-img">
-									<img src="@/assets/images/vue.jpg" class="level-userPhoto level-user-item">
+									<img :src="$Tool.headerImgFilter(userList.imageurl)" class="level-userPhoto level-user-item">
 								</div>
 								<div class="level-desc">
-									<h5>夏Alex</h5>
-									<span>爱心值：66</span>
+									<h5>{{userList.username}}</h5>
+									<span>爱心值：{{userList.integration}}</span>
 								</div>
 							</div>
 						</td>
@@ -42,161 +45,71 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<tr v-for="(item, index) in record" :key="item.id">
 						<td>
-							<div class="level-num-img"><img src="@/assets/images/no-1.png"></div>
+							<div class="level-num-img">
+                <span class="level-num" v-if="index > 2">{{index + 1}}</span>
+                <img :src="item.levelImg" v-else>
+              </div>
 						</td>
 						<td>
 							<div class="level-user">
-								<div class="level-img level-img1">
-									<img src="@/assets/images/login-header.png" class="level-userPhoto">
-								</div>
-								<div class="level-desc">
-									<h5>Deepbooty</h5>
-									<span>爱心值：1000</span>
-								</div>
-							</div>
-						</td>
-						<td>首善</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="level-num-img"><img src="@/assets/images/no-2.png"></div>
-						</td>
-						<td>
-							<div class="level-user">
-								<div class="level-img level-img2">
-									<img src="@/assets/images/login-header.png" class="level-userPhoto">
-								</div>
-								<div class="level-desc">
-									<h5>Deepbooty</h5>
-									<span>爱心值：1000</span>
-								</div>
-							</div>
-						</td>
-						<td>爱心天使</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="level-num-img"><img src="@/assets/images/no-3.png"></div>
-						</td>
-						<td>
-							<div class="level-user">
-								<div class="level-img level-img3">
-									<img src="@/assets/images/login-header.png" class="level-userPhoto">
-								</div>
-								<div class="level-desc">
-									<h5>Deepbooty</h5>
-									<span>爱心值：1000</span>
-								</div>
-							</div>
-						</td>
-						<td>爱心大使</td>
-					</tr>
-					<tr v-for="(item, index) in tabList">
-						<td>
-							<div class="level-num-img"><span class="level-num">{{item.id}}</span></div>
-						</td>
-						<td>
-							<div class="level-user">
-								<div class="level-img">
-									<img :src="item.userImg" class="level-userPhoto level-user-item">
+								<div class="level-img" :class="{'level-img1':index == 0,'level-img2':index == 1,'level-img3':index == 2}">
+									<img :src="$Tool.headerImgFilter(item.imageurl)" class="level-userPhoto level-user-item">
 								</div>
 								<div class="level-desc">
 									<h5>{{item.username}}</h5>
-									<span>爱心值：{{item.userLove}}</span>
+									<span>爱心值：{{item.integration}}</span>
 								</div>
 							</div>
 						</td>
-						<td>{{item.userTitle}}</td>
+						<td>{{item.registertime}}</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 </template>
-
 <script>
+  import config from '@/lib/config/config'
+  import userService from '@/service/userService'
 export default{
 	data(){
 		return {
-			tabList:[
-				{
-					id:4,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善家',
-					icon:'icon-shangsheng'
-
-				},
-				{
-					id:5,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善家',
-					icon:'icon-icon--'
-
-				},
-				{
-					id:6,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善大使',
-					icon:'icon-shangsheng'
-
-				},
-				{
-					id:7,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善大使',
-					icon:'icon-xiajiang'
-
-				},
-				{
-					id:8,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善大使',
-					icon:'icon-icon--'
-
-				},
-				{
-					id:9,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善楷模',
-					icon:'icon-xiajiang'
-
-				},
-				{
-					id:10,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善楷模',
-					icon:'icon-xiajiang'
-
-				},
-				{
-					id:11,
-					userImg:require('@/assets/images/userPhoto.jpg'),
-					username:'Deepbooty',
-					userLove:1000,
-					userTitle:'慈善之星',
-					icon:'icon-icon--'
-
-				},
-			]
+		  record:[],
+      userList:{},
+      userId:localStorage.id,
+      levelText:false,
+      fileRoot:config.fileRoot+'/',     //可删除
 		}
-	}
-}	
+	},
+  mounted(){
+	  this.$nextTick(()=>{
+	    this.init();
+    })
+  },
+  methods:{
+	  init(){
+	    //获取排行信息
+      userService.getUserPh((data)=>{
+        if(data && data.status == "success") {
+          this.record = data.recordList;
+          this.$set(this.record[0],'levelImg',require('@/assets/images/no-1.png'));
+          this.$set(this.record[1],'levelImg',require('@/assets/images/no-2.png'));
+          this.$set(this.record[2],'levelImg',require('@/assets/images/no-3.png'));
+
+          for(let i in this.record){
+            console.log(this.record[i].integration)
+          }
+        }
+      });
+      //获取当前用户信息
+      let userData = userService.getUserById(this.userId);
+      console.log(userData);
+      this.userList = userData.result.user;
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
@@ -217,27 +130,31 @@ export default{
 				justify-content: center;
 				padding-top: 5%;
 				.level-bg{
-					width: 2.175rem;
-					height: 1.9rem;
-					position: relative;
-					background-image: url('../../assets/images/topBg.png');
-					background-position: 0 0;
-					background-size: 100% 100%;
-					img{
-						display: block;
-						width: 1.305rem;
-						height: 1.305rem;
-						position: absolute;
-						left: .44rem;
-						top: .35rem;
-						border-radius: 50%;
-						object-fit: cover;
-						border: .04rem solid #ffcb42;
-					}
+          position: relative;
+          width: 100%;
+          .level-king{
+            width: 2.175rem;
+            height: 1.9rem;
+            margin: 0 auto;
+            background-image: url('../../assets/images/topBg.png');
+            background-position: 0 0;
+            background-size: 100% 100%;
+            img{
+              display: block;
+              width: 1.305rem;
+              height: 1.305rem;
+              position: relative;
+              left: .43rem;
+              top: .35rem;
+              border-radius: 50%;
+              object-fit: cover;
+              border: .04rem solid #ffcb42;
+            }
+          }
 					.level-name{
-						position: absolute;
-						left: .5rem;
-						bottom: -.6rem;
+            width: 100%;
+            margin-top: .2rem;
+            text-align: center;
 						font-size: .3rem;
 						letter-spacing: .02rem;
 						color: #fff;
@@ -318,14 +235,31 @@ export default{
 										height: 1rem;
 									}
 								}
-
-								.level-img1{background-image: url('../../assets/images/1.png')}
-								.level-img2{background-image: url('../../assets/images/2.png')}
-								.level-img3{background-image: url('../../assets/images/3.png')}
+								.level-img1{
+                  background-image: url('../../assets/images/1.png');
+                  .level-user-item{
+                    left: .12rem;
+                    top: -.12rem;
+                  }
+                }
+								.level-img2{
+                  background-image: url('../../assets/images/2.png');
+                  .level-user-item{
+                    left: .12rem;
+                    top: -.12rem;
+                  }
+                }
+								.level-img3{
+                  background-image: url('../../assets/images/3.png');
+                  .level-user-item{
+                    left: .12rem;
+                    top: -.12rem;
+                  }
+                }
 								.level-desc{
 									h5{
-										width:1.1rem;
-										max-width: 1.1rem;
+										width:2rem;
+										max-width: 2rem;
 										font-size: .3rem;
 										overflow:hidden;
 										text-overflow: ellipsis;
@@ -334,6 +268,8 @@ export default{
 										padding-bottom: .2rem;
 									}
 									span{
+                    display: block;
+                    text-align: left;
 										color: #999;
 									}
 								}

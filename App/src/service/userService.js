@@ -135,10 +135,9 @@ service.logOut = function(){
  */
 service.testUserName = function(username){
 	let params = {
-		username,
-	}
+		username
+	};
 	let resMap = commonUtil.ajaxAsync(controller+'/testUserName',params);
-
 	return resMap;
 }
 /**
@@ -154,5 +153,17 @@ service.testMobile = function(mobile){
 
 	return resMap;
 }
+
+// 获取用户排行
+service.getUserPh = function (call) {
+  let params={};
+  if(call){
+    commonUtil.ajax(controller+'/getUserPh',params,call);
+    return;
+  }
+  let  resMap = commonUtil.ajaxAsync(controller+'/getUserPh',params);
+  return resMap;
+}
+
 export default service
 
