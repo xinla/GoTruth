@@ -543,17 +543,17 @@ export default {
 			//获取文章信息
 			let resArticleDetail = articleService.getArticleById(this.id);
 			// if(resArticleDetail && resArticleDetail.status == "success") {
-	        let audioStr =  resArticleDetail.record.audio;
-	        let audioArr = audioStr.split(',');
-	        this.audioSrc = audioArr;
+
 			// }
 			if (resArticleDetail&&resArticleDetail.status == "success") {
 				this.article = resArticleDetail.record;
-				console.log(this.article.content);
 				if(!this.article.content){
 					this.iconShow = false;
 				}else{
 					this.iconShow = true;
+          let audioStr =  resArticleDetail.record.audio;
+          let audioArr = audioStr.split(',');
+          this.audioSrc = audioArr;
 				}
 				if(this.article.sourceurl == null) {
 					this.sourceShow = false;

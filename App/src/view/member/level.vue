@@ -27,7 +27,6 @@
 							</div>
 						</td>
 						<td>爱心楷模</td>
-						<td><i class="iconfont icon-shangsheng" ></i></td>
 					</tr>
 				</tbody>
 			</table>
@@ -40,7 +39,6 @@
 						<th>排名</th>
 						<th>用户</th>
 						<th>称号</th>
-						<th>综合指数</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -60,7 +58,6 @@
 							</div>
 						</td>
 						<td>首善</td>
-						<td><i class="iconfont icon-shangsheng"></i></td>
 					</tr>
 					<tr>
 						<td>
@@ -78,7 +75,6 @@
 							</div>
 						</td>
 						<td>爱心天使</td>
-						<td><i class="iconfont icon-xiajiang"></i></td>
 					</tr>
 					<tr>
 						<td>
@@ -96,7 +92,6 @@
 							</div>
 						</td>
 						<td>爱心大使</td>
-						<td><i class="iconfont icon-icon--"></i></td>
 					</tr>
 					<tr v-for="(item, index) in tabList">
 						<td>
@@ -114,7 +109,6 @@
 							</div>
 						</td>
 						<td>{{item.userTitle}}</td>
-						<td><i class="iconfont" :class="item.icon"></i></td>
 					</tr>
 				</tbody>
 			</table>
