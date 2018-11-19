@@ -11,29 +11,31 @@
 				</div>
 			</div>
 		</div>
-		<div class="level-mine level-list" style="margin-top: 0; padding-bottom: 0;">
-			<table class="level-tab">
-				<tbody>
-					<tr>
-						<td>
-							<div class="level-num-img"><span class="level-num">66</span></div>
-						</td>
-						<td>
-							<div class="level-user">
-								<div class="level-img">
-									<img :src="$Tool.headerImgFilter(userList.imageurl)" class="level-userPhoto level-user-item">
-								</div>
-								<div class="level-desc">
-									<h5>{{userList.username}}</h5>
-									<span>爱心值：{{userList.integration}}</span>
-								</div>
-							</div>
-						</td>
-						<td>爱心楷模</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<!--<div class="level-mine level-list" style="margin-top: 0; padding-bottom: 0;">-->
+			<!--<table class="level-tab">-->
+				<!--<tbody>-->
+					<!--<tr>-->
+						<!--<td>-->
+							<!--<div class="level-num-img">-->
+                <!--<span class="level-num">{{record.id}}</span>-->
+              <!--</div>-->
+						<!--</td>-->
+						<!--<td>-->
+							<!--<div class="level-user">-->
+								<!--<div class="level-img">-->
+									<!--<img :src="$Tool.headerImgFilter(userList.imageurl)" class="level-userPhoto level-user-item">-->
+								<!--</div>-->
+								<!--<div class="level-desc">-->
+									<!--<h5>{{userList.username}}</h5>-->
+									<!--<span>爱心值：{{userList.integration}}</span>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</td>-->
+						<!--<td>爱心楷模</td>-->
+					<!--</tr>-->
+				<!--</tbody>-->
+			<!--</table>-->
+		<!--</div>-->
 
 		<div class="level-list">
 			<table class="level-tab">
@@ -63,7 +65,7 @@
 								</div>
 							</div>
 						</td>
-						<td>{{item.registertime}}</td>
+						<td>{{item.levelDesc}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -77,16 +79,20 @@ export default{
 	data(){
 		return {
 		  record:[],
+      index:0,
+      levelDesc:'',
       userList:{},
       userId:localStorage.id,
-      levelText:false,
       fileRoot:config.fileRoot+'/',     //可删除
 		}
 	},
-  mounted(){
+  activated(){
 	  this.$nextTick(()=>{
-	    this.init();
-    })
+      this.init();
+    });
+
+  },
+  watch:{
   },
   methods:{
 	  init(){
@@ -97,18 +103,30 @@ export default{
           this.$set(this.record[0],'levelImg',require('@/assets/images/no-1.png'));
           this.$set(this.record[1],'levelImg',require('@/assets/images/no-2.png'));
           this.$set(this.record[2],'levelImg',require('@/assets/images/no-3.png'));
-
-          for(let i in this.record){
-            console.log(this.record[i].integration)
+          this.$set(this.record[0],'levelDesc','爱心天使');
+          this.$set(this.record[1],'levelDesc','爱心楷模');
+          this.$set(this.record[2],'levelDesc','爱心达人');
+          for(let i = 3; i < this.record.length; i++){
+            this.$set(this.record[i],'levelDesc','爱心人士');
           }
+
+
         }
       });
       //获取当前用户信息
-      let userData = userService.getUserById(this.userId);
-      console.log(userData);
-      this.userList = userData.result.user;
+      // let userData = userService.getUserById(this.userId);
+      // let record = userData.result.user;
+      // this.userList = record;
+
     },
   },
+  beforeRouteEnter (to, from, next) {
+    if (!localStorage.id ) {
+      GoTruth.$Tool.loginPrompt();
+    }else{
+      next();
+    }
+  }
 }
 </script>
 
