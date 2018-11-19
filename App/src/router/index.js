@@ -215,7 +215,7 @@ export default new Router({
           path:'position',
           name:'position',
           component: (resolve)=>{
-            require(['@/view/member/position.vue'],resolve)
+            require(['@/view/member/positionTx.vue'],resolve)
           }      
         },
         {

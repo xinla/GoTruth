@@ -19,6 +19,8 @@ function State(){
   this.transitionName = "";
   this.isScolling = false;
   this.isNetwork = false; // 是否连网
+  this.selectedPublishName = "";
+  this.selectedPublishAddress = "";
 }
 let state = new State();
 //创建改变状态的方法
@@ -67,9 +69,12 @@ const mutations = {
   setIsScolling(state,data){
     state.isScolling = data; 
   },
-  // setForbidSwiper(state,data){
-  //   state.forbidSwiper = data;
-  // }
+  setSelectedPublishName(state,data){
+    state.selectedPublishName = data;
+  },
+  setSelectedPublishAddress(state,data){
+    state.selectedPublishAddress = data;
+  }
 }
 //创建驱动action可以使得mutations得
 const actions = {

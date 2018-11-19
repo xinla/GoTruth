@@ -10,21 +10,23 @@
 </template>
 
 <script>
+import config from '@/lib/config/config'
 import QRCode from 'qrcode' 
 export default {
 	data(){
 		return {
-			inviteCode:localStorage.inviteCode || 66,
+			inviteCode:1,
 		}
 	},
-	mounted(){
+	activated(){
+		this.inviteCode = localStorage.inviteCode || 1;
 		this.creatQRCode();
 	},
 	methods:{
 		//动态生成二维码
 	    creatQRCode(){ 
 	      	//生成的二维码内容，添加变量
-	　　　　	let url ='https://www.baidu.com?inviteCode='+this.inviteCode;
+	　　　　	let url = config.domain + '/#/login?inviteCode=' + this.inviteCode;
 			let canvas = this.$refs.QRCode;
 	        QRCode.toCanvas(canvas, url, function (error) {
 	        if (error) console.error(error);

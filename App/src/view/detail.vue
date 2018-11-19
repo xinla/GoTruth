@@ -52,6 +52,19 @@
 					</div>
 					<a :href="article.sourceurl" class="see-text" v-if="sourceShow">查看原文</a>
 				</div>
+				<div class="loveCiew">
+				<p class="red">爱心提示：</p>
+				<p>
+诈骗在中国已涉及到各行各业，高超的诈骗手段让人防不胜防！
+全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康。
+				</p>
+				<p>我们对此深恶痛绝，鉴于此，我们开创了这个平台！</p>
+				<p>
+				我们希望你能通过直击真相的平台了解到有关方面的知识和技能，懂得如何更好地保护自己和家人，并能够把这个平台推荐和分享给您身边的亲朋好友，让他们尽早的远离欺骗和伤害。
+				</p>
+				<p>我们相信，你的一次举手之劳，可能就会挽救一个家庭甚至一个美丽的生命！</p>
+				<p class="red">直击真相：多一个人看到，就少一个人受骗！</p>
+			</div>
 				<!-- <div class="keywords">
 					<label>关键词：</label>
 					<span v-for="item in article.keywords">{{ item }}</span>
@@ -1970,6 +1983,16 @@ export default {
 	.lg-preview-title{
 		display: none !important;
 	}
+	.loveCiew{
+		line-height: 30px;
+		text-indent: 2em;
+		color:#f36767;
+	    margin-bottom: 10px;
+	}
+	.red{
+		color:#f00;
+		font-weight: 600;
+	}
 </style>
 
 <style scoped>
@@ -1988,6 +2011,4 @@ export default {
 	.vux-popup-show{
 		/*z-index: 999 !important;*/
 	}
-
-
 </style>	

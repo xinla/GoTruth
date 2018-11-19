@@ -106,17 +106,20 @@ export default{
 				},   //1：图文，2:视频
 				publishtime:'',  // 后台设置
 				classify:1,
+				selectedpublishname:'',
 				selectedpublishaddress:'',
-				selectedpublishname:'不显示',
 			},
 			record_file:[],
 		}
 	},
 	activated(){
 		this.record.type = this.$route.query.sort;
-		this.record.selectedpublishname = localStorage.position || "不显示";
-		this.record.selectedpublishaddress = localStorage.selectedpublishaddress || 0;
-
+		this.record.selectedpublishname = this.selectedPublishName || "不显示";
+		this.record.selectedpublishaddress = this.selectedPublishAddress || "不显示";
+		if(this.selectedPublishName === '我的位置'){
+			this.record.selectedpublishname = this.selectedPublishAddress; 
+		}
+		// console.log(this.record)
 		// let resArcClass = articleClassifyService.getArticleClassifyList();
 		this.classifyList = JSON.parse(localStorage.classify)
 
@@ -246,7 +249,7 @@ export default{
 					})
 					return;
 				}
-			this.record.author = Number(localStorage.id?localStorage.id:0);
+			this.record.author = Number(localStorage.id || 0);
 			Object.assign(this.record,this.position);
 			let res;
 			if (this.record.type == 1) {
@@ -262,8 +265,8 @@ export default{
 				this.$vux.alert.show({
 				  content:'发布成功',
 				})
-				localStorage.selectedpublishaddress = null;
-				localStorage.position = null;
+				// selectedPublishAddress = null;
+				// selectedPublishName = null;
 				this.record_file=[];
 				this.record.title = "";
 				this.record.content = "";
@@ -280,9 +283,17 @@ export default{
 			}
 		},
 	},
-	watch:{
-		"$route"(){
-			this.record.type = this.$route.query.sort;
+	// watch:{
+	// 	"$route"(){
+	// 		this.record.type = this.$route.query.sort;
+	// 	}
+	// },
+	computed:{
+		selectedPublishName(){
+			return this.$store.state.selectedPublishName;
+		},
+		selectedPublishAddress(){
+			return this.$store.state.selectedPublishAddress;
 		}
 	},
 	beforeRouteEnter (to, from, next) {
@@ -308,7 +319,7 @@ export default{
 			margin-bottom: .4rem;
 			.release-select{
 				position: absolute;
-				z-index: 10;
+				// z-index: 10;
 				width: 55%;
 				height: .8rem;
 				line-height: .8rem;
