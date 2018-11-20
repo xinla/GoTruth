@@ -11,31 +11,32 @@
 				</div>
 			</div>
 		</div>
-		<!--<div class="level-mine level-list" style="margin-top: 0; padding-bottom: 0;">-->
-			<!--<table class="level-tab">-->
-				<!--<tbody>-->
-					<!--<tr>-->
-						<!--<td>-->
-							<!--<div class="level-num-img">-->
-                <!--<span class="level-num">{{record.id}}</span>-->
-              <!--</div>-->
-						<!--</td>-->
-						<!--<td>-->
-							<!--<div class="level-user">-->
-								<!--<div class="level-img">-->
-									<!--<img :src="$Tool.headerImgFilter(userList.imageurl)" class="level-userPhoto level-user-item">-->
-								<!--</div>-->
-								<!--<div class="level-desc">-->
-									<!--<h5>{{userList.username}}</h5>-->
-									<!--<span>爱心值：{{userList.integration}}</span>-->
-								<!--</div>-->
-							<!--</div>-->
-						<!--</td>-->
-						<!--<td>爱心楷模</td>-->
-					<!--</tr>-->
-				<!--</tbody>-->
-			<!--</table>-->
-		<!--</div>-->
+		<div class="level-mine level-list" style="margin-top: 0; padding-bottom: 0;">
+			<table class="level-tab">
+				<tbody>
+					<tr>
+						<td>
+							<div class="level-num-img">
+                <span class="level-num" v-if="mySelf.userPh > 3">{{mySelf.userPh}}</span>
+                <img :src="mySelf.userTp" v-else>
+              </div>
+						</td>
+						<td>
+							<div class="level-user">
+								<div class="level-img">
+									<img :src="$Tool.headerImgFilter(userList.imageurl)" class="level-userPhoto level-user-item">
+								</div>
+								<div class="level-desc">
+									<h5>{{userList.username}}</h5>
+									<span>爱心值：{{userList.integration}}</span>
+								</div>
+							</div>
+						</td>
+						<td>{{mySelf.userCh}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<div class="level-list">
 			<table class="level-tab">
@@ -79,7 +80,13 @@ export default{
 	data(){
 		return {
 		  record:[],
-      index:0,
+      mySelf:{
+		    userPh:0,
+        userCh:'',
+        userTp:''
+      },
+      userPh:0,
+      userCh:'',
       levelDesc:'',
       userList:{},
       userId:localStorage.id,
@@ -109,15 +116,29 @@ export default{
           for(let i = 3; i < this.record.length; i++){
             this.$set(this.record[i],'levelDesc','爱心人士');
           }
-
-
         }
       });
       //获取当前用户信息
-      // let userData = userService.getUserById(this.userId);
-      // let record = userData.result.user;
-      // this.userList = record;
-
+      let userData = userService.getUserById(this.userId);
+      let record = userData.result.user;
+      this.userList = record;
+      userService.getUserPhByUserid(this.userId,(data)=>{
+        if(data && data.status == 'success'){
+          this.mySelf.userPh = data.ph;
+          if(this.mySelf.userPh == 1){
+            this.mySelf.userCh = '爱心天使';
+            this.mySelf.userTp = require('@/assets/images/no-1.png');
+          }else if(this.mySelf.userPh == 2){
+            this.mySelf.userCh = '爱心楷模';
+            this.mySelf.userTp = require('@/assets/images/no-2.png');
+          }else if(this.mySelf.userPh == 3) {
+            this.mySelf.userCh = '爱心达人';
+            this.mySelf.userTp = require('@/assets/images/no-3.png');
+          }else{
+            this.mySelf.userCh = '爱心人士';
+          }
+        }
+      })
     },
   },
   beforeRouteEnter (to, from, next) {

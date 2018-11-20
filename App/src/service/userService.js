@@ -165,5 +165,19 @@ service.getUserPh = function (call) {
   return resMap;
 }
 
+// 根据用户id获取用户排行
+service.getUserPhByUserid = function(userid,call){
+  var params = {
+    userid,
+  };
+  if (call) {
+    commonUtil.ajax(controller+'/getUserPhByUserid',params,call);
+    return;
+  }
+  var resMap = commonUtil.ajaxAsync(controller+'/getUserPhByUserid',params);
+
+  return resMap;
+};
+
 export default service
 
