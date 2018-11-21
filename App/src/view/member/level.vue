@@ -23,7 +23,7 @@
 						</td>
 						<td>
 							<div class="level-user">
-								<div class="level-img">
+								<div class="level-img" :class="{'level-img1':mySelf.userPh == 1,'level-img2':mySelf.userPh == 2,'level-img3':mySelf.userPh == 3}">
 									<img :src="$Tool.headerImgFilter(userList.imageurl)" class="level-userPhoto level-user-item">
 								</div>
 								<div class="level-desc">
@@ -265,7 +265,7 @@ export default{
 										width: .85rem;
 										height: .85rem;
 										border-radius: 50%;
-										border: .04rem solid #ffcb42;
+										border: .02rem solid #ccc;
 									}
 									.level-user-item{
 										top: 0;
