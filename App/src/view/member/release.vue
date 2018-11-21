@@ -92,6 +92,7 @@ export default{
 			fileRoot:config.fileRoot +'/',
 	        classifyList:[],
 	        push:[],
+	        //实际发布位置
 			position:{},
 			record:{
 				title:'',
@@ -129,15 +130,15 @@ export default{
 			let longitude = data.longitude;
 			let latitude = data.latitude;
 			this.position = data;
-			mapService.getPoiList(page_num,latitude,longitude,(data2)=>{
-					page_num++;
-			})
+			// mapService.getPoiList(page_num,latitude,longitude,(data2)=>{
+			// 		page_num++;
+			// })
 		})
 	},
 	methods:{
 		show(index){
 			 this.$refs.previewer.show(index);
-			 console.log(index);
+			 // console.log(index);
 		},
 		handleType(){
 			this.optionShow = !this.optionShow;
@@ -147,7 +148,7 @@ export default{
 		},
 		handleItem(item){
 			this.defaultType = item.classifyname;
-			 this.record.classify = item.classifycode;
+			this.record.classify = item.classifycode;
 			this.optionShow = false;
 		},
 		handleRemoveImg(item){

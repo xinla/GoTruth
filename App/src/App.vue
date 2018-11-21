@@ -215,4 +215,8 @@ export default {
   .video-js .vjs-volume-panel{
     display: none !important;
   }
+  /*视频高度*/
+  .video-js{
+    height: 4.2rem;
+  }
 </style>

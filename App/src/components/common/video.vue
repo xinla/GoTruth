@@ -42,7 +42,6 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-			imgurl:require('@/assets/images/userPhoto.jpg'),
 			ArticleFile:[
 				{
 					thumbnail:"",
@@ -64,8 +63,8 @@ export default {
 			playerOptions : {
 				preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
 				language: 'zh-CN',
-				aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-				fluid: true, // 当true时，Video.jsplayer将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+				//aspectRatio: '4:3', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+				//fluid: false, // 当true时，Video.jsplayer将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
 				sources: [
 					{
 						type: "video/mp4",
@@ -73,7 +72,7 @@ export default {
 					}
 				],
 				poster: "", //你的封面地址 
-				notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+				notSupportedMessage: '暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
 				controlBar: {
 					timeDivider: false,
 					durationDisplay: false,
@@ -130,15 +129,6 @@ export default {
             this.countShow = false;
           }
 				}
-
-        /*let commentStr = String(this.commentNum);
-        let commentLength = commentStr.length;
-        if(commentLength >= 5) {
-          let commentDie = commentStr/10000;
-          let commentResult = (commentDie.toFixed(1)) + 'w';
-          this.commentNum = commentResult;
-          // console.log(commentResult);
-        }*/
 			});
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
@@ -275,51 +265,4 @@ export default {
       }
     }
   }
-	/*.text-wrap{
-	    border-bottom: 1px solid #eee;
-	}
-	h1{
-		margin:.3em;
-		font-weight: normal;
-		font-size: 16px;
-	    line-height: 1.5em;
-	}
-	[data-dpr='2'] h1{
-		font-size: 36px;
-	}
-	[data-dpr='3'] h1{
-		font-size: 54px;
-	}
-	.pub{
-		margin:0 .3em;
-		line-height: 2.5em;
-	    color: #999;
-	}
-	.img-wrap img{
-		float: left;
-		width: 2.2rem;
-		height: 2.2rem;
-		max-width: 200px;
-		margin:0 1%;
-	}
-	small.delete {
-        font-size: 0.85em;
-	    background: #eee;
-	    width: 1.1em;
-	    line-height: 1.1em;
-	    text-align: center;
-	    border-radius: 1.6em;
-	    vertical-align: middle;
-	    top: 0.85em;
-	}
-	img{
-		background: url('../../assets/images/imgErrorBg.png') #efefef no-repeat center;
-	    background-size: 80%;
-	}
-	.icon-play-circle{
-		width:50px;
-		height:50px;
-	    font-size: 50px;
-	    color: #666;		
-	}*/
 </style>

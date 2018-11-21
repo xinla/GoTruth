@@ -32,8 +32,8 @@
           <div class="member-code">
             <span class="code">我的邀请码：</span>
             <code>{{inviteCode}}</code>
-            <span class="member-copy"  @click="copyCode($event)" >复制</span>
-            <input :value="inviteCode" ref="inviteCode">
+            <span class="member-copy" @click="copyCode($event)" >复制</span>
+            <input :value="inviteCode" ref="inviteCode" readonly>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default {
       ],
       loginLink: '/topBase/login',
       userId:localStorage.id,
-      inviteCode:0,
+      inviteCode:'',
       userName: '用户名',
       ifLogin: false,
       userPhoto:"",
@@ -133,14 +133,6 @@ export default {
       this.userName = localStorage.userName;
       this.inviteCode = localStorage.inviteCode;
       this.ifLogin = true;
-      /*let reg = /^http/i;
-      if (!reg.test(userImg)) {
-        if (userImg) {
-          this.userPhoto = config.fileRoot + '/' + userImg;         
-        }else{
-          this.userPhoto = require('@/assets/images/user_head.jpg');
-        }
-      }*/
       //获取粉丝数量
       followService.getUserVermicelliCount(this.userId,data=>{
         if (data && data.status == "success" ) {
@@ -184,8 +176,8 @@ export default {
     },
     copyCode(e){
       this.$refs.inviteCode.select();
-      e.stopPropagation();
       document.execCommand("Copy");
+      e.stopPropagation();
       this.$vux.alert.show({
         content:'复制成功！',
       })
@@ -363,7 +355,7 @@ export default {
       color: #10aeff;
     }
     input{
-      display: none;
+      height: 0;
     }
   }
 }

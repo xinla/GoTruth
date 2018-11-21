@@ -49,10 +49,7 @@ export default {
 	},
 	mounted(){
 		setTimeout(()=>{
-			this.init();
-			if (this.arcList.length) {
-				this.ifLoad = true;
-			}
+			this.init();			
 		},100)
 	},
 	methods:{
@@ -88,6 +85,9 @@ export default {
 							width:"50%",
 						});				
 					}
+				}
+				if (this.arcList.length) {
+					this.ifLoad = true;
 				}					
 			});
 			// if(this.classify == 0){
@@ -161,10 +161,10 @@ export default {
 		// 	}
 		// }
 	},
-	watch:{
-		$route(){
-			$(this.$refs["srcoll"].$el).scrollTop(this.scrollTop);
-		}
+	beforeRouteEnter(to,from,next){
+		next(vm=>{
+			$(vm.$refs["srcoll"].$el).scrollTop(vm.scrollTop);
+		})	
 	}
 }
 </script>
