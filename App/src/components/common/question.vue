@@ -181,7 +181,7 @@ export default {
 
 /*	data(){
 		return {
-			imgurl:require('@/assets/images/userPhoto.jpg'),
+			imgurl:require('@/assets/images/user_head.jpg'),
 			ArticleFile:[
 				// {
 				// 	thumbnail:"",

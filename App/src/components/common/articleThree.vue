@@ -42,7 +42,7 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-			imgurl:require('@/assets/images/userPhoto.jpg'),
+			imgurl:require('@/assets/images/user_head.jpg'),
 			ArticleFile:[
 				{
 					thumbnail:"",
@@ -184,54 +184,4 @@ export default {
 			}
 		}
 	}
-	/* .text-wrap{
-	    border-bottom: 1px solid #eee;
-	    background-color: #fff;
-	    padding: .3rem .2rem;
-	}
-	h1{
-		margin:.3em 0;
-		font-weight: normal;
-		font-size: 16px;
-	    line-height: 1.5em;
-	}
-	[data-dpr='2'] h1{
-		font-size: 36px;
-	}
-	[data-dpr='3'] h1{
-		font-size: 54px;
-	}
-	.pub{
-		line-height: 2.5em;
-	    color: #999;
-	}
-	.img-wrap img{
-		float: left;
-		width: 2.2rem;
-		height: 2.2rem;
-		max-width: 200px;
-		margin:0 1%;
-	}
-	small.delete {
-	        font-size: 0.85em;
-	    background: #eee;
-	    width: 1.1em;
-	    line-height: 1.1em;
-	    text-align: center;
-	    border-radius: 1.6em;
-	    vertical-align: middle;
-	    top: 0.85em;
-	}
-	img{
-		background: url('../../assets/images/imgErrorBg.png') #efefef no-repeat center;
-	    background-size: 80%;
-	}
-	.icon-play-circle{
-	    font-size: 50px;
-	    color: #666;		
-	}
-	.img-wrap.fr{
-		margin-bottom: 5px;
-		margin-left: 5px;
-	} */
 </style>

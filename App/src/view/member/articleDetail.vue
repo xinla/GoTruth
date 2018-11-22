@@ -256,7 +256,7 @@ export default {
 			ifLoad:true,
 			userId:localStorage.id,
 			id:Number,//文章id =>article.id
-			imgurl:require('@/assets/images/userPhoto.jpg'),
+			imgurl:require('@/assets/images/user_head.jpg'),
 			fileRoot:config.fileRoot+'/',
 			focusState:false,
 			article:{

@@ -117,7 +117,6 @@ export default {
 			//三级回复@的用户名
 			commentConAdd:'',
 			replyUserFocusState:false,
-			imgurl:require('@/assets/images/userPhoto.jpg'),
 			fileRoot:config.fileRoot+'/',
 			replyList:[],
 			//举报显隐

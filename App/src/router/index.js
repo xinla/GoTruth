@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import home from '@/view/home'
-// import detail from '@/view/detail'
 Router.prototype.go = function () {
   this.isBack = true;
   window.history.go(-1);
@@ -11,13 +9,6 @@ Vue.use(Router)
 export default new Router({
   // mode:'history',
   routes: [
-    // {
-    //   path: '/test',
-    //   name: 'test',
-    //   component: (resolve)=>{
-    //     require(['@/view/test.vue'],resolve)
-    //   }
-    // },
     //首页
     {
       path: '/',
@@ -84,21 +75,6 @@ export default new Router({
         require(['@/view/search.vue'],resolve)
       }
     },
-    //会员中心首页
-    // {
-    //   path:'/member',
-    //   name:'member',
-    //   component: (resolve)=>{
-    //     require(['@/view/member/index.vue'],resolve)
-    //   }      
-    // },
-    {
-      path:'/member/userCenter',
-      name:'userCenter',
-      component: (resolve)=>{
-        require(['@/view/member/userCenter.vue'],resolve)
-      }
-    },
     //二级页面
     {
       path:'/sub',
@@ -134,13 +110,6 @@ export default new Router({
             require(['@/view/member/release.vue'],resolve)
           }
         },
-        // {
-        //   path:'focus',
-        //   name:'focus',
-        //   component: (resolve)=>{
-        //     require(['@/view/member/focus.vue'],resolve)
-        //   }
-        // },
         {
           path:'messages',
           name:'messages',

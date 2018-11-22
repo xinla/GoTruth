@@ -395,7 +395,6 @@ export default {
 			userId:localStorage.id,
 			id:0,//文章id =>article.id
 			detailType:0,
-			// imgurl:require('@/assets/images/userPhoto.jpg'),
 			fileRoot:config.fileRoot+'/',
 			focusState:false,
 			article:{

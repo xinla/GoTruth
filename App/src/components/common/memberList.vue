@@ -21,7 +21,7 @@ import followService from '@/service/followService'
 export default{
 	data(){
 		return{	
-			imgurl:require('@/assets/images/userPhoto.jpg'),
+			imgurl:require('@/assets/images/user_head.jpg'),
 			fileRoot:config.fileRoot+'/',
 			userList:[
 				// {

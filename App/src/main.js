@@ -11,7 +11,6 @@ window.$ = $;
 import router from './router'
 import store from './store/index'
 
-// import 'animate.css/animate.min.css'
 
 import animate from 'animate.css'
 //css样式
@@ -38,10 +37,6 @@ import axios from 'axios'
 Vue.prototype.$http = axios
 
 // 预览大图
-// import preview from 'vue-photo-preview'
-// import 'vue-photo-preview/dist/skin.css'
-// Vue.use(preview);
-
 import vuePicturePreview from 'vue-picture-preview'
 Vue.use(vuePicturePreview)
 
@@ -64,13 +59,6 @@ Vue.component('multIT',multIT);
 //单问答视图组件
 import question from '@/components/common/question'
 Vue.component('question',question);
-//Confirm插件
-// import Confirm from '@/plugins/confirm'
-// Vue.use(Confirm);
-
-//BottomPopup插件
-// import BottomPopup from '@/plugins/BottomPopup'
-// Vue.use(BottomPopup);
 
 // 视频插件
 import VideoPlayer from 'vue-video-player'

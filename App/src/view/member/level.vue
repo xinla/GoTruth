@@ -253,7 +253,7 @@ export default{
 									position: relative;
 									width: 1.22rem;
 									height: .97rem;
-									margin-right: .2rem;
+							 		margin-right: .2rem;
 									border-radius: 50%;
 									background-position: 0 0;
 									background-size: 100% 100%;
