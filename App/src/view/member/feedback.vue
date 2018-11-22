@@ -82,12 +82,6 @@ import { Previewer, TransferDom } from 'vux'
 export default{
 	directives: {
 		TransferDom,
-		// focus: {
-		// // 指令的定义
-		// 	update: function (el) {
-		// 			el.focus()					
-		// 	}
-		// }
 	},
 	components: {
 		Previewer

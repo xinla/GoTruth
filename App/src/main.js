@@ -41,10 +41,6 @@ import vuePicturePreview from 'vue-picture-preview'
 Vue.use(vuePicturePreview)
 
 
-//Loading插件
-import {Loading,LoadText} from '@/plugins/loading'
-Vue.use(Loading);
-// Vue.use(LoadText);
 //通用top
 import Top from '@/components/common/top'
 Vue.component('Top',Top);

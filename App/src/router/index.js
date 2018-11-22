@@ -34,13 +34,6 @@ export default new Router({
             require(['@/view/questionAnswer.vue'],resolve)
           }
         },
-        {
-          path: '/answerSubject',
-          name: 'answerSubject',
-          component: (resolve)=>{
-            require(['@/components/common/answerSubject.vue'],resolve)
-          }
-        },
         //视频
         {
           path: 'video',

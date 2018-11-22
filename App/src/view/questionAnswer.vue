@@ -3,7 +3,7 @@
 	<div class="index">
 		<home-header></home-header>
 		<div class="main-wrap">
-			<div class="bfc-o">
+			<div class="bfc-o main-box">
 				<tab :line-width=2 active-color='#fc378c' v-model="classifyIndex">
 					<tab-item :selected="currentClassiftyName == '推荐'" @click="currentClassiftyName = '推荐'">推荐
 					</tab-item>
@@ -42,11 +42,8 @@ import homeHeader from '@/components/headerBar'
 import homeMore from'@/components/more'
 import listQuestion from '@/components/listQuestion'
 
-// import homeService from '@/service/homeService'
-import articleService from '@/service/articleService'
-import articleClassifyService from '@/service/article_classifyService'
 
-	export default {
+export default {
 		directives: {
     		TransferDom
   		},
@@ -64,7 +61,6 @@ import articleClassifyService from '@/service/article_classifyService'
 				classifyList:[],
 				classifyIndex:0,
 				currentClassiftyName:"推荐",
-				ifDetail:false,
 				swiperHeight:0,
 				showArr:[],
 			}
@@ -96,6 +92,9 @@ import articleClassifyService from '@/service/article_classifyService'
 		width: 100%;
 		background: #fff;
 		overflow: hidden;
+    .main-box{
+      border-bottom: .02rem solid @borderColor;
+    }
 		.main{
 			height: calc(100% - 90px);
 			overflow-y:auto;
@@ -143,7 +142,30 @@ import articleClassifyService from '@/service/article_classifyService'
 		height: 100%;
 		overflow-y: auto;
 	}
+  .vux-tab .vux-tab-item{
+    font-size: 17px !important;
+    font-weight: 500;
+    flex: 0 0 18% !important;
+  }
 	
 </style>
 <style>
+  /*vux tab 样式修改*/
+  .vux-tab-wrap{
+    padding-top: .76rem !important;
+  }
+  .vux-tab .vux-tab-item{
+    color: #000 !important;
+    line-height: .76rem !important;
+    font-size: .28rem !important;
+  }
+  .vux-tab-container{
+    height: .76rem !important;
+  }
+  .vux-tab .vux-tab-item.vux-tab-selected{
+    color: rgb(252, 55, 140) !important;
+  }
+  .vux-tab{
+    height: .76rem !important;
+  }
 </style>

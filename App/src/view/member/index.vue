@@ -195,18 +195,7 @@ export default {
         return;
       }
     }
-  },
- /* watch:{
-    "$store"(){
-      console.log(this.$store);
-      this.loadUser();
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm=>{
-      vm.loadUser();
-    })
-  }*/
+  }
 }
 
 </script>
