@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<iframe id="iframe" width="100%" frameborder=0 scrolling="no"
-        src="//apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
+        src="http://apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp">
 	    </iframe>
 	</div>
 </template>
