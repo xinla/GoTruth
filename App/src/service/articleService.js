@@ -19,20 +19,6 @@ service.publishArticle = function(record,record_file) {
 	let resArticle = commonUtil.ajaxAsync(controller+'/publishArticle',params);
 	return resArticle;
 }
-// 文章问题（讨论）
-service.publishQuestion = function(record,images) {
-	
-	let params = {
-		userid,
-		title:record.title,//:"标题",
-		description:record.content,//:"描述"
-		images,//:"图片地址集合"  格式：url，url2,..........
-		classify:record.classify//:"文章分类"
-	};
-
-	let res = commonUtil.ajaxAsync(controller+'/publishArticle',params);
-	return res;
-}
 // 获取用户的文章
 service.getArticleByUser = function(userid,page,size,type){
 

@@ -74,6 +74,7 @@ import mapUtil from '@/service/util/mapUtil'
 import mapService from '@/service/mapService'
 import fileService from '@/service/fileService'
 import articleService from '@/service/articleService'
+import interlocutionService from '@/service/interlocutionService'
 // import articleClassifyService from '@/service/article_classifyService'
 import { Previewer, TransferDom } from 'vux'
 export default{
@@ -260,7 +261,7 @@ export default{
 				for (let i = this.record_file.length - 1; i >= 0; i--) {
 					images += this.record_file[i].url;
 				}
-				res = articleService.publishQuestion(this.record,images);
+				res = interlocutionService.publishQuestion(this.record,images);
 			}
 			// debugger;
 			if(res.status=="success") {
