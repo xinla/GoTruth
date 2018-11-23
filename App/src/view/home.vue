@@ -58,7 +58,15 @@ import articleClassifyService from '@/service/article_classifyService'
 		data(){
 			return {
 				showMore:false,
-				classifyList:[],
+				classifyList:[
+					{"classifyname":"揭秘","classifycode":1},
+					{"classifyname":"防骗","classifycode":2},
+					{"classifyname":"打假","classifycode":3},
+					{"classifyname":"寻亲","classifycode":4},
+					{"classifyname":"普法","classifycode":5},
+					{"classifyname":"打工","classifycode":6},
+					{"classifyname":"视频","classifycode":7}
+				],
 				classifyIndex:0,
 				currentClassiftyName:"推荐",
 				swiperHeight:0,
@@ -71,8 +79,8 @@ import articleClassifyService from '@/service/article_classifyService'
           if(!localStorage.classify) {
             articleClassifyService.getArticleClassifyList((data)=>{
               if(data && data.status == "success") {
-                console.log(data)
                 this.classifyList = data.result.classfyList;
+                localStorage.classify = JSON.stringify(this.classifyList);
               }
             });
           }else{

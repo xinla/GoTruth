@@ -31,7 +31,7 @@
 			<!-- 上传图片 -->
 			<div class="release-upload-img clearfix">
 				<div class="release-img fl" v-for="(item,index) in record_file">
-					<i class="iconfont icon-remove" @click.stop="handleRemoveImg(item)"></i>
+					<i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
 					<img :src="fileRoot + item.url">
 				</div>
 				<div class="release-upload fl">
@@ -122,7 +122,7 @@ export default{
 		}
 		// console.log(this.record)
 		// let resArcClass = articleClassifyService.getArticleClassifyList();
-		this.classifyList = JSON.parse(localStorage.classify)
+		this.classifyList = JSON.parse(localStorage.classify);
 
 		let page_num = 0;
 		mapUtil.getPosition((data)=>{
@@ -200,32 +200,32 @@ export default{
 				})
 			    return;
 			 }
-			this.$loading.open(2);
+			this.$vux.loading.show();
 		    let param = new FormData(); //创建form对象
 		    param.append('file',file,file.name);//通过append向form对象添加数据
-		    if(this.record.type==1){
+		    if(this.record.type !== 2){
 			    fileService.uploadPic(param,(data)=>{
 			    	let obj = {};
 		          	obj.url = data.result.url;
 		          	obj.filename = data.result.filename;
 		          	obj.type =1;
 		          	this.record_file.push(obj);
-		          	this.$loading.close();
 				})
-		    }else if(this.record.type==2){
+		    }else if(this.record.type === 2){
 		    	fileService.uploadVideo(param,(data)=>{
 		    		let obj = data.result;
 		          	// obj.thumbnail = data.result.thumbnail;
 		          	// obj.filename = data.result.filename;
-		          	obj.type =2;
+		          	obj.type = 2;
 		          	this.addShow = false;
 		          	this.record_file.push(obj);
-		          	this.$loading.close();
 		          	// console.log(obj)
 		    	})
 		    }else{
+		    	this.$vux.loading.hide();
 		    	alert("错误");
 		    }
+          	this.$vux.loading.hide();
 
 		},
 		publish(){
@@ -253,13 +253,14 @@ export default{
 			this.record.author = Number(localStorage.id || 0);
 			Object.assign(this.record,this.position);
 			let res;
-			if (this.record.type == 1) {
-				res = articleService.publishArticle(this.record,this.record_file);
-			} else if (this.record.type == 2) {
-				// debugger;
+			if (this.record.type !== 3) {
 				res = articleService.publishArticle(this.record,this.record_file);
 			} else {
-
+				let images = '';
+				for (let i = this.record_file.length - 1; i >= 0; i--) {
+					images += this.record_file[i].url;
+				}
+				res = articleService.publishQuestion(this.record,images);
 			}
 			// debugger;
 			if(res.status=="success") {

@@ -632,18 +632,6 @@ export default {
 					}else{
 						this.badgeShow = true;
 					}
-					// if(this.commentNum >= 1){
-					// 	this.commentNum = 19345;
-					// }
-					/*let commentStr = String(this.commentNum);
-					let commentLength = commentStr.length;
-					// console.log(commentLength);
-					if(commentLength >= 5) {
-						let commentDie = commentStr/10000;
-						let commentResult = (commentDie.toFixed(1)) + 'w';
-						this.commentNum = commentResult;
-						// console.log(commentResult);
-					}*/
 				}
 			});
 
@@ -1097,7 +1085,7 @@ export default {
 		handleReport(){
 			this.reportShow = true;
 			this.popMask = true;
-			console.log('举报');
+			// console.log('举报');
 		},
 
 		// 选择举报项
@@ -1111,10 +1099,10 @@ export default {
 			if(!this.reportInfo.reportreasion){
 				this.reportShow = false;
 				this.popMask = false;
-			}else{
+			} else {
 				this.$vux.alert.show({
 				  content:'感谢您的反馈，我们会着实核查！',
-				})	
+				})
 				this.reportShow = false;
 				this.popMask = false;
 				this.reportList.show = false;
