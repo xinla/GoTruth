@@ -20,10 +20,6 @@ import './assets/styles/iconfont.css'
 //二维码生成插件
 import QRCode from 'qrcode'
 
-//引用工具函数
-import localforage from './assets/common/localforage'
-Vue.use(localforage);
-
 //引用功能函数
 import Tool from './assets/common/methods'
 Vue.use(Tool);
@@ -31,7 +27,6 @@ Vue.use(Tool);
 // 预览大图
 import vuePicturePreview from 'vue-picture-preview'
 Vue.use(vuePicturePreview)
-
 
 //通用top
 import Top from '@/components/common/top'
