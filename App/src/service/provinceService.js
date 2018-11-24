@@ -1,5 +1,4 @@
 import config from '@/lib/config/config'
-import axios from 'axios'
 import commonUtil from '@/service/util/commonUtil'
 const controller =config.successServer+'/province';
 const service ={}

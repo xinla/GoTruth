@@ -33,7 +33,7 @@ util.ajaxAsync = function(url,params){
 
 }
 util.ajax = function(url,params,call){
-	let res = {};
+	// let res = {};
 	/*let res = {},
 		net = {};
 	try{

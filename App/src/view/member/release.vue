@@ -189,6 +189,7 @@ export default{
 		},
 		uploadFile(e){
 			let file = e.target.files[0];
+			if (!file) { return; }
 		    if (this.record.type==1 && !this.$Tool.checkPic(file.name)) {
 		    	this.$vux.alert.show({
 				  content:'格式错误',

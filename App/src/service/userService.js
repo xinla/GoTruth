@@ -1,5 +1,4 @@
 import config from '@/lib/config/config'
-import axios from 'axios'
 import commonUtil from '@/service/util/commonUtil'
 const controller =config.successServer+'/user';
 const service ={}
@@ -9,26 +8,22 @@ const userid =  localStorage.getItem('id');
 
 //获取手机验证码
 service.getCode = function(mobile,call){
-	// debugger;
-	axios.get(controller+'/getCode',{params:{
-		mobile:mobile
-	}}).then(function(res){
-		call(res.data);
-	})
+	var params = {
+		mobile,
+	};
+	
+	commonUtil.ajax(controller+'/getCode',params,call);
 }
 
 //手机号登录
 service.loginByMobile = function(mobile,code,call){
+	var params = {
+		mobile,
+		code,
+	};
+	
+	commonUtil.ajax(controller+'/loginByMobile',params,call);
 
-	axios.get(controller+'/loginByMobile',{params:{
-		mobile:mobile,
-		code:code
-	}}).then(function(res){
-		call(res.data);
-		// console.log(res.data);
-	}).catch(function(error){
-		console.log(error);
-	})
 }
 //微信登录
 service.loginByWx = function(params,call) {

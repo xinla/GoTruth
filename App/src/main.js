@@ -17,10 +17,6 @@ import animate from 'animate.css'
 import './assets/styles/reset.css'
 import './assets/styles/iconfont.css'
 
-//服务端请求
-import Request from './assets/request/axiosServer'
-// Vue.use(Request);
-
 //二维码生成插件
 import QRCode from 'qrcode'
 
@@ -31,10 +27,6 @@ Vue.use(localforage);
 //引用功能函数
 import Tool from './assets/common/methods'
 Vue.use(Tool);
-
-//数据
-import axios from 'axios'
-Vue.prototype.$http = axios
 
 // 预览大图
 import vuePicturePreview from 'vue-picture-preview'
