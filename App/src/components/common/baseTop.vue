@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<top @hrefTo="this.$Tool.goBack">
+		<top>
 			<template slot="title">{{title}}</template>
 		</top>
 		 <transition :name="$store.state.transitionName">

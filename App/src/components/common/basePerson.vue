@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<top @hrefTo="$Tool.goBack()">
+		<top>
 			<template slot="title">{{title}}</template>
 		</top>
 		<div class="member-msg">

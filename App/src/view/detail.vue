@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<top @hrefTo="this.$Tool.goBack">
+		<top>
 			<template slot="title">{{ '文章详情' }}</template>
 		</top>
 		<div class="mask" v-show="ifLoad">
@@ -174,7 +174,7 @@
 		</div>
 
 		<!-- 分享 -->
-		<div v-transfer-dom style="z-index: 988;">
+		<!-- <div v-transfer-dom style="z-index: 988;">
 			<popup v-model="shareShow" style="z-index: 999;">
 				<div class="share-wrap">
 					<ul class="share-list">
@@ -206,7 +206,7 @@
 					<div class="share-btn" @click="handleCancelShare">取消</div>
 				</div>
 			</popup>
-		</div>
+		</div> -->
 
 		<!-- 回复框 -->
 		<div v-transfer-dom>
@@ -328,13 +328,15 @@
 				</div>
 			</popup>
 		</div>
+		<!-- 分享 -->
+		<share :content="shareDesc" v-model="shareShow"></share>
 	</div>
 </template>
 
 <script>
 import config from '@/lib/config/config'
 import like from '@/components/common/like'
-// import share from '@/components/common/share'
+import share from '@/components/common/share'
 import memberList from '@/components/common/memberList'
 import netUtil from "@/service/util/netUtil"
 import listUtil from '@/service/util/listUtil'
@@ -356,11 +358,10 @@ import { Group, TransferDom, Popup} from 'vux'
 export default {
 	directives:{
 		TransferDom,
-
 	},
 	components:{
 		like,
-		// share,
+		share,
 		memberList,
 		Group,
 		Popup
@@ -527,7 +528,6 @@ export default {
 		}
 	},
 	mounted(){
-
 		try{
 			shareService.init();
 		}catch(e){
@@ -1000,7 +1000,7 @@ export default {
 		},
 
 		//分享到第三方
-		handleGiveShare(type){
+		/*handleGiveShare(type){
 			if(type == 1) {
 				shareService.shareToWxHy(this.shareDesc,(data)=>{
 					console.log(this.shareDesc);
@@ -1013,7 +1013,7 @@ export default {
 				})
 			}
 			else if(type == 3) {
-				shareService.shareToWxPyq(this.shareDesc,(data)=>{
+				shareService.shareToQQ(this.shareDesc,(data)=>{
 					console.log(this.shareDesc);
 				})
 			}
@@ -1023,7 +1023,7 @@ export default {
 				})
 			}
 
-		},
+		},*/
 		//关闭分享弹框
 		handleCancelShare(){
 			this.shareShow = false;
@@ -1287,7 +1287,7 @@ export default {
 <style lang="less" scoped>
 	.mask{
 		position: absolute;
-		bottom: initial;
+		// bottom: initial;
 		background: #fafafa;
 	}
 	.playAudio{
@@ -1453,9 +1453,9 @@ export default {
 				color: #222;
 			}
 		}
-		.likeActive{
-			color: #f40;
-		}
+	}
+	.likeActive{
+		color: #f40;
 	}
 	.article-menu{
 		line-height: .8rem;
@@ -1693,7 +1693,7 @@ export default {
 			}
 		}
 	}
-	.share-wrap{
+	/* .share-wrap{
 		.share-list{
 			background-color: #f0f0f0;
 			padding: .53rem .2rem;
@@ -1717,7 +1717,7 @@ export default {
 						width: .75rem;
 						height: .75rem;
 						margin-top: .225rem;
-
+	
 					}
 				}
 				.share-desc{
@@ -1736,7 +1736,7 @@ export default {
 			font-size: .32rem;
 			background-color: #f6f6f6;
 		}
-	}
+	} */
 	.reply-wrap{
 		height: 100vh;
 		border-radius: .3rem .3rem 0 0;

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<top @hrefTo="this.$Tool.goBack" :showNav="true">
+		<top :showNav="true">
 			<template slot="title">{{ title ||'个人认证' }}</template>
 			<span class="nav" slot="nav" @click="$Tool.goPage({name:'idenComQuestion',query:{title:'常见问题'}})">常见问题</span>
 		</top>

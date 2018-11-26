@@ -5,19 +5,27 @@
 				<div class="bf" v-show="value">
 					<ul class="share-wrap">
 						<li class="share-li" @click="shareService.shareToWxHy(content)">
-							<div class="iconfont icon-weixin1"></div>
+							<div class="share-img">
+								<img src="@/assets/images/icon-wechat.png">
+							</div>
 							微信	
 						</li>	
 						<li class="share-li" @click="shareService.shareToWxPyq(content)">
-							<div class="iconfont icon-friend-circle"></div>
+							<div class="share-img">
+								<img src="@/assets/images/icon-friend.png">
+							</div>
 							朋友圈
 						</li>
 						<li class="share-li" @click="shareService.shareToQQ(content)">
-							<div class="iconfont icon-qq"></div>
+							<div class="share-img">
+								<img src="@/assets/images/icon-qq.png">
+							</div>
 							QQ
 						</li>
 						<li class="share-li" @click="shareService.shareToXl(content)">
-							<div class="iconfont icon-weibo"></div>
+							<div class="share-img">
+								<img src="@/assets/images/icon-weibo.png">
+							</div>
 							微博
 						</li>
 					</ul>
@@ -42,13 +50,18 @@ export default {
 			default:{},
 		}
 	},
-	mounted(){
-		document.addEventListener('plusready',this.plusReady,false);
+	mounted(){	
+		try{
+			shareService.init();
+		}catch(e){
+
+		}
+		// document.addEventListener('plusready',this.plusReady,false);
 	},
 	methods:{
-		plusReady(){
-			shareService.init();
-		},
+		// plusReady(){
+		// 	shareService.init();
+		// },
 		cancle(){
 			this.$emit("input",false)
 		}
@@ -56,7 +69,7 @@ export default {
 }
 </script>
 
-<style rel="stylesheet" scoped>
+<style lang="less" scoped>
 .mask{
 	background: rgba(60, 60, 60, 0.1);
 }
@@ -73,13 +86,26 @@ export default {
 }
 .share-wrap{
 	display: flex;
-	height: 80px;
+	height: 90px;
 	justify-content: space-around;
 	align-items: center;
 }
 .share-li{
 	/*flex: auto;*/
 	color: #666;
+}
+.share-img{
+	margin: 0 auto;
+	width: 1.2rem;
+	height: 1.2rem;
+	border-radius: 50%;
+	background-color: #fff;
+	img{
+		display: inline-block;
+		width: .75rem;
+		height: .75rem;
+		margin-top: .225rem;
+	}
 }
 .iconfont{
 	font-size: 20px;
@@ -93,5 +119,6 @@ export default {
 .slide-ud-enter, .slide-ud-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   bottom: -50px;
+  opacity: 0;
 }
 </style>
