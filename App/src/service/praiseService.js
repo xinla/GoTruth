@@ -30,7 +30,7 @@ service.testPraise = function(itemid,type,call){
 		type,//:"点赞类型", //1:文章，2:评论
 	};
 	if (call) {
-		commonUtil.ajaxAsync(controller+'/testPraise',params,call);	
+		commonUtil.ajax(controller+'/testPraise',params,call);	
 		return;	
 	}
 
