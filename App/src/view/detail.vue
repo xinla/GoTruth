@@ -1412,7 +1412,7 @@ export default {
 			.content{
 				padding-bottom: .45rem;
 				.article-content{
-					padding-bottom: .4rem;
+					// padding-bottom: .4rem;
 					line-height: .5rem;
 					p{
             font-size: .34rem;
@@ -1430,7 +1430,7 @@ export default {
 					}
 				}
 				.phone-content{
-					padding-bottom: .4rem;
+					// padding-bottom: .4rem;
 					.phone-img{
 						width: 100%;
 						.tel-img{
