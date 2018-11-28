@@ -114,7 +114,7 @@
 									<div class="fl">
 										<span class="hot-time">{{$Tool.publishTimeFormat(item.commenttime)}}</span>
 										<span class="hot-point">•</span>
-										<span class="hot-reply" @click="handleFirstReply(item.douserid,item.id,index)">
+										<span class="hot-reply" @click="handleFirstReply(item,index)">
 											<var>{{item.replyCount}}</var>回复
 										</span>
 									</div>
@@ -254,9 +254,9 @@
 									<div class="reply-list fl" v-show="hasZan">
 										暂无人赞过
 									</div>
-									<div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,0)" :class="{'likeActive':likeStatus}">
+									<div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,0)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
 										{{replyobj.likeNum}}
-										<like :likeStatus="likeStatus"></like>
+										<like :likeStatus="commentIndex >= 0 && commentList[commentIndex].ifLike"></like>
 									</div>
 								</div>
 
@@ -309,21 +309,25 @@
 					<div class="report-header">
 						<h2>举报</h2>
 					</div>
-					<div class="report-body">
+					<!-- <div class="report-body">
 						<ul class="report-list">
-							<li class="report-item clearfix" v-for="(item,index) in reportList" :key="item.id" @click="handleChooseReport(item,index)">
-							<span class="fl">{{item.desc}}</span>
-							<i v-show="item.show" class="iconfont icon-warning-circle fr"></i>
-						</li>
-
-						<!-- 	<li class="report-item">
-								其它：
-								<input type="text" placeholder="我有话说">
-							</li -->
-						</ul>
-					</div>
+						 	<li class="report-item clearfix" v-for="(item,index) in reportList" :key="item.id" @click="handleChooseReport(item,index)">
+						 	<span class="fl">{{item.desc}}</span>
+						 	<i v-show="item.show" class="iconfont icon-warning-circle fr"></i>
+						 </li>
+						 
+						 <li class="report-item">
+						 		其它：
+						 		<input type="text" placeholder="我有话说">
+						 	</li
+						 </ul>
+					</div> -->
+					 <group>
+						 <radio :selected-label-style="{color: '#FF9900'}" fill-mode :options="reportList" v-model="reportreasion">
+						 </radio>
+					</group>
 					<div class="report-footer" @click="handleSendReport">
-						完成
+						提交
 					</div>
 				</div>
 			</popup>
@@ -353,7 +357,7 @@ import shareService from '@/service/shareService'
 import messageService from '@/service/messageService'
 import transmitService from '@/service/transmitService'
 
-import { Group, TransferDom, Popup} from 'vux'
+import { TransferDom, Popup} from 'vux'
 
 export default {
 	directives:{
@@ -363,7 +367,6 @@ export default {
 		like,
 		share,
 		memberList,
-		Group,
 		Popup
 	},
 	data(){
@@ -399,10 +402,10 @@ export default {
 			fileRoot:config.fileRoot+'/',
 			focusState:false,
 			article:{
-				id:Number,
+				id:0,
 				title:"",
 				content:"",
-				author:Number,
+				author:0,
 				type:2,
 				sourceurl:'',
 				publishtime:"发布时间",
@@ -433,7 +436,7 @@ export default {
 			//回复评论人的关注状态
 			replyUserFocusState:false,
 			//指定评论数组中某条评论的索引值 //展开评论回复是顶部当前索引使用
-			commentIndex:Number,
+			commentIndex:-1,
 			//评论类型：1评论，2回复
 			commentType:1,
 			//点赞
@@ -453,12 +456,18 @@ export default {
 			//举报显隐
 			ifReport:false,
 			//举报数组
-			reportList:[
-				{id: 1, desc: "淫秽色情", show:false},
-				{id: 2, desc: "违法信息", show:false},
-				{id: 3, desc: "营销广告", show:false},
-				{id: 4, desc: "恶意攻击谩骂", show:false},
-				// {id: 5, desc: "其它", show:false},
+			// reportList:[
+			// 	{id: 1, desc: "淫秽色情", show:false},
+			// 	{id: 2, desc: "违法信息", show:false},
+			// 	{id: 3, desc: "营销广告", show:false},
+			// 	{id: 4, desc: "恶意攻击谩骂", show:false},
+			// 	// {id: 5, desc: "其它", show:false},
+			// ],
+			reportList:['淫秽色情','违法信息','营销广告','恶意攻击谩骂'
+				// {key:'淫秽色情',value:'淫秽色情'},
+				// {key:'违法信息',value:'违法信息'},
+				// {key:'营销广告',value:'营销广告'},
+				// {key:'恶意攻击谩骂',value:'恶意攻击谩骂'},
 			],
 			//显影分享
 			ifShare:false,
@@ -503,13 +512,7 @@ export default {
 					fullscreenToggle: true //全屏按钮
 				}
 			},
-			reportInfo:{
-				reportreasion:'',//"举报原因"，
-				reporttime:'',//"举报时间" ,
-				// itemid:'',//"对象id",
-				// reportuserid:'',//"被举报人id",
-				// type:'',//"类型"  1.文章举报
-			},
+			reportreasion:'',//"举报原因"，
 			//转发，点赞列表
 			listMember:[],
 			//转发，点赞提示
@@ -792,7 +795,7 @@ export default {
 				// 评论点赞
 				let resDoPraise = praiseService.doPraise(itemid,2);
 				if(resDoPraise && resDoPraise.status == "success") {
-					console.log(resDoPraise);
+					// console.log(resDoPraise);
 					if(resDoPraise.result.code == 1) {
 						this.curLike = index;
 						this.ifLike = true;
@@ -1029,16 +1032,16 @@ export default {
 			this.shareShow = false;
 		},
 		//首次回复
-		handleFirstReply(replyUserId,commentid,commentIndex){
+		handleFirstReply(item,commentIndex){
 			this.replyShow = true;
 			this.commentType = 2;
-			this.replyUserId = replyUserId;	//回复评论人id
-			this.replyCommentId = commentid; //回复评论的id
+			this.replyUserId = item.douserid;	//回复评论人id
+			this.replyCommentId = item.id; //回复评论的id
 			this.commentIndex = commentIndex;//指定评论数组中某条评论的索引值
 			//展开评论回复是顶部当前索引使用
 			// 是否关注发布人
 			// debugger;
-			this.replyobj = this.commentList[commentIndex];
+			this.replyobj = item;
 			if(this.replyobj.likeNum <= 0) {
 				this.noZan = false;
 				this.hasZan = true;
@@ -1047,7 +1050,7 @@ export default {
 				this.hasZan = false;
 			}
 			if(localStorage.getItem('token')){
-				let resTestFolow = followService.testFollow(replyUserId);
+				let resTestFolow = followService.testFollow(item.douserid);
 				if(resTestFolow && resTestFolow.status == "success"){
 					if(resTestFolow.result == 1){
 						this.replyUserFocusState = true;
@@ -1078,7 +1081,7 @@ export default {
 		handleComment(){
 			let dis = $(".detail").scrollTop() + $(".article-change").offset().top -100;
 			$(".detail").animate({scrollTop:dis},100);
-			console.log(dis);
+			// console.log(dis);
 		},
 
 		// 举报
@@ -1089,23 +1092,58 @@ export default {
 		},
 
 		// 选择举报项
-		handleChooseReport(item,index){
-			item.show = !item.show;
-			this.reportInfo.reportreasion = index;
-		},
+		/*handleChooseReport(item,index){
+			// item.show = !item.show;
+			// this.reportInfo.reportreasion = index;
+			console.log(this.reportInfo.reportreasion)
+		},*/
 
-		// 提交举报
-		handleSendReport(itemid,reportuserid){
-			if(!this.reportInfo.reportreasion){
-				this.reportShow = false;
-				this.popMask = false;
+		/**
+		 * 提交举报
+		 * @param  Number type 举报类型 1:文章，2:评论
+		 * @return {[type]}      [description]
+		 */
+		handleSendReport(type){
+			/*reportInfo:{
+				reporttime:'',//"举报时间" ,
+				itemid:'',//"对象id",
+				reportuserid:'',//"被举报人id",
+				type:'',//"类型"  1.文章举报
+			},*/
+			if(this.reportreasion){
+				let reportInfo;
+				if (type === 1) {
+					reportInfo = {
+						type:1,
+						itemid:this.id,
+						reportuserid:this.article.author,
+						reportreasion:this.reportreasion
+					};
+				}else{
+					reportInfo = {
+						type:2,
+						itemid:this.replyobj.id,
+						reportuserid:this.replyobj.douserid,
+						reportreasion:this.reportreasion
+					};										
+				}
+				let res = reportService.doReport(reportInfo);
+				if (res && res.status === "success") {
+					this.$vux.alert.show({
+					  content:'感谢您的反馈，我们会着实核查！',
+					})					
+					this.reportShow = false;
+					this.popMask = false;
+					this.reportreasion = "";
+				}else{
+					this.$vux.alert.show({
+					  content:'提交失败，请稍后再试！',
+					})
+				}
 			} else {
-				this.$vux.alert.show({
-				  content:'感谢您的反馈，我们会着实核查！',
-				})
 				this.reportShow = false;
 				this.popMask = false;
-				this.reportList.show = false;
+				// this.reportList.show = false;
 			}
 		},
 
@@ -1764,7 +1802,7 @@ export default {
 		.reply-body{
 			width: 100%;
 			height: calc(100vh - .89rem);
-			overflow-y: auto;
+			// overflow-y: auto;
 			// overflow: auto;
 			// padding: .32rem .3rem;
 			padding: .32rem .3rem 1rem .3rem;
@@ -1804,19 +1842,19 @@ export default {
 								color: #979fac;
 							}
 						}
-						.reply-fabulous{
-							color: #979fac;
-							span{
-								font-size: .24rem;
-								margin-right: -.1rem;
-							}
-							.iconfont{
-								font-size: .36rem;
-							}
-							.icon-weizan{
-								color: #979fac;
-							}
-						}
+						// .reply-fabulous{
+						// 	color: #979fac;
+						// 	span{
+						// 		font-size: .24rem;
+						// 		margin-right: -.1rem;
+						// 	}
+						// 	.iconfont{
+						// 		font-size: .36rem;
+						// 	}
+						// 	.icon-weizan{
+						// 		color: #979fac;
+						// 	}
+						// }
 						.header-focus{
 							font-weight: 700;
 							font-size: .24rem;
@@ -1874,19 +1912,7 @@ export default {
 								}
 							}
 						}
-						.reply-fabulous{
-							color: #979fac;
-							span{
-								font-size: .24rem;
-								margin-right: -.1rem;
-							}
-							.iconfont{
-								font-size: .36rem;
-							}
-							.icon-weizan{
-								color: #979fac;
-							}
-						}
+						
 					}
 
 				}
@@ -1898,6 +1924,19 @@ export default {
 				line-height: .8rem;
 				padding-left: .89rem;
 			}
+		}
+	}
+	.reply-fabulous{
+		// color: #979fac;
+		span{
+			font-size: .24rem;
+			margin-right: -.1rem;
+		}
+		.iconfont{
+			font-size: .36rem;
+		}
+		.icon-weizan{
+			color: #979fac;
 		}
 	}
 	.report-wrap{
@@ -1912,8 +1951,8 @@ export default {
 				letter-spacing: .02rem;
 			}
 		}
-		.report-body{
-			padding: 0 .56rem;
+		/* .report-body{
+			// padding: 0 .56rem;
 			.report-list{
 				 .report-item{
 				 	line-height: .75rem;
@@ -1932,14 +1971,14 @@ export default {
 				 	}
 				 }
 			}
-		}
+		} */
 		.report-footer{
-			padding:  0 .56rem;
+			// padding:  0 .56rem;
 			line-height: .8rem;
 			font-size: .32rem;
 			text-align: center;
-			color: #222;
-			border-top: .02rem solid @borderColor;
+			// color: #222;
+			// border-top: .02rem solid @borderColor;
 			background-color: #fff;
 		}
 	}

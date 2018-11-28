@@ -97,11 +97,10 @@
 <script>
 import userService from '@/service/userService'
 import versionService from "@/service/versionService"
-import { XSwitch, Group} from 'vux'
+import { XSwitch,} from 'vux'
 export default{
 	components:{
 		XSwitch,
-		Group
 	},
 	data(){
 		return {
