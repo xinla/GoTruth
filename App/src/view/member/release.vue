@@ -258,11 +258,12 @@ export default{
 			if (this.record.type !== 3) {
 				res = articleService.publishArticle(this.record,this.record_file);
 			} else {
-				let images = '';
+				let images = [];
 				for (let i = this.record_file.length - 1; i >= 0; i--) {
-					images += this.record_file[i].url;
+				//	images += this.record_file[i].url;
+          images.push(this.record_file[i].url);
 				}
-				res = interlocutionService.publishQuestion(this.record,images);
+				res = interlocutionService.publishQuestion(this.record,images+"");
 			}
 			// debugger;
 			if(res.status=="success") {

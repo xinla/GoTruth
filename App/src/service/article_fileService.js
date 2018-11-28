@@ -18,3 +18,4 @@ service.getFileByArticle = function(articleid,call){
 }
 
 export default service
+

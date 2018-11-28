@@ -19,19 +19,22 @@ service.publishQuestion = function(record,images) {
 	return res;
 }
 // 问题列表
-service.getQuestionPage = function(page,size,userid){
-	let params = {
-		page,//:"当前页",
-		size,//:"分页大小"
-		userid,//:"用户id"
-	}
-	// if (call) {
-	// 	commonUtil.ajax(controller+'/getQuestionPage',params,call);
-	// 	return;
-	// }
-	let resMap = commonUtil.ajaxAsync(controller+'/getQuestionPage',params);
+service.getQuestionPage = function(page,size,classify,userid){
+  let params = {
+    page,//:"当前页",
+    size,//:"分页大小"
+    classify,
+    userid,//:"用户id"
+  };
+  let resMap = commonUtil.ajaxAsync(controller+'/getQuestionPage',params);
 
-	return resMap;
-}
+  return resMap;
+};
 
+// 获取回答
+service.getAnswers = function (page,size,parentid) {
+  let params = {page, size, parentid};
+  let resData = commonUtil.ajaxAsync(controller+'/getAnswers',params);
+  return resData;
+};
 export default service

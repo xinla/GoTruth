@@ -42,6 +42,8 @@ Vue.component('multIT',multIT);
 //单问答视图组件
 import question from '@/components/common/question'
 Vue.component('question',question);
+import wendaUser from '@/components/common/wendaUser'
+Vue.component('wendaUser',wendaUser);
 
 // 视频插件
 import VideoPlayer from 'vue-video-player'

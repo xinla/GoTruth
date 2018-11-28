@@ -41,6 +41,7 @@ import { TransferDom,Swiper,SwiperItem, Popup } from 'vux'
 import homeHeader from '@/components/headerBar'
 import homeMore from'@/components/more'
 import listQuestion from '@/components/listQuestion'
+import wendaUser from '@/components/common/wendaUser'
 
 
 export default {
@@ -54,6 +55,7 @@ export default {
 			SwiperItem,
 			listQuestion,
 			Popup,
+      wendaUser
 		},
 		data(){
 			return {
@@ -61,6 +63,7 @@ export default {
 				classifyList:[],
 				classifyIndex:0,
 				currentClassiftyName:"推荐",
+				currentClassiftyName:"",
 				swiperHeight:0,
 				showArr:[],
 			}
@@ -78,7 +81,7 @@ export default {
 			handleClose(){
 				this.showMore = false;
 			},
-	    },
+    },
 	}
 </script>
 <style lang="less" scoped>

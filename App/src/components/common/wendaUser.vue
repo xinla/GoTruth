@@ -1,65 +1,77 @@
 <template>
-    <div class="wenda-user">
-      <div class="wenda-login" v-if="ifLogin">
-        <div class="header-nologin">
-          <span>马上登录</span>，参与回答
-        </div>
-        <ul class="body">
-          <li class="item">
-            <i class="iconfont icon-dati"></i>
-            <span>答题</span>
-          </li>
-          <li class="item">
-            <i class="iconfont icon-eye2"></i>
-            <span>发现</span>
-          </li>
-        </ul>
-      </div>
-      <div class="wenda-login" v-if="isLogin">
-        <div class="header-login clearfix">
-          <div class="left fl">
-            <img src="@/assets/images/header.jpeg">
-            <span class="username">用户名</span>
-          </div>
-          <div class="right fr">
-            我的问答
-            <i class="iconfont icon-arrow-right"></i>
-          </div>
-        </div>
-        <ul class="body">
-          <li class="item">
-            <i class="iconfont icon-dati"></i>
-            <span>答题</span>
-          </li>
-          <li class="item">
-            <i class="iconfont icon-tiwen"></i>
-            <span>提问</span>
-          </li>
-          <li class="item">
-            <i class="iconfont icon-eye2"></i>
-            <span>发现</span>
-          </li>
-        </ul>
-      </div>
+  <div class="wenda-user">
+    <div class="wenda-login" v-if="!ifLogin">
+      <router-link class="header-nologin"  :to="{path:'/topBase/login',query:{title:'用户登录'}}" tag="div">
+        <span>马上登录</span>，参与回答
+      </router-link>
+      <ul class="body">
+        <router-link class="item" :to="{path:'answerSubject'}" tag="li">
+          <i class="iconfont icon-dati"></i>
+          <span>答题</span>
+        </router-link>
+        <li class="item">
+          <i class="iconfont icon-eye2"></i>
+          <span>发现</span>
+        </li>
+      </ul>
     </div>
+    <div class="wenda-login" v-if="ifLogin">
+      <div class="header-login clearfix">
+        <div class="left fl">
+          <img :src="userPhoto">
+          <span class="username">{{userName}}</span>
+        </div>
+        <div class="right fr">
+          我的问答
+          <i class="iconfont icon-arrow-right"></i>
+        </div>
+      </div>
+      <ul class="body">
+        <router-link class="item" :to="{path:'answerSubject'}" tag="li">
+          <i class="iconfont icon-dati"></i>
+          <span>答题</span>
+        </router-link>
+        <li class="item">
+          <i class="iconfont icon-tiwen"></i>
+          <span>提问</span>
+        </li>
+        <li class="item">
+          <i class="iconfont icon-eye2"></i>
+          <span>发现</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
   export default {
-    name: "wendaUser",
     data(){
-      return{
-        ifLogin:true,
-        isLogin:false,
+      return {
+        ifLogin:false,
+        //当前用户名
+        userName:'',
+        //当前用户头像
+        userPhoto:''
       }
     },
-    activated(){
+    activated() {
       this.$nextTick(()=>{
+        let token = localStorage.getItem('token');
+        //判断是否登录
+        if(!token) {
+          this.ifLogin = false;
+          return;
+        }
+        this.userPhoto = localStorage.userImg;
+        this.userName = localStorage.userName;
+        this.ifLogin = true;
+      })
+    }
 
-      });
-    },
   }
 </script>
+
 <style lang="less" scoped>
   .wenda-login{
     background-color: #fff;
@@ -74,8 +86,9 @@
       }
     }
     .header-login{
-      padding: .24rem 0;
+      padding: .24rem .3rem;
       background-color: #fff;
+      border-bottom: .02rem solid @borderColor;
       .left{
         display: flex;
         line-height: .72rem;
@@ -96,6 +109,11 @@
       .right{
         line-height: .72rem;
         color: #999;
+        .iconfont{
+          position: relative;
+          top: .02rem;
+          left: -.08rem;
+        }
       }
     }
     .body{
@@ -130,4 +148,5 @@
       }
     }
   }
+
 </style>

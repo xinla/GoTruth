@@ -1,5 +1,5 @@
 <template>
-	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="srcoll">
+	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
 		<div>		
 			<prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
 			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
@@ -29,7 +29,7 @@ export default {
 			ifNet:false,
 			ifLoading:true,
 			tip:"正在加载",	
-			timeId:0,
+			timer:null
 		}
 	},
 	props:{
@@ -44,20 +44,6 @@ export default {
 	},
 	mounted () {
 		this.$nextTick(()=>{
-			/*let net = {}
-			function getNet() {
-				net = netUtil.getNetInfo();	
-				if (net.network == "未连接网络") {
-					this.ifNet = true;
-					return;
-				}
-			}
-			try{
-				document.addEventListener('plusready', getNet.bind(this));
-				document.removeEventListener('plusready', getNet.bind(this));
-			}catch(e){
-				// console.log(e)
-			}*/
 			if (!this.classify) {
 				this.init();
 				if (this.arcList.length) {
@@ -143,8 +129,8 @@ export default {
 			this.scrollTop = $(e.target).scrollTop();	
 			// console.log(this.scrollTop)	
 			// 滚动结束200ms后解禁滚动状态
-			clearTimeout(this.timeId);
-			this.timeId = setTimeout(()=>{
+			clearTimeout(this.timer);
+			this.timer = setTimeout(()=>{
 				if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) >= e.target.scrollHeight) {
 					this.getMoreActicle();
 				}
@@ -185,7 +171,7 @@ export default {
 	},
 	watch:{
 		$route(){
-			$(this.$refs["srcoll"].$el).scrollTop(this.scrollTop);
+			$(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
 		},
 		show(){	
 			this.$nextTick(()=>{		
@@ -198,21 +184,19 @@ export default {
 	},
 	computed:{
 		isScolling(){
-			return this.$store.state.isScolling;
+			return this.$store.state.isScrolling;
 		},
 	}
 }
 </script>
 
-<style rel="stylesheet" scoped>
+<style lang="less" scoped>
 	.main-content{
 		position: relative;
 		height: calc(100vh - 2.7rem);
 		overflow: hidden;
 		overflow-y: auto;
 		-webkit-overflow-scrolling:touch;
-		/*// padding: 0 .3rem;
-		// padding-bottom: .3rem;*/
 	}
 	.refresh{
 		background: #fafafa;

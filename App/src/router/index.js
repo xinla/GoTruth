@@ -60,6 +60,22 @@ export default new Router({
         require(['@/view/detail.vue'],resolve)
       },
     },
+    // 问答列表页面
+    {
+      path:'/wendaList',
+      name:'wendaList',
+      component:(resolve)=>{
+        require(['@/view/wendaList.vue'],resolve)
+      }
+    },
+    // 问答详情页面
+    {
+      path:'/wendaDetail',
+      name:'wendaDetail',
+      component:(resolve)=>{
+        require(['@/view/wendaDetail.vue'],resolve)
+      }
+    },
     //搜索页面
     {
       path: '/search',

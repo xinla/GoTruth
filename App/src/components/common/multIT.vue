@@ -2,7 +2,6 @@
 	<div class="bfc-o" v-if="ArticleFile.length || imgList.length"  @click="goDetail">
 		<div class="article-wrap">
 			<div class="article-item clearfix">
-
 				<!-- 浮动单图片 -->
 				<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
 				<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">					
@@ -51,7 +50,7 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-			ArticleFile:[
+      ArticleFile:[
 				// {
 				// 	thumbnail:"",
 				// }
@@ -101,7 +100,8 @@ export default {
 		init(){
 			articleFileService.getFileByArticle(this.article.id,data=>{
 				if (data && data.status == "success") {
-					this.ArticleFile = data.result.filelist;				
+					this.ArticleFile = data.result.filelist;
+					console.log(this.ArticleFile)
 				}				
 			});
 			if (this.ifPublisher) {
@@ -123,10 +123,10 @@ export default {
 					this.commentNum = this.$Tool.numConvertText(data.result.count);
 				}					
 			});
-
-			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);	
+			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);
 			if (this.article.type == 3) {
-				this.imgList = this.$Tool.extractImg(this.article.content,3);				
+				this.imgList = this.$Tool.extractImg(this.article.content,3);
+
 			}
 		},
 		goDetail(){
