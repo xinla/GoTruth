@@ -80,6 +80,10 @@
 					<span>不喜欢</span>
 					<i class="iconfont icon-lajixiang"></i>
 				</li>
+				<li class="item" @click="handleReport(1)">
+					<span>举报</span>
+					<i class="iconfont icon-warning-circle"></i>
+				</li>
 			</ul>
 
 			<ul class="article-menu" v-else>
@@ -237,7 +241,7 @@
 									<span class="reply-time fl">
 										{{$Tool.publishTimeFormat(replyobj.commenttime)}}
 									</span>
-									<span class="reply-report fr" @click="handleReport">举报</span>
+									<span class="reply-report fr" @click="handleReport(2)">举报</span>
 								</div>
 								<div class="reply-footer clearfix">
 									<div class="reply-footer-wrap fl clearfix" v-show="noZan">	
@@ -254,7 +258,7 @@
 									<div class="reply-list fl" v-show="hasZan">
 										暂无人赞过
 									</div>
-									<div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,0)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
+									<div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,commentIndex)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
 										{{replyobj.likeNum}}
 										<like :likeStatus="commentIndex >= 0 && commentList[commentIndex].ifLike"></like>
 									</div>
@@ -512,7 +516,8 @@ export default {
 					fullscreenToggle: true //全屏按钮
 				}
 			},
-			reportreasion:'',//"举报原因"，
+			reportreasion:'',//"举报原因"
+			reportType:0,//举报类型 1:文章，2:评论
 			//转发，点赞列表
 			listMember:[],
 			//转发，点赞提示
@@ -1084,11 +1089,15 @@ export default {
 			// console.log(dis);
 		},
 
-		// 举报
-		handleReport(){
+		/**
+		 * 举报
+		 * @param  Number type 举报类型 1:文章，2:评论
+		 * @return {[type]}      [description]
+		 */
+		handleReport(type){
 			this.reportShow = true;
 			this.popMask = true;
-			// console.log('举报');
+			this.reportType = type;
 		},
 
 		// 选择举报项
@@ -1100,10 +1109,9 @@ export default {
 
 		/**
 		 * 提交举报
-		 * @param  Number type 举报类型 1:文章，2:评论
 		 * @return {[type]}      [description]
 		 */
-		handleSendReport(type){
+		handleSendReport(){
 			/*reportInfo:{
 				reporttime:'',//"举报时间" ,
 				itemid:'',//"对象id",
@@ -1112,14 +1120,14 @@ export default {
 			},*/
 			if(this.reportreasion){
 				let reportInfo;
-				if (type === 1) {
+				if (this.reportType === 1) {
 					reportInfo = {
 						type:1,
 						itemid:this.id,
 						reportuserid:this.article.author,
 						reportreasion:this.reportreasion
 					};
-				}else{
+				}else if (this.reportType === 2){
 					reportInfo = {
 						type:2,
 						itemid:this.replyobj.id,
@@ -1127,11 +1135,12 @@ export default {
 						reportreasion:this.reportreasion
 					};										
 				}
+				// console.log(reportInfo)
 				let res = reportService.doReport(reportInfo);
 				if (res && res.status === "success") {
 					this.$vux.alert.show({
 					  content:'感谢您的反馈，我们会着实核查！',
-					})					
+					})			
 					this.reportShow = false;
 					this.popMask = false;
 					this.reportreasion = "";
@@ -1473,7 +1482,7 @@ export default {
 			width: 1.84rem;
 			height: .64rem;
 			line-height: .64rem;
-			margin-right: .86rem;
+			margin-right: .5rem;
 			border: .02rem solid #d9d9d9;
 			border-radius: .3rem;
 			text-align: center;

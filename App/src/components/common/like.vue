@@ -23,13 +23,13 @@ export default {
 .like-animate{
 	position: absolute;
 	left: 0;
-	// bottom: 0;
+	bottom: 0;
 	opacity: 1;
 	color: transparent;
     transition:opacity 1s,transform 1s;
 }
 .like-up-leave-to {
- 	opacity: .2;
+ 	opacity: 0;
     transform: scale(2);
     color: #f40;
 }
