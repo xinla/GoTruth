@@ -46,7 +46,7 @@
 				<ul class="login-way-list">
 					<li class="login-icon-item" @click="authLogin(2)"><i class="iconfont icon-qq"></i></li>
 					<li class="login-icon-item" @click="authLogin(1)"><i class="iconfont icon-weixin1"></i></li>
-					<li class="login-icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo1"></i></li>
+					<li class="login-icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo"></i></li>
 				</ul>
 			</div>
 			<p class="login-desc">登录即代表您已阅读并同意
@@ -539,12 +539,15 @@ export default{
         				&:last-child{
         					margin-right: 0;
         				}
-        				&:first-child i,&:last-child i{
+        				&:first-child i{
         					line-height: .7rem;
         				}
         				&:nth-child(2) i{
         					line-height: .8rem;
         				}
+                &:last-child i{
+                  line-height: .75rem;
+                }
         				.iconfont{
         					font-size: .5rem;
         					color: #555;

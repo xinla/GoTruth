@@ -65,7 +65,7 @@ import articleClassifyService from '@/service/article_classifyService'
 					{"classifyname":"寻亲","classifycode":4},
 					{"classifyname":"普法","classifycode":5},
 					{"classifyname":"打工","classifycode":6},
-					{"classifyname":"视频","classifycode":7}
+					{"classifyname":"广场舞","classifycode":7}
 				],
 				classifyIndex:0,
 				currentClassiftyName:"推荐",

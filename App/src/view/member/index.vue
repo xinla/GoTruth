@@ -96,7 +96,7 @@ export default {
         { id: 1, class: 'icon-icon-copy' },
         { id: 2, class: 'icon-qq' },
         { id: 3, class: 'icon-weixin1' },
-        { id: 4, class: 'icon-weibo1' },
+        { id: 4, class: 'icon-weibo' },
       ],
       tabArr: [
         { id: 1, desc: '收藏', class: 'icon-not-collection', path: '/personBase/collect', query: 6 },

@@ -106,7 +106,7 @@ export default{
 					type:Number,
 					default:1,
 				},   //1：图文，2:视频
-				publishtime:'',  // 后台设置
+        publishtime:'',  // 后台设置
 				classify:1,
 				selectedpublishname:'',
 				selectedpublishaddress:'',
