@@ -357,7 +357,7 @@ import readHistoryService from '@/service/readHistoryService'
 import articleFileService from '@/service/article_fileService'
 import articleCommentService from '@/service/article_commentService'
 import articleCollectService from '@/service/articleCollectService'
-import shareService from '@/service/shareService'
+// import shareService from '@/service/shareService'
 import messageService from '@/service/messageService'
 import transmitService from '@/service/transmitService'
 
@@ -536,11 +536,11 @@ export default {
 		}
 	},
 	mounted(){
-		try{
-			shareService.init();
-		}catch(e){
+		// try{
+		// 	shareService.init();
+		// }catch(e){
 
-		}
+		// }
 	},
 	activated(){
 		this.id = this.$route.query.id;

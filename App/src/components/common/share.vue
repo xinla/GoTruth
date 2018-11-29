@@ -4,25 +4,25 @@
 			<transition name="slide-ud">
 				<div class="bf" v-show="value">
 					<ul class="share-wrap">
-						<li class="share-li" @click="shareService.shareToWxHy(content)">
+						<li class="share-li" @click="share(1)">
 							<div class="share-img">
 								<img src="@/assets/images/icon-wechat.png">
 							</div>
 							微信	
 						</li>	
-						<li class="share-li" @click="shareService.shareToWxPyq(content)">
+						<li class="share-li" @click="share(2)">
 							<div class="share-img">
 								<img src="@/assets/images/icon-friend.png">
 							</div>
-							朋友圈
+							微信朋友圈
 						</li>
-						<li class="share-li" @click="shareService.shareToQQ(content)">
+						<li class="share-li" @click="share(3)">
 							<div class="share-img">
 								<img src="@/assets/images/icon-qq.png">
 							</div>
 							QQ
 						</li>
-						<li class="share-li" @click="shareService.shareToXl(content)">
+						<li class="share-li" @click="share(4)">
 							<div class="share-img">
 								<img src="@/assets/images/icon-weibo.png">
 							</div>
@@ -54,17 +54,26 @@ export default {
 		try{
 			shareService.init();
 		}catch(e){
-
 		}
-		// document.addEventListener('plusready',this.plusReady,false);
 	},
 	methods:{
-		// plusReady(){
-		// 	shareService.init();
-		// },
 		cancle(){
 			this.$emit("input",false)
-		}
+		},
+		//分享到第三方
+		share(type){
+			switch(type){
+				case 1:shareService.shareToWxHy(this.content);
+				break;
+				case 2:shareService.shareToWxPyq(this.content);
+				break;
+				case 3:shareService.shareToQQ(this.content);
+				break;
+				case 4:shareService.shareToXl(this.content);
+				break;
+				default:console.log("分享出错")
+			}
+		},
 	}
 }
 </script>
