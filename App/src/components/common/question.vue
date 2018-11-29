@@ -93,9 +93,9 @@ export default {
       }
     },
     handleGoDetail(item){
+      debugger;
       if(!this.$store.state.isScolling) {
-        this.$Tool.goPage({name:'wendaList',query:{id:this.wenda.id,item:item}});
-        console.log(item)
+        this.$Tool.goPage({name:'wendaList',query:{id:this.wenda.id,item:JSON.stringify(item)}});
       }
     }
   },

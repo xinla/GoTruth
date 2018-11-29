@@ -85,7 +85,7 @@
 
       <!--回答弹出框-->
       <div v-transfer-dom>
-        <popup v-model="popRecord.show" height="100%">
+        <popup v-model="popObj.show" height="100%">
           <div class="popup-wrap">
             <div class="popup-header clearfix">
               <div class="header-cancel" @click="handleCancel">取消</div>
@@ -97,13 +97,13 @@
                   placeholder="分享你的真实观点和经验"
                   :onpropertychange="onpropertychange"
                   :oninput="oninput"
-                  v-model="popRecord.content"></textarea>
+                  v-model="record.content"></textarea>
                 <div class="popup-img clearfix">
                   <div class="img fl" v-for="(item, index) in record_file">
                     <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
                     <img :src="fileRoot + item.url">
                   </div>
-                  <div class="popup-addimg fl" v-show="popRecord.addShow">
+                  <div class="popup-addimg fl" v-show="popObj.addShow">
                     <label for="addImg"></label>
                     <i class="iconfont icon-add"></i>
                     <input type="file" id="addImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
@@ -161,23 +161,16 @@
             notcollect:true,
             collected:false
           },
-          popRecord:{
+          record:{
+            content:'',
+            author:1,
+            type:1,
+            publishtime:'',
+            parentid:''
+          },
+          popObj:{
             show:true,
             addShow:false,
-            content:'',
-            author:{
-              type:Number,
-              default:1
-            },
-            type:{
-              type:Number,
-              default: 1
-            },
-            publishtime:'',
-            parentid:{
-              type:Number,
-              default:1
-            }
           },
           record_file:[]
 
@@ -189,8 +182,9 @@
 
     activated(){
       this.$nextTick(()=>{
+        debugger;
         this.id = this.$route.query.id;
-        this.newList = this.$route.query.item;
+        this.newList = JSON.parse(this.$route.query.item);
         if(this.newList.images == null) {
           this.imgShow = false;
           return false;
@@ -252,7 +246,7 @@
           this.record_file.push(obj);
         });
         if(param.has.length >= 1){
-          this.popRecord.addShow = true;
+          this.popObj.addShow = true;
         }
         this.$vux.loading.hide();
       },
@@ -273,7 +267,7 @@
             },600);
             if(thiz.record_file.length == 1){
               setTimeout(()=>{
-                thiz.popRecord.addShow = false;
+                thiz.popObj.addShow = false;
               },600);
             }
           }
@@ -312,12 +306,12 @@
 
       //弹出回答框
       handleAnswer(){
-        this.popRecord.show =true;
+        this.popObj.show =true;
       },
 
       //取消回答框
       handleCancel(){
-        this.popRecord.show = false;
+        this.popObj.show = false;
       },
 
       // 发布回答
@@ -329,16 +323,19 @@
           return;
         }
 
-        if(!this.$Tool.checkInput(this.popRecord.content)) {
-          this.popRecord.content = this.$Tool.replaceNo(this.popRecord.content);
+        if(!this.$Tool.checkInput(this.record.content)) {
+          this.record.content = this.$Tool.replaceNo(this.record.content);
           this.$vux.alert.show({
             content:'内容含有非法字符，已为您删除，请确认'
           });
           return;
         }
-        this.popRecord.author = Number(localStorage.id || 0);
-        let res = articleService.publishArticle(this.popRecord, this.record_file);
-          console.log(res)
+        this.record.author = Number(localStorage.id || 0);
+        let pid =this.newList.id;
+        this.record.parentid = pid;
+        debugger;
+        let res = articleService.publishArticle(this.record, this.record_file);
+        console.log(res);
 
       }
     },
