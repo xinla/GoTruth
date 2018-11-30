@@ -536,11 +536,6 @@ export default {
 		}
 	},
 	mounted(){
-		// try{
-		// 	shareService.init();
-		// }catch(e){
-
-		// }
 	},
 	activated(){
 		this.id = this.$route.query.id;
@@ -667,7 +662,7 @@ export default {
 		},
 		// 弹出评论框
 	    ended(){
-	    	console.log(111);
+	    	// console.log(111);
 	    },
 	    handleAudio(){
 	    	if(!this.tag){
@@ -1336,6 +1331,7 @@ export default {
 		position: absolute;
 		// bottom: initial;
 		background: #fafafa;
+		height:calc (100vh - 65px);
 	}
 	.playAudio{
 		position: absolute;

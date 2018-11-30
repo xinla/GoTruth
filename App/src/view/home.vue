@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<div class="main" ref="main">
-				<swiper v-model="classifyIndex" :height="swiperHeight + 'px'" :show-dots="false" :threshold="150" >
+				<swiper v-model="classifyIndex" height="100vh" :show-dots="false" :threshold="150" >
 			        <swiper-item>
 			          	<listArticle></listArticle>
 			        </swiper-item>
@@ -69,7 +69,7 @@ import articleClassifyService from '@/service/article_classifyService'
 				],
 				classifyIndex:0,
 				currentClassiftyName:"推荐",
-				swiperHeight:0,
+				// swiperHeight:0,
 				showArr:[],
 			}
 		},
@@ -88,7 +88,7 @@ import articleClassifyService from '@/service/article_classifyService'
           }
         });
         //获取swiper的高度
-        this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;
+        // this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;
 	    },
 		methods: {
       //导航栏添加弹出popup
@@ -116,10 +116,10 @@ import articleClassifyService from '@/service/article_classifyService'
     .main-box{
       border-bottom: .02rem solid @borderColor;
     }
-		.main{
-			height: calc(100% - 90px);
-			overflow-y:auto;
-		}
+		/* .main{
+			height: 100%;
+			// overflow-y:auto;
+		} */
 		.nav-add {
 			position: absolute;
 			right: 0;
@@ -168,7 +168,7 @@ import articleClassifyService from '@/service/article_classifyService'
 	
 </style>
 <style>
-	/*vux tab 样式修改*/
+	/*vux样式修改*/
 	.vux-tab-wrap{
       	padding-top: .76rem !important;
 	}

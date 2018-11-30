@@ -36,10 +36,12 @@ export default {
 		}
 	},
 	activated(){
-		this.ifDeleteAll = false;
-		this.page = 1;
-		this.arcList = [];
-		this.init();
+		setTimeout(()=>{
+			this.ifDeleteAll = false;
+			this.page = 1;
+			this.arcList = [];
+			this.init();
+		},300)
 	},
 	methods:{
 		init(){

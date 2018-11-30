@@ -26,7 +26,9 @@ export default{
 	// 	this.init()
 	// },
 	activated(){
-		this.init();
+		setTimeout(()=>{
+			this.init();			
+		},300)
 	},
 	methods:{
 		init(){

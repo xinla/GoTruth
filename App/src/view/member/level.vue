@@ -113,7 +113,7 @@ export default{
           this.$set(this.record[0],'levelDesc','爱心天使');
           this.$set(this.record[1],'levelDesc','爱心楷模');
           this.$set(this.record[2],'levelDesc','爱心达人');
-          for(let i = 3; i < this.record.length; i++){
+          for(let i = 3,len = this.record.length; i < len; i++){
             this.$set(this.record[i],'levelDesc','爱心人士');
           }
         }

@@ -25,10 +25,12 @@ export default{
 	// 	this.init();
 	// },
 	activated(){
-		this.page = 1;
-		this.list = [];
-		this.init();
-		// console.log("focu")
+		setTimeout(()=>{
+			this.page = 1;
+			this.list = [];
+			this.init();		
+		},300)
+		// 延迟时间必须大于路由切换动画时间
 	},
 	methods:{
 		init(){

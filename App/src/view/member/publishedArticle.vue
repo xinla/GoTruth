@@ -31,10 +31,13 @@ export default {
 		}
 	},
 	activated(){
-		this.userId = this.$route.query.userId;
-		this.page = 1;
-		this.arcList = [];
-		this.init();
+		setTimeout(()=>{
+			this.userId = this.$route.query.userId;
+			this.page = 1;
+			this.arcList = [];
+			this.init();			
+		},300)
+		// 延迟时间必须大于路由切换动画时间
 	},
 	methods:{
 		init(){

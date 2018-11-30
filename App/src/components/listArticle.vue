@@ -174,9 +174,10 @@ export default {
 			$(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
 		},
 		show(){	
-			this.$nextTick(()=>{		
+			setTimeout(()=>{
 				this.init();
-			})				
+			},400)
+			// 延迟时间必须大于切换动画时间
 		},
 		"$store.state.isNetwork"(val){
 			this.ifNet = val;
@@ -194,8 +195,8 @@ export default {
 	.main-content{
 		position: relative;
 		height: calc(100vh - 2.7rem);
-		overflow: hidden;
-		overflow-y: auto;
+		// overflow: hidden;
+		// overflow-y: auto;
 		-webkit-overflow-scrolling:touch;
 	}
 	.refresh{
