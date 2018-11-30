@@ -260,7 +260,6 @@ export default{
 			} else {
 				let images = [];
 				for (let i = this.record_file.length - 1; i >= 0; i--) {
-				//	images += this.record_file[i].url;
           images.push(this.record_file[i].url);
 				}
 				res = interlocutionService.publishQuestion(this.record,images+"");

@@ -39,7 +39,7 @@
             <div class="body-content">
               <p class="content">水电费第三方军绿色快递放假克里斯多夫吉林省打开福建省打开了附近受得了福建省的脸孔福建省的脸孔发胶索拉卡打飞机受得了开发说服力抗衰老的飞机上来的咖啡机克鲁赛德建安费凉快圣诞节凉快圣诞节饭凉快圣诞节饭两款手机弗兰克萨就发了开始打家纺雷克萨就发了开始打解放路肯定是九分裤了电视剧付款了圣诞节弗兰克斯离开家施蒂利克福建省的脸孔积分离开的设计费凉快圣诞节饭离开的时间凉快圣诞节凉快圣诞节凉快圣诞节饭凉快圣诞节凉快圣诞节拉开距离会计法老是看得见</p>
               <ul class="body-img">
-                <li class="body-item">
+               <!-- <li class="body-item">
                   <img src="@/assets/images/a.jpg" alt="">
                 </li>
                 <li class="body-item">
@@ -47,7 +47,7 @@
                 </li>
                 <li class="body-item">
                   <img src="@/assets/images/b.jpg" alt="">
-                </li>
+                </li>-->
               </ul>
             </div>
             <span class="body-read">4.4万阅读</span>
@@ -90,13 +90,14 @@
             <div class="popup-header clearfix">
               <div class="header-cancel" @click="handleCancel">取消</div>
               <div class="header-title">回答</div>
-              <div class="header-fabu" @click="handlePublish">发布</div>
+              <div class="header-fabu" @click="handlePublish" :class="{fabuColor:fabuColor}">发布</div>
             </div>
             <div class="popup-body">
                 <textarea
                   placeholder="分享你的真实观点和经验"
                   :onpropertychange="onpropertychange"
                   :oninput="oninput"
+                  @input="handelInput"
                   v-model="record.content"></textarea>
                 <div class="popup-img clearfix">
                   <div class="img fl" v-for="(item, index) in record_file">
@@ -110,7 +111,7 @@
                   </div>
                 </div>
             </div>
-            <div class="popup-footer clearfix">
+            <div class="popup-footer clearfix" :class="{'nav-hide':hideClass}">
               <div class="keyboard fl">
                 <i class="iconfont icon-jianpan-up"></i>
               </div>
@@ -144,6 +145,10 @@
     },
     data(){
         return{
+          docmHeight: document.documentElement.clientHeight,  //一开始的屏幕高度
+          showHeight: document.documentElement.clientHeight,   //一开始的屏幕高度
+          hideClass:false,
+          timer:false,
           onpropertychange:"this.style.height=this.scrollHeight + 'px'",
           oninput:"this.style.height=this.scrollHeight + 'px'",
           fileRoot:config.fileRoot + '/',
@@ -153,9 +158,11 @@
           imgArr:[],
           newList:{},
           count:0,
+          fabuColor:false,
           imgShow:true,
           id:0,
           page:1,
+          parentid:'',
           answerList:[],
           collectToggle:{
             notcollect:true,
@@ -169,7 +176,7 @@
             parentid:''
           },
           popObj:{
-            show:true,
+            show:false,
             addShow:false,
           },
           record_file:[]
@@ -178,11 +185,17 @@
     },
 
     mounted(){
+      // window.onresize监听页面高度变化
+      window.onresize = () =>{
+        return (()=>{
+          window.screenHeight = document.body.clientHeight;
+          this.showHeight = window.screenHeight;
+        })()
+      }
     },
 
     activated(){
       this.$nextTick(()=>{
-        debugger;
         this.id = this.$route.query.id;
         this.newList = JSON.parse(this.$route.query.item);
         if(this.newList.images == null) {
@@ -219,8 +232,12 @@
         });
 
         // 获取回答列表
-        let answerData = interService.getAnswers(this.page, 15);
+        let pid =this.record.parentid;
+        this.parentid = pid;
+        let answerData = interService.getAnswers(this.page, 15,this.parentid);
         if(answerData && answerData.status == "success") {
+          console.log(answerData)
+
         }
 
         //获取问题收藏数量
@@ -245,10 +262,11 @@
           obj.type =1;
           this.record_file.push(obj);
         });
-        if(param.has.length >= 1){
-          this.popObj.addShow = true;
-        }
         this.$vux.loading.hide();
+        // if(param.has.length >= 1){
+        //   this.popObj.addShow = true;
+        // }
+
       },
 
       //删除上传图片
@@ -330,13 +348,57 @@
           });
           return;
         }
+
+        if(!this.record.content){
+          this.$vux.toast.text('回答不能为空', 'middle')
+          return;
+        }
         this.record.author = Number(localStorage.id || 0);
         let pid =this.newList.id;
         this.record.parentid = pid;
-        debugger;
-        let res = articleService.publishArticle(this.record, this.record_file);
-        console.log(res);
+        let data = articleService.publishArticle(this.record, this.record_file);
+        if(data && data.status == "success") {
+          this.$vux.alert.show({
+            content:'发布成功'
+          });
+          this.record_file = [];
+          this.record.content ="";
+          this.popObj.addShow=false;
+          setTimeout(()=>{
+            this.$vux.alert.hide();
+          },800);
+        }else{
+          this.$vux.alert.show({
+            content:'发布失败'
+          });
+        }
 
+      },
+
+      //监听文本框
+      handelInput(){
+        if(this.record.content.length >= 1){
+          this.fabuColor = true;
+        }else{
+          this.fabuColor = false;
+        }
+      },
+      // 检测屏幕高度变化
+      inputType(){
+        if(!this.timer) {
+          this.timer = true;
+          let that = this;
+          setTimeout(()=>{
+            if(that.docmHeight > that.showHeight) {
+              // 显示class
+              this.hideClass = true;
+            }else if(that.docmHeight <= that.showHeight) {
+              // 显示隐藏
+              this.hideClass = false;
+            }
+            that.timer = false;
+          },20)
+        }
       }
     },
     watch:{
@@ -344,7 +406,8 @@
         setTimeout(()=>{
           this.init();
         },450);
-      }
+      },
+      showHeight: 'inputType'
     }
   }
 </script>
@@ -561,6 +624,9 @@
       .header-fabu{
         color: #c7c7c7;
       }
+      .fabuColor{
+        color:#2a90d7;
+      }
       .header-title{
         width: calc(100% - 2.2rem);
         letter-spacing: .02rem;
@@ -664,6 +730,9 @@
         font-size: .5rem;
         color: #444;
       }
+    }
+    .nav-hide {
+      position: static!important;
     }
   }
 </style>
