@@ -1,5 +1,5 @@
 <template>
-	<div class="article" v-if="ArticleFile.length || imgList.length"  @click="goDetail">
+	<div class="article" v-if="ArticleFile.length || imgList.length" @click="goDetail">
 		<!-- 浮动单图片 -->
 		<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
 		<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">					
@@ -46,16 +46,12 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-      ArticleFile:[
-				// {
-				// 	thumbnail:"",
-				// }
-			],
-			commentNum:0,
-			publishtime:"",
-			fileRoot:config.fileRoot+'/',
-			publisher:"",
-			imgList:[],
+	    ArticleFile:[],
+		commentNum:0,
+		publishtime:"",
+		fileRoot:config.fileRoot+'/',
+		publisher:"",
+		imgList:[],
 		}
 	},
 	props:{
@@ -82,9 +78,9 @@ export default {
 		},
 	},
 	mounted(){
-		this.$nextTick(()=>{
 			this.init();
-		})
+		// this.$nextTick(()=>{
+		// })
 	},	
 	watch:{
 		//使用了缓存，父组件传值发生改变，子组件需要监测对应改变的对象值，不然子组件重新渲染还是使用缓存中的值

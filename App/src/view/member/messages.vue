@@ -37,11 +37,11 @@ export default {
 		}
 	},
 	activated(){
-		this.$nextTick(()=>{
+		setTimeout(()=>{
 			this.page = 1;
 			this.list = [];
-			this.init();
-		})		
+			this.init();		
+		},delay)		
 	},
 	methods:{
 		init(){

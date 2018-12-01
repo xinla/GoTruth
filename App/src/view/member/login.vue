@@ -231,7 +231,7 @@ export default{
 		//登录
 		handleLogin(){
 			if(this.isOpacity == true) {
-				this.$vux.loading.show({text: '正在登录中...'});
+				this.$vux.loading.show({text: '登录中...',});
 				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,this.userInfoStore);
 				this.mobileDesc = "";
 				this.codeDesc = "";

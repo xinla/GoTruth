@@ -17,8 +17,8 @@ import animate from 'animate.css'
 import './assets/styles/reset.css'
 import './assets/styles/iconfont.css'
 
-//二维码生成插件
-import QRCode from 'qrcode'
+// //二维码生成插件
+// import QRCode from 'qrcode'
 
 //引用功能函数
 import Tool from './assets/common/methods'
@@ -52,9 +52,9 @@ require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
 
 //Swiper组件
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css';
-Vue.use(VueAwesomeSwiper);
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
+// import 'swiper/dist/css/swiper.css';
+// Vue.use(VueAwesomeSwiper);
 
 //vux
 import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,InlineLoading } from 'vux';
@@ -87,6 +87,7 @@ new Vue({
   store,
   created() {
     window.GoTruth = this;
+    window.delay = 400;// 延迟时间必须大于路由切换动画时间
     // this.initSystem();
   },
 /*  methods: {

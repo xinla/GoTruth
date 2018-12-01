@@ -90,14 +90,13 @@ export default{
       levelDesc:'',
       userList:{},
       userId:localStorage.id,
-      fileRoot:config.fileRoot+'/',     //可删除
+      // fileRoot:config.fileRoot+'/',     //可删除
 		}
 	},
   activated(){
-	  this.$nextTick(()=>{
-      this.init();
-    });
-
+  	setTimeout(()=>{
+		this.init();		
+	},delay)
   },
   watch:{
   },

@@ -6,12 +6,12 @@
 		<div class="mask" v-show="ifLoad">
 			<loading-main></loading-main>
 		</div>
-		<div class="audio-box" style="display: none;">
+		<!-- <div class="audio-box" style="display: none;">
 			<audio controls class="myAudios"  preload="auto" ref="audioPlayer" v-for="item in audioSrc" :src="fileRoot + item"></audio>
 		</div>
 		<div class="playAudio" @click="handleAudio" v-if="iconShow">
 			<i class="iconfont" :class="icon"></i>
-		</div>
+		</div> -->
 		<!-- <div id="audioBox"></div> -->
 		<div class="detail" @scroll="loadScroll">
 			<section class="content-wrap" v-if="!proFail1">
@@ -176,42 +176,6 @@
 				</div>
 			</popup>
 		</div>
-
-		<!-- 分享 -->
-		<!-- <div v-transfer-dom style="z-index: 988;">
-			<popup v-model="shareShow" style="z-index: 999;">
-				<div class="share-wrap">
-					<ul class="share-list">
-						<li @click="handleGiveShare(1)">
-							<div class="share-img">
-								<img src="@/assets/images/icon-wechat.png" alt="">
-							</div>
-							<span class="share-desc">微信好友</span>
-						</li>
-						<li  @click="handleGiveShare(2)">
-							<div class="share-img">
-								<img src="@/assets/images/icon-friend.png" alt="">
-							</div>
-							<span class="share-desc">微信朋友圈</span>
-						</li>
-						<li  @click="handleGiveShare(3)">
-							<div class="share-img">
-								<img src="@/assets/images/icon-qq.png" alt="">
-							</div>
-							<span class="share-desc">手机QQ</span>
-						</li>
-						<li  @click="handleGiveShare(4)">
-							<div class="share-img">
-								<img src="@/assets/images/icon-weibo.png" alt="">
-							</div>
-							<span class="share-desc">微博</span>
-						</li>
-					</ul>
-					<div class="share-btn" @click="handleCancelShare">取消</div>
-				</div>
-			</popup>
-		</div> -->
-
 		<!-- 回复框 -->
 		<div v-transfer-dom>
 			<popup v-model="replyShow" position="bottom" height="100%">
@@ -313,19 +277,6 @@
 					<div class="report-header">
 						<h2>举报</h2>
 					</div>
-					<!-- <div class="report-body">
-						<ul class="report-list">
-						 	<li class="report-item clearfix" v-for="(item,index) in reportList" :key="item.id" @click="handleChooseReport(item,index)">
-						 	<span class="fl">{{item.desc}}</span>
-						 	<i v-show="item.show" class="iconfont icon-warning-circle fr"></i>
-						 </li>
-						 
-						 <li class="report-item">
-						 		其它：
-						 		<input type="text" placeholder="我有话说">
-						 	</li
-						 </ul>
-					</div> -->
 					 <group>
 						 <radio :selected-label-style="{color: '#FF9900'}" fill-mode :options="reportList" v-model="reportreasion">
 						 </radio>
@@ -535,8 +486,6 @@ export default {
 			}
 		}
 	},
-	mounted(){
-	},
 	activated(){
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
@@ -566,9 +515,9 @@ export default {
 					this.iconShow = false;
 				}else{
 					this.iconShow = true;
-          let audioStr =  resArticleDetail.record.audio;
-          let audioArr = audioStr.split(',');
-          this.audioSrc = audioArr;
+          // let audioStr =  resArticleDetail.record.audio;
+          // let audioArr = audioStr.split(',');
+          // this.audioSrc = audioArr;
 				}
 				if(this.article.sourceurl == null) {
 					this.sourceShow = false;
@@ -657,49 +606,47 @@ export default {
 			//评论滚动近底部，自动加载 一屏1080
 			this.loadComment();
 			this.ifLoad = false;
-
-
 		},
 		// 弹出评论框
 	    ended(){
 	    	// console.log(111);
 	    },
-	    handleAudio(){
-	    	if(!this.tag){
-	    		this.icon = "icon-ziyuanldpi";
-	    		this.playerAudio();
+	    // handleAudio(){
+	    // 	if(!this.tag){
+	    // 		this.icon = "icon-ziyuanldpi";
+	    // 		this.playerAudio();
 
-	    		this.tag=true;
-	    	}else{
-	    		this.icon = "icon-touting";
-	    		this.pauseAudio();
-	    		this.tag=false;
-	    	}
-	    },
-	    playerAudio(){
-	    	let audios = document.getElementsByClassName("myAudios");
-			let index = 0;
-	    	function play() {
-				var caudio = audios[index];
-				if(!caudio){
-					index =0;
-					// play();
-				}
-				caudio.play();
-				caudio.addEventListener("ended", function() {
-					console.log("播放完毕")
-					index ++;
-					// play()
-				});
-			}
-			play();
-	    },
-	    pauseAudio(){
-	    	let audios = document.getElementsByClassName("myAudios");
-	    	if(audios!==null){
-	    		alert(audios.paused);
-	    	}
-	    },
+	    // 		this.tag=true;
+	    // 	}else{
+	    // 		this.icon = "icon-touting";
+	    // 		this.pauseAudio();
+	    // 		this.tag=false;
+	    // 	}
+	    // },
+	  //   playerAudio(){
+	  //   	let audios = document.getElementsByClassName("myAudios");
+			// let index = 0;
+	  //   	function play() {
+			// 	var caudio = audios[index];
+			// 	if(!caudio){
+			// 		index =0;
+			// 		// play();
+			// 	}
+			// 	caudio.play();
+			// 	caudio.addEventListener("ended", function() {
+			// 		console.log("播放完毕")
+			// 		index ++;
+			// 		// play()
+			// 	});
+			// }
+			// play();
+	  //   },
+	  //   pauseAudio(){
+	  //   	let audios = document.getElementsByClassName("myAudios");
+	  //   	if(audios!==null){
+	  //   		alert(audios.paused);
+	  //   	}
+	  //   },
 		handleOpenInput(){
 			this.textShow();
 			if(this.replyShow){
@@ -1001,36 +948,6 @@ export default {
 				this.shareDesc['thumbs'] = [this.fileRoot + this.playerOptions.poster];
 			}
 		},
-
-		//分享到第三方
-		/*handleGiveShare(type){
-			if(type == 1) {
-				shareService.shareToWxHy(this.shareDesc,(data)=>{
-					console.log(this.shareDesc);
-
-				})
-			}
-			else if(type == 2) {
-				shareService.shareToWxPyq(this.shareDesc,(data)=>{
-					console.log(this.shareDesc);
-				})
-			}
-			else if(type == 3) {
-				shareService.shareToQQ(this.shareDesc,(data)=>{
-					console.log(this.shareDesc);
-				})
-			}
-			else{
-				shareService.shareToXl(this.shareDesc,data=>{
-					console.log(this.shareDesc);
-				})
-			}
-
-		},*/
-		//关闭分享弹框
-		handleCancelShare(){
-			this.shareShow = false;
-		},
 		//首次回复
 		handleFirstReply(item,commentIndex){
 			this.replyShow = true;
@@ -1094,25 +1011,17 @@ export default {
 			this.popMask = true;
 			this.reportType = type;
 		},
-
-		// 选择举报项
-		/*handleChooseReport(item,index){
-			// item.show = !item.show;
-			// this.reportInfo.reportreasion = index;
-			console.log(this.reportInfo.reportreasion)
-		},*/
-
 		/**
 		 * 提交举报
 		 * @return {[type]}      [description]
 		 */
 		handleSendReport(){
-			/*reportInfo:{
-				reporttime:'',//"举报时间" ,
-				itemid:'',//"对象id",
-				reportuserid:'',//"被举报人id",
-				type:'',//"类型"  1.文章举报
-			},*/
+			// reportInfo:{
+			// 	reporttime:'',//"举报时间" ,
+			// 	itemid:'',//"对象id",
+			// 	reportuserid:'',//"被举报人id",
+			// 	type:'',//"类型"  1.文章举报
+			// },
 			if(this.reportreasion){
 				let reportInfo;
 				if (this.reportType === 1) {
@@ -1269,8 +1178,6 @@ export default {
 				this.noComment = false;
 			}
 		},
-
-
 		// 页面加载后渲染函数
 		loadScroll(){
 			if (!this.lock && ($(".detail").scrollTop() + $(".detail").height()) > $(".detail")[0].scrollHeight-350) {
@@ -1313,7 +1220,7 @@ export default {
 			setTimeout(()=>{
 				this.init();
 				this.ifLoad = false;
-			},450)
+			},delay)
 			//注：延迟时长必须在动画大于切换动画（300）
 		}
 	},
@@ -1330,19 +1237,18 @@ export default {
 	.mask{
 		position: absolute;
 		// bottom: initial;
-		background: #fafafa;
-		height:calc (100vh - 65px);
+		background: linear-gradient(transparent 10%,#fafafa 10%);
 	}
-	.playAudio{
-		position: absolute;
-		display: inline-block;
-		top: .7rem;
-		right: .3rem;
-		.iconfont{
-			font-size: .46rem;
-			font-weight: 500;
-		}
-	}
+	// .playAudio{
+	// 	position: absolute;
+	// 	display: inline-block;
+	// 	top: .7rem;
+	// 	right: .3rem;
+	// 	.iconfont{
+	// 		font-size: .46rem;
+	// 		font-weight: 500;
+	// 	}
+	// }
 	.detail{
 		position: relative;
 		height: calc(100% - 1.5rem);
@@ -1736,50 +1642,6 @@ export default {
 			}
 		}
 	}
-	/* .share-wrap{
-		.share-list{
-			background-color: #f0f0f0;
-			padding: .53rem .2rem;
-			display: flex;
-			text-align: center;
-			li{
-				flex: 1;
-				margin-right: .24rem;
-				&:last-child{
-					margin-right: 0;
-				}
-				.share-img{
-					margin: 0 auto;
-					width: 1.2rem;
-					height: 1.2rem;
-					border-radius: 50%;
-					text-align: center;
-					background-color: #fff;
-					img{
-						display: inline-block;
-						width: .75rem;
-						height: .75rem;
-						margin-top: .225rem;
-	
-					}
-				}
-				.share-desc{
-					display: block;
-					padding-top: .2rem;
-					font-size: .24rem;
-					color: #222;
-				}
-			}
-		}
-		.share-btn{
-			width: 100%;
-			height: 1rem;
-			line-height: 1rem;
-			text-align: center;
-			font-size: .32rem;
-			background-color: #f6f6f6;
-		}
-	} */
 	.reply-wrap{
 		height: 100vh;
 		border-radius: .3rem .3rem 0 0;
@@ -1956,27 +1818,6 @@ export default {
 				letter-spacing: .02rem;
 			}
 		}
-		/* .report-body{
-			// padding: 0 .56rem;
-			.report-list{
-				 .report-item{
-				 	line-height: .75rem;
-				 	border-bottom: .02rem solid @borderColor;
-				 	&:last-child{
-				 		border-bottom: none;
-				 	}
-				 	.iconfont{
-				 		color: #f00;
-				 	}
-				 	input{
-				 		display: inline-block;
-				 		width: 70%;
-				 		height: .65rem;
-				 		margin-top: -.06rem;
-				 	}
-				 }
-			}
-		} */
 		.report-footer{
 			// padding:  0 .56rem;
 			line-height: .8rem;

@@ -4,7 +4,7 @@
 			<prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
 			<loading-main v-if="!ifNet && !arcList.length"></loading-main>
 			<multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
-			<load-more v-show="arcList.length && ifLoad" :show-loading="ifLoading" :tip="tip"></load-more>
+			<load-more v-show="!ifNet && arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
 		</div>
 	</downRefresh>
 </template>
@@ -22,7 +22,7 @@ export default {
 			arcList:[],
 			page:1,
 			lock:false,
-			ifLoad:false,
+			// ifLoad:false,
 			scrollTop:0,	
 			total:0,
 			ifNew:false,
@@ -43,14 +43,12 @@ export default {
 		}
 	},
 	mounted () {
-		this.$nextTick(()=>{
 			if (!this.classify) {
-				this.init();
-				if (this.arcList.length) {
-					this.ifLoad = true;
-				}			
+				this.init();			
 			}
-		})
+		// this.$nextTick(()=>{
+		// 	// this.ifLoad = true;
+		// })
 
 	},
 	methods:{

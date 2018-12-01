@@ -37,7 +37,7 @@ export default {
 			this.page = 1;
 			this.arcList = [];
 			this.init();			
-		},300)
+		},delay)
 		// 延迟时间必须大于路由切换动画时间
 	},
 	methods:{

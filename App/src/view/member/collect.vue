@@ -41,7 +41,7 @@ export default {
 			this.page = 1;
 			this.arcList = [];
 			this.init();
-		},300)
+		},delay)
 	},
 	methods:{
 		init(){

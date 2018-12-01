@@ -62,11 +62,11 @@ export default {
 			});
 		},
 	},
-	watch:{
-		keywords(){
+	// watch:{
+	// 	keywords(){
 
-		}
-	}
+	// 	}
+	// }
 }
 </script>
 
@@ -76,7 +76,7 @@ export default {
 		width: 100%;
 		padding-top:@statusBarHeight;
 		height: @headerHeight;
-		background-color: @mainColor;
+		background:linear-gradient(#f71d56,@mainColor);
 		align-items: center;
 		box-sizing: content-box;
 		.header-logo {
@@ -150,13 +150,13 @@ export default {
 				}
 			}
 			.mask {
-				width: 100vw;
-				height: 100vh;
-				position: fixed;
-				overflow: hidden;
-				left: 0;
-				top: 0.88rem;
-				bottom: inherit;
+				// width: 100vw;
+				// height: 100vh;
+				// position: fixed;
+				// overflow: hidden;
+				// left: 0;
+				// top: 0.88rem;
+				// bottom: inherit;
 				z-index: 9;
 				background-color: transparent;
 			}

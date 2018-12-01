@@ -28,7 +28,7 @@ export default{
 	activated(){
 		setTimeout(()=>{
 			this.init();			
-		},300)
+		},delay)
 	},
 	methods:{
 		init(){

@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<!-- 上传视频 -->
-		<div class="release-upload-video clearfix" v-if="record.type==2">
+		<div class="release-upload-video clearfix" v-if="record.type == 2">
 			<div class="release-video fl" v-for="(item,index) in record_file">
 				<i class="iconfont icon-remove" @click.stop="handleRemoveVideo(item)"></i>
 				<img :src="fileRoot + item.thumbnail" >
@@ -98,15 +98,9 @@ export default{
 			record:{
 				title:'',
 				content:'',
-				author:{
-					type:Number,
-					default:1,
-				},
-				type:{
-					type:Number,
-					default:1,
-				},   //1：图文，2:视频
-        publishtime:'',  // 后台设置
+				author:0,
+				type:0,   //1：图文，2:视频
+		        publishtime:'',  // 后台设置
 				classify:1,
 				selectedpublishname:'',
 				selectedpublishaddress:'',
@@ -190,30 +184,32 @@ export default{
 		uploadFile(e){
 			let file = e.target.files[0];
 			if (!file) { return; }
-		    if (this.record.type==1 && !this.$Tool.checkPic(file.name)) {
+		    if (this.record.type == 1 && !this.$Tool.checkPic(file.name)) {
 		    	this.$vux.alert.show({
 				  content:'格式错误',
 				})
 			    return;
 			 }
-			 if(this.record.type==2 && !this.$Tool.checkVideo(file.name)) {
+			 if(this.record.type == 2 && !this.$Tool.checkVideo(file.name)) {
 		    	this.$vux.alert.show({
 				  content:'格式错误',
 				})
 			    return;
 			 }
-			this.$vux.loading.show();
+			 // debugger
+			this.$vux.loading.show({text: ''});
 		    let param = new FormData(); //创建form对象
 		    param.append('file',file,file.name);//通过append向form对象添加数据
-		    if(this.record.type !== 2){
+		    if(this.record.type != 2){
 			    fileService.uploadPic(param,(data)=>{
 			    	let obj = {};
 		          	obj.url = data.result.url;
 		          	obj.filename = data.result.filename;
 		          	obj.type =1;
 		          	this.record_file.push(obj);
+		          	this.$vux.loading.hide();
 				})
-		    }else if(this.record.type === 2){
+		    }else if(this.record.type == 2){
 		    	fileService.uploadVideo(param,(data)=>{
 		    		let obj = data.result;
 		          	// obj.thumbnail = data.result.thumbnail;
@@ -221,14 +217,15 @@ export default{
 		          	obj.type = 2;
 		          	this.addShow = false;
 		          	this.record_file.push(obj);
+		          	this.$vux.loading.hide();
 		          	// console.log(obj)
 		    	})
 		    }else{
 		    	this.$vux.loading.hide();
-		    	alert("错误");
+		    	this.$vux.alert.show({
+				  content:'出现意外错误',
+				})
 		    }
-          	this.$vux.loading.hide();
-
 		},
 		publish(){
 			if(!localStorage.id){
@@ -255,7 +252,7 @@ export default{
 			this.record.author = Number(localStorage.id || 0);
 			Object.assign(this.record,this.position);
 			let res;
-			if (this.record.type !== 3) {
+			if (this.record.type != 3) {
 				res = articleService.publishArticle(this.record,this.record_file);
 			} else {
 				let images = [];
@@ -287,11 +284,6 @@ export default{
 			}
 		},
 	},
-	// watch:{
-	// 	"$route"(){
-	// 		this.record.type = this.$route.query.sort;
-	// 	}
-	// },
 	computed:{
 		selectedPublishName(){
 			return this.$store.state.selectedPublishName;

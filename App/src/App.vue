@@ -23,15 +23,15 @@ export default {
   data() {
   	return {
   		transitionName: '',
-      ifLoad:true,
+      // ifLoad:true,
       mainRoute:["member","questionAnswer","video"],
       first:"",
   	}
   },
   created(){
-    setTimeout(()=>{
-      this.ifLoad = false;
-    },3000);
+    // setTimeout(()=>{
+    //   this.ifLoad = false;
+    // },3000);
     //html font-size 
     var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
     window.addEventListener(resizeEvt, subRecalc, false);
@@ -183,7 +183,7 @@ export default {
     position: absolute;
     background: #f4f5f6;
     transition: transform .3s cubic-bezier(.55,0,.1,1);
-    /*注：动画时长其他组件延迟加载时长（450）有关联，需小于，不可随意更改*/
+    /*注：动画时长与其他组件延迟加载时长（450）有关联，需小于，不可随意更改*/
   }
   .slide-left-enter, .slide-right-leave-active {
     transform: translate(100%, 0);

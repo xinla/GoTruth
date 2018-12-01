@@ -18,10 +18,14 @@ mapUtil.load = function(call) {
 	//	alert('你使用的组件是' + loc.module + ',刚选择了' + loc.poiname + ',它位于' + loc.poiaddress + ',它的经纬度是：' + loc.latlng.lat + ',' + loc.latlng.lng + ',所属城市为:' + loc.cityname)
 		
 		var resMap = {};
-		resMap.publishaddresses = data.poiname
-		resMap.latitude = data.latlng.lat;
-		resMap.longitude = data.latlng.lng;
-		resMap.publishstreet = data.poiaddress
+		try{
+			resMap.publishaddresses = data.poiname
+			resMap.latitude = data.latlng.lat;
+			resMap.longitude = data.latlng.lng;
+			resMap.publishstreet = data.poiaddress
+		}catch(e){
+			
+		}
 		// console.log(data);
 		call(resMap);
 		

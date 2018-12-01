@@ -96,9 +96,10 @@ export default {
 		ifDel:false,
 	},
 	mounted(){
-		this.$nextTick(()=>{
 			this.init();
-		})
+  //   this.$nextTick(()=>{
+  //   不可异步
+		// })
 	},	
 	watch:{
 		article(){
