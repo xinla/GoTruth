@@ -41,8 +41,7 @@ import { TransferDom,Swiper,SwiperItem, Popup } from 'vux'
 import homeHeader from '@/components/headerBar'
 import homeMore from'@/components/more'
 import listQuestion from '@/components/listQuestion'
-import wendaUser from '@/components/common/wendaUser'
-
+import articleClassifyService from '@/service/article_classifyService'
 
 export default {
 		directives: {
@@ -54,13 +53,20 @@ export default {
 			Swiper, 
 			SwiperItem,
 			listQuestion,
-			Popup,
-      wendaUser
+			Popup
 		},
 		data(){
 			return {
 				showMore:false,
-				classifyList:[],
+        classifyList:[
+          {"classifyname":"揭秘","classifycode":1},
+          {"classifyname":"防骗","classifycode":2},
+          {"classifyname":"打假","classifycode":3},
+          {"classifyname":"寻亲","classifycode":4},
+          {"classifyname":"普法","classifycode":5},
+          {"classifyname":"打工","classifycode":6},
+          {"classifyname":"广场舞","classifycode":7}
+        ],
 				classifyIndex:0,
 				currentClassiftyName:"推荐",
 				currentClassiftyName:"",
@@ -69,8 +75,22 @@ export default {
 			}
 		},
 		mounted () {
-	    	this.classifyList = JSON.parse(localStorage.classify);
-	    	this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;
+	    	/*this.classifyList = JSON.parse(localStorage.classify);
+	    	this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;*/
+        this.$nextTick(()=>{
+        if(!localStorage.classify) {
+            articleClassifyService.getArticleClassifyList((data)=>{
+              if(data && data.status == "success") {
+                this.classifyList = data.result.classfyList;
+                localStorage.classify = JSON.stringify(this.classifyList);
+              }
+            });
+          }else{
+            this.classifyList = JSON.parse(localStorage.classify);
+          }
+        });
+      //获取swiper的高度
+      this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;
 	    },
 		methods:{
 			//导航栏添加弹出popup

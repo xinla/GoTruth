@@ -124,7 +124,6 @@ export default {
 					this.publidsedNum = data.result.count;
 				}
 			});
-			// console.log(resArticleCount)
 			//获取粉丝数量
 			followService.getUserVermicelliCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {

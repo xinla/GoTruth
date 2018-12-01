@@ -8,9 +8,6 @@
           <h2 class="title">{{newList.title}}</h2>
           <div class="desc" >
             <p class="desc-text">{{newList.description}}</p>
-            <!--<div class="open" v-show="openShow">
-              <p>展开 <i class="iconfont icon-arrow-down"></i></p>
-            </div>-->
           </div>
 
           <ul class="wendaList-img" v-show="imgShow">
@@ -25,35 +22,30 @@
           </div>
         </div>
 
-        <div class="wendaList-other">
+        <div class="wendaList-other" v-for="(item,index) in wendaList">
           <div class="header clearfix">
             <div class="header-user fl">
-              <img src="@/assets/images/a.jpg" class="userPhoto">
-              <span class="username">用户名用户已</span>
+              <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
+              <span class="username">{{ wendaUser.username}}</span>
             </div>
-            <div class="header-focus fr">
+            <!--<div class="header-focus fr">
               关注
-            </div>
+            </div>-->
           </div>
           <div class="body">
             <div class="body-content">
-              <p class="content">水电费第三方军绿色快递放假克里斯多夫吉林省打开福建省打开了附近受得了福建省的脸孔福建省的脸孔发胶索拉卡打飞机受得了开发说服力抗衰老的飞机上来的咖啡机克鲁赛德建安费凉快圣诞节凉快圣诞节饭凉快圣诞节饭两款手机弗兰克萨就发了开始打家纺雷克萨就发了开始打解放路肯定是九分裤了电视剧付款了圣诞节弗兰克斯离开家施蒂利克福建省的脸孔积分离开的设计费凉快圣诞节饭离开的时间凉快圣诞节凉快圣诞节凉快圣诞节饭凉快圣诞节凉快圣诞节拉开距离会计法老是看得见</p>
+              <p class="content">{{item.content}}</p>
               <ul class="body-img">
-               <!-- <li class="body-item">
-                  <img src="@/assets/images/a.jpg" alt="">
+                <li class="body-item" v-for="(item,index) in wendaFile">
+                  <img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url">
                 </li>
-                <li class="body-item">
-                  <img src="@/assets/images/b.jpg" alt="">
-                </li>
-                <li class="body-item">
-                  <img src="@/assets/images/b.jpg" alt="">
-                </li>-->
               </ul>
             </div>
-            <span class="body-read">4.4万阅读</span>
+            <!--<span class="body-read">4.4万阅读</span>-->
           </div>
           <div class="footer">
-            <div class="item">
+
+            <!--<div class="item">
               <i class="iconfont icon-share"></i>
               <span>7</span>
             </div>
@@ -64,10 +56,10 @@
             <div class="item">
               <i class="iconfont icon-weizan"></i>
               <span>7</span>
-            </div>
+            </div>-->
           </div>
         </div>
-      </div>
+       </div>
       <div class="wendaList-footer">
         <div class="item" @click="handleProCollection(id)" >
           <i class="iconfont" :class="{'icon-not-collection':collectToggle.notcollect,'icon-collected':collectToggle.collected}"></i>
@@ -110,15 +102,15 @@
                     <input type="file" id="addImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
                   </div>
                 </div>
-            </div>
-            <div class="popup-footer clearfix" :class="{'nav-hide':hideClass}">
-              <div class="keyboard fl">
-                <i class="iconfont icon-jianpan-up"></i>
-              </div>
-              <div class="addImg fr">
-                <label for="iconImg"></label>
-                <i class="iconfont icon-album"></i>
-                <input type="file" id="iconImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
+              <div class="popup-footer clearfix">
+               <!-- <div class="keyboard fl" @click="handelBoard">
+                  <i class="iconfont icon-jianpan-up"></i>
+                </div>-->
+                <div class="addImg fr">
+                  <label for="iconImg"></label>
+                  <i class="iconfont icon-album"></i>
+                  <input type="file" id="iconImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
+                </div>
               </div>
             </div>
           </div>
@@ -128,15 +120,33 @@
 </template>
 <script>
   import config from '@/lib/config/config'
+  import listUtil from '@/service/util/listUtil'
   import userService from '@/service/userService'
   import wdcollectService from '@/service/wdcollectService'
   import interService from '@/service/interlocutionService'
   import messageService from '@/service/messageService'
   import fileService from '@/service/fileService'
   import articleService from '@/service/articleService'
+  import articleFileService from '@/service/article_fileService'
   import { TransferDom, Popup} from 'vux'
+
   export default {
-    name: "wendaList",
+    directives:{
+      TransferDom,
+    },
+    components:{
+      Popup
+    },
+    data() {
+      return {
+        wenda:{},    //問題對象
+        fileRoot:config.fileRoot + '/',   //服務路徑
+      }
+    }
+  }
+
+
+/*  export default {
     directives:{
       TransferDom,
     },
@@ -145,10 +155,6 @@
     },
     data(){
         return{
-          docmHeight: document.documentElement.clientHeight,  //一开始的屏幕高度
-          showHeight: document.documentElement.clientHeight,   //一开始的屏幕高度
-          hideClass:false,
-          timer:false,
           onpropertychange:"this.style.height=this.scrollHeight + 'px'",
           oninput:"this.style.height=this.scrollHeight + 'px'",
           fileRoot:config.fileRoot + '/',
@@ -157,16 +163,20 @@
           wendaList:[],
           imgArr:[],
           newList:{},
+          wendaFile:[],
           count:0,
           fabuColor:false,
           imgShow:true,
-          id:0,
+          id:0 ,
           page:1,
           parentid:'',
-          answerList:[],
           collectToggle:{
             notcollect:true,
             collected:false
+          },
+          wendaUser:{
+            username:'',
+            imageurl:''
           },
           record:{
             content:'',
@@ -179,25 +189,33 @@
             show:false,
             addShow:false,
           },
-          record_file:[]
+          record_file:[],
+          ifNew:false,
 
         }
     },
+    props:{
+      wenda:Object,
+      whi:{
+        type:Number,
+        default:0,
+      },
+      //判断是否显示发布人
+      ifPublisher:{
+        type:Boolean,
+        default:true,
+      },
+      ifDel:false,
+    },
 
     mounted(){
-      // window.onresize监听页面高度变化
-      window.onresize = () =>{
-        return (()=>{
-          window.screenHeight = document.body.clientHeight;
-          this.showHeight = window.screenHeight;
-        })()
-      }
     },
 
     activated(){
       this.$nextTick(()=>{
         this.id = this.$route.query.id;
         this.newList = JSON.parse(this.$route.query.item);
+        this.init();
         if(this.newList.images == null) {
           this.imgShow = false;
           return false;
@@ -205,18 +223,20 @@
           this.imgShow = true;
         }
         this.imgArr = this.newList.images.split(',');
+
       });
+
     },
 
     methods:{
       init(){
-        if(!this.id){
+       /!* if(!this.id){
           this.$vux.alert.show({
             content:'获取出错，请返回！'
           });
           this.$Tool.goBack();
           return;
-        }
+        }*!/
         // 判断是否收藏
         wdcollectService.testWdCollect(this.id, (data)=>{
           if(data && data.status == 'success') {
@@ -231,23 +251,29 @@
           }
         });
 
-        // 获取回答列表
-        let pid =this.record.parentid;
-        this.parentid = pid;
-        let answerData = interService.getAnswers(this.page, 15,this.parentid);
-        if(answerData && answerData.status == "success") {
-          console.log(answerData)
-
-        }
-
         //获取问题收藏数量
         wdcollectService.getWdCollectCount(this.id,(data)=>{
           if(data && data.status == "success") {
             this.count = data.count;
           }
-        })
-      },
+        });
 
+        //获取回答列表
+        let answerData = interService.getAnswers(this.page, 15, this.id);
+        if(answerData && answerData.status == "success") {
+          listUtil.appendList(this.wendaList,answerData.recordPage.list)
+          this.page++;
+        }
+
+        // 获取发布回答人信息
+
+        listUtil.asyncSetListPropty(answerData.recordPage.list, (item)=> {
+          let wendaUserData = userService.getUserById(item.author);
+          if(wendaUserData && wendaUserData.status == "success") {
+            this.wendaUser = wendaUserData.result.user;
+          }
+        });
+      },
       // 图片上传
       handleuploadFile(e){
         let file = e.target.files[0];
@@ -262,13 +288,11 @@
           obj.type =1;
           this.record_file.push(obj);
         });
+        if(this.record_file.length >= 0){
+          this.popObj.addShow = true;
+        }
         this.$vux.loading.hide();
-        // if(param.has.length >= 1){
-        //   this.popObj.addShow = true;
-        // }
-
       },
-
       //删除上传图片
       handleRemoveImg(item){
         const thiz = this;
@@ -298,10 +322,10 @@
         let data = wdcollectService.wdCollect(wdid);
         if(data && data.status == 'success') {
           if(data.result == 1) {
-            /*this.$vux.toast.show({
+            /!*this.$vux.toast.show({
               text:'收藏成功',
               type:'success'
-            });*/
+            });*!/
             //给发布人发送消息
             messageService.sendMessage(this.newList.userid,"collect",this.id,1);
             setTimeout(()=>{
@@ -311,10 +335,10 @@
             this.collectToggle.notcollect = false;
             this.collectToggle.collected = true;
           }else{
-            /*this.$vux.toast.text('取消收藏', 'middle');
+            /!*this.$vux.toast.text('取消收藏', 'middle');
             setTimeout(()=>{
               this.$vux.alert.hide();
-            },1000);*/
+            },1000);*!/
             this.collectState = false;
             this.collectToggle.notcollect = true;
             this.collectToggle.collected = false;
@@ -355,6 +379,7 @@
         }
         this.record.author = Number(localStorage.id || 0);
         let pid =this.newList.id;
+
         this.record.parentid = pid;
         let data = articleService.publishArticle(this.record, this.record_file);
         if(data && data.status == "success") {
@@ -367,6 +392,7 @@
           setTimeout(()=>{
             this.$vux.alert.hide();
           },800);
+          this.popObj.show = false;
         }else{
           this.$vux.alert.show({
             content:'发布失败'
@@ -383,42 +409,24 @@
           this.fabuColor = false;
         }
       },
-      // 检测屏幕高度变化
-      inputType(){
-        if(!this.timer) {
-          this.timer = true;
-          let that = this;
-          setTimeout(()=>{
-            if(that.docmHeight > that.showHeight) {
-              // 显示class
-              this.hideClass = true;
-            }else if(that.docmHeight <= that.showHeight) {
-              // 显示隐藏
-              this.hideClass = false;
-            }
-            that.timer = false;
-          },20)
-        }
-      }
     },
-    watch:{
+  /!*  watch:{
       id(){
         setTimeout(()=>{
           this.init();
         },450);
       },
-      showHeight: 'inputType'
-    }
-  }
+    }*!/
+  }*/
 </script>
 
 <style lang="less" scoped>
   .wendaList{
     position: relative;
-    height: calc(100% - 1.5rem);
+    height: calc(100% - 2.38rem);
     overflow: hidden;
     overflow-y: auto;
-    background-color: #ccc;
+    background-color: #f3f4f5;
     .wendaList-current{
       padding: 0 .3rem;
       background-color: #fff;
@@ -496,7 +504,7 @@
       }
     }
     .wendaList-other{
-      padding: .2rem .3rem;
+      padding: .2rem .3rem .6rem .3rem;
       background-color: #fff;
       .header{
         line-height: .72rem;
@@ -547,12 +555,12 @@
             }
           }
         }
-        .body-read{
+        /*.body-read{
           display: block;
           font-size: .28rem;
           color: #9b9b9b;
           line-height: .5rem;
-        }
+        }*/
       }
       .footer{
         width: 100%;
@@ -730,9 +738,6 @@
         font-size: .5rem;
         color: #444;
       }
-    }
-    .nav-hide {
-      position: static!important;
     }
   }
 </style>

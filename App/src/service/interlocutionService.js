@@ -4,6 +4,7 @@ const controller =config.successServer+'/interlocution';
 const service ={}
 
 const userid = localStorage.getItem('id');
+const token = localStorage.getItem('token');
 // 发布问题（讨论）
 service.publishQuestion = function(record,images) {
 	
@@ -36,5 +37,19 @@ service.getAnswers = function (page,size,parentid) {
   let params = {page, size, parentid};
   let resData = commonUtil.ajaxAsync(controller+'/getAnswers',params);
   return resData;
+};
+
+// 删除问答
+service.deleteQuestion = function(ids){
+  let params = {token, "ids[]":ids};
+  let resDelete = commonUtil.ajaxAsync(controller+'/deleteQuestion',params);
+
+  return resDelete;
+};
+
+//获取回答数量
+service.getAnswerCount = function(wdid, call) {
+  let params ={wdid};
+  commonUtil.ajax(controller+'/getAnswerCount',params,call);
 };
 export default service

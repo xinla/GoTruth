@@ -2,6 +2,7 @@
     <downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
     <div>
       <prompt-blank style="margin-top:100px;" v-if="ifNet && !wendaList.length" mes="断网啦..."></prompt-blank>
+      <loading-main v-if="!ifNet && !wendaList.length"></loading-main>
       <wenda-user></wenda-user>
       <question v-for="(item, index) in wendaList" :wenda="item" :key="index"></question>
       <load-more v-show="wendaList.length && ifLoad" :show-loading="ifLoading" :tip="tip"></load-more>
@@ -15,6 +16,9 @@
   import interService from '@/service/interlocutionService'
 
   export default {
+    components:{
+      downRefresh
+    },
     data(){
       return {
         wendaList:[],
@@ -40,10 +44,6 @@
         default: false
       }
     },
-
-    components:{
-      downRefresh
-    },
     mounted(){
       this.$nextTick(()=>{
         if(!this.classify) {
@@ -57,19 +57,19 @@
     methods:{
       init(){
         this.page = 1;
-        let data;
+        let resWendaPage;
         try{
           if(this.classify == 0) {
-            data = interService.getQuestionPage(this.page, 15);
+            resWendaPage = interService.getQuestionPage(this.page, 15);
           }else {
-            data = interService.getQuestionPage(this.page, 15, this.classify);
+            resWendaPage = interService.getQuestionPage(this.page, 15, this.classify);
           }
-          if(data && data.status == "success") {
-            this.wendaList = data.recordPage.list;
-            if(this.total == data.recordPage.totalRow) {
+          if(resWendaPage && resWendaPage.status == "success") {
+            this.wendaList = resWendaPage.recordPage.list;
+            if(this.total == resWendaPage.recordPage.totalRow) {
               this.ifNew = true;
             }else{
-              this.total = data.recordPage.totalRow;
+              this.total = resWendaPage.recordPage.totalRow;
               this.ifNew = false;
             }
             this.page++;
@@ -97,12 +97,12 @@
         }else {
           this.ifNet = false;
         }
-        // this.init();
+        this.init();
         if(this.ifNew) {
           this.$vux.toast.show({
             type: 'text',
             time: 800,
-            text: '网络竟然崩溃了',
+            text: '已经是最新内容了',
             width: '50%'
           });
         }
@@ -131,24 +131,24 @@
         clearTimeout(this.timer);
         this.timer = setTimeout(()=>{
           if(!this.lock && (targetH1 >= targetH2)){
-            this.getMoreActicle();
+            this.getMoreWenda();
           }
           this.$store.dispatch('setIsScolling', false);
         }, 200);
       },
       // 获取问答接口
-      getMoreActicle(){
+      getMoreWenda(){
         this.lock = true;
-        let data;
+        let resWendaPage;
         try{
           if(this.classify == 0) {
-            data = interService.getQuestionPage(this.page, 15);
+            resWendaPage = interService.getQuestionPage(this.page, 15);
           }else{
-            data = interService.getQuestionPage(this.page, 15, this.classify);
+            resWendaPage = interService.getQuestionPage(this.page, 15, this.classify);
           }
-          if(data && data.status == "success") {
-            this.wendaList = this.wendaList.concat(data.recordPage.list);
-            if(data.recordPage.list.length) {
+          if(resWendaPage && resWendaPage.status == "success") {
+            this.wendaList = this.wendaList.concat(resWendaPage.recordPage.list);
+            if(resWendaPage.recordPage.list.length) {
               this.page++;
             }else {
               this.ifLoading = false;

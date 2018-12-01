@@ -4,7 +4,7 @@
       <router-link class="header-nologin"  :to="{path:'/topBase/login',query:{title:'用户登录'}}" tag="div">
         <span>马上登录</span>，参与回答
       </router-link>
-      <ul class="body">
+   <!--   <ul class="body">
         <router-link class="item" :to="{path:'answerSubject'}" tag="li">
           <i class="iconfont icon-dati"></i>
           <span>答题</span>
@@ -13,7 +13,7 @@
           <i class="iconfont icon-eye2"></i>
           <span>发现</span>
         </li>
-      </ul>
+      </ul>-->
     </div>
     <div class="wenda-login" v-if="ifLogin">
       <div class="header-login clearfix">
@@ -26,7 +26,7 @@
           <i class="iconfont icon-arrow-right"></i>
         </div>
       </div>
-      <ul class="body">
+  <!--    <ul class="body">
         <router-link class="item" :to="{path:'answerSubject'}" tag="li">
           <i class="iconfont icon-dati"></i>
           <span>答题</span>
@@ -39,7 +39,7 @@
           <i class="iconfont icon-eye2"></i>
           <span>发现</span>
         </li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </template>
