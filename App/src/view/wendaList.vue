@@ -5,32 +5,31 @@
       </top>
       <div class="wendaList">
         <div class="wendaList-current">
-          <h2 class="title">{{newList.title}}</h2>
+          <h2 class="title">{{wenda.title}}</h2>
           <div class="desc" >
-            <p class="desc-text">{{newList.description}}</p>
+            <p class="desc-text">{{wenda.description}}</p>
           </div>
 
-          <ul class="wendaList-img" v-show="imgShow">
-            <li class="item" v-for="(item,index) in imgArr">
+          <ul class="wendaList-img">
+            <li class="item" :class="{bigImg:bigImg}"  v-for="(item,index) in imgArr" v-show="ifImgNull">
               <img :src="fileRoot + item">
             </li>
           </ul>
           <div class="wendaList-tip">
-            <span>100</span>个回答
+            <span>{{wendaCount}}</span>回答
             <span class="point">•</span>
-            <span>{{count}}</span>个收藏
+            <span>{{collectCount}}</span>收藏
           </div>
         </div>
-
-        <div class="wendaList-other" v-for="(item,index) in wendaList">
+      <!--  <div class="wendaList-other" v-for="(item,index) in wendaList">
           <div class="header clearfix">
             <div class="header-user fl">
               <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
               <span class="username">{{ wendaUser.username}}</span>
             </div>
-            <!--<div class="header-focus fr">
+            &lt;!&ndash;<div class="header-focus fr">
               关注
-            </div>-->
+            </div>&ndash;&gt;
           </div>
           <div class="body">
             <div class="body-content">
@@ -41,11 +40,11 @@
                 </li>
               </ul>
             </div>
-            <!--<span class="body-read">4.4万阅读</span>-->
+            &lt;!&ndash;<span class="body-read">4.4万阅读</span>&ndash;&gt;
           </div>
           <div class="footer">
 
-            <!--<div class="item">
+            &lt;!&ndash;<div class="item">
               <i class="iconfont icon-share"></i>
               <span>7</span>
             </div>
@@ -56,11 +55,11 @@
             <div class="item">
               <i class="iconfont icon-weizan"></i>
               <span>7</span>
-            </div>-->
+            </div>&ndash;&gt;
           </div>
-        </div>
+        </div>-->
        </div>
-      <div class="wendaList-footer">
+     <!-- <div class="wendaList-footer">
         <div class="item" @click="handleProCollection(id)" >
           <i class="iconfont" :class="{'icon-not-collection':collectToggle.notcollect,'icon-collected':collectToggle.collected}"></i>
           <span>{{collectState?'已收藏':'收藏'}}</span>
@@ -73,10 +72,23 @@
           <i class="iconfont icon-comment"></i>
           <span>回答</span>
         </div>
+      </div>-->
+      <div class="wendaList-footer">
+        <div class="item" @click="handleCollect">
+          <i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"></i>
+          <span>{{collectState?'已收藏':'收藏'}}</span>
+        </div>
+        <div class="item">
+          <i class="iconfont icon-fabu"></i>
+          <span>提问</span>
+        </div>
+        <div class="item">
+          <i class="iconfont icon-comment"></i>
+          <span>回答</span>
+        </div>
       </div>
-
       <!--回答弹出框-->
-      <div v-transfer-dom>
+      <!--<div v-transfer-dom>
         <popup v-model="popObj.show" height="100%">
           <div class="popup-wrap">
             <div class="popup-header clearfix">
@@ -103,9 +115,9 @@
                   </div>
                 </div>
               <div class="popup-footer clearfix">
-               <!-- <div class="keyboard fl" @click="handelBoard">
+               &lt;!&ndash; <div class="keyboard fl" @click="handelBoard">
                   <i class="iconfont icon-jianpan-up"></i>
-                </div>-->
+                </div>&ndash;&gt;
                 <div class="addImg fr">
                   <label for="iconImg"></label>
                   <i class="iconfont icon-album"></i>
@@ -115,7 +127,7 @@
             </div>
           </div>
         </popup>
-      </div>
+      </div>-->
     </div>
 </template>
 <script>
@@ -139,10 +151,108 @@
     },
     data() {
       return {
-        wenda:{},    //問題對象
-        fileRoot:config.fileRoot + '/',   //服務路徑
+        collectIcon:false,
+        id:0,   //问题Id
+        wenda:{},    //问题对象
+        fileRoot:config.fileRoot + '/',   //服务路径
+        imgArr:[],  //问题图片
+        bigImg:false,      //判断是否一张图
+        ifImgNull:false,   //判断问题是否有图片
+        wendaCount:0,     //回答数
+        collectCount:0,   //问题收藏数
+        collectIcon:false,   //监听收藏图标变化
+        collectState: false, //收藏文字变化
       }
-    }
+    },
+    mounted(){
+      this.$nextTick(()=>{
+
+      })
+    },
+    activated() {
+      this.$nextTick(()=>{
+        this.init();
+      });
+      this.id = this.$route.query.id;
+      this.wenda = JSON.parse(this.$route.query.item);
+      this.ifImgNull = true;
+      if(this.wenda.images == null) {
+        this.ifImgNull = false;
+        return false;
+      }else{
+        this.ifImgNull = true;
+      }
+      this.imgArr = this.wenda.images.split(',');
+
+      if(this.imgArr.length == 1) {
+        this.bigImg = true;
+      }else{
+        this.bigImg = false;
+      }
+    },
+    methods:{
+      //页面初始化渲染
+      init() {
+        if (!this.id) {
+          this.$vux.alert.show({
+            content: '获取出错，请返回！',
+          });
+          this.$Tool.goBack();
+          return;
+        }
+        // 获取问题回答数量
+        interService.getAnswerCount(this.wenda.id, (data) =>{
+          if(data && data.status == "success") {
+            this.wendaCount = this.$Tool.numConvertText(data.count);
+            if(data.count == 0) {
+              this.wendaCount = "暂无";
+            }
+          }
+        });
+        //获取问题的收藏状态
+        wdcollectService.testWdCollect(this.id, (data)=>{
+          if(data && data.status == "success") {
+            if(data.result == 1) {
+              this.collectIcon = true;
+              this.collectState = true;
+            }else{
+              this.collectIcon = false;
+              this.collectState = false;
+            }
+          }
+        });
+
+        // 获取问题收藏数量
+        wdcollectService.getWdCollectCount(this.wenda.id,(data)=>{
+          if(data && data.status == "success") {
+            this.collectCount = data.count;
+            if(data.count == 0) {
+              this.collectCount = "暂无";
+            }
+          }
+        });
+      },
+
+      // 收藏问题
+      handleCollect(){
+        if(!localStorage.id) {
+          this.$Tool.loginPrompt();
+          return;
+        }
+        let data = wdcollectService.wdCollect(this.wenda.id);
+        if(data && data.status == "success") {
+          if(data.result == 1) {
+            messageService.sendMessage(this.wenda.author,"collect",this.id,1);
+            this.collectIcon = true;
+            this.collectState = true;
+          }else{
+            this.collectIcon = false;
+            this.collectState = false;
+          }
+        }
+      }
+
+    },
   }
 
 
