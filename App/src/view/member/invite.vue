@@ -14,22 +14,22 @@
 <script>
 import config from '@/lib/config/config'
 import QRCode from 'qrcode'
-import share from '@/components/common/share'
+// import share from '@/components/common/share'
 export default {
 	components:{
-		share,
+		// share,
 	},
 	data(){
 		return {
-			inviteCode:1,
+			// inviteCode:localStorage.inviteCode || 1,
 			shareDesc:{},
 			shareShow:false,
-			url:config.domain + '/#/login?inviteCode='
+			url:config.domain + '/#/login?inviteCode=' + (localStorage.inviteCode || 1)
 		}
 	},
-	activated(){
-		this.inviteCode = localStorage.inviteCode || 1;
-		this.url = config.domain + '/#/login?inviteCode=' + this.inviteCode;
+	mounted(){
+		// this.inviteCode = localStorage.inviteCode || 1;
+		// this.url = config.domain + '/#/login?inviteCode=' + this.inviteCode;
 		this.creatQRCode();
 	},
 	methods:{
@@ -42,13 +42,13 @@ export default {
 	        })
 	    },
 	    showShare(){
+			this.shareShow = true;
 	    	this.shareDesc = {
 				href:this.url,
 				title: '邀你进入直击真相',
 				content: '进入直击真相，为好友助力，为大爱助力',
 				thumbs:'@/assets/images/logo.png'
 			};
-			this.shareShow = true;
 	    }
 	},
 }

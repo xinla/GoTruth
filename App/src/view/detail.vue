@@ -295,7 +295,7 @@
 <script>
 import config from '@/lib/config/config'
 import like from '@/components/common/like'
-import share from '@/components/common/share'
+// import share from '@/components/common/share'
 import memberList from '@/components/common/memberList'
 import netUtil from "@/service/util/netUtil"
 import listUtil from '@/service/util/listUtil'
@@ -320,7 +320,7 @@ export default {
 	},
 	components:{
 		like,
-		share,
+		// share,
 		memberList,
 		Popup
 	},

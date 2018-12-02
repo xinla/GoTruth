@@ -27,7 +27,9 @@ Vue.use(Tool);
 // 预览大图
 import vuePicturePreview from 'vue-picture-preview'
 Vue.use(vuePicturePreview)
-
+// Vue.use(resolve => require(['vue-picture-preview'], resolve))
+//分享
+Vue.component('share', () => import('@/components/common/share'))
 //通用top
 import Top from '@/components/common/top'
 Vue.component('Top',Top);

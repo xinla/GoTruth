@@ -96,18 +96,12 @@ export default {
 					// console.log(this.ArticleFile)
 				}				
 			});
-			if (this.ifPublisher) {
-				if (this.article.author) {
-					try{
-						userService.getUserById(this.article.author,data=>{
-							if (data && data.status == "success") {
-								this.publisher = data.result.user.username;
-							}
-						});										
-					}catch(err){
-						
+			if (this.ifPublisher && this.article.author) {
+				userService.getUserById(this.article.author,data=>{
+					if (data && data.status == "success") {
+						this.publisher = data.result.user.username;
 					}
-				}				
+				});										
 			}
 			// 获取文章评论数量
 			articleCommentService.getArticleCommentCount(this.article.id,data=>{
