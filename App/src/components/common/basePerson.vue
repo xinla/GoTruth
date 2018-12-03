@@ -68,12 +68,7 @@ import config from '@/lib/config/config'
 import articleService from '@/service/articleService'
 import followService from '@/service/followService'
 import userService from '@/service/userService'
-import { Tab,TabItem } from 'vux'
 export default {
-	components: {
-		Tab,
-		TabItem
-	},
 	data(){
 		return {
 			loginUserId:localStorage.id || 0,

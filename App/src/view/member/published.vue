@@ -38,10 +38,10 @@ export default {
 			this.arcList = [];
 			this.init();			
 		},delay)
-		// 延迟时间必须大于路由切换动画时间
 	},
 	methods:{
 		init(){
+			this.proIf = false;
 			this.lock = true;
 			this.ifLoad = true;
 			var res = articleService.getArticleByUser(this.userId,this.page,10);
@@ -90,7 +90,7 @@ export default {
 
 		},
 		loadMore(e){
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-350) {
+			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() +10) >= e.target.scrollHeight) {
 				this.init();
 				// console.log(1)
 			}

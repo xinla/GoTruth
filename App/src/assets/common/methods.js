@@ -10,14 +10,14 @@ const tool = {
     }
   },
   //前往当前页面的某一个子页面
-  goChildPage(params){
-    //正在扫描
-    GoTruth.$router.push(
-      GoTruth.$router.resolve({
-        path:params.path,
-        query:params.query,
-      },GoTruth.$route,true).location);
-  },
+  // goChildPage(params){
+  //   //正在扫描
+  //   GoTruth.$router.push(
+  //     GoTruth.$router.resolve({
+  //       path:params.path,
+  //       query:params.query,
+  //     },GoTruth.$route,true).location);
+  // },
   //返回上个页面
   goBack(n) {
     if(n && typeof n === 'number'){
@@ -27,23 +27,23 @@ const tool = {
     }
   },
   //是否显示底部导航
-  changeTabBar(bool) {
-    if(bool) {
-      GoTruth.$store.commit('setStateData',{name:'showTabBar',value:true});
-    } else {
-      GoTruth.$store.commit('setStateData',{name:'showTabBar',value:false});
-    }
-  },
+  // changeTabBar(bool) {
+  //   if(bool) {
+  //     GoTruth.$store.commit('setStateData',{name:'showTabBar',value:true});
+  //   } else {
+  //     GoTruth.$store.commit('setStateData',{name:'showTabBar',value:false});
+  //   }
+  // },
   //生成唯一id
-  generateUUID() {
-    let d = new Date().getTime();
-    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      let r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
-    });
-    return uuid;
-  },
+  // generateUUID() {
+  //   let d = new Date().getTime();
+  //   let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  //     let r = (d + Math.random() * 16) % 16 | 0;
+  //     d = Math.floor(d / 16);
+  //     return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+  //   });
+  //   return uuid;
+  // },
   //手机号识别并返回
   isPhoneNumber(num) {
     if (!num) { return false };
@@ -70,7 +70,7 @@ const tool = {
     return mobile;
   },
   //银行卡号加上空格
-  BankInput(num) {
+  /*BankInput(num) {
     if (!num) { return };
     let newBank = num.toString().replace(/[^0-9]/g, '');
     let str = newBank.toString()
@@ -88,9 +88,9 @@ const tool = {
       bank = str.substring(0, 4) + ' ' + str.substring(4, 8) + ' ' + str.substring(8, 12) + ' ' + str.substring(12, 16) + ' ' + str.substring(16, 19);
     }
     return bank;
-  },
+  },*/
   //base64位转blob
-  convertBase64UrlToBlob(urlData) {
+  /*convertBase64UrlToBlob(urlData) {
     let bytes = window.atob(urlData.split(',')[1]); //去掉url的头，并转换为byte
     //处理异常,将ascii码小于0的转换为大于0
     let ab = new ArrayBuffer(bytes.length);
@@ -99,9 +99,9 @@ const tool = {
       ia[i] = bytes.charCodeAt(i);
     }
     return new Blob([ab], { type: this.type });
-  },
+  },*/
   //修改日期格式
-  format(time, format) {
+  /*format(time, format) {
     if (!time) {
       return;
     }
@@ -131,20 +131,20 @@ const tool = {
           break;
       }
     })
-  },
+  },*/
   //修改图片的裁剪区域
-  fitImg(src, w = 160, h = 160) {
+  /*fitImg(src, w = 160, h = 160) {
     if (!src) { return src };
     src = src.replace(/\?.*$/, '')
     return src + '?t=' + new Date().getTime() + '&x-oss-process=image/resize,m_fill,h_' + h + ',w_' + w;
-  },
+  },*/
     /*
   * 获取地理位置
   * 原生端获取
   * 微信端获取
   * 其他浏览器端获取定位
   * */
-  getLocation(){
+  /*getLocation(){
     let system = GoTruth.$store.state.System;
     if(system.isNative){
 
@@ -169,7 +169,7 @@ const tool = {
          GoTruth.$toast.open({msg:'您的浏览器不支持地理定位',type:'err'})
       }
     }
-  },
+  },*/
   //输入区内容合法验证
   checkInput(val){
     val = String(val);

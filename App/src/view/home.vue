@@ -10,19 +10,19 @@
 					<tab-item :selected="currentClassiftyName == item.classifyname" v-for="(item,index) in classifyList" @click="currentClassiftyName = item.classifyname" :key="index">{{item.classifyname}}
 					</tab-item>
 				</tab>
-					<div class="nav-add" @click="handleMore" v-model="showMore" v-if="0">
+					<!-- <div class="nav-add" @click="handleMore" v-model="showMore" v-if="0">
 						<i class="iconfont icon-menu1"></i>
-					</div>
-				<div v-transfer-dom>
+					</div> -->
+				<!-- <div v-transfer-dom>
 					<popup v-model="showMore" position="bottom" height="100%">
 						<div class="more-title" @click="handleClose">
 							<i class="iconfont icon-close"></i>
 						</div>
 						<home-more></home-more>
 					</popup>	
-				</div>
+				</div> -->
 			</div>
-			<div class="main" ref="main">
+			<div class="main">
 				<swiper v-model="classifyIndex" height="100vh" :show-dots="false" :threshold="150" >
 			        <swiper-item>
 			          	<listArticle></listArticle>
@@ -37,70 +37,61 @@
 </template>
 
 <script>	
-import { TransferDom,Swiper,SwiperItem, Popup } from 'vux'
-import homeHeader from '@/components/headerBar'
-import homeMore from'@/components/more'
+import { Swiper,SwiperItem } from 'vux'
+// import homeMore from'@/components/more'
 import listArticle from '@/components/listArticle'
 import articleClassifyService from '@/service/article_classifyService'
 
-	export default {
-		directives: {
-    		TransferDom
-  		},
-		components:{
-			homeHeader,
-			homeMore,
-			Swiper,
-			SwiperItem,
-			listArticle,
-			Popup,
-		},
-		data(){
-			return {
-				showMore:false,
-				classifyList:[
-					{"classifyname":"揭秘","classifycode":1},
-					{"classifyname":"防骗","classifycode":2},
-					{"classifyname":"打假","classifycode":3},
-					{"classifyname":"寻亲","classifycode":4},
-					{"classifyname":"普法","classifycode":5},
-					{"classifyname":"打工","classifycode":6},
-					{"classifyname":"广场舞","classifycode":7}
-				],
-				classifyIndex:0,
-				currentClassiftyName:"推荐",
-				// swiperHeight:0,
-				showArr:[],
-			}
-		},
-		mounted () {
-        this.$nextTick(()=>{
-          // 获取栏目分类
-          if(!localStorage.classify) {
-            articleClassifyService.getArticleClassifyList((data)=>{
-              if(data && data.status == "success") {
-                this.classifyList = data.result.classfyList;
-                localStorage.classify = JSON.stringify(this.classifyList);
-              }
-            });
-          }else{
-            this.classifyList = JSON.parse(localStorage.classify);
-          }
-        });
-        //获取swiper的高度
-        // this.swiperHeight = document.body.clientHeight - $(this.$refs.main).offset().top;
-	    },
-		methods: {
-      //导航栏添加弹出popup
-      handleMore() {
-        this.showMore = true;
-      },
-      //关闭popup
-      handleClose() {
-        this.showMore = false;
-      }
-    }
-	}
+export default {
+	components:{
+		// homeMore,
+		Swiper,
+		SwiperItem,
+		listArticle,
+	},
+	data(){
+		return {
+			// showMore:false,
+			classifyList:Object.freeze([
+				{"classifyname":"揭秘","classifycode":1},
+				{"classifyname":"防骗","classifycode":2},
+				{"classifyname":"打假","classifycode":3},
+				{"classifyname":"寻亲","classifycode":4},
+				{"classifyname":"普法","classifycode":5},
+				// {"classifyname":"打工","classifycode":6},
+				// {"classifyname":"广场舞","classifycode":7}
+			]),
+			classifyIndex:0,
+			currentClassiftyName:"推荐",
+			showArr:[],
+		}
+	},
+	mounted () {
+	    this.$nextTick(()=>{
+	      // 获取栏目分类
+	      if(!localStorage.classify) {
+	        articleClassifyService.getArticleClassifyList((data)=>{
+	          if(data && data.status == "success") {
+	            this.classifyList = Object.freeze(data.result.classfyList);
+	            localStorage.classify = JSON.stringify(this.classifyList);
+	          }
+	        });
+	      }else{
+	        this.classifyList = Object.freeze(JSON.parse(localStorage.classify));
+	      }
+	    });
+    },
+	// methods: {
+	//   //导航栏添加弹出popup
+	//   handleMore() {
+	//     this.showMore = true;
+	//   },
+	//   //关闭popup
+	//   handleClose() {
+	//     this.showMore = false;
+	//   }
+	// }
+}
 </script>
 <style lang="less" scoped>
 	.index{
@@ -116,11 +107,7 @@ import articleClassifyService from '@/service/article_classifyService'
     .main-box{
       border-bottom: .02rem solid @borderColor;
     }
-		/* .main{
-			height: 100%;
-			// overflow-y:auto;
-		} */
-		.nav-add {
+		/* .nav-add {
 			position: absolute;
 			right: 0;
 			top: 0;
@@ -135,27 +122,27 @@ import articleClassifyService from '@/service/article_classifyService'
 				font-size: .40rem;
 			}
 		}
-		.vux-popup-dialog{
+		 .vux-popup-dialog{
 			background-color: transparent;
-		}
+		}  */
 	}
-	.more-title {
-		width: 100%;
-		position: fixed;
-		left: 0;
-		top: 0;
-		z-index: 99999;
-		height: .87rem;
-		background-color: #fff;
-		border-radius: .3rem .3rem 0 0;
-		line-height: .87rem;
-		border-bottom: .01rem solid @borderColor;
-		padding: 0 .3rem;
-		i{
-			font-size: .45rem;
-			font-weight: 700;
-		}
-	}	
+	/* .more-title {
+			width: 100%;
+			position: fixed;
+			left: 0;
+			top: 0;
+			z-index: 99999;
+			height: .87rem;
+			background-color: #fff;
+			border-radius: .3rem .3rem 0 0;
+			line-height: .87rem;
+			border-bottom: .01rem solid @borderColor;
+			padding: 0 .3rem;
+			i{
+				font-size: .45rem;
+				font-weight: 700;
+			}
+		} */	
 	.main-content{
 		height: 100%;
 		overflow-y: auto;

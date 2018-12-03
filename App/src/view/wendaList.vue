@@ -127,15 +127,8 @@
   import fileService from '@/service/fileService'
   import articleService from '@/service/articleService'
   import articleFileService from '@/service/article_fileService'
-  import { TransferDom, Popup} from 'vux'
 
   export default {
-    directives:{
-      TransferDom,
-    },
-    components:{
-      Popup
-    },
     data() {
       return {
         collectIcon:false,
@@ -195,9 +188,9 @@
       }
     },
     mounted(){
-      this.$nextTick(()=>{
-        this.init();
-      })
+      setTimeout(()=>{
+        this.init();        
+      },100)
     },
     activated() {
       this.id = this.$route.query.id;

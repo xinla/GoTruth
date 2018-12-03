@@ -49,7 +49,6 @@ export default {
 		// this.$nextTick(()=>{
 		// 	// this.ifLoad = true;
 		// })
-
 	},
 	methods:{
 		init(){

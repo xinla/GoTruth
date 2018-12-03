@@ -7,7 +7,6 @@ window.$ = $;
 //es6 promise兼容
 // import 'es6-promise/auto'
 
-
 import router from './router'
 import store from './store/index'
 
@@ -17,9 +16,6 @@ import animate from 'animate.css'
 import './assets/styles/reset.css'
 import './assets/styles/iconfont.css'
 
-// //二维码生成插件
-// import QRCode from 'qrcode'
-
 //引用功能函数
 import Tool from './assets/common/methods'
 Vue.use(Tool);
@@ -27,17 +23,21 @@ Vue.use(Tool);
 // 预览大图
 import vuePicturePreview from 'vue-picture-preview'
 Vue.use(vuePicturePreview)
-// Vue.use(resolve => require(['vue-picture-preview'], resolve))
+// 主屏header
+import homeHeader from '@/components/headerBar'
+Vue.component('home-header',homeHeader)
 //分享
 Vue.component('share', () => import('@/components/common/share'))
 //通用top
 import Top from '@/components/common/top'
 Vue.component('Top',Top);
-import LoadingMain from '@/components/common/loadingMain'
-Vue.component('LoadingMain',LoadingMain);
+Vue.component('LoadingMain',() => import('@/components/common/loadingMain'));
+// import LoadingMain from '@/components/common/loadingMain'
+// Vue.component('LoadingMain',LoadingMain);
 //通用空白页提示
-import PromptBlank from '@/components/common/promptBlank'
-Vue.component('PromptBlank',PromptBlank);
+Vue.component('PromptBlank',() => import('@/components/common/promptBlank'));
+// import PromptBlank from '@/components/common/promptBlank'
+// Vue.component('PromptBlank',PromptBlank);
 //单文章视图组件
 import multIT from '@/components/common/multIT'
 Vue.component('multIT',multIT);
@@ -59,7 +59,9 @@ Vue.use(VideoPlayer)
 // Vue.use(VueAwesomeSwiper);
 
 //vux
-import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,InlineLoading } from 'vux';
+import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,Popup,InlineLoading,
+  DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom 
+} from 'vux';
 Vue.component('group', Group);
 Vue.component('cell', Cell);
 Vue.component('msg', Msg);
@@ -71,13 +73,15 @@ Vue.component('tab', Tab)
 Vue.component('tab-item', TabItem)
 Vue.component('load-more', LoadMore)
 Vue.component('badge', Badge)
+Vue.component('popup', Popup)
 Vue.component('inline-loading', InlineLoading)
-import { DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin  } from 'vux'
+// import { DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom } from 'vux'
 Vue.use(DatetimePlugin)
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
+Vue.directive('transfer-dom', TransferDom)
 
 import FastClick from 'fastclick'
 FastClick.attach(document.body);

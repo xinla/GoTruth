@@ -22,14 +22,11 @@
 
 <script>
 import netUtil from "@/service/util/netUtil"
-import homeHeader from '@/components/headerBar'
 import zVideo from '@/components/common/video'
 import downRefresh from '@/components/common/downRefresh'
-
 import articleService from '@/service/articleService'
 export default {
 	components:{
-		homeHeader,
 		zVideo,
 		downRefresh,
 	},
@@ -48,8 +45,8 @@ export default {
 		}
 	},
 	mounted(){
-		setTimeout(()=>{
 			this.init();			
+		setTimeout(()=>{
 		},100)
 	},
 	methods:{

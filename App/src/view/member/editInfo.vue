@@ -51,7 +51,7 @@
 				<span class="editInfo-tit fl">手机号</span>
 				<i class="iconfont icon-arrow-right fr"></i>
 				<div class="editInfo-desc editInfo-tel fr">
-					<span class="desc">{{this.$Tool.mobileInput(user.mobile)}}</span>
+					<span class="desc">{{$Tool.mobileInput(user.mobile)}}</span>
 				</div>
 			</li>
 		</ul>
@@ -170,16 +170,15 @@
 </template>
 
 <script>
-	import {Bus} from '@/store/eventBus'
+	// import {Bus} from '@/store/eventBus'
 	import config from '@/lib/config/config'
-	import vueCropper from 'vue-cropper'
-	import { XSwitch, Group, XButton,Loading ,TransferDom, Popup} from 'vux'
+	// import vueCropper from 'vue-cropper'
+	import { XSwitch, XButton,Loading,} from 'vux'
 	import fileService from '@/service/fileService'
 	import userService from '@/service/userService'
 	import provinceService from '@/service/provinceService'
 	export default {
 		directives:{
-			TransferDom,
 			focus: {
 				inserted: function (el) {
 					el.focus()
@@ -188,11 +187,9 @@
 		},
 		components:{
 			XSwitch,
-    		Group,
     		XButton,
     		Loading,
-			Popup,
-			vueCropper
+			vueCropper:() => import('vue-cropper')
 		},
 		data(){
 			return {
@@ -250,7 +247,7 @@
 					showTwo:false
 				},
 				showSex:false,
-				sexList:['男','女','保密'],
+				sexList:Object.freeze(['男','女','保密']),
 				showMobile:false,
 				showCode:false,
 				showAlert:false,
@@ -261,7 +258,12 @@
 		},
 		
 		activated(){
-			this.$nextTick(()=>{
+			setTimeout(() => {
+				this.init();
+			},delay)
+		},
+		methods: {
+			init(){
 				if (!localStorage.id) {return;}
 				let data = userService.getCurentUser();
 				if(data && data.status == 'success') {
@@ -282,20 +284,20 @@
 				// 	this.$store.dispatch('userImg',this.imgurl);
 				// }
 				//个人介绍
-				if(this.$data.user.introduce == null) {
+				if(this.user.introduce == null) {
 					this.user.introduce = "这个人很懒、暂无个性签名"
 				}
 				//判断性别
-				if(this.$data.user.sex == null) {
+				if(this.user.sex == null) {
 					this.user.sex='保密'
 				}
 
 				//判断生日
-				if(this.$data.user.birthday == null) {
+				if(this.user.birthday == null) {
 					this.user.birthday = '待完善';
 				}
 				//判断地区					
-				if(this.$data.user.province == null&&!localStorage.choiceAddress) {
+				if(this.user.province == null&&!localStorage.choiceAddress) {
 					this.address = '待完善'
 				}else if (localStorage.choiceAddress) {
 					let temp = JSON.parse(localStorage.choiceAddress);
@@ -311,7 +313,7 @@
 					} else {
 						this.address = this.user.province + this.user.city;					
 					}
-					userService.updateUser(this.$data.user);
+					userService.updateUser(this.user);
 					localStorage.removeItem("choiceAddress");
 				} else {
 					if (this.user.province = this.user.city) {
@@ -321,14 +323,10 @@
 					}
 				}
 				//判断手机号
-				if(this.$data.user.mobile == null) {
+				if(this.user.mobile == null) {
 					this.user.mobile='未绑定'
 				}
-			});
-		},
-		watch:{
-		},
-		methods: {
+			},
 			//上传头像
 			commitUpload(){
 				this.$vux.loading.show({
@@ -511,8 +509,8 @@
 					endDate: date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(),
 					value:thiz.user.birthday,
 					onConfirm(val){
-						thiz.$data.user.birthday = val;
-						let data = userService.updateUser(thiz.$data.user);
+						thiz.user.birthday = val;
+						let data = userService.updateUser(thiz.user);
 						if(data.status == 'success') {
 							thiz.$vux.toast.show({
 								text: '修改成功'
@@ -527,8 +525,8 @@
 				this.showSex = true;
 			},
 			handleSex(item){
-				this.$data.user.sex = item;
-				let data = userService.updateUser(this.$data.user);
+				this.user.sex = item;
+				let data = userService.updateUser(this.user);
 				this.showSex = false;
 				if(data.status == "success") {
 					this.$vux.toast.show({
@@ -599,7 +597,7 @@
 			},
 			//函数
 			descfunc(callback){
-				let data = userService.updateUser(this.$data.user);
+				let data = userService.updateUser(this.user);
 				this.popList.show = false;
 				if(data.status == "success") {
 					this.$vux.toast.show({

@@ -92,22 +92,22 @@ import followService from '@/service/followService'
 export default {
   data() {
     return {
-      loginArr: [
+      loginArr: Object.freeze([
         { id: 1, class: 'icon-icon-copy' },
         { id: 2, class: 'icon-qq' },
         { id: 3, class: 'icon-weixin1' },
         { id: 4, class: 'icon-weibo' },
-      ],
-      tabArr: [
+      ]),
+      tabArr: Object.freeze([
         { id: 1, desc: '收藏', class: 'icon-not-collection', path: '/personBase/collect', query: 6 },
         { id: 2, desc: '历史', class: 'icon-history', path: '/personBase/history', query: 7 },
-      ],
-      menuArr: [
+      ]),
+      menuArr: Object.freeze([
         { id: 1, desc: '我的关注', class: 'icon-zuji', path: '/personBase/focus' ,current:5},
         { id: 2, desc: '爱心邀请', class: 'icon-love-k', path: '/topBase/invite' },
         { id: 3, desc: '爱心榜单', class: 'icon-paihangbang', path: '/topBase/level' },
         { id: 4, desc: '意见反馈', class: 'icon-dfabu', path: '/topBase/feedback' },
-      ],
+      ]),
       loginLink: '/topBase/login',
       userId:localStorage.id,
       inviteCode:'',

@@ -295,8 +295,7 @@
 <script>
 import config from '@/lib/config/config'
 import like from '@/components/common/like'
-// import share from '@/components/common/share'
-import memberList from '@/components/common/memberList'
+// import memberList from '@/components/common/memberList'
 import netUtil from "@/service/util/netUtil"
 import listUtil from '@/service/util/listUtil'
 import userService from '@/service/userService'
@@ -308,21 +307,13 @@ import readHistoryService from '@/service/readHistoryService'
 import articleFileService from '@/service/article_fileService'
 import articleCommentService from '@/service/article_commentService'
 import articleCollectService from '@/service/articleCollectService'
-// import shareService from '@/service/shareService'
 import messageService from '@/service/messageService'
 import transmitService from '@/service/transmitService'
 
-import { TransferDom, Popup} from 'vux'
-
 export default {
-	directives:{
-		TransferDom,
-	},
 	components:{
 		like,
-		// share,
-		memberList,
-		Popup
+		memberList:() => import ('@/components/common/memberList'),
 	},
 	data(){
 		return {
@@ -411,19 +402,8 @@ export default {
 			//举报显隐
 			ifReport:false,
 			//举报数组
-			// reportList:[
-			// 	{id: 1, desc: "淫秽色情", show:false},
-			// 	{id: 2, desc: "违法信息", show:false},
-			// 	{id: 3, desc: "营销广告", show:false},
-			// 	{id: 4, desc: "恶意攻击谩骂", show:false},
-			// 	// {id: 5, desc: "其它", show:false},
-			// ],
-			reportList:['淫秽色情','违法信息','营销广告','恶意攻击谩骂'
-				// {key:'淫秽色情',value:'淫秽色情'},
-				// {key:'违法信息',value:'违法信息'},
-				// {key:'营销广告',value:'营销广告'},
-				// {key:'恶意攻击谩骂',value:'恶意攻击谩骂'},
-			],
+			reportList:Object.freeze(['淫秽色情','违法信息','营销广告','恶意攻击谩骂'
+			]),
 			//显影分享
 			ifShare:false,
 			//评论加载分页
@@ -1237,7 +1217,8 @@ export default {
 	.mask{
 		position: absolute;
 		// bottom: initial;
-		background: linear-gradient(transparent 10%,#fafafa 10%);
+		background: #fafafa;
+		// background: linear-gradient(transparent 10%,#fafafa 10%);
 	}
 	// .playAudio{
 	// 	position: absolute;

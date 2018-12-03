@@ -46,7 +46,7 @@ export default{
 	.footer-nav{
 		width: 100%;
 		position: fixed;
-    	z-index: 9;
+    	// z-index: 9;
 		left: 0;
 		bottom: 0;
 		text-align: center;

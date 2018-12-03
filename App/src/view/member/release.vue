@@ -76,14 +76,11 @@ import fileService from '@/service/fileService'
 import articleService from '@/service/articleService'
 import interlocutionService from '@/service/interlocutionService'
 // import articleClassifyService from '@/service/article_classifyService'
-import { Previewer, TransferDom } from 'vux'
+// import { Previewer } from 'vux'
 export default{
-	directives: {
-		TransferDom,
-	},
-	components:{
-		Previewer
-	},
+	// components:{
+	// 	Previewer
+	// },
 	data(){
 		return {
 			addShow:true,
@@ -131,10 +128,10 @@ export default{
 		})
 	},
 	methods:{
-		show(index){
-			 this.$refs.previewer.show(index);
-			 // console.log(index);
-		},
+		// show(index){
+		// 	 this.$refs.previewer.show(index);
+		// 	 // console.log(index);
+		// },
 		handleType(){
 			this.optionShow = !this.optionShow;
 		},

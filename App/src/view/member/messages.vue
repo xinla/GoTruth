@@ -24,9 +24,9 @@ export default {
 	data(){
 		return {
 			list:[
-				{ 
-					userid :"接收人id", itemid :"项目id", type :"项目类型", createtime :"最新消息时间", isnew:"是否最新消息", newcount:"最新消息数量",
-				}
+				// { 
+				// 	userid :"接收人id", itemid :"项目id", type :"项目类型", createtime :"最新消息时间", isnew:"是否最新消息", newcount:"最新消息数量",
+				// }
 			],
 			proMes:'',
 			proIf:false,

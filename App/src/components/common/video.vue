@@ -47,11 +47,8 @@ export default {
 					thumbnail:"",
 				}
 			],
-			commentNum:{
-				type:Number,
-				// default:0,
-			},
-			publishtime:this.article.publishtime,
+			commentNum:0,
+			publishtime:'',
 			fileRoot:config.fileRoot+'/',
 			// publisher:"",
       countShow:false,
@@ -61,10 +58,8 @@ export default {
         imageurl:'',
       },
 			playerOptions : {
-				preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+				preload: 'auto',
 				language: 'zh-CN',
-				//aspectRatio: '4:3', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-				//fluid: false, // 当true时，Video.jsplayer将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
 				sources: [
 					{
 						type: "video/mp4",
@@ -83,7 +78,10 @@ export default {
 		}
 	},
 	props:{
-		article:Object,
+		article:{
+      type:Object,
+      default:{}
+    },
 		whi:{
 			type:Number,
 			default:0,
