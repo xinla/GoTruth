@@ -52,7 +52,12 @@ service.testCollect = function(articleid,call){
 
 	commonUtil.ajax(controller+'/testCollect',params,call);
 
-}
+};
 
+// 收藏数量
+service.getUserArticleCollectCount = function (userid,call) {
+  let params = {userid};
+  commonUtil.ajax(controller+'/getUserArticleCollectCount',params,call);
+};
 export default service;
 

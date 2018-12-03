@@ -16,55 +16,55 @@
             </li>
           </ul>
           <div class="wendaList-tip">
-            <span>{{wendaCount}}</span>回答
+            <span v-show="questionBool.hasAnswer">{{wendaCount}}条回答</span>
+            <span v-show="questionBool.notAnswer">暂无回答</span>
             <span class="point">•</span>
-            <span>{{collectCount}}</span>收藏
+            <span v-show="questionBool.hasCollect">{{collectCount}}人收藏</span>
+            <span v-show="questionBool.notCollect">暂无人收藏</span>
           </div>
         </div>
-      <!--  <div class="wendaList-other" v-for="(item,index) in wendaList">
-          <div class="header clearfix">
-            <div class="header-user fl">
+        <div class="wendaList-other" v-for="(item,index) in answer">
+          <div class="header">
+            <div class="header-user">
               <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
               <span class="username">{{ wendaUser.username}}</span>
             </div>
-            &lt;!&ndash;<div class="header-focus fr">
-              关注
-            </div>&ndash;&gt;
           </div>
           <div class="body">
             <div class="body-content">
               <p class="content">{{item.content}}</p>
               <ul class="body-img">
-                <li class="body-item" v-for="(item,index) in wendaFile">
-                  <img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url">
+                <li class="body-item" v-for="(item,index) in answerFile">
+                  <img :src="fileRoot + item.url">
                 </li>
               </ul>
             </div>
-            &lt;!&ndash;<span class="body-read">4.4万阅读</span>&ndash;&gt;
           </div>
           <div class="footer">
-
-            &lt;!&ndash;<div class="item">
-              <i class="iconfont icon-share"></i>
-              <span>7</span>
+            <div class="item" @click="handleAnswerCollect(item.id)">
+              <i class="iconfont" :class="answerIcon ? 'icon-collected' : 'icon-not-collection'"></i>
+              <span v-show="answerBool.hasCollect">{{answerCount}}</span>
+              <span v-show="answerBool.notCollect">收藏</span>
             </div>
             <div class="item">
               <i class="iconfont icon-xiaoxi"></i>
-              <span>7</span>
+              <span v-show="answerBool.hasComment">7</span>
+              <span v-show="answerBool.notComment">评论</span>
             </div>
             <div class="item">
               <i class="iconfont icon-weizan"></i>
-              <span>7</span>
-            </div>&ndash;&gt;
+              <span v-show="answerBool.hasZan">7</span>
+              <span v-show="answerBool.notZan">点赞</span>
+            </div>
           </div>
-        </div>-->
+        </div>
        </div>
-     <!-- <div class="wendaList-footer">
-        <div class="item" @click="handleProCollection(id)" >
-          <i class="iconfont" :class="{'icon-not-collection':collectToggle.notcollect,'icon-collected':collectToggle.collected}"></i>
+      <div class="wendaList-footer">
+        <div class="item" @click="handleCollect">
+          <i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"></i>
           <span>{{collectState?'已收藏':'收藏'}}</span>
         </div>
-        <div class="item" @click="$Tool.goPage({ name:'release',query:{title:'发起讨论',sort:3}})">
+        <div class="item" @click="$Tool.goPage({ name:'release',query:{title:'发表问题',sort:3}})">
           <i class="iconfont icon-fabu"></i>
           <span>提问</span>
         </div>
@@ -72,24 +72,10 @@
           <i class="iconfont icon-comment"></i>
           <span>回答</span>
         </div>
-      </div>-->
-      <div class="wendaList-footer">
-        <div class="item" @click="handleCollect">
-          <i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"></i>
-          <span>{{collectState?'已收藏':'收藏'}}</span>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-fabu"></i>
-          <span>提问</span>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-comment"></i>
-          <span>回答</span>
-        </div>
       </div>
       <!--回答弹出框-->
-      <!--<div v-transfer-dom>
-        <popup v-model="popObj.show" height="100%">
+      <div v-transfer-dom>
+        <popup v-model="answerObj.show" height="100%">
           <div class="popup-wrap">
             <div class="popup-header clearfix">
               <div class="header-cancel" @click="handleCancel">取消</div>
@@ -108,16 +94,16 @@
                     <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
                     <img :src="fileRoot + item.url">
                   </div>
-                  <div class="popup-addimg fl" v-show="popObj.addShow">
+                  <div class="popup-addimg fl" v-show="answerObj.addShow">
                     <label for="addImg"></label>
                     <i class="iconfont icon-add"></i>
                     <input type="file" id="addImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
                   </div>
                 </div>
               <div class="popup-footer clearfix">
-               &lt;!&ndash; <div class="keyboard fl" @click="handelBoard">
+               <!-- <div class="keyboard fl" @click="handelBoard">
                   <i class="iconfont icon-jianpan-up"></i>
-                </div>&ndash;&gt;
+                </div>-->
                 <div class="addImg fr">
                   <label for="iconImg"></label>
                   <i class="iconfont icon-album"></i>
@@ -127,7 +113,7 @@
             </div>
           </div>
         </popup>
-      </div>-->
+      </div>
     </div>
 </template>
 <script>
@@ -135,6 +121,7 @@
   import listUtil from '@/service/util/listUtil'
   import userService from '@/service/userService'
   import wdcollectService from '@/service/wdcollectService'
+  import articleCollectService from '@/service/articleCollectService'
   import interService from '@/service/interlocutionService'
   import messageService from '@/service/messageService'
   import fileService from '@/service/fileService'
@@ -154,25 +141,65 @@
         collectIcon:false,
         id:0,   //问题Id
         wenda:{},    //问题对象
+        answer:[],   //问题回答对象
         fileRoot:config.fileRoot + '/',   //服务路径
         imgArr:[],  //问题图片
+        answerFile:[],    //回答附件图片列表
         bigImg:false,      //判断是否一张图
         ifImgNull:false,   //判断问题是否有图片
         wendaCount:0,     //回答数
         collectCount:0,   //问题收藏数
         collectIcon:false,   //监听收藏图标变化
         collectState: false, //收藏文字变化
+        answerCount:0 ,   //回答收藏数
+        answerIcon:false, //监听回答收藏图标变化
+        /*问题的收藏回答状态*/
+        questionBool:{
+          hasAnswer:false,
+          notAnswer:false,
+          hasCollect:false,
+          notCollect:false
+        },
+        /*问题的收藏-评论-点赞状态*/
+        answerBool:{
+          hasCollect:false,
+          notCollect:false,
+          hasComment:false,
+          notComment:false,
+          hasZan:false,
+          notZan:false,
+        },
+        answerObj:{
+          show:false,
+          addShow:false
+        },
+        //textarea高度变化
+        onpropertychange:"this.style.height=this.scrollHeight + 'px'",
+        oninput:"this.style.height=this.scrollHeight + 'px'",
+        fabuColor:false,    //发布按钮颜色
+        record:{
+          content:'',
+          author:1,
+          type:1,
+          publishtime:'',
+          parentid:''
+        },
+        record_file:[],   //问答附件数组
+        page:1,     //回答列表页数
+        // 答案发布人name-img
+        wendaUser:{
+          username:'',
+          imageurl:''
+        },
+
       }
     },
     mounted(){
       this.$nextTick(()=>{
-
+        this.init();
       })
     },
     activated() {
-      this.$nextTick(()=>{
-        this.init();
-      });
       this.id = this.$route.query.id;
       this.wenda = JSON.parse(this.$route.query.item);
       this.ifImgNull = true;
@@ -190,6 +217,11 @@
         this.bigImg = false;
       }
     },
+    watch:{
+      wenda(){
+        this.init();
+      }
+    },
     methods:{
       //页面初始化渲染
       init() {
@@ -200,12 +232,36 @@
           this.$Tool.goBack();
           return;
         }
+        // 获取回答列表
+        let answerData = interService.getAnswers(this.page, 15, this.id);
+        if(answerData && answerData.status == "success") {
+          listUtil.appendList(this.answer,answerData.recordPage.list);
+          this.page++;
+        }
+
+        // 获取发布回答用户的信息
+        listUtil.asyncSetListPropty(answerData.recordPage.list, (item)=> {
+          let wendaUserData = userService.getUserById(item.author);
+          if(wendaUserData && wendaUserData.status == "success") {
+            this.wendaUser = wendaUserData.result.user;
+          }
+          // 获取发布回答的图片
+          let answerSrcData = articleFileService.getFileByArticle(item.id);
+          if(answerSrcData && answerSrcData.status == "success") {
+            this.answerFile = answerSrcData.result.filelist;
+          }
+
+        });
         // 获取问题回答数量
         interService.getAnswerCount(this.wenda.id, (data) =>{
           if(data && data.status == "success") {
             this.wendaCount = this.$Tool.numConvertText(data.count);
-            if(data.count == 0) {
-              this.wendaCount = "暂无";
+            if(data.count <= 0) {
+              this.questionBool.notAnswer = true;
+              this.questionBool.hasAnswer = false;
+            }else{
+              this.questionBool.notAnswer = false;
+              this.questionBool.hasAnswer = true;
             }
           }
         });
@@ -221,16 +277,87 @@
             }
           }
         });
-
         // 获取问题收藏数量
         wdcollectService.getWdCollectCount(this.wenda.id,(data)=>{
           if(data && data.status == "success") {
             this.collectCount = data.count;
-            if(data.count == 0) {
-              this.collectCount = "暂无";
+            if(data.count <= 0) {
+              this.questionBool.notCollect = true;
+              this.questionBool.hasCollect = false;
+            }else{
+              this.questionBool.notCollect = false;
+              this.questionBool.hasCollect = true;
             }
           }
         });
+
+        // 获取回答的收藏状态
+        articleCollectService.testCollect(this.id,(data)=>{
+          if(data && data.status == "success") {
+            if(data.result == 1) {
+              this.answerIcon = true;
+            }else{
+              this.answerIcon = false;
+            }
+          }
+        });
+
+        // 获取回答收藏数量
+        articleCollectService.getUserArticleCollectCount(this.id,(data) =>{
+          if(data && data.status == "success") {
+            this.answerCount = data.count;
+            if(data.count <= 0) {
+              this.answerBool.notCollect = true;
+              this.answerBool.hasCollect = false;
+            }else{
+              this.answerBool.notCollect = false;
+              this.answerBool.hasCollect = true;
+            }
+          }
+        })
+      },
+      // 图片上传
+      handleuploadFile(e){
+        let file = e.target.files[0];
+        if (!file) { return; }
+        this.$vux.loading.show();
+        let param = new FormData(); //创建form对象
+        param.append('file',file,file.name);//通过append向form对象添加数据
+        fileService.uploadPic(param,(data)=>{
+          let obj = {};
+          obj.url = data.result.url;
+          obj.filename = data.result.filename;
+          obj.type =1;
+          this.record_file.push(obj);
+        });
+        if(this.record_file.length >= 0){
+          this.answerObj.addShow = true;
+        }
+        this.$vux.loading.hide();
+      },
+
+      //删除上传图片
+      handleRemoveImg(item){
+        const thiz = this;
+        this.$vux.confirm.show({
+          content:'确认删除图片?',
+          onConfirm () {
+            thiz.$vux.loading.show();
+            setTimeout(()=>{
+              thiz.record_file.splice(item,1);
+              thiz.$vux.loading.hide();
+              thiz.$vux.toast.show({
+                text:'删除成功'
+              });
+            },600);
+            if(thiz.record_file.length == 1){
+              setTimeout(()=>{
+                thiz.answerObj.addShow = false;
+              },600);
+            }
+          }
+        });
+
       },
 
       // 收藏问题
@@ -245,12 +372,118 @@
             messageService.sendMessage(this.wenda.author,"collect",this.id,1);
             this.collectIcon = true;
             this.collectState = true;
+            this.collectCount++;
+            if(this.collectCount > 0) {
+              this.questionBool.hasCollect = true;
+              this.questionBool.notCollect = false;
+            }
           }else{
             this.collectIcon = false;
             this.collectState = false;
+            this.collectCount--;
+            if(this.collectCount <= 0) {
+              this.questionBool.hasCollect = false;
+              this.questionBool.notCollect = true;
+            }
           }
         }
-      }
+      },
+
+      // 收藏回答
+      handleAnswerCollect(item){
+        if(!localStorage.id) {
+          this.$Tool.loginPrompt();
+          return;
+        }
+        console.log(item);
+        return;
+        let data = articleCollectService.articleCollect(item);
+        if(data && data.status == "success") {
+          if(data.result == 1) {
+            messageService.sendMessage(this.answer.author,"collect",this.id,1);
+            this.answerIcon = true;
+            this.answerCount++;
+            if(this.answerCount > 0) {
+              this.answerBool.hasCollect = true;
+              this.answerBool.notCollect = false;
+            }
+          }else{
+            this.answerIcon = false;
+            this.answerCount--;
+            if(this.answerCount <= 0) {
+              this.answerBool.hasCollect = false;
+              this.answerBool.notCollect = true;
+            }
+          }
+        }
+
+      },
+      //弹出回答框
+      handleAnswer(){
+        this.answerObj.show =true;
+      },
+
+      //取消回答框
+      handleCancel(){
+        this.answerObj.show = false;
+      },
+
+      // 发布回答
+      handlePublish(){
+        if(!localStorage.id) {
+          this.$vux.alert.show({
+            content:"你还未登录呢，请先登录再回答问题哦"
+          });
+          return;
+        }
+
+        if(!this.$Tool.checkInput(this.record.content)) {
+          this.record.content = this.$Tool.replaceNo(this.record.content);
+          this.$vux.alert.show({
+            content:'内容含有非法字符，已为您删除，请确认'
+          });
+          return;
+        }
+
+        if(!this.record.content){
+          this.$vux.toast.text('回答不能为空', 'middle')
+          return;
+        }
+        this.record.author = Number(localStorage.id || 0);
+        let pid =this.wenda.id;
+
+        this.record.parentid = pid;
+        let data = articleService.publishArticle(this.record, this.record_file);
+        if(data && data.status == "success") {
+          this.$vux.alert.show({
+            content:'发布成功'
+          });
+          this.record_file = [];
+          this.record.content ="";
+          this.answerObj.addShow=false;
+          this.wendaCount++;
+          if(this.wendaCount > 0) {
+            this.questionBool.hasAnswer = true;
+            this.questionBool.notAnswer = false;
+          }
+          setTimeout(()=>{
+            this.$vux.alert.hide();
+          },800);
+          this.answerObj.show = false;
+        }else{
+          this.$vux.alert.show({
+            content:'发布失败'
+          });
+        }
+      },
+      //监听文本框
+      handelInput(){
+        if(this.record.content.length >= 1){
+          this.fabuColor = true;
+        }else{
+          this.fabuColor = false;
+        }
+      },
 
     },
   }
@@ -295,7 +528,7 @@
             publishtime:'',
             parentid:''
           },
-          popObj:{
+          answerObj:{
             show:false,
             addShow:false,
           },
@@ -399,7 +632,7 @@
           this.record_file.push(obj);
         });
         if(this.record_file.length >= 0){
-          this.popObj.addShow = true;
+          this.answerObj.addShow = true;
         }
         this.$vux.loading.hide();
       },
@@ -419,7 +652,7 @@
             },600);
             if(thiz.record_file.length == 1){
               setTimeout(()=>{
-                thiz.popObj.addShow = false;
+                thiz.answerObj.addShow = false;
               },600);
             }
           }
@@ -458,12 +691,12 @@
 
       //弹出回答框
       handleAnswer(){
-        this.popObj.show =true;
+        this.answerObj.show =true;
       },
 
       //取消回答框
       handleCancel(){
-        this.popObj.show = false;
+        this.answerObj.show = false;
       },
 
       // 发布回答
@@ -498,11 +731,11 @@
           });
           this.record_file = [];
           this.record.content ="";
-          this.popObj.addShow=false;
+          this.answerObj.addShow=false;
           setTimeout(()=>{
             this.$vux.alert.hide();
           },800);
-          this.popObj.show = false;
+          this.answerObj.show = false;
         }else{
           this.$vux.alert.show({
             content:'发布失败'
@@ -682,6 +915,12 @@
           .iconfont{
             font-size: .4rem;
             font-weight: 500;
+          }
+          .icon-not-collection{
+            color: #000;
+          }
+          .icon-collected{
+            color: #f9c345;
           }
           span{
             font-size: .32rem;

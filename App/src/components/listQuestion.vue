@@ -5,6 +5,10 @@
       <loading-main v-if="!ifNet && !wendaList.length"></loading-main>
       <wenda-user></wenda-user>
       <question v-for="(item, index) in wendaList" :wenda="item" :key="index"></question>
+      <div class="nomsg" v-show="wendaShow">
+        <i class="iconfont icon-nomsg"></i>
+        <span class="text">暂无数据...</span>
+      </div>
       <load-more v-show="wendaList.length && ifLoad" :show-loading="ifLoading" :tip="tip"></load-more>
     </div>
     </downRefresh>
@@ -32,6 +36,7 @@
         ifLoad:false,
         tip:"正在加载",
         timer:null,
+        wendaShow:false
       }
     },
     props:{
@@ -76,6 +81,11 @@
           }
         }finally {
 
+        }
+        if(this.wendaList.length == 0) {
+          this.wendaShow = true;
+        }else{
+          this.wendaShow = false;
         }
       },
       doRefresh(){
@@ -188,6 +198,22 @@
     overflow: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    .nomsg{
+      position: relative;
+      background-color: #fff;
+      height: calc(100vh - 4.5rem);
+      text-align: center;
+      color: #999;
+      .iconfont{
+        display: block;
+        font-size: 1.8rem;
+        padding-top: 3rem;
+      }
+      span{
+        display: block;
+        padding-top: .3rem;
+      }
+    }
   }
   .refresh{
     overflow: hidden;
@@ -196,4 +222,5 @@
   .animate{
     transition: all .5s;
   }
+
 </style>

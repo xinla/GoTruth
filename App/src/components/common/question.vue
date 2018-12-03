@@ -1,29 +1,30 @@
 <template>
   <div class="bfc-o"  @click="handlewendaList(wenda)">
-    <div class="wenda-wrap">
-      <div class="wenda-item clearfix">
-        <!--标题-->
-        <h2 class="wenda-title" >{{wenda.title}}</h2>
-        <!--多图-->
-        <ul class="wenda-img-list">
-          <li class="wenda-img" :class="{bigImg:bigImg}"   v-for="(item,index) in imgList" v-if="index < 3" >
-            <img :src=" fileRoot + item" alt="直击真相">
-          </li>
-        </ul>
-        <!--问答底部-->
-        <div class="wenda-footer clearfix">
-          <div class="left fl clearfix">
-            <span class="wenda-username" v-if="ifPublisher">{{publisher}}</span>
-            <span class="wenda-num">{{wendaCount}}回答</span>
-            <span class="wenda-time">{{createtime}}</span>
+      <div class="wenda-wrap">
+        <div class="wenda-item clearfix">
+          <!--标题-->
+          <h2 class="wenda-title" >{{wenda.title}}</h2>
+          <!--多图-->
+          <ul class="wenda-img-list">
+            <li class="wenda-img" :class="{bigImg:bigImg}"   v-for="(item,index) in imgList" v-if="index < 3" >
+              <img :src=" fileRoot + item" alt="直击真相">
+            </li>
+          </ul>
+          <!--问答底部-->
+          <div class="wenda-footer clearfix">
+            <div class="left fl clearfix">
+              <span class="wenda-username" v-if="ifPublisher">{{publisher}}</span>
+              <span class="wenda-num">{{wendaCount}}回答</span>
+              <span class="wenda-time">{{createtime}}</span>
+            </div>
+            <div class="right fr" @click="$emit('delete',[wenda.id,whi,$event])" v-if="ifDel">
+              <i class="iconfont icon-remove"></i>
+            </div>
           </div>
-          <div class="right fr" @click="$emit('delete',[wenda.id,whi,$event])" v-if="ifDel">
-            <i class="iconfont icon-remove"></i>
-          </div>
-        </div>
       </div>
     </div>
-    </div>
+  </div>
+
 </template>
 <script>
 
