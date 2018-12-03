@@ -99,11 +99,11 @@ export default {
   //   不可异步
 		// })
 	},	
-	watch:{
+	/*watch:{
 		article(){
 			this.init();				
 		}
-	},
+	},*/
 	methods:{
 		init(){
 			articleFileService.getFileByArticle(this.article.id,(data)=>{
