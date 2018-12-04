@@ -23,7 +23,7 @@
             <span v-show="questionBool.notCollect">暂无人收藏</span>
           </div>
         </div>
-        <div class="wendaList-other" v-for="item in answer">
+        <div class="wendaList-other" v-for="item in answer" @click="goAnswerDetail">
           <div class="header">
             <div class="header-user">
               <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
@@ -415,6 +415,12 @@
           this.fabuColor = false;
         }
       },
+
+      goAnswerDetail(){
+        if (!this.$store.state.isScolling) {
+          this.$Tool.goPage({name:'wendaDetail',query:{id:this.answer}})
+        }
+      }
 
     },
   }
