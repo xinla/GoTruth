@@ -23,7 +23,7 @@
             <span v-show="questionBool.notCollect">暂无人收藏</span>
           </div>
         </div>
-        <div class="wendaList-other" v-for="(item,index) in answer">
+        <div class="wendaList-other" v-for="item in answer">
           <div class="header">
             <div class="header-user">
               <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
@@ -34,28 +34,16 @@
             <div class="body-content">
               <p class="content">{{item.content}}</p>
               <ul class="body-img">
-                <li class="body-item" v-for="(item,index) in answerFile">
-                  <img :src="fileRoot + item.url">
+                <li class="body-item" v-for="itemfile in item.answerFile" :key="itemfile.id">
+                  <img :src="fileRoot + itemfile.url">
                 </li>
               </ul>
             </div>
           </div>
           <div class="footer">
-            <div class="item" @click="handleAnswerCollect(item.id)">
-              <i class="iconfont" :class="answerIcon ? 'icon-collected' : 'icon-not-collection'"></i>
-              <span v-show="answerBool.hasCollect">{{answerCount}}</span>
-              <span v-show="answerBool.notCollect">收藏</span>
-            </div>
-            <div class="item">
-              <i class="iconfont icon-xiaoxi"></i>
-              <span v-show="answerBool.hasComment">7</span>
-              <span v-show="answerBool.notComment">评论</span>
-            </div>
-            <div class="item">
-              <i class="iconfont icon-weizan"></i>
-              <span v-show="answerBool.hasZan">7</span>
-              <span v-show="answerBool.notZan">点赞</span>
-            </div>
+            <span v-if="ifComment">{{answerCommentNum}}评论</span>
+            <span v-else>暂无评论</span>
+            <span>{{item.publishtime}}</span>
           </div>
         </div>
        </div>
@@ -127,11 +115,10 @@
   import fileService from '@/service/fileService'
   import articleService from '@/service/articleService'
   import articleFileService from '@/service/article_fileService'
-
+  import articleCommentService from '@/service/article_commentService'
   export default {
     data() {
       return {
-        collectIcon:false,
         id:0,   //问题Id
         wenda:{},    //问题对象
         answer:[],   //问题回答对象
@@ -142,25 +129,17 @@
         ifImgNull:false,   //判断问题是否有图片
         wendaCount:0,     //回答数
         collectCount:0,   //问题收藏数
+        answerCommentNum:0,  //回答评论数
         collectIcon:false,   //监听收藏图标变化
         collectState: false, //收藏文字变化
-        answerCount:0 ,   //回答收藏数
-        answerIcon:false, //监听回答收藏图标变化
+        publishtime:'',      //回答发布时间
+        ifComment:false,      //回答是否有评论
         /*问题的收藏回答状态*/
         questionBool:{
           hasAnswer:false,
           notAnswer:false,
           hasCollect:false,
           notCollect:false
-        },
-        /*问题的收藏-评论-点赞状态*/
-        answerBool:{
-          hasCollect:false,
-          notCollect:false,
-          hasComment:false,
-          notComment:false,
-          hasZan:false,
-          notZan:false,
         },
         answerObj:{
           show:false,
@@ -188,11 +167,14 @@
       }
     },
     mounted(){
-      setTimeout(()=>{
-        this.init();        
-      },100)
+      this.$nextTick(()=>{
+
+      });
     },
     activated() {
+      this.$nextTick(()=>{
+        this.init();
+      });
       this.id = this.$route.query.id;
       this.wenda = JSON.parse(this.$route.query.item);
       this.ifImgNull = true;
@@ -210,11 +192,6 @@
         this.bigImg = false;
       }
     },
-    watch:{
-      wenda(){
-        this.init();
-      }
-    },
     methods:{
       //页面初始化渲染
       init() {
@@ -229,22 +206,37 @@
         let answerData = interService.getAnswers(this.page, 15, this.id);
         if(answerData && answerData.status == "success") {
           listUtil.appendList(this.answer,answerData.recordPage.list);
+          // 循环回答列表
+          for(let i =0; i < this.answer.length; i++){
+            // 获取发布回答时间
+            this.answer[i].publishtime = this.$Tool.publishTimeFormat(this.answer[i].publishtime);
+            // 获取发布回答用户的信息
+            let wendaUserData = userService.getUserById(this.answer[i].author);
+            if(wendaUserData && wendaUserData.status == "success") {
+              this.wendaUser = wendaUserData.result.user;
+            }
+            // 获取发布回答的图片
+            let answerSrcData = articleFileService.getFileByArticle(this.answer[i].id);
+            if(answerSrcData && answerSrcData.status == "success") {
+              this.$set(this.answer[i],'answerFile',[]);
+              this.answer[i].answerFile = answerSrcData.result.filelist;
+            }
+            // 获取回答评论数量
+            articleCommentService.getArticleCommentCount(this.answer[i].id,(data)=>{
+              if(data.status == "success") {
+                this.answerCommentNum = this.$Tool.numConvertText(data.result.count);
+                if(data.result.count == 0) {
+                  this.ifComment = false;
+                }else{
+                  this.ifComment = true;
+                }
+              }
+            })
+          }
           this.page++;
         }
 
-        // 获取发布回答用户的信息
-        listUtil.asyncSetListPropty(answerData.recordPage.list, (item)=> {
-          let wendaUserData = userService.getUserById(item.author);
-          if(wendaUserData && wendaUserData.status == "success") {
-            this.wendaUser = wendaUserData.result.user;
-          }
-          // 获取发布回答的图片
-          let answerSrcData = articleFileService.getFileByArticle(item.id);
-          if(answerSrcData && answerSrcData.status == "success") {
-            this.answerFile = answerSrcData.result.filelist;
-          }
 
-        });
         // 获取问题回答数量
         interService.getAnswerCount(this.wenda.id, (data) =>{
           if(data && data.status == "success") {
@@ -283,31 +275,6 @@
             }
           }
         });
-
-        // 获取回答的收藏状态
-        articleCollectService.testCollect(this.id,(data)=>{
-          if(data && data.status == "success") {
-            if(data.result == 1) {
-              this.answerIcon = true;
-            }else{
-              this.answerIcon = false;
-            }
-          }
-        });
-
-        // 获取回答收藏数量
-        articleCollectService.getUserArticleCollectCount(this.id,(data) =>{
-          if(data && data.status == "success") {
-            this.answerCount = data.count;
-            if(data.count <= 0) {
-              this.answerBool.notCollect = true;
-              this.answerBool.hasCollect = false;
-            }else{
-              this.answerBool.notCollect = false;
-              this.answerBool.hasCollect = true;
-            }
-          }
-        })
       },
       // 图片上传
       handleuploadFile(e){
@@ -382,35 +349,6 @@
         }
       },
 
-      // 收藏回答
-      handleAnswerCollect(item){
-        if(!localStorage.id) {
-          this.$Tool.loginPrompt();
-          return;
-        }
-        console.log(item);
-        return;
-        let data = articleCollectService.articleCollect(item);
-        if(data && data.status == "success") {
-          if(data.result == 1) {
-            messageService.sendMessage(this.answer.author,"collect",this.id,1);
-            this.answerIcon = true;
-            this.answerCount++;
-            if(this.answerCount > 0) {
-              this.answerBool.hasCollect = true;
-              this.answerBool.notCollect = false;
-            }
-          }else{
-            this.answerIcon = false;
-            this.answerCount--;
-            if(this.answerCount <= 0) {
-              this.answerBool.hasCollect = false;
-              this.answerBool.notCollect = true;
-            }
-          }
-        }
-
-      },
       //弹出回答框
       handleAnswer(){
         this.answerObj.show =true;
@@ -840,8 +778,9 @@
       }
     }
     .wendaList-other{
-      padding: .2rem .3rem .6rem .3rem;
+      padding: .2rem .3rem .3rem .3rem;
       background-color: #fff;
+      border-bottom: .02rem solid @borderColor;
       .header{
         line-height: .72rem;
         .userPhoto{
@@ -900,8 +839,13 @@
       }
       .footer{
         width: 100%;
-        display: flex;
-        .item{
+        /*display: flex;*/
+        color: #999;
+        span{
+          color: #999;
+          margin-right: .08rem;
+        }
+        /*.item{
           flex: 1;
           text-align: center;
           color: #000;
@@ -916,10 +860,11 @@
             color: #f9c345;
           }
           span{
+            color: #f00;
             font-size: .32rem;
             vertical-align: auto;
           }
-        }
+        }*/
       }
     }
   }
