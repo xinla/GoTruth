@@ -50,6 +50,11 @@ export default {
     whi:{
       type: Number
     },
+    //判断是否为作者详情视图(真:为作者视图；假（空）:为浏览视图)
+    detailType:{
+      type:String,
+      default:"",
+    },
     ifPublisher:{
       type:Boolean,
       default:true
@@ -60,16 +65,17 @@ export default {
     }
   },
   mounted(){
-    this.$nextTick(()=>{
+    this.init();
+   /* this.$nextTick(()=>{
       this.init();
-    });
+    });*/
 
   },
-  watch:{
+ /* watch:{
     wenda(){
       this.init();
     }
-  },
+  },*/
   methods:{
     init() {
 

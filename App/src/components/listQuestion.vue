@@ -50,14 +50,17 @@
       }
     },
     mounted(){
-      this.$nextTick(()=>{
+      if (!this.classify) {
+        this.init();
+      }
+     /* this.$nextTick(()=>{
         if(!this.classify) {
           this.init();
           if(this.wendaList.length) {
             this.ifLoad = true;
           }
         }
-      });
+      });*/
     },
     methods:{
       init(){
