@@ -927,6 +927,9 @@ export default {
 			}else{
 				this.shareDesc['thumbs'] = [this.fileRoot + this.playerOptions.poster];
 			}
+			if (!this.shareDesc['thumbs']) {
+				this.shareDesc['thumbs'] = require('@/assets/images/logo-icon.png');
+			}
 		},
 		//首次回复
 		handleFirstReply(item,commentIndex){

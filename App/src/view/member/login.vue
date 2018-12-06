@@ -115,7 +115,8 @@ export default{
 	computed:{
 		// 检测手机号是否错误
 		mobileErr(){
-			return !this.$Tool.isPhoneNumber(this.mobileDesc.replace(/\s/g,""));
+			// return !this.$Tool.isPhoneNumber(this.mobileDesc.replace(/\s/g,""));
+			return !this.$Tool.isPhoneNumber(this.mobileDesc);
 		},
 		// 判断用户名和验证码格式是否正确，再决定登录按钮是否亮起
 		isOpacity(){
@@ -332,8 +333,18 @@ export default{
 		userInfoStore(data){
 			if(data && data.status === "success") {
 				this.$vux.loading.hide();
-				let reg = /^http/i,
-					token = data.result.token,
+				let user = data.result.user,
+				obj = {
+					token:data.result.token,
+					id:user.id,
+					logid:user.logid,
+					userImg:this.$Tool.headerImgFilter(user.imageurl),
+					userName:user.username,
+					userMobile:user.mobile,
+					inviteCode:user.invitecode
+				};
+				Object.assign(localStorage,obj)
+				/*let token = data.result.token,
 					user = data.result.user,
 					id = user.id,
 					logid = user.logid,
@@ -346,7 +357,7 @@ export default{
 				this.$store.dispatch('userLogid',logid);
 				this.$store.dispatch('userImg',userImg);
 				this.$store.dispatch('userName',userName);
-				this.$store.dispatch('userMobile',userMobile);
+				this.$store.dispatch('userMobile',userMobile);*/
 				this.$Tool.goPage({name: 'home',replace:true});
 				location.reload();
 			}
