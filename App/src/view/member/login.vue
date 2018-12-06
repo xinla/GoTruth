@@ -205,6 +205,9 @@ export default{
 				this.tip.codeColor = true;
 				if(data && data.status == "success") {
 					this.$vux.loading.hide();
+					this.$vux.toast.show({
+						text:'发送成功'
+					})
 					this.tip.getCodeDesc = "60秒后重发";
 					let i =60;
 					this.tip.codeTimer = setInterval(()=>{
@@ -214,13 +217,14 @@ export default{
 							this.tip.close1 = false;
 						}else {
 							clearInterval(this.tip.codeTimer);
-							this.tip.codeTImer = null;
+							this.tip.codeTimer = null;
 							this.tip.getCodeDesc = "获取验证码";
 							this.tip.codeColor = false;
 						}
 					},1000);
 				}
 				else if(data && data.status == "error") {
+					this.$vux.loading.hide();
 					this.tip.mobileTip = data.result.tip;
 					this.tip.active1 = true;
 					this.mobileDesc = "";
@@ -330,9 +334,12 @@ export default{
 				"status":"success"
 			}
 		 */
+		/**
+		 * login callback 存储登录用户信息 
+		 * @param  {[Object]} data [服务器返回的登录结果]
+		 */
 		userInfoStore(data){
 			if(data && data.status === "success") {
-				this.$vux.loading.hide();
 				let user = data.result.user,
 				obj = {
 					token:data.result.token,
@@ -366,16 +373,23 @@ export default{
 				this.tip.active2 = true;
 				this.tip.close2 = false;
 				this.codeDesc = "";
+				setTimeout(()=>{
+					this.$vux.alert.show({
+					  content: '系统繁忙，请稍后重试！',
+					});
+				},0)
 				// console.log("error")
 			}
+			this.$vux.loading.hide();
 		}
 	},
 	beforeRouteEnter(to, from, next){
-		if (!localStorage.id) {
-			next();
-		}else{
-			GoTruth.$Tool.goPage({name:"member",replace:"replace"})
-		}
+		!localStorage.id ? next() : GoTruth.$Tool.goPage({name:"member",replace:"replace"})
+		// if (!localStorage.id) {
+		// 	next();
+		// }else{
+		// 	GoTruth.$Tool.goPage({name:"member",replace:"replace"})
+		// }
 	}
 }
 </script>
