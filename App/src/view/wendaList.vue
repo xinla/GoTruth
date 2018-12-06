@@ -3,6 +3,9 @@
       <top @hrefTo="this.$Tool.goBack">
         <template slot="title">{{ '真相问答' }}</template>
       </top>
+      <div class="mask" v-show="ifLoad">
+        <loading-main></loading-main>
+      </div>
       <div class="wendaList">
         <div class="wendaList-current">
           <h2 class="title">{{wenda.title}}</h2>
@@ -23,7 +26,7 @@
             <span v-show="questionBool.notCollect">暂无人收藏</span>
           </div>
         </div>
-        <div class="wendaList-other" v-for="item in answer" @click="goAnswerDetail(wenda,item)">
+        <div class="wendaList-other" v-show="hasAnswer" v-for="item in answer" @click="goAnswerDetail(wenda,item)">
           <div class="header">
             <div class="header-user">
               <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
@@ -40,11 +43,20 @@
               </ul>
             </div>
           </div>
-          <div class="footer">
-            <span v-if="ifComment">{{answerCommentNum}}评论</span>
-            <span v-else>暂无评论</span>
-            <span>{{item.publishtime}}</span>
+          <div class="footer clearfix">
+            <div class="fl">
+              <span v-if="ifComment">{{answerCommentNum}}评论</span>
+              <span v-else>暂无评论</span>
+              <span>{{item.publishtime}}</span>
+            </div>
+            <div class="fr article-remove" @click="$emit('delete',[item.id,whi,$event])" v-if="ifDel">
+              <i class="iconfont icon-remove"></i>
+            </div>
           </div>
+        </div>
+        <div class="not-wendaList" v-show="notAnswer">
+          <i class="iconfont icon-nomsg"></i>
+          <span>抢第一个沙发吧...</span>
         </div>
        </div>
       <div class="wendaList-footer">
@@ -117,6 +129,25 @@
   import articleFileService from '@/service/article_fileService'
   import articleCommentService from '@/service/article_commentService'
   export default {
+    props:{
+      whi:{
+        type:Number,
+      },
+      //判断是否为作者详情视图(真:为作者视图；假（空）:为浏览视图)
+      detailType:{
+        type:String,
+        default:"",
+      },
+      //判断是否显示发布人
+      ifPublisher:{
+        type:Boolean,
+        default:true,
+      },
+      ifDel:{
+        type:Boolean,
+        default:false,
+      },
+    },
     data() {
       return {
         id:0,   //问题Id
@@ -163,34 +194,20 @@
           username:'',
           imageurl:''
         },
+        hasAnswer:false , //有回答
+        notAnswer:false,  //无回答
+        /*加载回答列表*/
+        ifNet:false,
+        ifLoad: false, //是否加载
 
       }
     },
     mounted(){
-      this.$nextTick(()=>{
-
-      });
     },
     activated() {
-      this.$nextTick(()=>{
-        this.init();
-      });
       this.id = this.$route.query.id;
       this.wenda = JSON.parse(this.$route.query.item);
-      this.ifImgNull = true;
-      if(this.wenda.images == null) {
-        this.ifImgNull = false;
-        return false;
-      }else{
-        this.ifImgNull = true;
-      }
-      this.imgArr = this.wenda.images.split(',');
 
-      if(this.imgArr.length == 1) {
-        this.bigImg = true;
-      }else{
-        this.bigImg = false;
-      }
     },
     methods:{
       //页面初始化渲染
@@ -201,6 +218,21 @@
           });
           this.$Tool.goBack();
           return;
+        }
+        this.ifLoad = true;
+        this.ifImgNull = true;
+        if(this.wenda.images == null) {
+          this.ifImgNull = false;
+          return false;
+        }else{
+          this.ifImgNull = true;
+        }
+        this.imgArr = this.wenda.images.split(',');
+
+        if(this.imgArr.length == 1) {
+          this.bigImg = true;
+        }else{
+          this.bigImg = false;
         }
         // 获取回答列表
         let answerData = interService.getAnswers(this.page, 15, this.id);
@@ -234,9 +266,14 @@
             })
           }
           this.page++;
+          if(answerData.recordPage.list == ""){
+            this.hasAnswer = false;
+            this.notAnswer = true;
+          }else{
+            this.hasAnswer = true;
+            this.notAnswer = false;
+          }
         }
-
-
         // 获取问题回答数量
         interService.getAnswerCount(this.wenda.id, (data) =>{
           if(data && data.status == "success") {
@@ -275,6 +312,7 @@
             }
           }
         });
+        this.ifLoad = false;
       },
       // 图片上传
       handleuploadFile(e){
@@ -421,291 +459,31 @@
             name:'wendaDetail',
             query:{
               wenda:JSON.stringify(wenda),
-              item:JSON.stringify(item)
+              item:JSON.stringify(item),
+              detailType:this.detailType
             },
           })
         }
       }
 
     },
-  }
-
-
-/*  export default {
-    directives:{
-      TransferDom,
-    },
-    components:{
-      Popup
-    },
-    data(){
-        return{
-          onpropertychange:"this.style.height=this.scrollHeight + 'px'",
-          oninput:"this.style.height=this.scrollHeight + 'px'",
-          fileRoot:config.fileRoot + '/',
-          bigImg:false,
-          collectState:false,
-          wendaList:[],
-          imgArr:[],
-          newList:{},
-          wendaFile:[],
-          count:0,
-          fabuColor:false,
-          imgShow:true,
-          id:0 ,
-          page:1,
-          parentid:'',
-          collectToggle:{
-            notcollect:true,
-            collected:false
-          },
-          wendaUser:{
-            username:'',
-            imageurl:''
-          },
-          record:{
-            content:'',
-            author:1,
-            type:1,
-            publishtime:'',
-            parentid:''
-          },
-          answerObj:{
-            show:false,
-            addShow:false,
-          },
-          record_file:[],
-          ifNew:false,
-
-        }
-    },
-    props:{
-      wenda:Object,
-      whi:{
-        type:Number,
-        default:0,
-      },
-      //判断是否显示发布人
-      ifPublisher:{
-        type:Boolean,
-        default:true,
-      },
-      ifDel:false,
-    },
-
-    mounted(){
-    },
-
-    activated(){
-      this.$nextTick(()=>{
-        this.id = this.$route.query.id;
-        this.newList = JSON.parse(this.$route.query.item);
-        this.init();
-        if(this.newList.images == null) {
-          this.imgShow = false;
-          return false;
-        }else{
-          this.imgShow = true;
-        }
-        this.imgArr = this.newList.images.split(',');
-
-      });
-
-    },
-
-    methods:{
-      init(){
-       /!* if(!this.id){
-          this.$vux.alert.show({
-            content:'获取出错，请返回！'
-          });
-          this.$Tool.goBack();
-          return;
-        }*!/
-        // 判断是否收藏
-        wdcollectService.testWdCollect(this.id, (data)=>{
-          if(data && data.status == 'success') {
-            if(data.result == 1) {
-              this.collectToggle.notCollect = false;
-              this.collectToggle.collected = true;
-            }else{
-              this.collectToggle.notCollect = true;
-              this.collectToggle.collected = false;
-            }
-
-          }
-        });
-
-        //获取问题收藏数量
-        wdcollectService.getWdCollectCount(this.id,(data)=>{
-          if(data && data.status == "success") {
-            this.count = data.count;
-          }
-        });
-
-        //获取回答列表
-        let answerData = interService.getAnswers(this.page, 15, this.id);
-        if(answerData && answerData.status == "success") {
-          listUtil.appendList(this.wendaList,answerData.recordPage.list)
-          this.page++;
-        }
-
-        // 获取发布回答人信息
-
-        listUtil.asyncSetListPropty(answerData.recordPage.list, (item)=> {
-          let wendaUserData = userService.getUserById(item.author);
-          if(wendaUserData && wendaUserData.status == "success") {
-            this.wendaUser = wendaUserData.result.user;
-          }
-        });
-      },
-      // 图片上传
-      handleuploadFile(e){
-        let file = e.target.files[0];
-        if (!file) { return; }
-        this.$vux.loading.show();
-        let param = new FormData(); //创建form对象
-        param.append('file',file,file.name);//通过append向form对象添加数据
-        fileService.uploadPic(param,(data)=>{
-          let obj = {};
-          obj.url = data.result.url;
-          obj.filename = data.result.filename;
-          obj.type =1;
-          this.record_file.push(obj);
-        });
-        if(this.record_file.length >= 0){
-          this.answerObj.addShow = true;
-        }
-        this.$vux.loading.hide();
-      },
-      //删除上传图片
-      handleRemoveImg(item){
-        const thiz = this;
-        this.$vux.confirm.show({
-          content:'确认删除图片?',
-          onConfirm () {
-            thiz.$vux.loading.show();
-            setTimeout(()=>{
-              thiz.record_file.splice(item,1);
-              thiz.$vux.loading.hide();
-              thiz.$vux.toast.show({
-                text:'删除成功'
-              });
-            },600);
-            if(thiz.record_file.length == 1){
-              setTimeout(()=>{
-                thiz.answerObj.addShow = false;
-              },600);
-            }
-          }
-        });
-
-      },
-      // 收藏功能
-      handleProCollection(wdid){
-        if(!localStorage.id){this.$Tool.loginPrompt();return;}
-        let data = wdcollectService.wdCollect(wdid);
-        if(data && data.status == 'success') {
-          if(data.result == 1) {
-            /!*this.$vux.toast.show({
-              text:'收藏成功',
-              type:'success'
-            });*!/
-            //给发布人发送消息
-            messageService.sendMessage(this.newList.userid,"collect",this.id,1);
-            setTimeout(()=>{
-              this.$vux.alert.hide();
-            },1000);
-            this.collectState = true;
-            this.collectToggle.notcollect = false;
-            this.collectToggle.collected = true;
-          }else{
-            /!*this.$vux.toast.text('取消收藏', 'middle');
-            setTimeout(()=>{
-              this.$vux.alert.hide();
-            },1000);*!/
-            this.collectState = false;
-            this.collectToggle.notcollect = true;
-            this.collectToggle.collected = false;
-          }
-        }
-      },
-
-      //弹出回答框
-      handleAnswer(){
-        this.answerObj.show =true;
-      },
-
-      //取消回答框
-      handleCancel(){
-        this.answerObj.show = false;
-      },
-
-      // 发布回答
-      handlePublish(){
-        if(!localStorage.id) {
-          this.$vux.alert.show({
-            content:"你还未登录呢，请先登录再回答问题哦"
-          });
-          return;
-        }
-
-        if(!this.$Tool.checkInput(this.record.content)) {
-          this.record.content = this.$Tool.replaceNo(this.record.content);
-          this.$vux.alert.show({
-            content:'内容含有非法字符，已为您删除，请确认'
-          });
-          return;
-        }
-
-        if(!this.record.content){
-          this.$vux.toast.text('回答不能为空', 'middle')
-          return;
-        }
-        this.record.author = Number(localStorage.id || 0);
-        let pid =this.newList.id;
-
-        this.record.parentid = pid;
-        let data = articleService.publishArticle(this.record, this.record_file);
-        if(data && data.status == "success") {
-          this.$vux.alert.show({
-            content:'发布成功'
-          });
-          this.record_file = [];
-          this.record.content ="";
-          this.answerObj.addShow=false;
-          setTimeout(()=>{
-            this.$vux.alert.hide();
-          },800);
-          this.answerObj.show = false;
-        }else{
-          this.$vux.alert.show({
-            content:'发布失败'
-          });
-        }
-
-      },
-
-      //监听文本框
-      handelInput(){
-        if(this.record.content.length >= 1){
-          this.fabuColor = true;
-        }else{
-          this.fabuColor = false;
-        }
-      },
-    },
-  /!*  watch:{
+    watch:{
       id(){
+        this.ifLoad = true;
         setTimeout(()=>{
           this.init();
-        },450);
-      },
-    }*!/
-  }*/
+          this.ifLoad = false;
+        },delay)
+      }
+    }
+  }
 </script>
 
 <style lang="less" scoped>
+  .mask{
+    position: absolute;
+    background: #fafafa;
+  }
   .wendaList{
     position: relative;
     height: calc(100% - 2.38rem);
@@ -850,12 +628,28 @@
       }
       .footer{
         width: 100%;
+        height: .6rem;
+        line-height: .6rem;
+        font-size: .24rem;
         /*display: flex;*/
         color: #999;
         span{
           color: #999;
           margin-right: .08rem;
         }
+        .article-remove{
+          width: .45rem;
+          height: .35rem;
+          line-height: .32rem;
+          margin-top: .125rem;
+          text-align: center;
+          border: .02rem solid @borderColor;
+          border-radius: .08rem;
+          .iconfont{
+            font-size: .24rem;
+          }
+        }
+
         /*.item{
           flex: 1;
           text-align: center;
@@ -876,6 +670,21 @@
             vertical-align: auto;
           }
         }*/
+      }
+    }
+    .not-wendaList{
+      width: 100%;
+      height: auto;
+      padding: .3rem 0;
+      text-align: center;
+      color: #999;
+      i{
+        font-size: .8rem;
+      }
+      span{
+        display: block;
+        padding: .1rem 0;
+        letter-spacing: .03rem;
       }
     }
   }

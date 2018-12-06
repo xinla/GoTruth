@@ -7,7 +7,7 @@
           <!--多图-->
           <ul class="wenda-img-list">
             <li class="wenda-img" :class="{bigImg:bigImg}"   v-for="(item,index) in imgList" v-if="index < 3" >
-              <img :src=" fileRoot + item" alt="直击真相">
+              <img :src=" fileRoot + item">
             </li>
           </ul>
           <!--问答底部-->
@@ -78,18 +78,14 @@ export default {
   },*/
   methods:{
     init() {
-
       // 获取发布人用戶名
-      userService.getUserById(this.wenda.id, (data)=>{
-        console.log(data);
-        if(data && data.status == "success") {
-          this.publisher = data.result.user.username;
-        }
-        else{
-          return;
-        }
-      });
-
+      if (this.ifPublisher && this.wenda.id) {
+        userService.getUserById(this.wenda.id,(data)=>{
+          if (data && data.status == "success") {
+            this.publisher = data.result.user.username;
+          }
+        });
+      }
       //获取问题回答数量
       interService.getAnswerCount(this.wenda.id, (data)=>{
         if(data && data.status == "success") {
@@ -99,7 +95,6 @@ export default {
           }
         }
       });
-
       //获取问题发布的时间
       this.createtime = this.$Tool.publishTimeFormat(this.wenda.createtime);
 
@@ -125,7 +120,8 @@ export default {
 </script>
 <style lang="less" scoped>
   .wenda-wrap{
-    padding: 0 .3rem;
+    padding: 0 .3rem .5rem .3rem;
+
     background-color: #f3f4f5;
     .wenda-item {
       padding-top: .26rem;

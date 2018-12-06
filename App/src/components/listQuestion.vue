@@ -3,13 +3,13 @@
     <div>
       <prompt-blank style="margin-top:100px;" v-if="ifNet && !wendaList.length" mes="断网啦..."></prompt-blank>
       <loading-main v-if="!ifNet && !wendaList.length"></loading-main>
-      <wenda-user></wenda-user>
+<!--      <wenda-user></wenda-user>-->
       <question v-for="(item, index) in wendaList" :wenda="item" :key="index"></question>
       <div class="nomsg" v-show="wendaShow">
         <i class="iconfont icon-nomsg"></i>
         <span class="text">暂无数据...</span>
       </div>
-      <load-more v-show="wendaList.length && ifLoad" :show-loading="ifLoading" :tip="tip"></load-more>
+      <load-more v-show="wendaList.length && !ifNet" :show-loading="ifLoading" :tip="tip"></load-more>
     </div>
     </downRefresh>
 </template>
@@ -26,14 +26,13 @@
     data(){
       return {
         wendaList:[],
-        total:0,
         page:1,
-        scrollTop:0,
-        ifNet:false,
-        ifNew:false,
         lock:false,
+        scrollTop:0,
+        total:0,
+        ifNew:false,
+        ifNet:false,
         ifLoading:true,
-        ifLoad:false,
         tip:"正在加载",
         timer:null,
         wendaShow:false
@@ -178,9 +177,10 @@
         $(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
       },
       show(){
-        this.$nextTick(()=>{
+        setTimeout(()=>{
           this.init();
-        })
+        },400)
+        // 延迟时间必须大于切换动画时间
       },
       "$store.state.isNetwork"(val) {
         this.ifNet = val;

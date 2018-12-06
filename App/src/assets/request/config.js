@@ -6,7 +6,7 @@ export default {
 			port:8080,
 			basePath:'/zjzx/'
 		},
-		articlePub:'article/publishArticle',	//文章发布
+		/*articlePub:'article/publishArticle',	//文章发布
 		articleReviews:'article_comment/articleComment',	//文章评论
 		articlePage:'article/articlePage',	//文章列表
 		getArticleById:'article/getArticleById',	//文章详情
@@ -38,6 +38,6 @@ export default {
 		getArticleByUser:'article/getArticleByUser',	//获取用户的文章
 		getArticleByUser:'article/getArticleByUser',	//获取用户的视频
 		getArticleByUser:'article/getArticleByUser',	//获取用户的文章和视频
-		getUserById:'user/getUserById',	//获取用户的id获取用户信息
+		getUserById:'user/getUserById',	//获取用户的id获取用户信息*/
 	}
 };
