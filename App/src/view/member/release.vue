@@ -179,6 +179,7 @@ export default{
 			})
 		},
 		uploadFile(e){
+			// debugger;
 			let file = e.target.files[0];
 			if (!file) { return; }
 		    if (this.record.type == 1 && !this.$Tool.checkPic(file.name)) {
@@ -208,14 +209,14 @@ export default{
 				})
 		    }else if(this.record.type == 2){
 		    	fileService.uploadVideo(param,(data)=>{
-		    		let obj = data.result;
-		          	// obj.thumbnail = data.result.thumbnail;
-		          	// obj.filename = data.result.filename;
-		          	obj.type = 2;
+		    		let obj = {};
+		    		obj.url = data.result.url;
+		    		obj.filename = data.result.filename;
+		    		obj.type = 2;
+		    		obj.thumbnail = data.thumbnail;
 		          	this.addShow = false;
 		          	this.record_file.push(obj);
 		          	this.$vux.loading.hide();
-		          	// console.log(obj)
 		    	})
 		    }else{
 		    	this.$vux.loading.hide();

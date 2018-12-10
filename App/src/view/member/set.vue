@@ -109,7 +109,7 @@ export default{
 			setupShow:true,
 			loginClass:true,
 			notlogin:true,
-			logined:true
+			logined:true,
 		}
 	},
 	activated(){
