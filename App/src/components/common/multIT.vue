@@ -1,5 +1,5 @@
 <template>
-	<div class="article" v-if="ArticleFile.length || imgList.length" @click="goDetail">
+	<div class="article" @click="goDetail">
 		<!-- 浮动单图片 -->
 		<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
 		<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">					
@@ -127,7 +127,8 @@ export default {
 	.article {
 	    margin: 0px 0.3rem;
 	    border-bottom: 1px solid @borderColor;
-	    padding: .15rem 0 .1rem;			
+	    padding: .15rem 0 .1rem;	
+	    overflow: hidden;		
 		.article-title{
 			// height: 1.3rem;
 			max-height: 1.4rem;
