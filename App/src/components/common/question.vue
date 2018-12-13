@@ -99,7 +99,7 @@ export default {
       this.createtime = this.$Tool.publishTimeFormat(this.wenda.createtime);
 
       // 获取问题发布的图片
-      if(this.wenda.images == null)return;
+      if(this.wenda.images == "")return;
 
       this.imgList = this.wenda.images.split(',');
       if(this.imgList.length == 1) {

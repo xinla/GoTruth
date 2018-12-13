@@ -221,7 +221,7 @@
         }
         this.ifLoad = true;
         this.ifImgNull = true;
-        if(this.wenda.images == null) {
+        if(this.wenda.images == "") {
           this.ifImgNull = false;
           return false;
         }else{
