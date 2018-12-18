@@ -1,7 +1,7 @@
 <template>
 	<div class="release">
 		<!-- 选择类型 -->
-		<div class="release-type clearfix" v-model="record.classify">
+		<div class="release-type clearfix" v-model="record.classify" v-show="record.type==1 || record.type == 2">
 			<div class="release-select clearfix" @click="handleType">
 				<span class="release-keys fl" :value="defaultVal">{{defaultType}}</span>
 				<i class="iconfont icon-down fr"></i>
@@ -20,7 +20,7 @@
 			</transition>
 		</div>
 		<!-- 标题 -->
-		<div class="release-title">
+		<div class="release-title" ref="marginTit">
 			<input type="text" v-model="record.title" placeholder="请输入标题">
 		</div>
 		<!-- 内容 -->
@@ -110,7 +110,7 @@ export default{
 		this.record.selectedpublishname = this.selectedPublishName || "不显示";
 		this.record.selectedpublishaddress = this.selectedPublishAddress || "不显示";
 		if(this.selectedPublishName === '我的位置'){
-			this.record.selectedpublishname = this.selectedPublishAddress; 
+			this.record.selectedpublishname = this.selectedPublishAddress;
 		}
 		// console.log(this.record)
 		// let resArcClass = articleClassifyService.getArticleClassifyList();
@@ -126,6 +126,11 @@ export default{
 			// 		page_num++;
 			// })
 		})
+		if(this.record.type == 3){
+			this.$refs.marginTit.style.marginTop = "0";
+		}else{
+			this.$refs.marginTit.style.marginTop = "1.2rem";
+		}
 	},
 	methods:{
 		// show(index){

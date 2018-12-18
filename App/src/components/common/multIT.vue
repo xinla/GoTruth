@@ -94,20 +94,20 @@ export default {
 				if (data && data.status == "success") {
 					this.ArticleFile = data.result.filelist;
 					// console.log(this.ArticleFile)
-				}				
+				}
 			});
 			if (this.ifPublisher && this.article.author) {
 				userService.getUserById(this.article.author,data=>{
 					if (data && data.status == "success") {
 						this.publisher = data.result.user.username;
 					}
-				});										
+				});
 			}
 			// 获取文章评论数量
 			articleCommentService.getArticleCommentCount(this.article.id,data=>{
 				if (data.status == "success") {
 					this.commentNum = this.$Tool.numConvertText(data.result.count);
-				}					
+				}
 			});
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);
 			if (this.article.type == 3) {
@@ -117,7 +117,7 @@ export default {
 		},
 		goDetail(){
 			if (!this.$store.state.isScolling) {
-				this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType}})				
+				this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType}})
 			}
 		}
 	}
