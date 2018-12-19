@@ -66,6 +66,7 @@ export default {
   },
   mounted(){
     this.init();
+
    /* this.$nextTick(()=>{
       this.init();
     });*/
@@ -79,8 +80,9 @@ export default {
   methods:{
     init() {
       // 获取发布人用戶名
-      if (this.ifPublisher && this.wenda.id) {
-        userService.getUserById(this.wenda.id,(data)=>{
+      if (this.ifPublisher && this.wenda.userid) {
+        userService.getUserById(this.wenda.userid,(data)=>{
+            console.log(data.result.user)
           if (data && data.status == "success") {
             this.publisher = data.result.user.username;
           }
@@ -120,7 +122,7 @@ export default {
 </script>
 <style lang="less" scoped>
   .wenda-wrap{
-    padding: 0 .3rem .5rem .3rem;
+    padding: 0 .3rem .1rem .3rem;
 
     background-color: #f3f4f5;
     .wenda-item {

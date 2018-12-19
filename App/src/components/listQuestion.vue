@@ -3,7 +3,7 @@
     <div>
       <prompt-blank style="margin-top:100px;" v-if="ifNet && !wendaList.length" mes="断网啦..."></prompt-blank>
       <loading-main v-if="!ifNet && !wendaList.length"></loading-main>
-<!--      <wenda-user></wenda-user>-->
+      <wenda-user></wenda-user>
       <question v-for="(item, index) in wendaList" :wenda="item" :key="index"></question>
       <div class="nomsg" v-show="wendaShow">
         <i class="iconfont icon-nomsg"></i>
