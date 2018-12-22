@@ -278,11 +278,11 @@ const tool = {
             onConfirm () {
                 GoTruth.$Tool.goPage({name:'login',query:query});
             },
-            onCancel () {
+         /*   onCancel () {
                 if (back) {
                     GoTruth.$Tool.goBack();
                 }
-            }
+            }*/
         })
     },
 

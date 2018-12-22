@@ -76,10 +76,10 @@
 					{{likeNum}}
 					<like :likeStatus="likeStatus"></like>
 				</li>
-				<li class="item">
+				<!--<li class="item">
 					<span>不喜欢</span>
 					<i class="iconfont icon-lajixiang"></i>
-				</li>
+				</li>-->
 				<li class="item" @click="handleReport(1)">
 					<span>举报</span>
 					<i class="iconfont icon-warning-circle"></i>
@@ -470,10 +470,11 @@ export default {
 	activated(){
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
-		console.log(localStorage.token)
         if(!localStorage.id || !localStorage.token){
             this.focusState = false;
             this.collectIcon = false;
+            this.ifLike = false;
+            this.likeStatus = false;
         }
 	},
 	methods:{
@@ -675,10 +676,39 @@ export default {
 		},
 		// 点赞--取消点赞
 		handleFabulous(type, itemid, index) {
-			if(!localStorage.id) {
-				this.$Tool.loginPrompt();
-				return;
-			}
+            if(!localStorage.id){
+                this.$Tool.loginGoBack({
+                    returnpage: "/detail?",
+                    query:{id:this.id},
+                    call:()=>{
+                        if(type == 1) {
+                            let resDoPraise = praiseService.doPraise(this.id,1);
+                            if(resDoPraise && resDoPraise.status == "success") {
+                                if(resDoPraise.result.code == 1) {
+                                    this.likeStatus = true;
+                                    this.likeNum++;
+                                    // 给发布人发送消息
+                                    messageService.sendMessage(this.article.author, "like", this.id, 1);
+                                }
+                            }
+                        }else{
+                            // 评论点赞
+                            let resDoPraise = praiseService.doPraise(itemid,2);
+                            if(resDoPraise && resDoPraise.status == "success") {
+                                if(resDoPraise.result.code == 1) {
+                                    this.curLike = index;
+                                    this.ifLike = true;
+                                    this.commentList[index].likeNum ++;
+                                    this.commentList[index].ifLike = true;
+                                    // 给评论人发送消息
+                                    messageService.sendMessage(this.replyUserId, "like", this.replyCommentId, 2);
+                                }
+                            }
+                        }
+                    }
+                });
+                return;
+            }
 			// 文章点赞
 			if(type == 1) {
 				let resDoPraise = praiseService.doPraise(this.id,1);
