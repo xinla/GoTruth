@@ -88,7 +88,8 @@ export default{
 				codeTimer:null
 			},
 			mobileDesc:'',
-			codeDesc:''
+			codeDesc:'',
+            goRoute:this.$route,
 		}
 	},
 	mounted(){
@@ -132,6 +133,10 @@ export default{
 
 		},
 	},
+    activated(){
+	    console.log(this.goRoute);
+
+    },
 	methods:{
 		show(ev){
 			if(ev.keyCode == 8) {
@@ -237,7 +242,26 @@ export default{
 		handleLogin(){
 			if(this.isOpacity == true) {
 				this.$vux.loading.show({text: '登录中...',});
-				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,this.userInfoStore);
+				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,(data)=> {
+				    debugger;
+				    let url =  this.$route.query.returnpage;
+				    let query = this.$route.query.query;
+				    let call = this.$route.query.call;
+				    if(!url){
+                        this.userInfoStore(data);
+                        return;
+                    }else{
+                        this.userInfoStore2(data);
+                        if(call){
+                            call();
+                        }
+
+                        //this.$Tool.goBack(-1);
+                        this.$Tool.goPage({name: 'detail',path:url,query:query});
+                    }
+
+
+                });
 				this.mobileDesc = "";
 				this.codeDesc = "";
 			}
@@ -338,6 +362,52 @@ export default{
 		 * login callback 存储登录用户信息 
 		 * @param  {[Object]} data [服务器返回的登录结果]
 		 */
+
+        userInfoStore2(data){
+            if(data && data.status === "success") {
+                let user = data.result.user,
+                    obj = {
+                        token:data.result.token,
+                        id:user.id,
+                        logid:user.logid,
+                        userImg:this.$Tool.headerImgFilter(user.imageurl),
+                        userName:user.username,
+                        userMobile:user.mobile,
+                        inviteCode:user.invitecode
+                    };
+                Object.assign(localStorage,obj)
+                /*let token = data.result.token,
+                    user = data.result.user,
+                    id = user.id,
+                    logid = user.logid,
+                    userImg = this.$Tool.headerImgFilter(user.imageurl),
+                    userName = user.username,
+                    userMobile = user.mobile;
+                localStorage.inviteCode = user.invitecode;
+                this.$store.dispatch('userLogin',token);
+                this.$store.dispatch('userId',id);
+                this.$store.dispatch('userLogid',logid);
+                this.$store.dispatch('userImg',userImg);
+                this.$store.dispatch('userName',userName);
+                this.$store.dispatch('userMobile',userMobile);*/
+                // this.$Tool.goPage({name: 'home',replace:true});
+                location.reload();
+            }
+            else if(data && data.status == "error") {
+                this.tip.codeTip = data.result.tip;
+                this.tip.active2 = true;
+                this.tip.close2 = false;
+                this.codeDesc = "";
+                setTimeout(()=>{
+                    this.$vux.alert.show({
+                        content: '系统繁忙，请稍后重试！',
+                    });
+                },0)
+                // console.log("error")
+            }
+            this.$vux.loading.hide();
+        },
+
 		userInfoStore(data){
 			if(data && data.status === "success") {
 				let user = data.result.user,

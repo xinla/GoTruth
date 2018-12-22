@@ -469,6 +469,7 @@ export default {
 	activated(){
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
+		console.log(this.$route)
 	},
 	methods:{
 		init(){
@@ -656,7 +657,27 @@ export default {
 			type: 1文章发布人---2.评论人
 			*/
 			if(!localStorage.id){
-				this.$Tool.loginPrompt();
+				//this.$Tool.loginPrompt();
+                this.$Tool.loginGoBack({
+                   returnpage: "/detail?",
+                   query:{id:this.id,detailType:this.detailType},
+                    call:()=>{
+                       //登录成功后调用
+                        followService.doFollow(userId, (data)=>{
+                            if(type == 1) {
+                                if(data.result == 1) {
+                                    this.$vux.toast.show({
+                                        text:'关注成功'
+                                    })
+                                    this.focusState = true;
+                                    //给发布人发送消息
+                                    messageService.sendMessage(userId, "focus", this.id, 1);
+                                }
+                            }
+                        })
+                    }
+
+                });
 				return;
 			}
 			followService.doFollow(userId, (data)=>{
@@ -1005,6 +1026,7 @@ export default {
 			// 	reportuserid:'',//"被举报人id",
 			// 	type:'',//"类型"  1.文章举报
 			// },
+            if (!localStorage.id ) { this.$Tool.loginPrompt();this.popMask = false;return; }
 			if(this.reportreasion){
 				let reportInfo;
 				if (this.reportType === 1) {
