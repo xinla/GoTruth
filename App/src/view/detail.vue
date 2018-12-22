@@ -148,7 +148,7 @@
 						<span class="badge" v-show="badgeShow">{{commentNum}}</span>
 					</div>
 					<div class="item">
-						<i class="iconfont" :class="{'icon-not-collection':collectToggle.notcollect,'icon-collected':collectToggle.collected}" @click="handleCollect(id)"></i>
+						<i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"  @click="handleCollect(id)"></i>
 					</div>
 					<div class="item"  @click="handleShare">
 						<i class="iconfont icon-share"></i>
@@ -329,6 +329,7 @@ export default {
 			noReply:false,
 			hasReply:false,
 			replyShow:false,
+            collectIcon:false,
 			collectToggle:{
 				notcollect:true,
 				collected:false
@@ -472,6 +473,7 @@ export default {
 		console.log(localStorage.token)
         if(!localStorage.id || !localStorage.token){
             this.focusState = false;
+            this.collectIcon = false;
         }
 	},
 	methods:{
@@ -572,19 +574,13 @@ export default {
 				}
 			});
 
-			// console.log(resArticleCommentList)
-			// console.log(this.commentList)
 			//是否收藏
 			articleCollectService.testCollect(this.id,(data)=>{
 				if (data && data.status == "success") {
 					if (data.result == 1 ) {
-						this.collectToggle.notCollect = false;
-						this.collectToggle.collected = true;
-						// this.ifCollect = true;
+                        this.collectIcon = true;
 					} else {
-						// this.ifCollect = false;
-						this.collectToggle.notCollect = true;
-						this.collectToggle.collected = false;
+                        this.collectIcon = false;
 					}
 				}
 			});
@@ -592,46 +588,6 @@ export default {
 			this.loadComment();
 			this.ifLoad = false;
 		},
-		// 弹出评论框
-	    ended(){
-	    	// console.log(111);
-	    },
-	    // handleAudio(){
-	    // 	if(!this.tag){
-	    // 		this.icon = "icon-ziyuanldpi";
-	    // 		this.playerAudio();
-
-	    // 		this.tag=true;
-	    // 	}else{
-	    // 		this.icon = "icon-touting";
-	    // 		this.pauseAudio();
-	    // 		this.tag=false;
-	    // 	}
-	    // },
-	  //   playerAudio(){
-	  //   	let audios = document.getElementsByClassName("myAudios");
-			// let index = 0;
-	  //   	function play() {
-			// 	var caudio = audios[index];
-			// 	if(!caudio){
-			// 		index =0;
-			// 		// play();
-			// 	}
-			// 	caudio.play();
-			// 	caudio.addEventListener("ended", function() {
-			// 		console.log("播放完毕")
-			// 		index ++;
-			// 		// play()
-			// 	});
-			// }
-			// play();
-	  //   },
-	  //   pauseAudio(){
-	  //   	let audios = document.getElementsByClassName("myAudios");
-	  //   	if(audios!==null){
-	  //   		alert(audios.paused);
-	  //   	}
-	  //   },
 		handleOpenInput(){
 			this.textShow();
 			if(this.replyShow){
@@ -899,30 +855,36 @@ export default {
 
 		//收藏---取消收藏
 		handleCollect(articleid){
-			if (!localStorage.id ) { this.$Tool.loginPrompt(); return; }
-			let resArticleCollect = articleCollectService.articleCollect(articleid);
-			if (resArticleCollect && resArticleCollect.status == "success") {
-				if (resArticleCollect.result == 1 ) {
-					this.$vux.toast.show({
-					  text:'收藏成功',
-					  type:'succes'
-					});
-					//给发布人发送消息
-					messageService.sendMessage(this.article.author,"collect",this.id,1);
-					setTimeout(()=>{
-						this.$vux.alert.hide();
-					},1000);
-					this.collectToggle.notcollect = false;
-					this.collectToggle.collected = true;
-				} else {
-					this.$vux.toast.text('取消收藏', 'middle')
-					setTimeout(()=>{
-						this.$vux.alert.hide();
-					},1000);
-					this.collectToggle.notcollect = true;
-					this.collectToggle.collected = false;
-				}
-			}
+		    if(!localStorage.id){
+		        this.$Tool.loginGoBack({
+                   returnpage: "/detail?",
+                    query:{id:this.id,detailType:this.detailType},
+                    call:()=>{
+                        let data = articleCollectService.articleCollect(articleid);
+                        if(data && data.status == "success"){
+                            if(data.result == 1){
+                                messageService.sendMessage(this.article.author,"collect",this.id,1);
+                                this.collectIcon = true;
+                            }
+                        }
+                    }
+                });
+		        return;
+            }
+            let data = articleCollectService.articleCollect(articleid);
+		    if(data && data.status == "success"){
+		        if(data.result == 1){
+                    messageService.sendMessage(this.article.author,"collect",this.id,1);
+                    this.collectIcon = true;
+                    this.$vux.toast.show({
+                        text:'收藏成功',
+                        type:'succes'
+                    });
+                }else{
+                    this.collectIcon = false;
+                    this.$vux.toast.text('取消收藏', 'middle')
+                }
+            }
 		},
 		// 分享
 		handleShare(){
@@ -1570,13 +1532,12 @@ export default {
 				}
 				.iconfont{
 					font-size: .4rem;
-					color: #222;
 				}
 				.icon-collected{
-					color: #fc0;
+					color: #f9c345;
 				}
 				.icon-not-collection{
-					color: #222;
+					color: #000;
 				}
 			}
 			.msg-item {
