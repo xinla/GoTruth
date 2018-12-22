@@ -620,7 +620,7 @@ export default {
 			if(!localStorage.id){
                 this.$Tool.loginGoBack({
                    returnpage: "/detail?",
-                   query:{id:this.id,detailType:this.detailType},
+                   query:{id:this.id},
                     call:()=>{
                        //登录成功后调用
                         let data = followService.doFollow(userId);
@@ -753,7 +753,7 @@ export default {
 			}
 		},
 		// 发布评论
-		handleSend(type){
+		handleSend(){
 			this.badgeShow = true;
 			if(!this.popList.desc) {
 				this.popList.show = false;
@@ -761,7 +761,13 @@ export default {
 				return;
 			}
 			if(!localStorage.id){
-				this.$Tool.loginPrompt();
+                debugger;
+                this.$Tool.loginGoBack({
+                    returnpage: "/detail?",
+                    query:{id:this.id},
+                    call:()=>{
+                    }
+                });
 				return;
 			}
 			let userId = localStorage.id;
@@ -1016,7 +1022,15 @@ export default {
 			// 	reportuserid:'',//"被举报人id",
 			// 	type:'',//"类型"  1.文章举报
 			// },
-            if (!localStorage.id ) { this.$Tool.loginPrompt();this.popMask = false;return; }
+            if (!localStorage.id ) {
+                this.$Tool.loginGoBack({
+                    returnpage: "/detail?",
+                    query:{id:this.id}
+                });
+                this.popMask = false;
+                return;
+
+            }
 			if(this.reportreasion){
 				let reportInfo;
 				if (this.reportType === 1) {

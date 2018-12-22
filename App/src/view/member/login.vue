@@ -12,9 +12,9 @@
 				<div class="login-item" :class="{loginActive1:tip.active1}">
 					<i class="iconfont icon-wode"></i>
 					<input
-						type="tel" 
-						class="mobileInput" 
-						@input="handeleMobile" 
+						type="tel"
+						class="mobileInput"
+						@input="handeleMobile"
 						@keydown="show($event)"
 						@focus="handleFocus1"
 						ref="mobileFocus"
@@ -27,9 +27,9 @@
 				<span class="login-tip" >{{tip.mobileTip}}</span>
 				<div class="login-item" :class="{loginActive1:tip.active2}">
 					<i class="iconfont icon-yanzhengma"></i>
-					<input type="text" 
-						class="codeInput" 
-						@input="handeleCode" 
+					<input type="text"
+						class="codeInput"
+						@input="handeleCode"
 						v-model="codeDesc"
 						maxlength="4"
 						ref="codeFocus"
@@ -99,7 +99,7 @@ export default{
 			})()
 		}
 		try{
-			authUtil.init();			
+			authUtil.init();
 		}catch(err){
 
 		}
@@ -122,7 +122,7 @@ export default{
 		// 判断用户名和验证码格式是否正确，再决定登录按钮是否亮起
 		isOpacity(){
 			if(!this.mobileDesc) return;
-			
+
 			if(this.mobileDesc.length != 11 || this.codeDesc.length < 4) {
 				this.disabled = true;
 				return false;
@@ -284,11 +284,11 @@ export default{
 						}*/
 						userService.loginByWx(params,_this.userInfoStore)
 					}
-					
+
 				});
 				break;
 				case 2://QQ登录
-				authUtil.loginByQQ(function(resMap){					
+				authUtil.loginByQQ(function(resMap){
 					if(resMap.status === "success"){
 						let params = resMap.result.qq_user;
 						userService.loginByQQ(params,_this.userInfoStore)
@@ -313,7 +313,7 @@ export default{
 						let params = resMap.result.xl_user;
 						userService.loginByXl(params,_this.userInfoStore)
 					}
-					
+
 				})
 				break;
 				default:
@@ -321,7 +321,7 @@ export default{
 			}
 		},
 		/**
-		 * login callback 存储登录用户信息 
+		 * login callback 存储登录用户信息
 		 * @param  {[Object]} data [服务器返回的用户信息]
 		 * {
 				"result":{
@@ -357,7 +357,7 @@ export default{
 			}
 		 */
 		/**
-		 * login callback 存储登录用户信息 
+		 * login callback 存储登录用户信息
 		 * @param  {[Object]} data [服务器返回的登录结果]
 		 */
 
@@ -532,7 +532,7 @@ export default{
 					}
 					.login-code-close{
 						right: .2rem;
-						
+
 					}
 					.login-code {
 						width: 1.8rem;
@@ -577,7 +577,7 @@ export default{
 				.isOpacity{
 					opacity:1;
 				}
-				
+
 			}
 		}
 		.login-footer{
