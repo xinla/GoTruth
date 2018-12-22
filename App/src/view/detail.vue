@@ -469,7 +469,10 @@ export default {
 	activated(){
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
-		console.log(this.$route)
+		console.log(localStorage.token)
+        if(!localStorage.id || !localStorage.token){
+            this.focusState = false;
+        }
 	},
 	methods:{
 		init(){
@@ -514,6 +517,7 @@ export default {
 			if (resUserInfo && resUserInfo.status == "success") {
 				this.artUser = resUserInfo.result.user;
 			}
+			// console.log(resUserInfo)
 			// console.log(resUserInfo)
 			// 是否关注发布人
 			if (localStorage.getItem('token')) {
@@ -657,31 +661,25 @@ export default {
 			type: 1文章发布人---2.评论人
 			*/
 			if(!localStorage.id){
-				//this.$Tool.loginPrompt();
                 this.$Tool.loginGoBack({
                    returnpage: "/detail?",
                    query:{id:this.id,detailType:this.detailType},
                     call:()=>{
                        //登录成功后调用
-                        followService.doFollow(userId, (data)=>{
-                            if(type == 1) {
-                                if(data.result == 1) {
-                                    this.$vux.toast.show({
-                                        text:'关注成功'
-                                    })
+                        let data = followService.doFollow(userId);
+                        if(data && data.status == "success"){
+                            if(type == 1){
+                                if(data.result == 1){
                                     this.focusState = true;
-                                    //给发布人发送消息
                                     messageService.sendMessage(userId, "focus", this.id, 1);
                                 }
                             }
-                        })
+                        }
                     }
-
                 });
 				return;
 			}
 			followService.doFollow(userId, (data)=>{
-
 				if(data && data.status == "success") {
 					if(type == 1) {
 						if(data.result == 1) {

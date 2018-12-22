@@ -243,7 +243,6 @@ export default{
 			if(this.isOpacity == true) {
 				this.$vux.loading.show({text: '登录中...',});
 				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,(data)=> {
-				    debugger;
 				    let url =  this.$route.query.returnpage;
 				    let query = this.$route.query.query;
 				    let call = this.$route.query.call;
@@ -251,12 +250,11 @@ export default{
                         this.userInfoStore(data);
                         return;
                     }else{
-                        this.userInfoStore2(data);
+                        this.userInfoPage(data);
                         if(call){
                             call();
                         }
 
-                        //this.$Tool.goBack(-1);
                         this.$Tool.goPage({name: 'detail',path:url,query:query});
                     }
 
@@ -363,7 +361,7 @@ export default{
 		 * @param  {[Object]} data [服务器返回的登录结果]
 		 */
 
-        userInfoStore2(data){
+        userInfoPage(data){
             if(data && data.status === "success") {
                 let user = data.result.user,
                     obj = {
@@ -375,22 +373,7 @@ export default{
                         userMobile:user.mobile,
                         inviteCode:user.invitecode
                     };
-                Object.assign(localStorage,obj)
-                /*let token = data.result.token,
-                    user = data.result.user,
-                    id = user.id,
-                    logid = user.logid,
-                    userImg = this.$Tool.headerImgFilter(user.imageurl),
-                    userName = user.username,
-                    userMobile = user.mobile;
-                localStorage.inviteCode = user.invitecode;
-                this.$store.dispatch('userLogin',token);
-                this.$store.dispatch('userId',id);
-                this.$store.dispatch('userLogid',logid);
-                this.$store.dispatch('userImg',userImg);
-                this.$store.dispatch('userName',userName);
-                this.$store.dispatch('userMobile',userMobile);*/
-                // this.$Tool.goPage({name: 'home',replace:true});
+                Object.assign(localStorage,obj);
                 location.reload();
             }
             else if(data && data.status == "error") {
@@ -403,10 +386,13 @@ export default{
                         content: '系统繁忙，请稍后重试！',
                     });
                 },0)
-                // console.log("error")
             }
             this.$vux.loading.hide();
         },
+        /**
+         * login callback 存储登录用户信息
+         * @param  {[Object]} data [服务器返回的登录结果]
+         */
 
 		userInfoStore(data){
 			if(data && data.status === "success") {
@@ -454,7 +440,7 @@ export default{
 		}
 	},
 	beforeRouteEnter(to, from, next){
-		!localStorage.id ? next() : GoTruth.$Tool.goPage({name:"member",replace:"replace"})
+		!localStorage.id ? next() : GoTruth.$Tool.goPage({name:"home",replace:"replace"})
 		// if (!localStorage.id) {
 		// 	next();
 		// }else{
