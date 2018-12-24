@@ -32,7 +32,7 @@
             <div class="release-upload-img clearfix">
                 <div class="release-img fl" v-for="(item,index) in record_file">
                     <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
-                    <img :src="fileRoot + item.url">
+                    <img :src="fileRoot + item.url" v-preview="fileRoot + item.url" class="previewer-demo-img">
                 </div>
                 <div class="release-upload fl">
                     <label for="upImg"></label>

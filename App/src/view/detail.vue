@@ -38,7 +38,7 @@
 					<div class="phone-content">
 						<div v-if="1 === article.type" class="phone-img clearfix">
 							<div class="tel-img fl" v-for="(item,index) in ArticleFile">
-								<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url">
+								<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url" class="previewer-demo-img">
 							</div>
 						</div>
 						<div v-else-if="2 === article.type">
@@ -669,7 +669,8 @@ export default {
 					}
 				}else {
 					this.$vux.alert.show({
-						content:'关注失败，请重新关注'
+                        returnpage: "/detail?",
+                        query:{id:this.id},						content:'关注失败，请重新关注'
 					})
 				}
 			});
@@ -678,8 +679,7 @@ export default {
 		handleFabulous(type, itemid, index) {
             if(!localStorage.id){
                 this.$Tool.loginGoBack({
-                    returnpage: "/detail?",
-                    query:{id:this.id},
+
                     call:()=>{
                         if(type == 1) {
                             let resDoPraise = praiseService.doPraise(this.id,1);
