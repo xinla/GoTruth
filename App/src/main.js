@@ -8,7 +8,7 @@ window.$ = $;
 // import 'es6-promise/auto'
 
 import router from './router'
-import store from './store/index'
+import store from './store'
 
 
 import animate from 'animate.css'
@@ -17,7 +17,7 @@ import './assets/styles/reset.css'
 import './assets/styles/iconfont.css'
 
 //引用功能函数
-import Tool from './assets/common/methods'
+import Tool from './assets/js/methods'
 Vue.use(Tool);
 
 // 预览大图
@@ -52,11 +52,6 @@ import VideoPlayer from 'vue-video-player'
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
-
-//Swiper组件
-// import VueAwesomeSwiper from 'vue-awesome-swiper'
-// import 'swiper/dist/css/swiper.css';
-// Vue.use(VueAwesomeSwiper);
 
 //vux
 import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,Popup,InlineLoading,

@@ -2,7 +2,7 @@
 	<div class="login-wrap">
 		<div class="login-header">
 			<div class="login-img">
-				<img src="@/assets/images/login-header.png" alt="">
+				<img src="@/assets/images/logo-icon.png">
 			</div>
 			<span>此刻开始直击真相</span>
 		</div>
@@ -24,7 +24,7 @@
 					<span class="login-close" v-show="tip.close1" @click="handleClose(1)">x</span>
 					<span class="login-code" @click="handlegetCodeDesc" :class="{codeColor:tip.codeColor}">{{tip.getCodeDesc}}</span>
 				</div>
-				<span class="login-tip" >{{tip.mobileTip}}</span>
+				<span class="login-tip">{{tip.mobileTip}}</span>
 				<div class="login-item" :class="{loginActive1:tip.active2}">
 					<i class="iconfont icon-yanzhengma"></i>
 					<input type="text"
@@ -470,7 +470,7 @@ export default{
 					width: 100%;
 					height: 100%;
 					border-radius: 50%;
-					border: .04rem solid @borderColor;
+					// border: .04rem solid @borderColor;
 				}
 			}
 			span{
@@ -550,7 +550,7 @@ export default{
 					}
 				}
 				.loginActive1,.loginActive2{
-					border-color: @mainColor;
+					border-color: @errColor;
 				}
 				.login-tip{
 					display: block;
@@ -560,7 +560,7 @@ export default{
 					height: .4rem;
 					line-height: .4rem;
 					opacity: 1;
-					color: @mainColor;
+					color: @errColor;
 				}
 				.login-btn{
 					width: 100%;

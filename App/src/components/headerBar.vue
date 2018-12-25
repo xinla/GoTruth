@@ -76,7 +76,7 @@ export default {
 		width: 100%;
 		padding-top:@statusBarHeight;
 		height: @headerHeight;
-		background:linear-gradient(#f71d56,@mainColor);
+		background:linear-gradient(@thinMainColor,@deepMainColor);
 		align-items: center;
 		box-sizing: content-box;
 		.header-logo {

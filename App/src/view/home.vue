@@ -4,7 +4,7 @@
 		<home-header></home-header>
 		<div class="main-wrap">
 			<div class="bfc-o main-box">
-				<tab :line-width=2 active-color='#fc378c' v-model="classifyIndex">
+				<tab :line-width=2 v-model="classifyIndex">
 					<tab-item :selected="currentClassiftyName == '推荐'" @click="currentClassiftyName = '推荐'">推荐
 					</tab-item>
 					<tab-item :selected="currentClassiftyName == item.classifyname" v-for="(item,index) in classifyList" @click="currentClassiftyName = item.classifyname" :key="index">{{item.classifyname}}
@@ -154,23 +154,26 @@ export default {
 	}
 	
 </style>
-<style>
+<style lang="less">
 	/*vux样式修改*/
 	.vux-tab-wrap{
       	padding-top: .76rem !important;
 	}
 	.vux-tab .vux-tab-item{
-    color: #000 !important;
+	    color: #000 !important;
 		line-height: .76rem !important;
-    font-size: .28rem !important;
+	    font-size: .28rem !important;
 	}
 	.vux-tab-container{
 		height: .76rem !important;
 	}
-  .vux-tab .vux-tab-item.vux-tab-selected{
-    color: rgb(252, 55, 140) !important;
-  }
+  	.vux-tab .vux-tab-item.vux-tab-selected{
+   		color: @mainColor !important;
+  	}
 	.vux-tab{
 		height: .76rem !important;
+	}
+	.vux-tab-ink-bar{
+		background-color: @mainColor !important;
 	}
 </style>

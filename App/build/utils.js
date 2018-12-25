@@ -66,7 +66,7 @@ exports.cssLoaders = function (options) {
       {
         loader: 'sass-resources-loader',
         options: {
-          resources: path.resolve(__dirname, '../src/Less/base.less')//这里按照你的文件路径填写
+          resources: path.resolve(__dirname, '../src/assets/styles/base.less')//这里按照你的文件路径填写
         }
       }
     ),
