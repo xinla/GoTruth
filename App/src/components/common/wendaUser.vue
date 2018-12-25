@@ -68,7 +68,7 @@
 <style lang="less" scoped>
     .wenda-login{
         background-color: #fff;
-        margin-bottom: .3rem;
+        margin-bottom: .1rem;
         border-bottom: .02rem solid @borderColor;
         .header-nologin{
             padding: .47rem 0;

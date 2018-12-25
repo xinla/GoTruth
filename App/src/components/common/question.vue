@@ -126,7 +126,7 @@ export default {
 
     background-color: #f3f4f5;
     .wenda-item {
-      padding-top: .26rem;
+      /*padding-top: .26rem;*/
       border-bottom: .02rem solid @borderColor;
       background-color: #fff;
       .wenda-title {

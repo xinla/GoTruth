@@ -244,6 +244,7 @@ export default{
 				this.$vux.loading.show({text: '登录中...',});
 				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,(data)=> {
 				    let url =  this.$route.query.returnpage;
+                    let name = this.$route.query.name;
 				    let query = this.$route.query.query;
 				    let call = this.$route.query.call;
 				    if(!url){
@@ -254,8 +255,7 @@ export default{
                         if(call){
                             call();
                         }
-
-                        this.$Tool.goPage({name: 'detail',path:url,query:query});
+                        this.$Tool.goPage({name:name,path:url,query:query});
                     }
 
 

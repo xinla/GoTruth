@@ -621,9 +621,11 @@ export default {
                 this.$Tool.loginGoBack({
                    returnpage: "/detail?",
                    query:{id:this.id},
+                   name:'detail',
                     call:()=>{
                        //登录成功后调用
                         let data = followService.doFollow(userId);
+                        alert(data)
                         if(data && data.status == "success"){
                             if(type == 1){
                                 if(data.result == 1){
@@ -669,8 +671,7 @@ export default {
 					}
 				}else {
 					this.$vux.alert.show({
-                        returnpage: "/detail?",
-                        query:{id:this.id},						content:'关注失败，请重新关注'
+                        content:'关注失败，请重新关注'
 					})
 				}
 			});
@@ -761,10 +762,10 @@ export default {
 				return;
 			}
 			if(!localStorage.id){
-                debugger;
                 this.$Tool.loginGoBack({
                     returnpage: "/detail?",
                     query:{id:this.id},
+                    name:'detail',
                     call:()=>{
                     }
                 });
@@ -848,7 +849,6 @@ export default {
 		handleDelete(itemid, index, type){
 			const thiz = this;
 			let deleteData = articleCommentService.deleteArticleConmon(itemid);
-			// debugger;
 			this.$vux.confirm.show({
 				content:'确认删除评论？',
 				onConfirm(){
@@ -895,6 +895,7 @@ export default {
 		        this.$Tool.loginGoBack({
                    returnpage: "/detail?",
                     query:{id:this.id,detailType:this.detailType},
+                    name:'detail',
                     call:()=>{
                         let data = articleCollectService.articleCollect(articleid);
                         if(data && data.status == "success"){
@@ -957,7 +958,6 @@ export default {
 			this.commentIndex = commentIndex;//指定评论数组中某条评论的索引值
 			//展开评论回复是顶部当前索引使用
 			// 是否关注发布人
-			// debugger;
 			this.replyobj = item;
 			if(this.replyobj.likeNum <= 0) {
 				this.noZan = false;
@@ -1025,7 +1025,8 @@ export default {
             if (!localStorage.id ) {
                 this.$Tool.loginGoBack({
                     returnpage: "/detail?",
-                    query:{id:this.id}
+                    query:{id:this.id},
+                    name:'detail',
                 });
                 this.popMask = false;
                 return;
@@ -1224,7 +1225,6 @@ export default {
 	},
 	watch:{
 		id(){
-			// debugger
 			this.ifLoad = true;
 			setTimeout(()=>{
 				this.init();

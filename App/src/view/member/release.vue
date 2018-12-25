@@ -21,12 +21,12 @@
         </div>
         <!-- 标题 -->
         <div class="release-title" ref="marginTit">
-            <input type="text" v-model="record.title" placeholder="请输入标题">
+            <input type="text" v-model="record.title" :placeholder="placeholderTit" maxlength="50">
         </div>
         <!-- 内容 -->
         <div class="release-content" v-if="record.type==1 || record.type == 3">
             <div class="content">
-                <textarea placeholder="请输入内容" v-model="record.content"></textarea>
+                <textarea :placeholder="placeholderDesc" v-model="record.content"></textarea>
             </div>
             <!-- 上传图片 -->
             <div class="release-upload-img clearfix">
@@ -75,14 +75,11 @@
     import fileService from '@/service/fileService'
     import articleService from '@/service/articleService'
     import interlocutionService from '@/service/interlocutionService'
-    // import articleClassifyService from '@/service/article_classifyService'
-    // import { Previewer } from 'vux'
     export default{
-        // components:{
-        // 	Previewer
-        // },
         data(){
             return {
+                placeholderTit:"",
+                placeholderDesc:"",
                 addShow:true,
                 optionShow:false,
                 defaultVal:null,
@@ -98,7 +95,7 @@
                     author:0,
                     type:0,   //1：图文，2:视频
                     publishtime:'',  // 后台设置
-                    classify:1,
+                    classify:0,
                     selectedpublishname:'',
                     selectedpublishaddress:'',
                 },
@@ -106,6 +103,7 @@
             }
         },
         activated(){
+            console.log(this.$route)
             this.record.type = this.$route.query.sort;
             this.record.selectedpublishname = this.selectedPublishName || "不显示";
             this.record.selectedpublishaddress = this.selectedPublishAddress || "不显示";
@@ -113,19 +111,23 @@
                 this.record.selectedpublishname = this.selectedPublishAddress;
             }
             this.classifyList = JSON.parse(localStorage.classify);
-
-            let page_num = 0;
             mapUtil.getPosition((data)=>{
-
-                let longitude = data.longitude;
-                let latitude = data.latitude;
+                // let longitude = data.longitude;let latitude = data.latitude;
                 this.position = data;
-            })
-            if(this.record.type == 3){
-                this.$refs.marginTit.style.marginTop = "0";
-            }else{
+            });
+            if(this.record.type == 1){
+                this.placeholderTit = "请输入文章标题";
+                this.placeholderDesc = "请输入文章内容"
                 this.$refs.marginTit.style.marginTop = "1.2rem";
+            }else if(this.record.type == 2){
+                this.placeholderTit = "请输入视频标题";
+                this.$refs.marginTit.style.marginTop = "1.2rem";
+            }else{
+                this.placeholderTit = "请输入问题标题?";
+                this.placeholderDesc = "请输入问题描述";
+                this.$refs.marginTit.style.marginTop = "0";
             }
+
         },
         methods:{
             handleType(){
@@ -220,20 +222,45 @@
             publish(){
                 if(!localStorage.id){
                     this.$vux.alert.show({
-                        content:'你还未登录呢，亲先登录再发布哦',
+                        content:"您还未登录，请先登录再发布文章"
                     });
                     return;
                 }
-                if (!this.record.title) {
-                    this.$vux.alert.show({
-                        content:'标题不能为空',
-                    });
-                    return;
+                if(this.record.type == 1){
+                    if(this.record.classify ==0){
+                        this.$vux.alert.show({
+                            content:"请选择文章类型"
+                        })
+                        return;
+                    }
+                    if(!this.record.title){
+                        this.$vux.alert.show({
+                            content:"请输入文章标题"
+                        });
+                        return;
+                    }
+                    if(!this.record.content){
+                        this.$vux.alert.show({
+                            content:"请输入文章内容"
+                        });
+                        return;
+                    }
+                }else if(this.record.type == 2){
+                    if(!this.record.title){
+                        this.$vux.alert.show({
+                            content:"请输入视频标题"
+                        })
+                    }
+                }else{
+                    if(!this.record.title){
+                        this.$vux.alert.show({
+                            content:"请输入问题标题"
+                        });
+                        return;
+                    }
                 }
-
-                if (!this.$Tool.checkInput(this.record.title) || !this.$Tool.checkInput(this.record.content)) {
+                if(!this.$Tool.checkInput(this.record.title)){
                     this.record.title = this.$Tool.replaceNo(this.record.title);
-                    this.record.content = this.$Tool.replaceNo(this.record.content);
                     this.$vux.alert.show({
                         content:'内容含有非法字符，已为您删除，请确认',
                     });
@@ -241,23 +268,32 @@
                 }
                 this.record.author = Number(localStorage.id || 0);
                 Object.assign(this.record,this.position);
-                let res;
-                if (this.record.type != 3) {
-                    res = articleService.publishArticle(this.record,this.record_file);
-                } else {
+
+                let data;
+                if(this.record.type == 1 || this.record.type == 2){
+                    data = articleService.publishArticle(this.record,this.record_file);
+                    if(data && data.status == "success"){
+                        setTimeout(()=>{
+                            this.$Tool.goPage({name:"home"});
+                        },1200);
+                    }
+                }else{
+                    this.record.title = this.$Tool.doTitle(this.record.title);
                     let images = [];
-                    for (let i = this.record_file.length - 1; i >= 0; i--) {
+                    for(let i = this.record_file.length - 1 ; i >= 0; i--){
                         images.push(this.record_file[i].url);
                     }
-                    res = interlocutionService.publishQuestion(this.record,images+"");
+                    data = interlocutionService.publishQuestion(this.record,images+"");
+                    if(data && data.status == "success"){
+                        setTimeout(()=>{
+                            this.$Tool.goPage({name:"questionAnswer"});
+                        },1200);
+                    }
                 }
-                if(res.status=="success") {
+                if(data && data.status == "success"){
                     this.$vux.alert.show({
                         content:'发布成功',
                     });
-                    setTimeout(()=>{
-                        this.$Tool.goPage({name:"home"});
-                    },1200);
                     this.record_file=[];
                     this.record.title = "";
                     this.record.content = "";
@@ -268,10 +304,11 @@
                     },1000)
                 }else{
                     this.$vux.alert.show({
-                        content:'发布失败',
+                        content:'发布失败,请重新发布',
                     })
                 }
             },
+
         },
         computed:{
             selectedPublishName(){

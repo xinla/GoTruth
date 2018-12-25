@@ -285,6 +285,19 @@ const tool = {
             }*/
         })
     },
+    doTitle(str){
+        let reg = /？/g;
+        str = str.replace(reg,"?");
+        reg = /\?+/g;
+        str = str.replace(reg,"?");
+
+        let last = str.substring(str.length-1);
+        if(last == "?" || last == "？"){
+            return str;
+        }
+
+        return str+"?";
+    },
 
 
     /**

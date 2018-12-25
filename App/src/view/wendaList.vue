@@ -15,7 +15,7 @@
 
                 <ul class="wendaList-img">
                     <li class="item" :class="{bigImg:bigImg}"  v-for="(item,index) in imgArr" v-show="ifImgNull">
-                        <img :src="fileRoot + item">
+                        <img :src="fileRoot + item" v-preview="fileRoot + item" class="previewer-demo-img">
                     </li>
                 </ul>
                 <div class="wendaList-tip">
@@ -65,10 +65,10 @@
                 <i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"></i>
                 <span>{{collectState?'已收藏':'收藏'}}</span>
             </div>
-            <div class="item" @click="$Tool.goPage({ name:'release',query:{title:'发表问题',sort:3}})">
+           <!-- <div class="item" @click="$Tool.goPage({ name:'release',query:{title:'发表问题',sort:3}})">
                 <i class="iconfont icon-fabu"></i>
                 <span>提问</span>
-            </div>
+            </div>-->
             <div class="item" @click="handleAnswer">
                 <i class="iconfont icon-comment"></i>
                 <span>回答</span>
@@ -93,7 +93,7 @@
                         <div class="popup-img clearfix">
                             <div class="img fl" v-for="(item, index) in record_file">
                                 <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
-                                <img :src="fileRoot + item.url">
+                                <img :src="fileRoot + item.url" v-preview="fileRoot + item.url" class="previewer-demo-img">
                             </div>
                             <div class="popup-addimg fl" v-show="answerObj.addShow">
                                 <label for="addImg"></label>
@@ -205,23 +205,26 @@
 
             }
         },
-        mounted(){
-        },
         activated() {
             this.$nextTick(()=>{
                 this.id = this.$route.query.id;
                 this.wenda = JSON.parse(this.$route.query.item);
                 this.ifLoad = true;
+
                 if(this.timer){
                     clearTimeout(this.timer);
                 }
                 this.timer = setTimeout(()=>{
                     this.init();
+                    if(!localStorage.id || !localStorage.token){
+                        this.collectIcon = false;
+                        this.collectState = false;
+                    }
                     this.ifLoad = false;
                 },120);
-            })
 
 
+            });
         },
         methods:{
             //页面初始化渲染
@@ -233,7 +236,6 @@
                     this.$Tool.goBack();
                     return;
                 }
-                // debugger;
                 this.ifLoad = true;
                 this.ifImgNull = true;
                 if(this.wenda.images == "") {
@@ -259,30 +261,30 @@
                         this.page++;
                     }
                     // 循环回答列表
-                         for(let i =0; i < this.answer.length; i++){
-                             // 获取发布回答时间
-                             this.answer[i].publishtime = this.$Tool.publishTimeFormat(this.answer[i].publishtime);
-                             // 获取发布回答用户的信息
-                             let wendaUserData = userService.getUserById(this.answer[i].author);
-                             if(wendaUserData && wendaUserData.status == "success") {
-                                 this.wendaUser = wendaUserData.result.user;
-                             }
-                             // 获取发布回答的图片
-                             let answerSrcData = articleFileService.getFileByArticle(this.answer[i].id);
-                             if(answerSrcData && answerSrcData.status == "success") {
-                                 this.$set(this.answer[i],'answerFile',[]);
-                                 this.answer[i].answerFile = answerSrcData.result.filelist;
-                             }
-                             // 获取回答评论数量
-                             articleCommentService.getArticleCommentCount(this.answer[i].id,(data)=>{
-                                 if(data.status == "success") {
-                                     this.$set(this.answer[i],'answerCommentNum',0);
+                    for(let i =0; i < this.answer.length; i++){
+                        // 获取发布回答时间
+                        this.answer[i].publishtime = this.$Tool.publishTimeFormat(this.answer[i].publishtime);
+                        // 获取发布回答用户的信息
+                        let wendaUserData = userService.getUserById(this.answer[i].author);
+                        if(wendaUserData && wendaUserData.status == "success") {
+                            this.wendaUser = wendaUserData.result.user;
+                        }
+                        // 获取发布回答的图片
+                        let answerSrcData = articleFileService.getFileByArticle(this.answer[i].id);
+                        if(answerSrcData && answerSrcData.status == "success") {
+                            this.$set(this.answer[i],'answerFile',[]);
+                            this.answer[i].answerFile = answerSrcData.result.filelist;
+                        }
+                        // 获取回答评论数量
+                        articleCommentService.getArticleCommentCount(this.answer[i].id,(data)=>{
+                            if(data.status == "success") {
+                                this.$set(this.answer[i],'answerCommentNum',0);
 
-                                     this.answerCommentNum = this.$Tool.numConvertText(data.result.count);
-                                     this.answer[i].answerCommentNum = this.$Tool.numConvertText(data.result.count);
-                                 }
-                             })
-                         }
+                                this.answerCommentNum = this.$Tool.numConvertText(data.result.count);
+                                this.answer[i].answerCommentNum = this.$Tool.numConvertText(data.result.count);
+                            }
+                        })
+                    }
                     if(answerData.recordPage.list == ""){
                         this.hasAnswer = false;
                         this.notAnswer = true;
@@ -378,9 +380,19 @@
             // 收藏问题
             handleCollect(){
                 if(!localStorage.id) {
-                    this.$Tool.loginPrompt();
+                    this.$Tool.loginGoBack({
+                        returnpage: "/wendaList",
+                        query:{id:this.id,item:JSON.stringify(this.wenda)},
+                        name:'wendaList',
+                        call:()=>{
+                            this.collect();
+                        }
+                    });
                     return;
                 }
+                this.collect();
+            },
+            collect(){
                 let data = wdcollectService.wdCollect(this.wenda.id);
                 if(data && data.status == "success") {
                     if(data.result == 1) {
@@ -403,7 +415,6 @@
                     }
                 }
             },
-
             //弹出回答框
             handleAnswer(){
                 this.answerObj.show =true;
@@ -417,12 +428,16 @@
             // 发布回答
             handlePublish(){
                 if(!localStorage.id) {
-                    this.$vux.alert.show({
-                        content:"你还未登录呢，请先登录再回答问题哦"
+                    this.$Tool.loginGoBack({
+                        returnpage: "/wendaList",
+                        query:{id:this.id,item:JSON.stringify(this.wenda)},
+                        name:'wendaList',
+                        call:()=>{
+                            this.publish();
+                        }
                     });
                     return;
                 }
-
                 if(!this.$Tool.checkInput(this.record.content)) {
                     this.record.content = this.$Tool.replaceNo(this.record.content);
                     this.$vux.alert.show({
@@ -435,9 +450,13 @@
                     this.$vux.toast.text('回答不能为空', 'middle')
                     return;
                 }
+                this.publish();
+
+            },
+            // 发布回答函数
+            publish(){
                 this.record.author = Number(localStorage.id || 0);
                 let pid =this.wenda.id;
-
                 this.record.parentid = pid;
                 let data = articleService.publishArticle(this.record, this.record_file);
                 if(data && data.status == "success") {
@@ -486,16 +505,16 @@
 
         },
         watch:{
-           /* id(){
-                this.ifLoad = true;
-                if(this.timer){
-                    clearTimeout(this.timer);
-                }
-                this.timer = setTimeout(()=>{
-                    this.init();
-                    this.ifLoad = false;
-                },120);
-            }*/
+            /* id(){
+                 this.ifLoad = true;
+                 if(this.timer){
+                     clearTimeout(this.timer);
+                 }
+                 this.timer = setTimeout(()=>{
+                     this.init();
+                     this.ifLoad = false;
+                 },120);
+             }*/
         }
     }
 </script>
