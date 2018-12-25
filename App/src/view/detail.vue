@@ -625,7 +625,6 @@ export default {
                     call:()=>{
                        //登录成功后调用
                         let data = followService.doFollow(userId);
-                        alert(data)
                         if(data && data.status == "success"){
                             if(type == 1){
                                 if(data.result == 1){

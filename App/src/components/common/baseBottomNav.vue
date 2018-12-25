@@ -25,7 +25,7 @@
 			<div class="footer-item">
 				<router-link :to="{path:'/member'}" exact>
 					<i class="iconfont icon-wode footer-icon">
-						<badge :text="newMes" class="bfc-p" v-if="newMes"></badge>
+						<badge :text="newMes" class="bfc-p" v-if="newMes" v-show="badgeShow"></badge>
 					</i>
 					<span class="footer-text">我的</span>
 				</router-link>
@@ -35,11 +35,24 @@
 </template>
 <script>
 export default{
+    data(){
+        return{
+            badgeShow:false
+        }
+    },
 	computed:{
 		newMes(){
 			return this.$store.state.newMes || this.$store.state.newVersion;
 		}
-	}
+	},
+    activated(){
+	    if(!localStorage.id){
+	        this.badgeShow = false;
+        }else{
+	        this.badgeShow = true;
+        }
+    }
+
 }
 </script>
 <style lang="less" scoped>
