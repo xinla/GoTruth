@@ -17,7 +17,7 @@
               <span class="wenda-num">{{wendaCount}}回答</span>
               <span class="wenda-time">{{createtime}}</span>
             </div>
-            <div class="right fr" @click="$emit('delete',[wenda.id,whi,$event])" v-if="ifDel">
+            <div class="right fr" @click.stop="$emit('delete',[wenda.id,whi])" v-if="ifDel">
               <i class="iconfont icon-remove"></i>
             </div>
           </div>
@@ -50,11 +50,6 @@ export default {
     whi:{
       type: Number
     },
-    //判断是否为作者详情视图(真:为作者视图；假（空）:为浏览视图)
-    detailType:{
-      type:String,
-      default:"",
-    },
     ifPublisher:{
       type:Boolean,
       default:true
@@ -66,23 +61,12 @@ export default {
   },
   mounted(){
     this.init();
-
-   /* this.$nextTick(()=>{
-      this.init();
-    });*/
-
   },
- /* watch:{
-    wenda(){
-      this.init();
-    }
-  },*/
   methods:{
     init() {
       // 获取发布人用戶名
       if (this.ifPublisher && this.wenda.userid) {
         userService.getUserById(this.wenda.userid,(data)=>{
-            console.log(data.result.user)
           if (data && data.status == "success") {
             this.publisher = data.result.user.username;
           }

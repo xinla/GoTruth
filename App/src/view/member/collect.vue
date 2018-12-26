@@ -8,7 +8,13 @@
 			</div>
 		</div>
 		<div class="list-wrap">
-			<articleThree v-for="(item,index) in arcList" :article="item" :whi="index" :ifPublisher="true"  @delete="deleteArticle" :key="index"></articleThree>			
+			<articleThree
+                    v-for="(item,index) in arcList"
+                    :article="item"
+                    :whi="index"
+                    :ifPublisher="true"
+                    @delete="deleteArticle"
+                    :key="index"></articleThree>
 		</div>
 		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
 		<load-more :show-loading="ifLoad"></load-more>

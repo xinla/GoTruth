@@ -30,7 +30,7 @@
 				<span>{{commentNum}}评论</span>
 				<span>{{publishtime}}</span>
 			</div>
-			<div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event]);" v-if="ifDel">
+			<div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">
 				<i class="iconfont icon-remove"></i>
 			</div>
 		</div>

@@ -7,8 +7,17 @@
 				<span class="fr" @click="ifDeleteAll = false;">完成</span>					
 			</div>
 		</div> -->
-		<multIT v-for="(item,index) in arcList" :article="item" :whi="index" detailType=1 :ifPublisher="false" :ifDel="true" @delete="deleteArticle" :key="index"></multIT>
-			<!-- <bigIVT :article="item" v-else="item.type==2"></bigIVT>	 -->
+		<multIT
+                v-for="(item,index) in arcList"
+                :article="item"
+                :whi="index"
+                detailType=1
+                :ifPublisher="false"
+                :ifDel="true"
+                @delete="deleteArticle"
+                :key="index">
+
+        </multIT>
 		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
 		<load-more :show-loading="ifLoad"></load-more>
 	</div>
@@ -61,13 +70,14 @@ export default {
 			this.ifLoad = false;
 		},
 		deleteArticle([id,whi,event]){
+            debugger;
 			let _this = this;
 			this.$vux.confirm.show({
 				content:"确定要删除么",
 				onConfirm () {
 					deleteArt.call(_this,whi);
 				}
-			})
+			});
 			event.stopPropagation();
 			function deleteArt (index) {
 				let resDelete = articleService.deleteArticleById(id);
@@ -75,7 +85,7 @@ export default {
 					this.arcList.splice(index,1);
 					this.$vux.alert.show({
 					  content:'删除成功',
-					})
+					});
 					setTimeout(()=>{
 						this.$vux.alert.hide();
 					},1000)
@@ -84,7 +94,6 @@ export default {
 					  content:'删除失败，请重试！',
 					})
 				}
-				// console.log(this.arcList)
 			}
 
 		},

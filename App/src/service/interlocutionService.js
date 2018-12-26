@@ -28,7 +28,6 @@ service.getQuestionPage = function(page,size,classify,userid){
     userid,//:"用户id"
   };
   let resMap = commonUtil.ajaxAsync(controller+'/getQuestionPage',params);
-
   return resMap;
 };
 
@@ -40,8 +39,12 @@ service.getAnswers = function (page,size,parentid) {
 };
 
 // 删除问答
-service.deleteQuestion = function(ids){
-  let params = {token, "ids[]":ids};
+service.deleteQuestion = function(id){
+  let params = {
+      userid,
+      token,
+      "ids[]":[id]
+  };
   let resDelete = commonUtil.ajaxAsync(controller+'/deleteQuestion',params);
 
   return resDelete;
