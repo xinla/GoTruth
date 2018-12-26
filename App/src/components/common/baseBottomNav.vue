@@ -84,7 +84,7 @@ export default{
 			}
 		}
 		.footer-item a.router-link-active,.current{
-			color: @mainColor;
+			color: @deepMainColor;
 		}
 	}
 </style>

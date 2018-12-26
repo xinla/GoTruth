@@ -82,7 +82,7 @@ export default {
 		.header-logo {
 			width: 1.9rem;
 			img{
-				width: 92%;
+				width: 80%;
 			}
 		}
 		.header-input {

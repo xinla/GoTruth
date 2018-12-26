@@ -170,9 +170,8 @@
 </template>
 
 <script>
-	// import {Bus} from '@/store/eventBus'
 	import config from '@/lib/config/config'
-	// import vueCropper from 'vue-cropper'
+	import {VueCropper} from 'vue-cropper'
 	import { XSwitch, XButton,Loading,} from 'vux'
 	import fileService from '@/service/fileService'
 	import userService from '@/service/userService'
@@ -189,7 +188,8 @@
 			XSwitch,
     		XButton,
     		Loading,
-			vueCropper:() => import('vue-cropper')
+    		VueCropper,
+			// VueCropper:() => import('vue-cropper')
 		},
 		data(){
 			return {
