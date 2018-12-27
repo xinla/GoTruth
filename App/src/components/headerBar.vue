@@ -1,7 +1,7 @@
 <template>
 	<div class="header">
 		<div class="header-logo ac">
-			<img src="@/assets/images/logo.png" alt="直击真相">
+			<img src="@/assets/images/logo.png">
 		</div>
 		<div class="header-input" @click="$Tool.goPage({ name:'search' })">
 			<marquee>
@@ -11,7 +11,7 @@
 		<div class="header-menu">
 			<div @click="handleRelease">
 				<i class="iconfont icon-add menu-icon"></i>
-				<p class="menu-text">发布</p>
+				<!-- <p class="menu-text">发布</p> -->
 			</div>
 			<transition  enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
 				<div class="header-dialog" v-show="releaseShow">
@@ -91,7 +91,7 @@ export default {
 			line-height: .63rem;
 			padding-left: .2rem;
 			background-color: #fff;
-			border-radius: .1rem;
+			border-radius: 1rem;
 			color:#444;
 			span{
 				vertical-align: top;
@@ -106,16 +106,17 @@ export default {
 			color: #fff;
 			.menu-icon{
 				font-size: .5rem;
+				font-weight: 600;
 			}
-			.menu-text {
+			/* .menu-text {
 				margin-top: -.05rem;
 				font-size: .2rem;
-			}
+			} */
 			.header-dialog{
 				width: 2.72rem;
 				position: absolute;
 				right: .14rem;
-				top: 1.52rem;
+				top: 1.4rem;
 				border-radius: .14rem;
 				background-color:#595959;
 				z-index: 12;

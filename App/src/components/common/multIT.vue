@@ -1,5 +1,5 @@
 <template>
-	<div class="article" @click="goDetail">
+	<div class="article clearfix" @click="goDetail">
 		<!-- 浮动单图片 -->
 		<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
 		<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">					
@@ -26,7 +26,7 @@
 		<!-- 文章评论 -->
 		<div class="article-footer clearfix">
 			<div class="fl">
-				<span v-if="ifPublisher">{{publisher}}</span>
+				<span class="publisher oe" v-if="ifPublisher">{{publisher}}</span>
 				<span>{{commentNum}}评论</span>
 				<span>{{publishtime}}</span>
 			</div>
@@ -128,7 +128,6 @@ export default {
 	    margin: 0px 0.3rem;
 	    border-bottom: 1px solid @borderColor;
 	    padding: .15rem 0 .1rem;	
-	    overflow: hidden;		
 		.article-title{
 			// height: 1.3rem;
 			max-height: 1.4rem;
@@ -195,6 +194,9 @@ export default {
 			line-height: .6rem;
 			font-size: .24rem;
 			color: #a3a3a3;
+			.publisher{
+				max-width: 80px;
+			}
 			span{
 				margin-right: .1rem;
 			}
