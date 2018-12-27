@@ -58,8 +58,8 @@ export default {
 				{"classifyname":"打假","classifycode":3},
 				{"classifyname":"寻亲","classifycode":4},
 				{"classifyname":"普法","classifycode":5},
-				// {"classifyname":"打工","classifycode":6},
-				// {"classifyname":"广场舞","classifycode":7}
+				{"classifyname":"打工","classifycode":6},
+				{"classifyname":"娱乐","classifycode":7}
 			]),
 			classifyIndex:0,
 			currentClassiftyName:"推荐",

@@ -89,7 +89,6 @@ export default{
 			},
 			mobileDesc:'',
 			codeDesc:'',
-            goRoute:this.$route,
 		}
 	},
 	mounted(){
@@ -134,7 +133,6 @@ export default{
 		},
 	},
     activated(){
-	    console.log(this.goRoute);
 
     },
 	methods:{
@@ -469,8 +467,6 @@ export default{
 					display: block;
 					width: 100%;
 					height: 100%;
-					border-radius: 50%;
-					// border: .04rem solid @borderColor;
 				}
 			}
 			span{
@@ -570,7 +566,7 @@ export default{
 					font-size: .28rem;
 					letter-spacing: .04rem;
 					border-radius: .4rem;
-					opacity: .3;
+					opacity: .5;
 					background-color: @mainColor;
 					color: #fff;
 				}

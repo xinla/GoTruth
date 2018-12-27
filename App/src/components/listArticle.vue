@@ -43,9 +43,9 @@
             }
         },
         mounted () {
-            if (!this.classify) {
+            // if (!this.classify) {
                 this.init();
-            }
+            // }
         },
         methods:{
             init(){
@@ -67,7 +67,6 @@
                             this.ifNew = false;
                         }
                         this.page++;
-                        // console.log(this.arcList);
                     }
                 }finally{
                     // this.lock = false;

@@ -397,10 +397,9 @@ export default{
 		}
 		.feedback-question{
 			// margin-top: 1.65rem;
-			padding-top: .4rem;
-			padding-bottom: .4rem;
+            padding: .4rem .3rem;
 			background-color: #f7f7f7;
-			min-height: calc( 100vh - 1.65rem);
+			max-height: calc( 100vh - 1.65rem);
 			.question-tit {
 				text-align: center;
 				letter-spacing: .02rem;
