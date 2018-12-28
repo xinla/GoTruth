@@ -556,6 +556,7 @@ export default {
 			//用户是否给文章点赞
 			praiseService.testPraise(this.id,1,(data)=>{
 				if (data && data.status == "success") {
+				    console.log(data)
 					if (data.result == 1) {
 						this.likeStatus = true;
 					} else {
@@ -623,135 +624,115 @@ export default {
                    query:{id:this.id},
                    name:'detail',
                     call:()=>{
-                       //登录成功后调用
-                        let data = followService.doFollow(userId);
-                        if(data && data.status == "success"){
-                            if(type == 1){
-                                if(data.result == 1){
-                                    this.focusState = true;
-                                    messageService.sendMessage(userId, "focus", this.id, 1);
-                                }
-                            }
-                        }
-                    }
+                        this.conFocus(userId,type);
+                     }
                 });
 				return;
 			}
-			followService.doFollow(userId, (data)=>{
-				if(data && data.status == "success") {
-					if(type == 1) {
-						if(data.result == 1) {
-							this.$vux.toast.show({
-								text:'关注成功'
-							})
-							this.focusState = true;
-							//给发布人发送消息
-							messageService.sendMessage(userId, "focus", this.id, 1);
-						}else {
-							this.$vux.toast.show({
-								text:'取消关注'
-							})
-							this.focusState = false;
-						}
-					}else {
-						if(data.result == 1) {
-							this.$vux.toast.show({
-								text:'关注成功'
-							})
-							this.replyUserFocusState = true;
-							// 给评论人发送消息
-							messageService.sendMessage(userId, "focus", this.replyCommentId, 2);
-						}else {
-							this.$vux.toast.show({
-								text:'取消关注'
-							})
-							this.replyUserFocusState = false;
-						}
-					}
-				}else {
-					this.$vux.alert.show({
-                        content:'关注失败，请重新关注'
-					})
-				}
-			});
+            this.conFocus(userId,type);
 		},
+        // 关注公共函数
+        conFocus(userId,type){
+            followService.doFollow(userId, (data)=>{
+                if(data && data.status == "success") {
+                    if(type == 1) {
+                        if(data.result == 1) {
+                            this.$vux.toast.show({
+                                text:'关注成功'
+                            })
+                            this.focusState = true;
+                            //给发布人发送消息
+                            messageService.sendMessage(userId, "focus", this.id, 1);
+                        }else {
+                            this.$vux.toast.show({
+                                text:'取消关注'
+                            })
+                            this.focusState = false;
+                        }
+                    }else {
+                        if(data.result == 1) {
+                            this.$vux.toast.show({
+                                text:'关注成功'
+                            })
+                            this.replyUserFocusState = true;
+                            // 给评论人发送消息
+                            messageService.sendMessage(userId, "focus", this.replyCommentId, 2);
+                        }else {
+                            this.$vux.toast.show({
+                                text:'取消关注'
+                            })
+                            this.replyUserFocusState = false;
+                        }
+                    }
+                }else {
+                    this.$vux.alert.show({
+                        content:'关注失败，请重新关注'
+                    })
+                }
+            });
+        },
+
+
+
 		// 点赞--取消点赞
 		handleFabulous(type, itemid, index) {
             if(!localStorage.id){
                 this.$Tool.loginGoBack({
-
+                    returnpage: "/detail?",
+                    query:{id:this.id},
+                    name:'detail',
                     call:()=>{
-                        if(type == 1) {
-                            let resDoPraise = praiseService.doPraise(this.id,1);
-                            if(resDoPraise && resDoPraise.status == "success") {
-                                if(resDoPraise.result.code == 1) {
-                                    this.likeStatus = true;
-                                    this.likeNum++;
-                                    // 给发布人发送消息
-                                    messageService.sendMessage(this.article.author, "like", this.id, 1);
-                                }
-                            }
-                        }else{
-                            // 评论点赞
-                            let resDoPraise = praiseService.doPraise(itemid,2);
-                            if(resDoPraise && resDoPraise.status == "success") {
-                                if(resDoPraise.result.code == 1) {
-                                    this.curLike = index;
-                                    this.ifLike = true;
-                                    this.commentList[index].likeNum ++;
-                                    this.commentList[index].ifLike = true;
-                                    // 给评论人发送消息
-                                    messageService.sendMessage(this.replyUserId, "like", this.replyCommentId, 2);
-                                }
-                            }
-                        }
+                        this.conFabulous(type, itemid, index);
                     }
                 });
                 return;
             }
-			// 文章点赞
-			if(type == 1) {
-				let resDoPraise = praiseService.doPraise(this.id,1);
-				if(resDoPraise && resDoPraise.status == "success") {
-					if(resDoPraise.result.code == 1) {
-						this.likeStatus = true;
-						this.likeNum++;
-						// 给发布人发送消息
-						messageService.sendMessage(this.article.author, "like", this.id, 1);
-					}else{
-						this.likeStatus = false;
-						this.likeNum --;
-					}
-				}
-			}else{
-				// 评论点赞
-				let resDoPraise = praiseService.doPraise(itemid,2);
-				if(resDoPraise && resDoPraise.status == "success") {
-					// console.log(resDoPraise);
-					if(resDoPraise.result.code == 1) {
-						this.curLike = index;
-						this.ifLike = true;
-						this.commentList[index].likeNum ++;
-						this.commentList[index].ifLike = true;
-						// 给评论人发送消息
-						messageService.sendMessage(this.replyUserId, "like", this.replyCommentId, 2);
-					}else{
-						this.curLike = index;
-						this.ifLike = false;
-						this.commentList[index].likeNum --;
-						this.commentList[index].ifLike = false;
-					}
-
-					if(resDoPraise.result.count <= 0){
-						this.noZan = false;
-						this.hasZan = true;
-					}else{
-						this.hasZan = false;
-						this.noZan = true;
-					}
-				}
-			}
+            this.conFabulous(type, itemid, index);
 		},
+        conFabulous(type, itemid, index){
+            // 文章点赞
+            if(type == 1) {
+                let resDoPraise = praiseService.doPraise(this.id,1);
+                if(resDoPraise && resDoPraise.status == "success") {
+                    if(resDoPraise.result.code == 1) {
+                        this.likeStatus = true;
+                        this.likeNum++;
+                        // 给发布人发送消息
+                        messageService.sendMessage(this.article.author, "like", this.id, 1);
+                    }else{
+                        this.likeStatus = false;
+                        this.likeNum --;
+                    }
+                }
+            }else{
+                // 评论点赞
+                let resDoPraise = praiseService.doPraise(itemid,2);
+                if(resDoPraise && resDoPraise.status == "success") {
+                    // console.log(resDoPraise);
+                    if(resDoPraise.result.code == 1) {
+                        this.curLike = index;
+                        this.ifLike = true;
+                        this.commentList[index].likeNum ++;
+                        this.commentList[index].ifLike = true;
+                        // 给评论人发送消息
+                        messageService.sendMessage(this.replyUserId, "like", this.replyCommentId, 2);
+                    }else{
+                        this.curLike = index;
+                        this.ifLike = false;
+                        this.commentList[index].likeNum --;
+                        this.commentList[index].ifLike = false;
+                    }
+
+                    if(resDoPraise.result.count <= 0){
+                        this.noZan = false;
+                        this.hasZan = true;
+                    }else{
+                        this.hasZan = false;
+                        this.noZan = true;
+                    }
+                }
+            }
+        },
 		// 发布评论
 		handleSend(){
 			this.badgeShow = true;
@@ -770,79 +751,79 @@ export default {
                 });
 				return;
 			}
-			let userId = localStorage.id;
-			if(this.popList.desc && this.$Tool.checkInput(this.popList.desc)) {
-				if(this.commentType == 1) {
+            let userId = localStorage.id;
+            if(this.popList.desc && this.$Tool.checkInput(this.popList.desc)) {
+                if(this.commentType == 1) {
+                    // 执行发送评论
+                    let resArticleComment = articleCommentService.articleComment(this.id,this.popList.desc,userId,this.article.author,1);
+                    if(resArticleComment && resArticleComment.status == "success") {
+                        this.lock = false;
+                        this.pageNum1 = 1;
+                        this.loadComment();
+                        setTimeout(()=>{
+                            this.$vux.toast.show({
+                                type:'success',
+                                text: '发布成功'
+                            });
+                        },500);
+                        this.popList.desc = "";
+                        this.commentNum++;
+                        this.popList.show = false;
+                        this.popList.popupActive = false;
 
-					// 执行发送评论
-					let resArticleComment = articleCommentService.articleComment(this.id,this.popList.desc,userId,this.article.author,1);
-					if(resArticleComment && resArticleComment.status == "success") {
-						this.lock = false;
-						this.pageNum1 = 1;
-						this.loadComment();
-						setTimeout(()=>{
-							this.$vux.toast.show({
-								type:'success',
-								text: '发布成功'
-							});
-						},500);
-						this.popList.desc = "";
-						this.commentNum++;
-						this.popList.show = false;
-						this.popList.popupActive = false;
+                        // 给发布人发送消息
+                        messageService.sendMessage(this.article.author,"reply",this.id,1);
+                        let dis = $(".detail").scrollTop() + $(".article-change").offset().top -100;
+                        $(".detail").animate({scrollTop:dis},100);
+                    }else{
+                        this.$vux.alert.show({
+                            content:'评论失败，请重试'
+                        });
+                        setTimeout(()=>{
+                            this.$vux.alert.hide();
+                        },1000);
+                    }
+                }else{
+                    let comment = this.commentConAdd?(this.popList.desc + this.commentConAdd):this.popList.desc;
+                    // 执行发送评论回复
+                    let resACommentReply = articleCommentService.articleComment(this.id,comment,userId,this.replyUserId,2,this.replyCommentId);
+                    if(resACommentReply && resACommentReply.status == "success") {
+                        setTimeout(()=>{
+                            this.$vux.toast.show({
+                                type:'success',
+                                text: '发布成功'
+                            });
+                        },500);
+                        this.popList.desc = "";
+                        this.commentConAdd = "";
+                        this.popList.show = false;
+                        this.popMask = false;
+                        this.popList.popupActive = false;
+                        this.commentList[this.commentIndex].replyCount ++;
 
-						// 给发布人发送消息
-						messageService.sendMessage(this.article.author,"reply",this.id,1);
-						let dis = $(".detail").scrollTop() + $(".article-change").offset().top -100;
-						$(".detail").animate({scrollTop:dis},100);
-					}else{
-						this.$vux.alert.show({
-							content:'评论失败，请重试'
-						});
-						setTimeout(()=>{
-							this.$vux.alert.hide();
-						},1000);
-					}
-				}else{
-					let comment = this.commentConAdd?(this.popList.desc + this.commentConAdd):this.popList.desc;
-					// 执行发送评论回复
-					let resACommentReply = articleCommentService.articleComment(this.id,comment,userId,this.replyUserId,2,this.replyCommentId);
-					if(resACommentReply && resACommentReply.status == "success") {
-						setTimeout(()=>{
-							this.$vux.toast.show({
-								type:'success',
-								text: '发布成功'
-							});
-						},500);
-						this.popList.desc = "";
-						this.commentConAdd = "";
-						this.popList.show = false;
-						this.popMask = false;
-						this.popList.popupActive = false;
-						this.commentList[this.commentIndex].replyCount ++;
-
-						// 给评论人发送消息
-						messageService.sendMessage(this.replyUserId,'reply',this.replyCommentId,2);
-						this.loadReply();
-						$(".reply-wrap").animate({scrollTop:0},100);
-					}else{
-						this.$vux.alert.show({
-							content:'评论失败，请重试'
-						});
-						setTimeout(()=>{
-							this.$vux.alert.hide();
-						},1000);
-					}
-				}
-			}else{
-				this.$vux.alert.show({
-					content:'内容不合法，请修改后提交'
-				});
-				setTimeout(()=>{
-					this.$vux.alert.hide();
-				},1000);
-			}
+                        // 给评论人发送消息
+                        messageService.sendMessage(this.replyUserId,'reply',this.replyCommentId,2);
+                        this.loadReply();
+                        $(".reply-wrap").animate({scrollTop:0},100);
+                    }else{
+                        this.$vux.alert.show({
+                            content:'评论失败，请重试'
+                        });
+                        setTimeout(()=>{
+                            this.$vux.alert.hide();
+                        },1000);
+                    }
+                }
+            }else{
+                this.$vux.alert.show({
+                    content:'内容不合法，请修改后提交'
+                });
+                setTimeout(()=>{
+                    this.$vux.alert.hide();
+                },1000);
+            }
 		},
+
 
 		// 删除评论
 		handleDelete(itemid, index, type){
@@ -1026,48 +1007,52 @@ export default {
                     returnpage: "/detail?",
                     query:{id:this.id},
                     name:'detail',
+                    call:()=>{}
                 });
                 this.popMask = false;
                 return;
 
             }
-			if(this.reportreasion){
-				let reportInfo;
-				if (this.reportType === 1) {
-					reportInfo = {
-						type:1,
-						itemid:this.id,
-						reportuserid:this.article.author,
-						reportreasion:this.reportreasion
-					};
-				}else if (this.reportType === 2){
-					reportInfo = {
-						type:2,
-						itemid:this.replyobj.id,
-						reportuserid:this.replyobj.douserid,
-						reportreasion:this.reportreasion
-					};										
-				}
-				// console.log(reportInfo)
-				let res = reportService.doReport(reportInfo);
-				if (res && res.status === "success") {
-					this.$vux.alert.show({
-					  content:'感谢您的反馈，我们会着实核查！',
-					})			
-					this.reportShow = false;
-					this.popMask = false;
-					this.reportreasion = "";
-				}else{
-					this.$vux.alert.show({
-					  content:'提交失败，请稍后再试！',
-					})
-				}
-			} else {
-				this.reportShow = false;
-				this.popMask = false;
-				// this.reportList.show = false;
-			}
+            this.conReport();
+
 		},
+
+        conReport(){
+            if(this.reportreasion){
+                let reportInfo;
+                if (this.reportType === 1) {
+                    reportInfo = {
+                        type:1,
+                        itemid:this.id,
+                        reportuserid:this.article.author,
+                        reportreasion:this.reportreasion
+                    };
+                }else if (this.reportType === 2){
+                    reportInfo = {
+                        type:2,
+                        itemid:this.replyobj.id,
+                        reportuserid:this.replyobj.douserid,
+                        reportreasion:this.reportreasion
+                    };
+                }
+                let res = reportService.doReport(reportInfo);
+                if (res && res.status === "success") {
+                    this.$vux.alert.show({
+                        content:'感谢您的反馈，我们会着实核查！',
+                    })
+                    this.reportShow = false;
+                    this.popMask = false;
+                    this.reportreasion = "";
+                }else{
+                    this.$vux.alert.show({
+                        content:'提交失败，请稍后再试！',
+                    })
+                }
+            } else {
+                this.reportShow = false;
+                this.popMask = false;
+            }
+        },
 
 		// 个人中心所能看到的switch
 		handleSwitch(v){;

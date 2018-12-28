@@ -142,7 +142,11 @@
         },
         beforeRouteEnter (to, from, next) {
             if (!localStorage.id ) {
-                GoTruth.$Tool.loginPrompt();
+                GoTruth.$Tool.loginGoBack({
+                    returnpage:"/topBase/level",
+                    query:{title:to.query.title},
+                    name:"level"
+                });
             }else{
                 next();
             }

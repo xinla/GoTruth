@@ -43,9 +43,11 @@
             }
         },
         mounted () {
-            // if (!this.classify) {
-                this.init();
-            // }
+            this.$nextTick(()=>{
+                if(!this.classify){
+                    this.init();
+                }
+            });
         },
         methods:{
             init(){
@@ -69,9 +71,6 @@
                         this.page++;
                     }
                 }finally{
-                    // this.lock = false;
-                    // this.ifLoad = false;
-
                 }
             },
             doRefresh(){

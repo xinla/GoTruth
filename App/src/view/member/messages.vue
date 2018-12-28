@@ -113,8 +113,12 @@ export default {
 		}
 	},
 	beforeRouteEnter (to, from, next) {
-		if (!localStorage.id ) { 
-            GoTruth.$Tool.loginPrompt(); 
+		if (!localStorage.id ) {
+            GoTruth.$Tool.loginGoBack({
+                returnpage:"/topBase/messages",
+                query:{title:to.query.title},
+                name:"messages"
+            });
         }else{
           	next();
         } 

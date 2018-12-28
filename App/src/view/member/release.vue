@@ -74,6 +74,7 @@
     import mapService from '@/service/mapService'
     import fileService from '@/service/fileService'
     import articleService from '@/service/articleService'
+    import articleClassifyService from '@/service/article_classifyService'
     import interlocutionService from '@/service/interlocutionService'
     export default{
         data(){
@@ -103,22 +104,32 @@
             }
         },
         activated(){
-            console.log(this.$route)
             this.record.type = this.$route.query.sort;
             this.record.selectedpublishname = this.selectedPublishName || "不显示";
             this.record.selectedpublishaddress = this.selectedPublishAddress || "不显示";
             if(this.selectedPublishName === '我的位置'){
                 this.record.selectedpublishname = this.selectedPublishAddress;
             }
-            this.classifyList = JSON.parse(localStorage.classify);
+
+            if(!localStorage.classify){
+                articleClassifyService.getArticleClassifyList((data)=>{
+                   if(data && data.status == "success"){
+                       this.classifyList = data.result.classfyList;
+                       localStorage.classify = JSON.stringify(this.classifyList);
+                   }
+                });
+            }else{
+                this.classifyList = JSON.parse(localStorage.classify);
+            }
+
             mapUtil.getPosition((data)=>{
-                // let longitude = data.longitude;let latitude = data.latitude;
                 this.position = data;
             });
             if(this.record.type == 1){
                 this.placeholderTit = "请输入文章标题";
                 this.placeholderDesc = "请输入文章内容"
                 this.$refs.marginTit.style.marginTop = "1.2rem";
+
             }else if(this.record.type == 2){
                 this.placeholderTit = "请输入视频标题";
                 this.$refs.marginTit.style.marginTop = "1.2rem";
@@ -320,9 +331,16 @@
         },
         beforeRouteEnter (to, from, next) {
             if (!localStorage.id) {
-                GoTruth.$Tool.loginPrompt();
+                GoTruth.$Tool.loginGoBack({
+                    returnpage:"/topBase/release",
+                    query:{title:to.query.title,sort:to.query.sort},
+                    name:"release",
+                    call:()=>{
+                    }
+                });
             }else{
                 next();
+
             }
         }
     }

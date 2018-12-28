@@ -17,7 +17,7 @@
 				<div class="header-dialog" v-show="releaseShow">
 					<div class="arrow-tip"></div>
 					<ul class="header-nav">
-						<li  @click="$Tool.goPage({ name:'release',query:{title:'发布图文',sort:1}});releaseShow = false;"><i class="iconfont icon-tuwen"></i>发布图文</li>
+						<li @click="$Tool.goPage({ name:'release',query:{title:'发布图文',sort:1}}),releaseShow = false;"><i class="iconfont icon-tuwen"></i>发布图文</li>
 						<li @click="$Tool.goPage({ name:'release',query:{title:'发布视频',sort:2}});releaseShow = false;"><i class="iconfont icon-shipin"></i>发布视频</li>
 						<li @click="$Tool.goPage({ name:'release',query:{title:'发起讨论',sort:3}});releaseShow = false;"><i class="iconfont icon-taolun"></i>发起讨论</li>
 					</ul>
@@ -61,12 +61,7 @@ export default {
 				}
 			});
 		},
-	},
-	// watch:{
-	// 	keywords(){
-
-	// 	}
-	// }
+	}
 }
 </script>
 
@@ -151,13 +146,6 @@ export default {
 				}
 			}
 			.mask {
-				// width: 100vw;
-				// height: 100vh;
-				// position: fixed;
-				// overflow: hidden;
-				// left: 0;
-				// top: 0.88rem;
-				// bottom: inherit;
 				z-index: 9;
 				background-color: transparent;
 			}

@@ -56,10 +56,10 @@ export default {
 				{"classifyname":"揭秘","classifycode":1},
 				{"classifyname":"防骗","classifycode":2},
 				{"classifyname":"打假","classifycode":3},
-				{"classifyname":"寻亲","classifycode":4},
+				{"classifyname":"娱乐","classifycode":7},
 				{"classifyname":"普法","classifycode":5},
 				{"classifyname":"打工","classifycode":6},
-				{"classifyname":"娱乐","classifycode":7}
+				{"classifyname":"寻亲","classifycode":4}
 			]),
 			classifyIndex:0,
 			currentClassiftyName:"推荐",
@@ -73,6 +73,7 @@ export default {
 	        articleClassifyService.getArticleClassifyList((data)=>{
 	          if(data && data.status == "success") {
 	            this.classifyList = Object.freeze(data.result.classfyList);
+
 	            localStorage.classify = JSON.stringify(this.classifyList);
 	          }
 	        });

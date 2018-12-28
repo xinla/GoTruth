@@ -235,11 +235,19 @@ export default{
 		},
 	},
 	beforeRouteEnter (to, from, next) {
-		if (!localStorage.id ) { 
-            GoTruth.$Tool.loginPrompt(); 
+	    console.log(to)
+        if (!localStorage.id) {
+            GoTruth.$Tool.loginGoBack({
+                returnpage:"/topBase/feedback",
+                query:{title:to.query.title},
+                name:"feedback",
+                call:()=>{
+                }
+            });
         }else{
-          next();
-        } 
+            next();
+
+        }
 	}
 }
 
