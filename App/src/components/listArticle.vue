@@ -54,8 +54,16 @@
                 this.page = 1;
                 let resArticlePage;
                 try{
-                    if(this.classify == 0){
+                    if(!this.classify || this.classify == 0){
+                        let resTopArticle = articleService.getTodayArticle();
                         resArticlePage = articleService.articlePage(this.page,15);
+                        let temp = resArticlePage.recordPage.list;
+                        for (var i = 0; i < temp.length; i++) {
+                            if (temp[i].id == resTopArticle.list[0].id || temp[i].id == resTopArticle.list[1].id) {
+                                temp.splice(i,1);
+                            }
+                        }
+                        resArticlePage.recordPage.list = resTopArticle.list.concat(resArticlePage.recordPage.list)
                     }else{
                         resArticlePage = articleService.articlePage(this.page,15,this.classify);
                     }

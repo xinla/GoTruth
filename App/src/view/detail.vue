@@ -3,6 +3,16 @@
 		<top>
 			<template slot="title">{{ '文章详情' }}</template>
 		</top>
+		<template v-if="2 === article.type">
+			<i class="iconfont icon-arrow-left" @click="this.$Tool.goBack">
+			</i>
+			<video-player class="video-player vjs-custom-skin"
+				ref="videoPlayer"
+			 	:playsinline="true"
+			  	:options="playerOptions"
+			  	@play="onPlayerPlay()">
+			</video-player>
+		</template>
 		<div class="mask" v-show="ifLoad">
 			<loading-main></loading-main>
 		</div>
@@ -65,7 +75,6 @@
 					<p>我们相信，你的一次举手之劳，可能就会挽救一个家庭甚至一个美丽的生命！</p>
 					<p class="red">直击真相：多一个人看到，就少一个人受骗！</p>
 				</div>
-
 			<div class="unfold-ciew ac" @click="isUnfold = !isUnfold">
 				{{isUnfold ? "收起" : "展开"}}
 			</div>
@@ -1871,6 +1880,20 @@ export default {
 	.red{
 		color:#f00;
 		font-weight: 600;
+	}
+	.video-player{
+	    position: fixed;
+	    width: 100%;
+	    top: 22px;
+	    left: 0;
+	    z-index: 1;
+	}
+	.icon-arrow-left{
+	    color: #eee;
+	    position: absolute;
+	    top: 35px;
+	    z-index: 2;
+	    left: 10px;
 	}
 </style>
 

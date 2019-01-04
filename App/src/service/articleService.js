@@ -145,5 +145,14 @@ service.recommendArticle = function(articleid){
 
 	return resMap;
 }
+//获取置顶文章
+service.getTodayArticle = function(){
+	var params = {
+	};
+
+	var resMap = commonUtil.ajaxAsync(controller+'/getTodayArticle',params);
+
+	return resMap;
+}
 export default service
 
