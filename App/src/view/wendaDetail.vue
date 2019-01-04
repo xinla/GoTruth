@@ -102,7 +102,7 @@
                     <i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"></i>
                 </div>
                 <div class="item-icon" @click="handleFabulous(1)">
-                    <i class="iconfont icon-weizan" :class="zanIcon ? 'icon-yizan' : 'icon-weizan'"></i>
+                    <i class="iconfont" :class="zanIcon ? 'icon-yizan' : 'icon-weizan'"></i>
                 </div>
                 <div class="item-icon" @click="handleAnswerShare">
                     <i class="iconfont icon-share"></i>
@@ -555,32 +555,16 @@
                         query:{item:JSON.stringify(this.answer),wenda:JSON.stringify(this.wenda)},
                         name:"wendaDetail",
                         call:()=>{
-                            let data =  followService.doFollow(userid);
-                            if(data && data.status == "success"){
-                                if(type == 1) {
-                                    if(data.result == 1) {
-                                        this.$vux.toast.show({
-                                            text:'关注成功'
-                                        });
-                                        this.answerFocusState = true;
-                                        // 向回答人发送消息
-                                        messageService.sendMessage(userid, "focus", this.answer.id, 1);
-                                    }
-                                }else{
-                                    if(data.result == 1) {
-                                        this.$vux.toast.show({
-                                            text:'关注成功'
-                                        });
-                                        this.replyUserFocusState = true;
-                                        // 给评论人发送消息
-                                        messageService.sendMessage(userid, "focus", this.replyCommentId, 2);
-                                    }
-                                }
-                            }
+                            this.conFabulous(type,itemid,index);
                         }
                     });
                     return;
                 }
+                this.conFabulous(type,itemid,index);
+
+            },
+
+            conFabulous(type,itemid,index){
                 if(type == 1) {
                     let zanData = praiseService.doPraise(this.answer.id,1);
                     if(zanData && zanData.status == "success") {
@@ -631,7 +615,6 @@
                     }
                 }
             },
-
             // 收藏回答---取消收藏回答
             handleAnswerCollect(answerid){
                 if (!localStorage.id ) {
@@ -696,6 +679,16 @@
 
             // 打开评论框
             handleOpenInput(){
+                if(!localStorage.id) {
+                    this.$Tool.loginGoBack({
+                        returnpage:"/wendaDetail",
+                        query:{item:JSON.stringify(this.answer),wenda:JSON.stringify(this.wenda)},
+                        name:"wendaDetail",
+                        call:()=>{
+                        }
+                    });
+                    return;
+                }
                 this.inputShow();
                 if(this.replyShow){
                     this.popMask = true;
@@ -726,10 +719,6 @@
                 if(!this.answerPopObj.desc) {
                     this.answerPopObj.show = false;
                     this.popMask = false;
-                    return;
-                }
-                if(!localStorage.id) {
-                    this.$Tool.loginPrompt();
                     return;
                 }
                 let currentUserid = localStorage.id;  //当前用户id

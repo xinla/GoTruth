@@ -250,10 +250,11 @@ export default{
                         return;
                     }else{
                         this.userInfoPage(data);
+                        this.$Tool.goPage({name:name,path:url,query:query});
                         if(call){
                             call();
                         }
-                        this.$Tool.goPage({name:name,path:url,query:query});
+
                     }
 
 

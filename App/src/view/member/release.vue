@@ -284,6 +284,7 @@
                 if(this.record.type == 1 || this.record.type == 2){
                     data = articleService.publishArticle(this.record,this.record_file);
                     if(data && data.status == "success"){
+                        console.log(data)
                         setTimeout(()=>{
                             this.$Tool.goPage({name:"home"});
                         },1200);

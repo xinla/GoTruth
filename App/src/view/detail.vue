@@ -65,7 +65,7 @@
 					<p>我们相信，你的一次举手之劳，可能就会挽救一个家庭甚至一个美丽的生命！</p>
 					<p class="red">直击真相：多一个人看到，就少一个人受骗！</p>
 				</div>
-					
+
 			<div class="unfold-ciew ac" @click="isUnfold = !isUnfold">
 				{{isUnfold ? "收起" : "展开"}}
 			</div>
@@ -133,7 +133,7 @@
 						</li>
 					</ul>
 					<prompt-blank v-if="proFail2" :mes="failMes2"></prompt-blank>
-					<load-more :show-loading="false" :tip="loadText" v-show="ifLoadMore"></load-more>	
+					<load-more :show-loading="false" :tip="loadText" v-show="ifLoadMore"></load-more>
 				</div>
 			</div>
 			<memberList v-else :list="listMember" :mes="proMes"></memberList>
@@ -167,7 +167,7 @@
 				<div class="popup-wrap">
 					<div class="popup-area">
 						<textarea
-							:placeholder="popList.placeholder" 
+							:placeholder="popList.placeholder"
 							v-model.trim="popList.desc"
 							@input="handleDesc"
 							autofocus
@@ -191,7 +191,7 @@
 					</div>
 					<div class="reply-body">
 						<div class="reply-container reply-first clearfix">
-							<div class="reply-img fl"> 
+							<div class="reply-img fl">
 								<img :src="$Tool.headerImgFilter(replyobj.imageurl)">
 							</div>
 							<div class="reply-content fr">
@@ -212,14 +212,14 @@
 									<span class="reply-report fr" @click="handleReport(2)">举报</span>
 								</div>
 								<div class="reply-footer clearfix">
-									<div class="reply-footer-wrap fl clearfix" v-show="noZan">	
+									<div class="reply-footer-wrap fl clearfix" v-show="noZan">
 										<ul class="reply-list clearfix fl">
 											<li class="reply-item">
 												<img :src="$Tool.headerImgFilter(replyobj.imageurl)" alt="">
 											</li>
 										</ul>
 										<div class="reply-footer-desc fl">
-											<span class="num">{{replyobj.likeNum}}</span>人赞过 
+											<span class="num">{{replyobj.likeNum}}</span>人赞过
 											<i class="iconfont icon-arrow-right"></i>
 										</div>
 									</div>
@@ -417,6 +417,7 @@ export default {
 			pageNum2:1,
      		audioSrc:[],
      		index:0,
+            articleImg:[],
      		iconShow:false,
      		icon:'icon-touting',
      		tag:false,
@@ -498,18 +499,17 @@ export default {
 			// }
 			//获取文章信息
 			let resArticleDetail = articleService.getArticleById(this.id);
-			// if(resArticleDetail && resArticleDetail.status == "success") {
-
-			// }
 			if (resArticleDetail&&resArticleDetail.status == "success") {
 				this.article = resArticleDetail.record;
+				// 获取富文本编辑器内容中的图片
+				let img= this.article.content.match(/<img[^>]+>/g);
+				for(let i =0; i<img.length;i++){
+				    this.articleImg = img[i];
+                }
 				if(!this.article.content){
 					this.iconShow = false;
 				}else{
 					this.iconShow = true;
-          // let audioStr =  resArticleDetail.record.audio;
-          // let audioArr = audioStr.split(',');
-          // this.audioSrc = audioArr;
 				}
 				if(this.article.sourceurl == null) {
 					this.sourceShow = false;
@@ -525,8 +525,6 @@ export default {
 			if (resUserInfo && resUserInfo.status == "success") {
 				this.artUser = resUserInfo.result.user;
 			}
-			// console.log(resUserInfo)
-			// console.log(resUserInfo)
 			// 是否关注发布人
 			if (localStorage.getItem('token')) {
 				followService.testFollow(this.article.author,(data)=>{
@@ -561,7 +559,6 @@ export default {
 			//用户是否给文章点赞
 			praiseService.testPraise(this.id,1,(data)=>{
 				if (data && data.status == "success") {
-				    console.log(data)
 					if (data.result == 1) {
 						this.likeStatus = true;
 					} else {
@@ -1132,12 +1129,12 @@ export default {
 					}
 				});
 				if (this.commentList.length == 0) {
-					this.lock = true;		
+					this.lock = true;
 					this.proFail2 = true;
 					this.failMes2 = "暂无评论，来抢第一个沙发吧";
 					this.ifLoadMore = false;
 				} else if (this.commentList.length < 10 || this.commentNum == this.commentList.length ) {
-					this.lock = true;		
+					this.lock = true;
 					this.ifLoadMore = true;
 					this.proFail2 = false;
 					this.loadText = "已加载全部";
@@ -1182,7 +1179,7 @@ export default {
 			if (!this.lock && ($(".detail").scrollTop() + $(".detail").height()) > $(".detail")[0].scrollHeight-350) {
 				this.loadComment();
 			}
-		},  
+		},
 		textShow(){
 			this.popList.show = true;
 			this.$refs.popFocus.focus();
@@ -1224,7 +1221,7 @@ export default {
 	},
 	// beforeRouteEnter(to,from,next){
 	// 	next(vm=>{
-	// 		vm.id = vm.$route.query.id;	
+	// 		vm.id = vm.$route.query.id;
 	// 		vm.detailType = vm.$route.query.detailType || 0;
 	// 	})
 	// }
@@ -1264,9 +1261,9 @@ export default {
 				letter-spacing: .02rem;
 				overflow: hidden;
 				text-overflow:ellipsis;
-				display:-webkit-box; 
+				display:-webkit-box;
 				-webkit-box-orient:vertical;
-				-webkit-line-clamp:3; 
+				-webkit-line-clamp:3;
 			}
 			.publisher{
 				padding: .45rem 0;
@@ -1412,7 +1409,7 @@ export default {
 		display: flex;
 		li{
 			flex: 1;
-			text-align: center;	
+			text-align: center;
 		}
 		.current{
 			border-bottom: .04rem solid #f85959;
@@ -1476,11 +1473,11 @@ export default {
 					padding-top: .1rem;
 					.hot-text{
 						line-height: .45rem;
-						// overflow:hidden; 
+						// overflow:hidden;
 						// text-overflow:ellipsis;
-						// display:-webkit-box; 
+						// display:-webkit-box;
 						// -webkit-box-orient:vertical;
-						// -webkit-line-clamp:4; 
+						// -webkit-line-clamp:4;
 					}
 					.hot-open{
 						position: absolute;
@@ -1593,7 +1590,7 @@ export default {
 					color: #fff;
 				}
 			}
-				
+
 		}
 	}
 	.popup-wrap {
@@ -1767,7 +1764,7 @@ export default {
 										height: 100%;
 										border-radius: 50%;
 									}
-								}	
+								}
 							}
 							.reply-footer-desc{
 								font-size: .24rem;
@@ -1777,7 +1774,7 @@ export default {
 								}
 							}
 						}
-						
+
 					}
 
 				}
@@ -1893,4 +1890,4 @@ export default {
 	.vux-popup-show{
 		/*z-index: 999 !important;*/
 	}
-</style>	
+</style>

@@ -29,8 +29,8 @@
             <div class="wendaList-other" v-show="hasAnswer" v-for="item in answer" @click="goAnswerDetail(wenda,item)">
                 <div class="header">
                     <div class="header-user">
-                        <img :src="$Tool.headerImgFilter(wendaUser.imageurl)" class="userPhoto">
-                        <span class="username">{{ wendaUser.username}}</span>
+                        <img :src="$Tool.headerImgFilter(item.imageurl)" class="userPhoto">
+                        <span class="username">{{ item.username}}</span>
                     </div>
                 </div>
                 <div class="body">
@@ -209,6 +209,7 @@
             this.$nextTick(()=>{
                 this.id = this.$route.query.id;
                 this.wenda = JSON.parse(this.$route.query.item);
+                console.log(this.answer)
                 this.ifLoad = true;
 
                 if(this.timer){
@@ -261,30 +262,30 @@
                         this.page++;
                     }
                     // 循环回答列表
-                    for(let i =0; i < this.answer.length; i++){
+                    listUtil.asyncSetListPropty(answerData.recordPage.list,(item)=>{
                         // 获取发布回答时间
-                        this.answer[i].publishtime = this.$Tool.publishTimeFormat(this.answer[i].publishtime);
-                        // 获取发布回答用户的信息
-                        let wendaUserData = userService.getUserById(this.answer[i].author);
-                        if(wendaUserData && wendaUserData.status == "success") {
-                            this.wendaUser = wendaUserData.result.user;
+                      item.publishtime = this.$Tool.publishTimeFormat(item.publishtime);
+                      // 获取发布回答用户信息
+                        let wendaUserData = userService.getUserById(item.author);
+                        if(wendaUserData && wendaUserData.status == "success"){
+                            this.$set(item, "imageurl", wendaUserData.result.user.imageurl);
+                            this.$set(item, "username", wendaUserData.result.user.username);
                         }
                         // 获取发布回答的图片
-                        let answerSrcData = articleFileService.getFileByArticle(this.answer[i].id);
+                        let answerSrcData = articleFileService.getFileByArticle(item.id);
                         if(answerSrcData && answerSrcData.status == "success") {
-                            this.$set(this.answer[i],'answerFile',[]);
-                            this.answer[i].answerFile = answerSrcData.result.filelist;
+                            this.$set(item,'answerFile',[]);
+                            item.answerFile = answerSrcData.result.filelist;
                         }
                         // 获取回答评论数量
-                        articleCommentService.getArticleCommentCount(this.answer[i].id,(data)=>{
-                            if(data.status == "success") {
-                                this.$set(this.answer[i],'answerCommentNum',0);
-
+                        articleCommentService.getArticleCommentCount(item.id,(data)=>{
+                            if(data && data.status == "success"){
+                                this.$set(item,'answerCommentNum',0);
                                 this.answerCommentNum = this.$Tool.numConvertText(data.result.count);
-                                this.answer[i].answerCommentNum = this.$Tool.numConvertText(data.result.count);
+                                item.answerCommentNum = this.$Tool.numConvertText(data.result.count);
                             }
-                        })
-                    }
+                        });
+                    });
                     if(answerData.recordPage.list == ""){
                         this.hasAnswer = false;
                         this.notAnswer = true;
@@ -433,7 +434,10 @@
                         query:{id:this.id,item:JSON.stringify(this.wenda)},
                         name:'wendaList',
                         call:()=>{
-                            this.publish();
+                            setTimeout(()=>{
+                                this.publish();
+                            },280);
+
                         }
                     });
                     return;
@@ -646,6 +650,7 @@
                 .body-img{
                     width:100%;
                     .body-item{
+                        overflow: hidden;
                         display: inline-block;
                         width: 32.5%;
                         height: 1.88rem;

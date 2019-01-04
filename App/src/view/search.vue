@@ -5,7 +5,7 @@
 			<i class="iconfont icon-left fl" @click="this.$Tool.goBack"></i>
 			<div class="search-input fl clearfix">
 				<i class="iconfont icon-search fl"></i>
-				<input type="search" class="fl" v-model="keywords"  ref="searchInput"  @keyup="getMatchkeywords" placeholder="请输入关键词">
+				<input type="search" class="fl" v-model.trim="keywords"  ref="searchInput" maxlength="25"  @keyup="getMatchkeywords" placeholder="请输入关键词">
 				<i class="iconfont icon-close-circle fr" @click="reset()"></i>
 			</div>
 			<div class="search-btn fr" @click="search">搜索</div>
@@ -27,7 +27,7 @@
 						<i class="iconfont icon-delete fr" v-if="!ifDeleteAll" @click="ifDeleteAll = true;"></i>
 						<div class="fr" v-else>
 							<span @click="deleteAll()">删除全部</span>
-							<span @click="ifDeleteAll = false;">完成</span>
+							<span @click="ifDeleteAll = false">完成</span>
 						</div>
 					</div>
 					<div class="search-public-content">
@@ -39,7 +39,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="search-public">
+				<!--<div class="search-public">
 					<div class="search-public-title clearfix">
 						<span class="title fl">猜你想搜的</span>
 						<i class="iconfont icon-nosee fr" style="font-size: .2rem;"></i>
@@ -49,7 +49,7 @@
 							<div class="item-desc fl">{{item.guesstext}}</div>
 						</div>
 					</div>
-				</div>
+				</div>-->
 			</div>
 			<div class="search-result" v-else>
 				<div class="main-content" @scroll="loadMore" v-if="searchResult.length">
@@ -151,6 +151,7 @@ export default {
 			searchService.getKeywordList(this.keywords,data=>{
 				if (data && data.status == "success") {
 					this.matchKeywords = data.recordList;
+					this.matchKeywords.reverse();
 					if (this.matchKeywords.length) {
 						this.ifMatch = true;
 					}else{
@@ -268,6 +269,11 @@ export default {
 				height: .8rem;
 				line-height: .8rem;
 				border-bottom: .02rem solid @borderColor;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
 				&:last-child{
 					border-bottom: none;
 				}
