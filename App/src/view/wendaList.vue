@@ -418,6 +418,15 @@
             },
             //弹出回答框
             handleAnswer(){
+                if(!localStorage.id) {
+                    this.$Tool.loginGoBack({
+                        returnpage: "/wendaList",
+                        query:{id:this.id,item:JSON.stringify(this.wenda)},
+                        name:'wendaList',
+                        call:()=>{}
+                    });
+                    return;
+                }
                 this.answerObj.show =true;
             },
 
@@ -428,20 +437,7 @@
 
             // 发布回答
             handlePublish(){
-                if(!localStorage.id) {
-                    this.$Tool.loginGoBack({
-                        returnpage: "/wendaList",
-                        query:{id:this.id,item:JSON.stringify(this.wenda)},
-                        name:'wendaList',
-                        call:()=>{
-                            setTimeout(()=>{
-                                this.publish();
-                            },280);
 
-                        }
-                    });
-                    return;
-                }
                 if(!this.$Tool.checkInput(this.record.content)) {
                     this.record.content = this.$Tool.replaceNo(this.record.content);
                     this.$vux.alert.show({
@@ -454,11 +450,6 @@
                     this.$vux.toast.text('回答不能为空', 'middle')
                     return;
                 }
-                this.publish();
-
-            },
-            // 发布回答函数
-            publish(){
                 this.record.author = Number(localStorage.id || 0);
                 let pid =this.wenda.id;
                 this.record.parentid = pid;
@@ -485,6 +476,7 @@
                         content:'发布失败'
                     });
                 }
+
             },
             //监听文本框
             handelInput(){
@@ -611,7 +603,7 @@
             }
         }
         .wendaList-other{
-            padding: .2rem .3rem .3rem .3rem;
+            padding: .2rem .3rem .15rem .3rem;
             background-color: #fff;
             border-bottom: .02rem solid @borderColor;
             .header{
