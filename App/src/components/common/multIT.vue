@@ -5,7 +5,7 @@
 			<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
 			<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">
 		</template>				
-		<img class="float-img a" v-else :src="imgList[0] || (fileRoot+ArticleFile[0].url) || (fileRoot+ArticleFile[0].thumbnail)" >
+		<img class="float-img a" v-else :src="imgList[0] || ArticleFile.length && (2 == article.type?fileRoot + ArticleFile[0].thumbnail:fileRoot+ArticleFile[0].thumbnail)" >
 		<!-- 公共标题 -->
 		<h2 class="article-title">{{article.title}}</h2>
 		<!-- 二或三图 -->
@@ -17,7 +17,7 @@
 			</div>
 			<div class="multiple-img-wrap" v-else-if="1 === article.type && ArticleFile.length > 1">
 				<div class="multiple-img" v-for="(item, index) in ArticleFile" v-if="index < 3">
-					<img :src="fileRoot+item.url" >
+					<img :src="fileRoot + item.url" >
 				</div>
 			</div>
 			<!-- 视频大图 -->
@@ -134,7 +134,6 @@ export default {
 </script>
 <style lang="less" scoped>
 	.article {
-	    margin: 0px 0.3rem;
 	    border-bottom: 1px solid @borderColor;
 	    padding: .15rem 0 .1rem;	
 		.article-title{

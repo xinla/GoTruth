@@ -1,6 +1,6 @@
 <template>
     <downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
-        <div>
+        <div class="article-list">
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
             <multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
@@ -57,13 +57,25 @@
                     if(!this.classify || this.classify == 0){
                         let resTopArticle = articleService.getTodayArticle();
                         resArticlePage = articleService.articlePage(this.page,15);
-                        let temp = resArticlePage.recordPage.list;
-                        for (var i = 0; i < temp.length; i++) {
-                            if (temp[i].id == resTopArticle.list[0].id || temp[i].id == resTopArticle.list[1].id) {
-                                temp.splice(i,1);
+                        let temp = resArticlePage.recordPage.list,
+                            same = [];
+                        // console.log(temp);console.log(resTopArticle.list)
+                        // 置顶与推荐查重
+                        for (let i = 0,len = temp.length; i < len; i++) {
+                            for (let j = 0,len1 = resTopArticle.list.length; j < len1; j++) {
+                                if (temp[i].id == resTopArticle.list[j].id) {
+                                    same.push(i);
+                                    break;
+                                }
                             }
+                            if(same.length == resTopArticle.list.length) {break;}
                         }
-                        resArticlePage.recordPage.list = resTopArticle.list.concat(resArticlePage.recordPage.list)
+                        // console.log(same)
+                        // 删除重复
+                        for (let i = 0; i < same.length; i++) {
+                            temp.splice(same[i] - i,1)
+                        }
+                        resArticlePage.recordPage.list = resTopArticle.list.concat(temp)
                     }else{
                         resArticlePage = articleService.articlePage(this.page,15,this.classify);
                     }
@@ -198,5 +210,8 @@
     }
     .animate{
         transition: all .5s;
+    }
+    .article-list{
+        margin: 0px 0.3rem;
     }
 </style>

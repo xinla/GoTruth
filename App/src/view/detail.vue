@@ -23,13 +23,13 @@
 			<i class="iconfont" :class="icon"></i>
 		</div> -->
 		<!-- <div id="audioBox"></div> -->
-		<div class="detail" @scroll="loadScroll">
+		<div class="detail" @scroll="loadScroll" :style="{paddingTop:[(2 === article.type)?'150px':0]}">
 			<section class="content-wrap" v-if="!proFail1">
 				<h1 class="article-title">{{ article.title }}</h1>
-				<div class="publisher bfc-o clearfix">
+				<div class="publisher bfc-o">
 					<router-link :to="{name:'published',query:{userId:article.author}}">
-						<img :src="$Tool.headerImgFilter(artUser.imageurl)" alt="" class="uphoto uphoto-big fl">
-						<div class="article-time-name fl">
+						<img :src="$Tool.headerImgFilter(artUser.imageurl)" alt="" class="uphoto uphoto-big">
+						<div class="article-time-name bfc-d">
 							<div class="uname">
 								{{ artUser.username}}
 							</div>
@@ -42,24 +42,14 @@
 					<button type="button" class="focus bfc-p fr" v-if="userId != article.author" @click="handleFocus(article.author,1)">{{focusState?'已关注':'关注'}}</button>
 				</div>
 				<div class="content">
-					<div class="article-content">
+					<div class="article-content" v-if='article.content'>
 		            <p v-html="article.content"></p>
 		          </div>
-					<div class="phone-content">
-						<div v-if="1 === article.type" class="phone-img clearfix">
-							<div class="tel-img fl" v-for="(item,index) in ArticleFile">
-								<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url" class="previewer-demo-img">
-							</div>
-						</div>
-						<div v-else-if="2 === article.type">
-							<video-player class="video-player vjs-custom-skin"
-								ref="videoPlayer"
-							 	:playsinline="true"
-							  	:options="playerOptions"
-							  	@play="onPlayerPlay()">
-							</video-player>
-						</div>
+		          <div v-if="1 === article.type" class="phone-img clearfix">
+					<div class="tel-img fl" v-for="(item,index) in ArticleFile">
+						<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url" class="previewer-demo-img">
 					</div>
+				</div>
 					<a :href="article.sourceurl" class="see-text" v-if="sourceShow">查看原文</a>
 				</div>
 				<div :class="['loveCiew',{'loveCiew-unfold':!isUnfold}]">
@@ -98,12 +88,16 @@
 					<i class="iconfont icon-warning-circle"></i>
 				</li>
 			</ul>
-
 			<ul class="article-menu" v-else>
 				<li :class="{current:current == 1}" @click="handleSwitch(1)">评论</li>
 				<li :class="{current:current == 2}" @click="handleSwitch(2)">转发</li>
 				<li :class="{current:current == 3}" @click="handleSwitch(3)">点赞</li>
 			</ul>
+			<multIT v-for="(item,index) in aboutArticle" :article="item" :key="index" :ifSingle="true">
+				
+			</multIT>
+			<div>
+			</div>
 
 			<div class="hot-comment" v-if="ifSwitchB">
 				<div class="hot-title">热门评论</div>
@@ -479,7 +473,8 @@ export default {
 				content:'',
 				thumbs:[]
 			},
-			isUnfold:false
+			isUnfold:false,
+			aboutArticle:[]
 		}
 	},
 	activated(){
@@ -511,10 +506,14 @@ export default {
 			if (resArticleDetail&&resArticleDetail.status == "success") {
 				this.article = resArticleDetail.record;
 				// 获取富文本编辑器内容中的图片
-				let img= this.article.content.match(/<img[^>]+>/g);
-				for(let i =0; i<img.length;i++){
-				    this.articleImg = img[i];
-                }
+				// console.log(this.article.content)
+				if (this.article.content) {
+					let img = this.article.content.match(/<img[^>]+>/g);
+					// console.log(img)
+					for(let i =0; i<img.length;i++){
+					    this.articleImg = img[i];
+	                }
+				}
 				if(!this.article.content){
 					this.iconShow = false;
 				}else{
@@ -600,6 +599,11 @@ export default {
 			//评论滚动近底部，自动加载 一屏1080
 			this.loadComment();
 			this.ifLoad = false;
+			articleService.articleVideoPage(1,2,this.article.type,2,data=>{
+				if (data && data.status == "success") {
+					this.aboutArticle = data.recordPage.list;
+				}
+			})
 		},
 		handleOpenInput(){
 			this.textShow();
@@ -1263,8 +1267,8 @@ export default {
 		background-color: #fff;
 		.content-wrap{
 			.article-title{
-        padding-top: .4rem;
-        padding-bottom: .2rem;
+	        padding-top: .4rem;
+	        // padding-bottom: .2rem;
 				font-size: .42rem;
 				line-height: .58rem;
 				letter-spacing: .02rem;
@@ -1277,8 +1281,8 @@ export default {
 			.publisher{
 				padding: .45rem 0;
 				.uphoto{
-					width: 1.2rem;
-					height: 1.2rem;
+					width: .8rem;
+					height: .8rem;
 					border-radius: 50%;
 					margin-right: .2rem;
 				}
@@ -1286,7 +1290,7 @@ export default {
 					width: calc(100% - 2.78rem);
 					margin-right: .22rem;
 					.uname{
-						padding-top: .25rem;
+						// padding-top: .25rem;
 						font-size: .32rem;
 					}
 					.utime{
@@ -1303,11 +1307,11 @@ export default {
 					width: 1.16rem;
 					height: .56rem;
 					line-height: .56rem;
-					margin-top: .4rem;
+					// margin-top: .4rem;
 					text-align: center;
 					color: #fff;
 					border-radius: .1rem;
-					background-color: #f85959;
+					background-color: @mainColor;
 					border: .02rem solid transparent;
 				}
 				.btnActive{
@@ -1317,7 +1321,7 @@ export default {
 				}
 			}
 			.content{
-				padding-bottom: .45rem;
+				// padding-bottom: .45rem;
 				.article-content{
 					// padding-bottom: .4rem;
 					line-height: .5rem;
@@ -1872,7 +1876,7 @@ export default {
 	}
 	.unfold-ciew{
 	    line-height: 30px;
-	    background: #f00;
+	    background: @mainColor;
 	    color: #fff;
 	    border-radius: 50px;
 	    margin: 10px;
@@ -1889,11 +1893,13 @@ export default {
 	    z-index: 1;
 	}
 	.icon-arrow-left{
-	    color: #eee;
+	    color: #ddd;
 	    position: absolute;
-	    top: 35px;
+        top: 22px;
 	    z-index: 2;
-	    left: 10px;
+	    width: 40px;
+	    line-height: 30px;
+	    text-align: center;
 	}
 </style>
 
