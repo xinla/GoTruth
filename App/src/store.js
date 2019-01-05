@@ -105,6 +105,9 @@ const actions = {
   setNewVersion({commit},data) {
     commit("setNewVersion",data);
   },
+  setCurrentVersion({commit},data) {
+    commit("setCurrentVersion",data);
+  },
   setIsScolling({commit},data) {
     commit("setIsScolling",data);
   },

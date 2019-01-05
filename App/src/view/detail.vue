@@ -477,7 +477,8 @@ export default {
 			aboutArticle:[]
 		}
 	},
-	activated(){
+	mounted(){
+			// debugger
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
         if(!localStorage.id || !localStorage.token){
@@ -1224,12 +1225,26 @@ export default {
 	},
 	watch:{
 		id(){
+			// debugger
 			this.ifLoad = true;
 			setTimeout(()=>{
 				this.init();
 				this.ifLoad = false;
 			},delay)
 			//注：延迟时长必须在动画大于切换动画（300）
+		},
+		$route(to,from) {
+			// debugger
+			if (to.query.id) {
+				this.id = to.query.id;
+				this.detailType = this.$route.query.detailType || 0;
+				if(!localStorage.id || !localStorage.token){
+		            this.focusState = false;
+		            this.collectIcon = false;
+		            this.ifLike = false;
+		            this.likeStatus = false;
+		        }
+			}
 		}
 	},
 	// beforeRouteEnter(to,from,next){

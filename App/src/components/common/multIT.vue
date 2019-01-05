@@ -81,6 +81,7 @@ export default {
 			type:Boolean,
 			default:false,
 		},
+		// 是否为单张小图片视图
 		ifSingle:{
 			type:Boolean,
 			default:false,
@@ -121,12 +122,11 @@ export default {
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);
 			if (this.article.type == 3) {
 				this.imgList = this.$Tool.extractImg(this.article.content,3);
-
 			}
 		},
 		goDetail(){
 			if (!this.$store.state.isScolling) {
-				this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType}})
+				!this.ifSingle ? this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType}}) : this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType},replace:'true'})
 			}
 		}
 	}

@@ -52,7 +52,7 @@ export default {
 				if (res.recordPage.list.length) {
 					this.proIf = false;
 					this.page++;						
-					this.arcList = this.arcList.concat(res.recordPage.list);					
+					this.arcList = this.arcList.concat(res.recordPage.list);
 				}else if (this.arcList.length == 0) {
 					this.proIf = true;
 					this.proMes = "您想要的真相消失啦~~~";

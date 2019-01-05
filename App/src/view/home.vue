@@ -28,7 +28,7 @@
 			          	<listArticle></listArticle>
 			        </swiper-item>
 			        <swiper-item v-for="(item,index) in classifyList" :key="index">
-			          	<listArticle :classify="item.classifycode" :show="item.classifycode == classifyIndex?showArr[classifyIndex] = true:showArr[item.classifycode]"></listArticle>
+			          	<listArticle :classify="item.classifycode" :show="index + 1 == classifyIndex?showArr[classifyIndex] = true:showArr[index + 1]"></listArticle>
 			        </swiper-item>
 		      	</swiper>
 			</div>
