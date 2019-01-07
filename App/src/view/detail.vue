@@ -94,7 +94,7 @@
 				<li :class="{current:current == 3}" @click="handleSwitch(3)">点赞</li>
 			</ul>
 			<multIT v-for="(item,index) in aboutArticle" :article="item" :key="index" :ifSingle="true">
-				
+
 			</multIT>
 			<div>
 			</div>
@@ -607,6 +607,16 @@ export default {
 			})
 		},
 		handleOpenInput(){
+            if(!localStorage.id){
+                this.$Tool.loginGoBack({
+                    returnpage: "/detail?",
+                    query:{id:this.id},
+                    name:'detail',
+                    call:()=>{
+                    }
+                });
+                return;
+            }
 			this.textShow();
 			if(this.replyShow){
 				this.popMask = true;
@@ -757,16 +767,7 @@ export default {
 				this.popMask = false;
 				return;
 			}
-			if(!localStorage.id){
-                this.$Tool.loginGoBack({
-                    returnpage: "/detail?",
-                    query:{id:this.id},
-                    name:'detail',
-                    call:()=>{
-                    }
-                });
-				return;
-			}
+
             let userId = localStorage.id;
             if(this.popList.desc && this.$Tool.checkInput(this.popList.desc)) {
                 if(this.commentType == 1) {
@@ -1003,21 +1004,6 @@ export default {
 		 * @return {[type]}      [description]
 		 */
 		handleReport(type){
-			this.reportShow = true;
-			this.popMask = true;
-			this.reportType = type;
-		},
-		/**
-		 * 提交举报
-		 * @return {[type]}      [description]
-		 */
-		handleSendReport(){
-			// reportInfo:{
-			// 	reporttime:'',//"举报时间" ,
-			// 	itemid:'',//"对象id",
-			// 	reportuserid:'',//"被举报人id",
-			// 	type:'',//"类型"  1.文章举报
-			// },
             if (!localStorage.id ) {
                 this.$Tool.loginGoBack({
                     returnpage: "/detail?",
@@ -1029,11 +1015,15 @@ export default {
                 return;
 
             }
-            this.conReport();
-
+			this.reportShow = true;
+			this.popMask = true;
+			this.reportType = type;
 		},
-
-        conReport(){
+		/**
+		 * 提交举报
+		 * @return {[type]}      [description]
+		 */
+		handleSendReport(){
             if(this.reportreasion){
                 let reportInfo;
                 if (this.reportType === 1) {
@@ -1068,7 +1058,9 @@ export default {
                 this.reportShow = false;
                 this.popMask = false;
             }
-        },
+
+		},
+
 
 		// 个人中心所能看到的switch
 		handleSwitch(v){;
