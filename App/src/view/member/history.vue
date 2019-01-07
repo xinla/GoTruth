@@ -8,7 +8,8 @@
 			</div>
 		</div>
 		<div class="list-wrap">
-			<articleSub v-for="(item,index) in arcList" :article="item" :whi="index" :ifPublisher="true"  @delete="deleteArticle" :key="index"></articleSub>			
+			<articleSub v-for="(item,index) in arcList" v-if="!deleteIndex[index]" :article="item" :whi="index" :ifPublisher="true" :ifHistory="true" @delete="deleteArticle" :key="index">
+			</articleSub>			
 		</div>
 		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
 		<load-more :show-loading="ifLoad"></load-more>
@@ -33,10 +34,12 @@ export default {
 			lock:false,
 			ifLoad:true,
 			scrollTop:0,
+			deleteIndex:[]
 		}
 	},
 	activated(){
 		setTimeout(()=>{
+			this.deleteIndex = [];
 			this.ifDeleteAll = false;
 			this.page = 1;
 			this.arcList = [];
@@ -77,7 +80,9 @@ export default {
 			function deleteArt (whi) {
 				let resDelete = readHistoryService.clearHistory([id]);
 				if (resDelete && resDelete.status == "success") {
-					this.arcList.splice(whi,1);
+					// this.arcList.splice(whi,1);
+					this.$set(this.deleteIndex,whi,true);
+					// this.deleteIndex[whi] = true;
 					this.$vux.alert.show({
 					  content:'删除成功',
 					})

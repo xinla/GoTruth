@@ -24,12 +24,12 @@ export default {
 			// inviteCode:localStorage.inviteCode || 1,
 			shareDesc:{},
 			shareShow:false,
-			url:config.domain + '/#/login?inviteCode=' + (localStorage.inviteCode || 1)
+			url:config.share + '/#/login?inviteCode=' + (localStorage.inviteCode || 1)
 		}
 	},
 	mounted(){
 		// this.inviteCode = localStorage.inviteCode || 1;
-		// this.url = config.domain + '/#/login?inviteCode=' + this.inviteCode;
+		// this.url = config.share + '/#/login?inviteCode=' + this.inviteCode;
 		this.creatQRCode();
 	},
 	methods:{

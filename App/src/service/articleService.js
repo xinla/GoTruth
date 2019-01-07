@@ -154,5 +154,17 @@ service.getTodayArticle = function(){
 
 	return resMap;
 }
+//获取推荐视频
+service.getTjsp = function(classify,call){
+	var params = {
+		classify,//:"文章分类"
+	};
+	if (call) {
+		commonUtil.ajax(controller+'/getTjsp',params,call);
+	 	return;
+	}
+	var resMap = commonUtil.ajaxAsync(controller+'/getTjsp',params);
+	return resMap;
+}
 export default service
 

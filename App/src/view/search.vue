@@ -348,4 +348,7 @@ export default {
 			}
 		}
 	}
+	.search-result {
+	    padding: 0 .3rem;
+	}
 </style>

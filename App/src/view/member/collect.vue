@@ -8,13 +8,15 @@
 			</div>
 		</div>
 		<div class="list-wrap">
-			<articleThree
+			<articleSub
                     v-for="(item,index) in arcList"
                     :article="item"
                     :whi="index"
                     :ifPublisher="true"
                     @delete="deleteArticle"
-                    :key="index"></articleThree>
+                    :key="index"
+                    v-if="!deleteIndex[index]">
+            </articleSub>
 		</div>
 		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
 		<load-more :show-loading="ifLoad"></load-more>
@@ -22,12 +24,12 @@
 </template>
 
 <script>
-import articleThree from '@/components/common/articleThree'
+import articleSub from '@/components/common/articleSub'
 import readHistoryService from '@/service/readHistoryService'
 import articleCollectService from '@/service/articleCollectService'
 export default {
 	components:{
-		articleThree,
+		articleSub,
 	},
 	data(){
 		return {
@@ -39,6 +41,7 @@ export default {
 			lock:false,
 			ifLoad:true,
 			scrollTop:0,
+			deleteIndex:[]
 		}
 	},
 	activated(){
@@ -84,7 +87,8 @@ export default {
 				// debugger
 				if (resDelete && resDelete.status == "success") {
 					if (resDelete.result == 0) {
-						this.arcList.splice(whi,1);
+						// this.arcList.splice(whi,1);
+						this.$set(this.deleteIndex,whi,true);
 						this.$vux.alert.show({
 						  content:'删除成功',
 						})						
@@ -114,7 +118,7 @@ export default {
 				for (var i = 0,len = this.arcList.length; i < len; i++) {
 					temp.push(this.arcList[i].articleid)
 				}
-				console.log(temp)
+				// console.log(temp)
 				let resDelete = articleCollectService.deleteCollect(temp);
 				if (resDelete && resDelete.status == "success") {
 					this.arcList = [];

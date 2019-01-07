@@ -11,14 +11,16 @@
 		<!-- 二或三图 -->
 		<template v-if="!ifSingle">
 			<div class="multiple-img-wrap" v-if="3 === article.type && imgList.length > 1">
-				<div class="multiple-img" v-for="(item,index) in imgList">
-					<img :src="item">
-				</div>
+				<!-- <div class="multiple-img" v-for="(item, index) in imgList">
+					<img :src="item" >
+				</div> -->
+				<img class="multiple-img" :src="item" v-for="(item,index) in imgList">
 			</div>
 			<div class="multiple-img-wrap" v-else-if="1 === article.type && ArticleFile.length > 1">
-				<div class="multiple-img" v-for="(item, index) in ArticleFile" v-if="index < 3">
+				<img class="multiple-img" :src="item.url && (fileRoot + item.url)" v-for="(item,index) in ArticleFile">
+				<!-- <div class="multiple-img" v-for="(item, index) in ArticleFile" v-if="index < 3">
 					<img :src="fileRoot + item.url" >
-				</div>
+				</div> -->
 			</div>
 			<!-- 视频大图 -->
 			<div class="article-video" v-else-if="2 === article.type && ArticleFile.length">
@@ -30,11 +32,12 @@
 		</template>
 		<!-- 文章评论 -->
 		<div class="article-footer clearfix">
-			<div class="fl">
-				<span class="publisher oe" v-if="ifPublisher">{{publisher}}</span>
+				<!-- <span class="publisher oe" v-if="ifPublisher">{{publisher}}</span> -->
+				<span class="publisher oe">{{publisher}}</span>
 				<span>{{commentNum}}评论</span>
 				<span>{{publishtime}}</span>
-			</div>
+			<!-- <div class="fl">
+			</div> -->
 			<div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">
 				<i class="iconfont icon-remove"></i>
 			</div>
@@ -164,9 +167,10 @@ export default {
 			height: 1.6rem;
 			overflow: hidden;
 			img{
-				display: block;
+				/* display: block;
 				width: 100%;
-				height: 100%;
+				height: 100%; */
+				width: 0px;
 				padding: .02rem;
 				object-fit: cover;
 			}

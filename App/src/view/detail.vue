@@ -52,6 +52,8 @@
 				</div>
 					<a :href="article.sourceurl" class="see-text" v-if="sourceShow">查看原文</a>
 				</div>
+				<multIT v-for="(item,index) in aboutArticle" :article="item" :key="index" :ifSingle="true">
+				</multIT>
 				<div :class="['loveCiew',{'loveCiew-unfold':!isUnfold}]">
 					<p class="red">爱心提示：</p>
 					<p>
@@ -93,9 +95,6 @@
 				<li :class="{current:current == 2}" @click="handleSwitch(2)">转发</li>
 				<li :class="{current:current == 3}" @click="handleSwitch(3)">点赞</li>
 			</ul>
-			<multIT v-for="(item,index) in aboutArticle" :article="item" :key="index" :ifSingle="true">
-
-			</multIT>
 			<div>
 			</div>
 
@@ -600,9 +599,11 @@ export default {
 			//评论滚动近底部，自动加载 一屏1080
 			this.loadComment();
 			this.ifLoad = false;
-			articleService.articleVideoPage(1,2,this.article.type,2,data=>{
+			// 获取视频相关推荐
+			articleService.getTjsp(this.article.type,data=>{
 				if (data && data.status == "success") {
-					this.aboutArticle = data.recordPage.list;
+					// console.log(data)
+					this.aboutArticle = data.recordList;
 				}
 			})
 		},
@@ -930,7 +931,7 @@ export default {
 			let reg = /[^\u4e00-\u9fa5]+/g;
 			let tempContent = this.article.content.replace(reg,"");
 			this.shareDesc = {
-				href:config.domain + location.href.substring(location.href.indexOf('/',10)),
+				href:config.share + '/#/detail' + location.href.substring(location.href.indexOf('?')),
 				title: this.article.title,
 				content: tempContent.substring(0,80)
 			};

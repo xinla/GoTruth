@@ -782,7 +782,7 @@ export default {
 		},
 		share(type){
 			let msg = {
-				href:config.domain + location.href.substr(location.href.indexOf('/',10)),
+				href:config.share + '/#/detail' + location.href.substr(location.href.indexOf('?')),
 				title:this.article.title,
 				content:this.article.content.substr(0,100),
 				// thumbs:this.ArticleFile[0]['imageurl'],

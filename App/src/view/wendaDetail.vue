@@ -935,7 +935,7 @@
                 let reg = /[^\u4e00-\u9fa5]+/g;
                 let tempContent = this.answer.content.replace(reg,"");
                 this.shareDesc = {
-                    href:config.domain + location.href.substring(location.href.indexOf('/',10)),
+                    href:config.share + '/#/detail' + location.href.substring(location.href.indexOf('?')),
                     title: this.answer.title,
                     content: tempContent.substring(0,80)
                 };
