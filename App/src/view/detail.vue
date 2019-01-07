@@ -508,13 +508,13 @@ export default {
 				this.article = resArticleDetail.record;
 				// 获取富文本编辑器内容中的图片
 				// console.log(this.article.content)
-				if (this.article.content) {
+				/*if (this.article.content) {
 					let img = this.article.content.match(/<img[^>]+>/g);
 					// console.log(img)
 					for(let i =0; i<img.length;i++){
 					    this.articleImg = img[i];
 	                }
-				}
+				}*/
 				if(!this.article.content){
 					this.iconShow = false;
 				}else{
