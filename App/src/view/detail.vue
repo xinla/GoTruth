@@ -23,7 +23,7 @@
 			<i class="iconfont" :class="icon"></i>
 		</div> -->
 		<!-- <div id="audioBox"></div> -->
-		<div class="detail" @scroll="loadScroll" :style="{paddingTop:[(2 === article.type)?'150px':0]}">
+		<div class="detail" @scroll="loadScroll" :style="{paddingTop:[(2 === article.type)?'3rem':0]}">
 			<section class="content-wrap" v-if="!proFail1">
 				<h1 class="article-title">{{ article.title }}</h1>
 				<div class="publisher bfc-o">
@@ -1880,7 +1880,7 @@ export default {
 	    transition: all .5s;
 	}
 	.loveCiew-unfold{
-		height: 45px;
+		height: 52px;
 	}
 	.unfold-ciew{
 	    line-height: 30px;
