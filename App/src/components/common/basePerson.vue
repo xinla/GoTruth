@@ -14,7 +14,7 @@
 				</div>
 				<div class="member-msg-modal">
 					<ul class="member-msg-list">
-						<li class="member-msg-item" @click="$Tool.goPage({ name:'release',query:{'title':'发布图文',sort:1}})">
+						<li class="member-msg-item" @click="(loginUserId == userId) && $Tool.goPage({ name:'release',query:{'title':'发布图文',sort:1}})">
 							<span>{{publidsedNum}}</span>
 							发布
 						</li>
@@ -44,18 +44,31 @@
 				<router-link class="member-switch-item active" v-for="(item, index) in switchListPrivate" tag="li" :to="{path:item.path,}" :key="index" >{{item.desc}}
 				</router-link> -->
 			</ul>
-			<tab bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="current">
+			<tab bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="current" v-show="loginUserId == userId">
 		      <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
 		      	<router-link :to="{path:item.path,query:{userId,}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
-		      <tab-item v-if="loginUserId == userId" v-for="(item, index) in switchListPrivate" :key="item.id">
+		      <tab-item v-for="(item, index) in switchListPrivate" :key="item.id">
 		      	<router-link :to="{path:item.path,query:{userId:item.userId}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
 		    </tab>
+		    <tab v-show="loginUserId != userId" bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="currentSub">
+		      <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
+		      	<router-link :to="{path:item.path,query:{userId,}}" replace>
+		      		{{item.desc}}
+				</router-link>
+		      </tab-item>
+		      <!-- <tab-item v-if="loginUserId == userId" v-for="(item, index) in switchListPrivate" :key="item.id">
+		      	<router-link :to="{path:item.path,query:{userId:item.userId}}" replace>
+		      		{{item.desc}}
+				</router-link>
+		      </tab-item> -->
+		    </tab>
+
 		</div>
 		<keep-alive>
 			<router-view class="router-view"></router-view>
@@ -72,8 +85,9 @@ export default {
 	data(){
 		return {
 			loginUserId:localStorage.id || 0,
-			userId:localStorage.id,
+			userId:0,
 			current:0,
+			currentSub:0,
 			currentName:"全部",
 			imgs: [
                 {
@@ -136,13 +150,16 @@ export default {
 	watch:{
 		userId(){
 			this.init();
-		}
+		},
+		$route(to,from){
+			to.query.userId ? (this.userId = to.query.userId):this.userId = localStorage.id;
+		},
 	},
-	activated() {
-  	this.$nextTick(()=>{
-      this.init();
-  	})
-  },
+	// activated() {
+	//   	this.$nextTick(()=>{
+	//       this.init();
+	//   	})
+	// },
 	beforeRouteEnter (to, from, next) {
     	if (!to.query.userId && !localStorage.id) { 
             GoTruth.$vux.alert.show({

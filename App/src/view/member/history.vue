@@ -130,7 +130,7 @@ export default {
 			}
 		},
 		loadMore(e){
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-350) {
+			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-10) {
 				this.init();
 				// console.log(1)
 			}

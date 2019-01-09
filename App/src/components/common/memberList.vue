@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<ul class="member" v-if="list.length">
-			<li class="member-list" v-for="(item,index) in userList">
+			<li class="member-list" v-for="(item,index) in userList" @click="goPerson(item.id)">
 				<img class="uname" :src="item.imageurl?(fileRoot+item.imageurl):imgurl">
 				{{ item.username }}
-				<div class="fr ac" v-if="ifFocus" @click="doFocus(item.id,index);">
+				<div class="fr ac" v-if="ifFocus" @click.stop="doFocus(item.id,index);">
 					<span v-if="index == currentFocus?focus:1" class="focused">已关注</span>
 					<span v-else class="focus">关注</span>					
 				</div>
@@ -85,6 +85,10 @@ export default{
 					}
 				}
 			})
+		},
+		goPerson(userId){
+			this.$Tool.goPage({name:'published',query:{userId,}})
+			// location.reload();
 		}
 	},
 	watch:{
@@ -96,7 +100,7 @@ export default{
 }	
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 	.member{
 		background: #fff;
 	}
@@ -126,6 +130,6 @@ export default{
 	}
 	.focus{
 	    color: #fff;
-	    background: #f25d5d;	    
+	    background: @mainColor;	    
 	}
 </style>
