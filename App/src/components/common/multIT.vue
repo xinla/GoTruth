@@ -35,7 +35,7 @@
 				<!-- <span class="publisher oe" v-if="ifPublisher">{{publisher}}</span> -->
 				<span class="publisher oe">{{publisher}}</span>
 				<span>{{commentNum}}评论</span>
-				<span>{{publishtime}}</span>
+				<span class="publish-time">{{publishtime}}</span>
 			<!-- <div class="fl">
 			</div> -->
 			<div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">
@@ -202,7 +202,7 @@ export default {
 			}
 		}
 		.article-footer{
-			height: .6rem;
+			// height: .6rem;
 			line-height: .6rem;
 			font-size: .24rem;
 			color: #a3a3a3;
@@ -224,6 +224,9 @@ export default {
 					font-size: .24rem;
 				}
 			}
+		}
+		.publish-time{
+			white-space: nowrap;
 		}
 	}
 	img{

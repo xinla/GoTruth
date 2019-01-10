@@ -599,13 +599,24 @@ export default {
 			//评论滚动近底部，自动加载 一屏1080
 			this.loadComment();
 			this.ifLoad = false;
-			// 获取视频相关推荐
-			articleService.getTjsp(this.article.type,data=>{
-				if (data && data.status == "success") {
-					// console.log(data)
-					this.aboutArticle = data.recordList;
-				}
-			})
+			// 获取文章相关推荐
+			if (this.article.type != 2) {
+				articleService.getTjwz(this.article.classify,data=>{
+					if (data && data.status == "success") {
+						// console.log(data)
+						this.aboutArticle = data.recordList;
+						console.log(this.aboutArticle)
+					}
+				})
+			}else{
+				// 获取视频相关推荐
+				articleService.getTjsp(this.article.classify,data=>{
+					if (data && data.status == "success") {
+						// console.log(data)
+						this.aboutArticle = data.recordList;
+					}
+				})
+			}
 		},
 		handleOpenInput(){
             if(!localStorage.id){

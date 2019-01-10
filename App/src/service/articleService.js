@@ -166,5 +166,17 @@ service.getTjsp = function(classify,call){
 	var resMap = commonUtil.ajaxAsync(controller+'/getTjsp',params);
 	return resMap;
 }
+// 获取推荐文章
+service.getTjwz = function(classify,call){
+	var params = {
+		classify,//:"文章分类"
+	};
+	if (call) {
+		commonUtil.ajax(controller+'/getTjwz',params,call);
+	 	return;
+	}
+	var resMap = commonUtil.ajaxAsync(controller+'/getTjwz',params);
+	return resMap;
+}
 export default service
 
