@@ -209,9 +209,7 @@
             this.$nextTick(()=>{
                 this.id = this.$route.query.id;
                 this.wenda = JSON.parse(this.$route.query.item);
-                console.log(this.answer)
                 this.ifLoad = true;
-
                 if(this.timer){
                     clearTimeout(this.timer);
                 }
@@ -223,8 +221,6 @@
                     }
                     this.ifLoad = false;
                 },120);
-
-
             });
         },
         methods:{
@@ -239,19 +235,12 @@
                 }
                 this.ifLoad = true;
                 this.ifImgNull = true;
-                if(this.wenda.images == "") {
-                    this.ifImgNull = false;
-                    return false;
-                }else{
-                    this.ifImgNull = true;
-                }
                 this.imgArr = this.wenda.images.split(',');
-
-                if(this.imgArr.length == 1) {
-                    this.bigImg = true;
-                }else{
-                    this.bigImg = false;
+                if(!this.wenda.images){
+                    this.ifImgNull = false;
                 }
+                // this.ifImgNull = true;
+
                 // 获取回答列表
                 this.page = 1;
                 this.answer =[];

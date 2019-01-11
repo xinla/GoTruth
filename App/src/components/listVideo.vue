@@ -1,9 +1,8 @@
 <template>
 	<downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore">
-		<div>				
+		<div>
 			<loading-main v-show="!arcList.length"></loading-main>
-			
-			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>		
+			<load-more v-show="arcList.length && ifLoad" tip="正在加载"></load-more>
 		</div>
 	</downRefresh>
 </template>
@@ -30,7 +29,7 @@ export default {
 	mounted () {
 		this.$nextTick(()=>{
 			if (!this.classify) {
-				this.init();				
+				this.init();
 			}
 		})
 	},
@@ -40,9 +39,9 @@ export default {
 			page:1,
 			lock:false,
 			ifLoad:true,
-			scrollTop:0,	
+			scrollTop:0,
 			total:0,
-			ifNew:false,		
+			ifNew:false,
 		}
 	},
 	methods:{

@@ -110,7 +110,7 @@ export default {
 				if (data && data.status == "success") {
 					this.playerOptions.sources[0].src = this.fileRoot + data.result.filelist[0].url;
 					this.playerOptions.poster = this.fileRoot + data.result.filelist[0].thumbnail;				
-				}				
+				}
 			});
 
 			// 获取发布人用户名&头像

@@ -1,5 +1,3 @@
-
-	
 	var listUtil ={
 			/**
 			 * 数组拼接
@@ -48,7 +46,6 @@
 						newArray.push(item);
 					}
 				}
-				
 				return newArray;
 			},
 			/**
