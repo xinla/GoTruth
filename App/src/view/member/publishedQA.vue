@@ -5,7 +5,7 @@
                 :wenda="item"
                 :whi="index"
                 :ifPublisher="false"
-                :ifDel="true"
+                :ifDel="ifDel"
                 @delete="deleteWenda"
                 :key="index">
         </question>
@@ -89,6 +89,11 @@
             },
 
         },
+        computed:{
+            ifDel(){
+                return (localStorage.id == this.userId);
+            }
+        }
     }
 </script>
 

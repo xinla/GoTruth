@@ -8,15 +8,14 @@
 			</div>
 		</div> -->
 		<multIT
-                v-for="(item,index) in arcList"
-                :article="item"
-                :whi="index"
-                detailType=1
-                :ifPublisher="false"
-                :ifDel="true"
-                @delete="deleteArticle"
-                :key="index">
-
+            v-for="(item,index) in arcList"
+            :article="item"
+            :whi="index"
+            :detailType='ifSelf'
+            :ifPublisher="false"
+            :ifDel="ifSelf"
+            @delete="deleteArticle"
+            :key="index">
         </multIT>
 		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
 		<load-more :show-loading="ifLoad"></load-more>
@@ -105,6 +104,11 @@ export default {
 		},
 
 	},
+	computed:{
+		ifSelf(){
+			return (localStorage.id == this.userId);
+		}
+	}
 	// watch:{
 	// 	arcList(){
 	// 		this.getArticleInfo();	

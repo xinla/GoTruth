@@ -605,14 +605,12 @@ export default {
 					if (data && data.status == "success") {
 						// console.log(data)
 						this.aboutArticle = data.recordList;
-						console.log(this.aboutArticle)
 					}
 				})
 			}else{
 				// 获取视频相关推荐
 				articleService.getTjsp(this.article.classify,data=>{
 					if (data && data.status == "success") {
-						// console.log(data)
 						this.aboutArticle = data.recordList;
 					}
 				})

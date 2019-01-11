@@ -256,14 +256,16 @@ export default new Router({
           path:'publishedArticle',
           name:'publishedArticle',
           component: (resolve)=>{
-            require(['@/view/member/publishedArticle.vue'],resolve)
+            require(['@/view/member/published.vue'],resolve)
+            // require(['@/view/member/publishedArticle.vue'],resolve)
           },         
         },
         {
           path:'publishedVideo',
           name:'publishedVideo',
           component: (resolve)=>{
-            require(['@/view/member/publishedVideo.vue'],resolve)
+            require(['@/view/member/published.vue'],resolve)
+            // require(['@/view/member/publishedVideo.vue'],resolve)
           },         
         },
         {

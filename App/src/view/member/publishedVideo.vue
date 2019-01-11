@@ -7,7 +7,16 @@
 				<span class="fr" @click="ifDeleteAll = false;">完成</span>					
 			</div>
 		</div> -->
-		<multIT v-for="(item,index) in arcList" :article="item" :whi="index" detailType=1 :ifPublisher="false" :ifDel="true" @delete="deleteArticle" :key="index"></multIT>
+		<multIT 
+			v-for="(item,index) in arcList" 
+			:article="item" 
+			:whi="index" 
+			:detailType='ifSelf'
+			:ifPublisher="false" 
+			:ifDel="ifSelf" 
+			@delete="deleteArticle" 
+			:key="index">
+		</multIT>
 			<!-- <bigIVT :article="item" v-else="item.type==2"></bigIVT>	 -->
 		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
 		<load-more :show-loading="ifLoad"></load-more>
@@ -85,15 +94,18 @@ export default {
 					})
 				}
 			}
-
 		},
 		loadMore(e){
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-350) {
+			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-10) {
 				this.init();
 			}
 		},
-
 	},
+	computed:{
+		ifSelf(){
+			return (localStorage.id == this.userId);
+		}
+	}
 	// watch:{
 	// 	arcList(){
 	// 		this.getArticleInfo();	

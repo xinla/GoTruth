@@ -46,19 +46,19 @@
 			</ul>
 			<tab bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="current" v-show="loginUserId == userId">
 		      <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
-		      	<router-link :to="{path:item.path,query:{userId,}}" replace>
+		      	<router-link class="block" :to="{path:item.path,query:{userId,}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
 		      <tab-item v-for="(item, index) in switchListPrivate" :key="item.id">
-		      	<router-link :to="{path:item.path,query:{userId:item.userId}}" replace>
+		      	<router-link class="block" :to="{path:item.path,query:{userId:item.userId}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
 		    </tab>
 		    <tab v-show="loginUserId != userId" bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="currentSub">
 		      <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
-		      	<router-link :to="{path:item.path,query:{userId,}}" replace>
+		      	<router-link class="block" :to="{path:item.path,query:{userId,}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
@@ -153,7 +153,16 @@ export default {
 		},
 		$route(to,from){
 			to.query.userId ? (this.userId = to.query.userId):this.userId = localStorage.id;
+			if(this.$route.name == 'published'){
+				this.ifSelf?this.current = 0:this.currentSub = 0;
+			}
+			// console.log(this.current)
 		},
+	},
+	computed:{
+		ifSelf(){
+            return (localStorage.id == this.userId);
+        }
 	},
 	// activated() {
 	//   	this.$nextTick(()=>{
@@ -273,6 +282,10 @@ export default {
 	    height: calc(100% - 190px);
 	    overflow-y: auto;
 		background: #fff;
+		padding: 0 15px;
+	}
+	.block{
+		display: block;
 	}
 </style>
 

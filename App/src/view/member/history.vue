@@ -33,7 +33,7 @@ export default {
 			page:1,
 			lock:false,
 			ifLoad:true,
-			scrollTop:0,
+			// scrollTop:0,
 			deleteIndex:[]
 		}
 	},
@@ -164,5 +164,8 @@ export default {
 	}
 	.list-wrap{
 		margin-top: 40px;
+	}
+	.router-view{
+		padding: 0;
 	}
 </style>

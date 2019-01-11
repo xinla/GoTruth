@@ -1,14 +1,15 @@
 <template>
     <div @scroll="loadMore">
         <multIT
-                v-for="(item,index) in arcList"
-                :article="item"
-                :whi="index"
-                detailType=1
-                :ifPublisher="false"
-                :ifDel="true"
-                @delete="deleteArticle"
-                :key="index">
+            v-for="(item,index) in arcList"
+            :article="item"
+            :whi="index"
+            :detailType='ifSelf'
+            :ifPublisher="false"
+            :ifDel="ifSelf"
+            @delete="deleteArticle"
+            :key="index"
+            v-if="!deleteIndex[index]">
         </multIT>
         <!-- <bigIVT :article="item" v-else="item.type==2"></bigIVT>	 -->
         <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
@@ -30,10 +31,13 @@
                 page:1,
                 lock:false,
                 ifLoad:true,
+                deleteIndex:[]
             }
         },
-        activated(){
+        mounted(){
+            // console.log(1)
             setTimeout(()=>{
+                this.deleteIndex = [];
                 this.userId = this.$route.query.userId;
                 this.page = 1;
                 this.arcList = [];
@@ -45,12 +49,21 @@
                 this.proIf = false;
                 this.lock = true;
                 this.ifLoad = true;
-                var res = articleService.getArticleByUser(this.userId,this.page,10);
+                var res;
+                if (this.$route.name == 'published') {
+                    res = articleService.getArticleByUser(this.userId,this.page,10);
+                }else if (this.$route.name == 'publishedArticle') {
+                    res = articleService.getArticleByUser(this.userId,this.page,10,1);
+                }else if (this.$route.name == 'publishedVideo') {
+                    res = articleService.getArticleByUser(this.userId,this.page,10,2);
+                }
                 if (res&&res.status == "success") {
-                    if (res.result.recordPage.list.length) {
+                    let temp = res.result.recordPage.list;
+                    if (temp.length) {
+                        (temp.length < 10) && (this.ifLoad = false);
                         this.page++;
                         // console.log(this.page)
-                        this.arcList = this.arcList.concat(res.result.recordPage.list);
+                        this.arcList = this.arcList.concat(temp);
                     }else if (this.arcList.length == 0) {
                         this.proIf = true;
                         this.proMes = "您想要的真相消失啦~~~";
@@ -60,7 +73,7 @@
                     this.proMes = "请求失败，请稍后再试！"
                 }
                 this.lock = false;
-                this.ifLoad = false;
+                // this.ifLoad = false;
             },
             deleteArticle([id,whi,event]){
                 let _this = this;
@@ -73,9 +86,10 @@
                 event.stopPropagation();
                 function deleteArt (index) {
                     let resDelete = articleService.deleteArticleById(id);
-                    console.log(resDelete)
+                    // console.log(resDelete)
                     if (resDelete && resDelete.status == "success") {
-                        this.arcList.splice(index,1);
+                        // this.arcList.splice(index,1);
+                        this.$set(this.deleteIndex,whi,true);
                         this.$vux.alert.show({
                             content:'删除成功',
                         })
@@ -99,11 +113,28 @@
             },
 
         },
-        // watch:{
-        // 	arcList(){
-        // 		this.getArticleInfo();
-        // 	}
-        // },
+        computed:{
+            ifSelf(){
+                return (localStorage.id == this.userId);
+            }
+        },
+        watch:{
+            $route(to,from){
+                // console.log(2)
+                if (to.query.userId) {
+                    setTimeout(()=>{
+                        this.deleteIndex = [];
+                        this.userId = this.$route.query.userId;
+                        this.page = 1;
+                        this.arcList = [];
+                        this.init();
+                    },delay)
+                }
+            }
+        	// arcList(){
+        	// 	this.getArticleInfo();
+        	// }
+        },
         // beforeRouteEnter (to, from, next) {
         // 	next(vm=>{
         // 		vm.init();

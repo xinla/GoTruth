@@ -2,7 +2,7 @@
 	<div>
 		<ul class="member" v-if="list.length">
 			<li class="member-list" v-for="(item,index) in userList" @click="goPerson(item.id)">
-				<img class="uname" :src="item.imageurl?(fileRoot+item.imageurl):imgurl">
+				<img class="uname" :src="$Tool.headerImgFilter(item.imageurl)">
 				{{ item.username }}
 				<div class="fr ac" v-if="ifFocus" @click.stop="doFocus(item.id,index);">
 					<span v-if="index == currentFocus?focus:1" class="focused">已关注</span>
@@ -21,8 +21,6 @@ import followService from '@/service/followService'
 export default{
 	data(){
 		return{	
-			imgurl:require('@/assets/images/user_head.jpg'),
-			fileRoot:config.fileRoot+'/',
 			userList:[
 				// {
 				// 	username:'',

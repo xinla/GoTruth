@@ -40,12 +40,13 @@ export default {
 			page:1,
 			lock:false,
 			ifLoad:true,
-			scrollTop:0,
+			// scrollTop:0,
 			deleteIndex:[]
 		}
 	},
 	activated(){
 		setTimeout(()=>{
+			this.deleteIndex = [];
 			this.ifDeleteAll = false;
 			this.page = 1;
 			this.arcList = [];
@@ -173,5 +174,8 @@ export default {
 	}
 	.list-wrap{
 		margin-top: 40px;
+	}
+	.router-view{
+		padding: 0;
 	}
 </style>
