@@ -1,11 +1,13 @@
 <template>
 	<div class="invite ac">
 		<div class="iconfont icon-share" @click="showShare"></div>
-		<pre class="invite-title">
+		<div class="invite-title">
 扫描二维码，注册登录
-即可邀请好友一起看真相！
-（自动绑定您的邀请码）
-		</pre>
+<div>
+	即可邀请好友一起探寻<span class="blod">真相</span>
+</div>
+<small>（自动绑定您的邀请码）</small>
+		</div>
 		<canvas class="qr-code cc" ref="QRCode"></canvas>
 		<share :content="shareDesc" v-model="shareShow"></share>
 	</div>
@@ -62,9 +64,12 @@ export default {
   	.invite-title{
   		margin: 1rem 0;
   		line-height: 24px;
+  		font-weight: 600;
+  		letter-spacing: 1px;
   	}
   	.invite {
   		min-height: 500px;
+  		background: url('../../assets/images/inviteBg.jpg') center no-repeat;
   	}
   	.cc{
   		position: fixed;
@@ -76,5 +81,9 @@ export default {
 	    right: 0.3rem;
 	    font-size: 0.46rem;
 	    font-weight: 500;
+  	}
+  	.blod{
+  		color: red;
+  		font-size: 1.3em;
   	}
 </style>
