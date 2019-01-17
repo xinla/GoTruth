@@ -67,7 +67,4 @@ export default{
 </script>
 
 <style scoped>
-	.router-view{
-		padding: 0;
-	}
 </style>

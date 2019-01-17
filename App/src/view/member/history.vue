@@ -197,7 +197,4 @@ export default {
 	.list-wrap{
 		padding-top: 40px;
 	}
-	.router-view{
-		padding: 0;
-	}
 </style>
