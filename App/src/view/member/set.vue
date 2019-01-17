@@ -25,7 +25,7 @@
 					</div>
 				</router-link>
 			</ul>
-			<ul class="system-list">
+			<!-- <ul class="system-list">
 				<li class="system-item clearfix">
 					<label class="system-tit fl">字体大小</label>
 					<div class="system-wrap fr clearfix">
@@ -53,14 +53,14 @@
 						<i class="iconfont icon-arrow-right fr"></i>
 					</div>
 				</li>
-			</ul>
-			<div class="setup">
-				<group>
-		    		<x-switch title="通知推送" v-model="value"></x-switch>
-		    		<x-switch title="WiFi视频自动播放" v-model="value"></x-switch>
-		    		<x-switch title="夜间模式" v-model="value"></x-switch>
-		  		</group>
-			</div>
+			</ul> -->
+	<!-- 		<div class="setup">
+		<group>
+			    		<x-switch title="通知推送" v-model="value"></x-switch>
+			    		<x-switch title="WiFi视频自动播放" v-model="value"></x-switch>
+			    		<x-switch title="夜间模式" v-model="value"></x-switch>
+			  		</group>
+	</div> -->
 			<ul class="system-list">
 				<li class="system-item clearfix">
 					<label class="system-tit fl">清除缓存</label>
@@ -69,12 +69,12 @@
 						<span class="system-desc fr">10.00MB</span>
 					</div>
 				</li>
-				<li class="system-item clearfix">
-					<label class="system-tit fl">评分</label>
-					<div class="system-wrap fr clearfix">
-						<i class="iconfont icon-arrow-right fr"></i>
-					</div>
-				</li>
+			<!-- 	<li class="system-item clearfix">
+				<label class="system-tit fl">评分</label>
+				<div class="system-wrap fr clearfix">
+					<i class="iconfont icon-arrow-right fr"></i>
+				</div>
+			</li> -->
 				<li class="system-item clearfix" @click="appUpdate()">
 					<label class="system-tit fl">检查版本</label>
 					<div class="system-wrap fr clearfix">

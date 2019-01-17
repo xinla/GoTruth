@@ -5,7 +5,10 @@
             <div class="member-login-way" v-if="!ifLogin">
                 <h4 class="member-title">一键登录</h4>
                 <ul class="clearfix">
-                    <li class="icon-item" v-for="item in loginArr" :key="item.id"><i class="iconfont" :class="item.class"></i></li>
+                    <router-link class="icon-item" :to="{path:loginLink,query:{title:'用户登录'}}" tag="li"><i class="iconfont icon-icon-copy"></i></router-link>
+                    <li class="icon-item" @click="authLogin(2)"><i class="iconfont icon-qq"></i></li>
+                    <li class="icon-item" @click="authLogin(1)"><i class="iconfont icon-weixin1"></i></li>
+                    <li class="icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo"></i></li>
                 </ul>
                 <router-link :to="{path:loginLink,query:{title:'用户登录'}}">
                     <div class="member-btn">
@@ -43,10 +46,10 @@
                     <i class="iconfont" :class="item.class"></i>
                     <span class="member-desc-txt">{{item.desc}}</span>
                 </router-link>
-                <li class="member-desc-item" @click="setDYModel">
-                    <i class="iconfont icon-yejian"></i>
-                    <span class="member-desc-txt">夜间</span>
-                </li>
+               <!--  <li class="member-desc-item" @click="setDYModel">
+                   <i class="iconfont icon-yejian"></i>
+                   <span class="member-desc-txt">夜间</span>
+               </li> -->
             </ul>
         </div>
         <div class="member-body">
@@ -88,7 +91,7 @@
 <script>
     import config from '@/lib/config/config'
     import followService from '@/service/followService'
-
+    import authUtil from '@/service/util/authUtil'
     export default {
         data() {
             return {
@@ -160,7 +163,7 @@
                     }
                 });
             },
-            setDYModel() {
+      /*      setDYModel() {
                 if (!localStorage.dayNight || localStorage.dayNight =='day') {
                     let night = document.getElementById('night');
                     if (night) {
@@ -179,7 +182,7 @@
                     document.getElementById('night').removeAttribute('href');
                     localStorage.dayNight = "day";
                 }
-            },
+            },*/
             copyCode(e){
                 this.$refs.inviteCode.select();
                 document.execCommand("Copy");
@@ -200,7 +203,41 @@
                     this.$Tool.goPage({name:"set",query:{title:'系统设置'}});
                     return;
                 }
+            },
+            authLogin(type){
+            const _this = this;
+            switch (type){
+                case 1://微信登录
+                authUtil.loginByWx(function(resMap){
+                    if(resMap.status === "success"){
+                        let params = resMap.result.wx_user;
+                        userService.loginByWx(params,_this.userInfoStore)
+                    }
+
+                });
+                break;
+                case 2://QQ登录
+                authUtil.loginByQQ(function(resMap){
+                    if(resMap.status === "success"){
+                        let params = resMap.result.qq_user;
+                        userService.loginByQQ(params,_this.userInfoStore)
+                    }
+
+                })
+                break;
+                case 3://新浪登录
+                authUtil.loginByXl(function(resMap){
+                    if(resMap.status === "success"){
+                        let params = resMap.result.xl_user;
+                        userService.loginByXl(params,_this.userInfoStore)
+                    }
+
+                })
+                break;
+                default:
+                console.log("授权出错")
             }
+        },
         }
     }
 

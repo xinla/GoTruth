@@ -62,14 +62,6 @@ import config from '@/lib/config/config'
 import authUtil from '@/service/util/authUtil'
 import userService from '@/service/userService'
 export default{
-	// directives: {
-	//   focus: {
-	//     // 指令的定义
-	//     inserted: function (el) {
-	//       el.focus()
-	//     }
-	//   }
-	// },
 	data(){
 		return{
 			docmHeight: document.documentElement.clientHeight,  //默认屏幕高度
