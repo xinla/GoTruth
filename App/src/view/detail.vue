@@ -47,7 +47,7 @@
 		          </div>
 		          <div v-if="1 === article.type" class="phone-img clearfix">
 					<div class="tel-img fl" v-for="(item,index) in ArticleFile">
-						<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url" class="previewer-demo-img">
+						<img  :src="fileRoot + item.url" :alt="item.filename"  v-preview="fileRoot + item.url">
 					</div>
 				</div>
 					<a :href="article.sourceurl" class="see-text" v-if="sourceShow">查看原文</a>
@@ -1357,27 +1357,27 @@ export default {
 						text-align: center;
 					}
 				}
-				.phone-content{
+				// .phone-content{
 					// padding-bottom: .4rem;
-					.phone-img{
-						width: 100%;
-						.tel-img{
-							width: 32.5%;
-							height: 2.1rem;
-							margin-right: .086rem;
-							margin-bottom: .086rem;
-							&:nth-child(3n){
-								margin-right: 0;
-							}
-							img{
-								display: block;
-								width: 100%;
-								height: 100%;
-								object-fit: cover;
-							}
+				.phone-img{
+					width: 100%;
+					.tel-img{
+						width:49%;
+						height: 2.1rem;
+						margin-right: .138rem;
+						margin-bottom: .138rem;
+						&:nth-child(2n){
+							margin-right: 0;
+						}
+						img{
+							display: block;
+							width: 100%;
+							height: 100%;
+							object-fit: cover;
 						}
 					}
 				}
+				// }
 				.see-text{
 					letter-spacing: .02rem;
 					line-height: .5rem;
