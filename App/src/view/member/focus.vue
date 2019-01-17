@@ -18,6 +18,7 @@ export default{
 			proMes:'',
 			page:1,
 			lock:false,
+			scrollTop:0,
 			ifLoad:true,
 		}
 	},
@@ -36,7 +37,12 @@ export default{
 		init(){
 			this.lock = true;
 			this.ifLoad = true;
-			let res = followService.getUserFollow(this.page,10);
+			let res;
+			if (this.$route.name == 'focus') {
+				res = followService.getUserFollow(this.page,10);
+			}else if (this.$route.name == 'fans') {
+				res = followService.getVermicelliList(this.page,10);
+			}
 			if (res && res.status == "success") {
 				if (res.recordPage.list.length) {
 					this.page++;						
@@ -61,5 +67,7 @@ export default{
 </script>
 
 <style scoped>
-
+	.router-view{
+		padding: 0;
+	}
 </style>

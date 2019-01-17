@@ -11,12 +11,12 @@
 
 <script>
     import netUtil from "@/service/util/netUtil"
-    import downRefresh from '@/components/common/downRefresh'
+    // import downRefresh from '@/components/common/downRefresh'
     import articleService from '@/service/articleService'
     export default {
-        components:{
+        /*components:{
             downRefresh,
-        },
+        },*/
         data(){
             return {
                 arcList:[],
@@ -138,15 +138,15 @@
                 if (!this.isScolling) {
                     this.$store.dispatch('setIsScolling',true);
                 }
-                this.scrollTop = $(e.target).scrollTop();
                 // console.log(this.scrollTop)
                 // 滚动结束200ms后解禁滚动状态
                 clearTimeout(this.timer);
                 this.timer = setTimeout(()=>{
+                    this.scrollTop = $(e.target).scrollTop();
+                    this.$store.dispatch('setIsScolling',false);
                     if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) >= e.target.scrollHeight) {
                         this.getMoreActicle();
                     }
-                    this.$store.dispatch('setIsScolling',false);
                 },200)
             },
             getMoreActicle(){
@@ -177,6 +177,7 @@
         watch:{
             $route(){
                 $(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
+                // console.log(this.$refs["scroll"])
             },
             show(){
                 setTimeout(()=>{

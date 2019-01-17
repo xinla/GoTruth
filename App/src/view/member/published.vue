@@ -1,26 +1,26 @@
 <template>
-    <div @scroll="loadMore">
-        <multIT
-            v-for="(item,index) in arcList"
-            :article="item"
-            :whi="index"
-            :detailType='ifSelf'
-            :ifPublisher="false"
-            :ifDel="ifSelf"
-            @delete="deleteArticle"
-            :key="index"
-            v-if="!deleteIndex[index]">
-        </multIT>
-        <!-- <bigIVT :article="item" v-else="item.type==2"></bigIVT>	 -->
-        <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
-        <load-more :show-loading="ifLoad"></load-more>
-    </div>
+    <downRefresh @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
+        <div class="article-list">
+            <multIT
+                v-for="(item,index) in arcList"
+                :article="item"
+                :whi="index"
+                :detailType='ifSelf'
+                :ifPublisher="false"
+                :ifDel="ifSelf"
+                @delete="deleteArticle"
+                :key="index"
+                v-if="!deleteIndex[index]">
+            </multIT>
+            <!-- <bigIVT :article="item" v-else="item.type==2"></bigIVT>	 -->
+            <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
+            <load-more :show-loading="(arcList.length > 0) && ifLoad"></load-more>
+        </div>
+    </downRefresh>
 </template>
 
 <script>
-
     import articleService from '@/service/articleService'
-
     export default {
         data(){
             return {
@@ -31,18 +31,24 @@
                 page:1,
                 lock:false,
                 ifLoad:true,
-                deleteIndex:[]
+                scrollTop:0,
+                deleteIndex:[],
+                timer:null
             }
         },
         mounted(){
             // console.log(1)
             setTimeout(()=>{
-                this.deleteIndex = [];
+                // this.deleteIndex = [];
                 this.userId = this.$route.query.userId;
-                this.page = 1;
-                this.arcList = [];
+                // this.page = 1;
+                // this.arcList = [];
                 this.init();
             },delay)
+        },
+        activated(){
+            this.userId = this.$route.query.userId;
+            $(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
         },
         methods:{
             init(){
@@ -103,24 +109,39 @@
                     }
                     // console.log(this.arcList)
                 }
-
             },
             loadMore(e){
-                if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() +10) >= e.target.scrollHeight) {
-                    this.init();
-                    // console.log(1)
+                //防止用户滚动中点击跳转
+                if (!this.isScolling) {
+                    this.$store.dispatch('setIsScolling',true);
                 }
+                // 滚动结束200ms后解禁滚动状态
+                clearTimeout(this.timer);
+                this.timer = setTimeout(()=>{
+                    this.scrollTop = $(e.target).scrollTop();
+                    // console.log(this.scrollTop)
+                    this.$store.dispatch('setIsScolling',false);
+                    if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) >= e.target.scrollHeight) {
+                        this.init();
+                    }
+                },200)
             },
-
+            doRefresh(){
+                this.page = 1;
+                this.arcList = [];
+                this.init();
+            }
         },
         computed:{
             ifSelf(){
                 return (localStorage.id == this.userId);
-            }
+            },
+            isScolling(){
+                return this.$store.state.isScrolling;
+            },
         },
         watch:{
-            $route(to,from){
-                // console.log(2)
+            /*$route(to,from){
                 if (to.query.userId) {
                     setTimeout(()=>{
                         this.deleteIndex = [];
@@ -130,10 +151,15 @@
                         this.init();
                     },delay)
                 }
+            },*/
+            userId(){
+                setTimeout(()=>{
+                    this.deleteIndex = [];
+                    this.page = 1;
+                    this.arcList = [];
+                    this.init();
+                },delay)
             }
-        	// arcList(){
-        	// 	this.getArticleInfo();
-        	// }
         },
         // beforeRouteEnter (to, from, next) {
         // 	next(vm=>{
@@ -157,5 +183,8 @@
     }
     .icon-delete{
         font-size: 18px;
+    }
+    .article-list{
+        margin: 0px 0.3rem;
     }
 </style>

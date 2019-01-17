@@ -1,3 +1,4 @@
+<!-- 废弃 -->
 <template>
 	<div @scroll="loadMore">
 		<memberList :list="list" :mes="proMes" :ifFocus="true"></memberList>
@@ -59,5 +60,7 @@ export default{
 </script>
 
 <style scoped>
-
+	.router-view{
+		padding: 0;
+	}
 </style>

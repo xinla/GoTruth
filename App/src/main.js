@@ -38,6 +38,9 @@ Vue.component('LoadingMain',() => import('@/components/common/loadingMain'));
 Vue.component('PromptBlank',() => import('@/components/common/promptBlank'));
 // import PromptBlank from '@/components/common/promptBlank'
 // Vue.component('PromptBlank',PromptBlank);
+// 下拉刷新组件
+import downRefresh from '@/components/common/downRefresh'
+Vue.component('downRefresh',downRefresh);
 //单文章视图组件
 import multIT from '@/components/common/multIT'
 Vue.component('multIT',multIT);

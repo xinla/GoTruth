@@ -10,24 +10,22 @@
 		</div>
 		<div class="about-body">
 			<div class="about-desc">
-				<p>直击真相是一款为兴趣而生的新一代资讯客户端！通过提供个性化的自定义频道、并以顶尖算法不断学习用户偏好，帮助用户从浩瀚的资讯中抽身而出，每天只读一点你关心的资讯即可！</p>
+				直击真相是一款高品质的思想教育类共享平台，主要设有揭秘、防骗、打假、寻亲等栏目，打造一支专业媒体团队，用事实说话，关注社会民生，揭秘诈骗套路、假冒伪劣商品等不法信息，并义务帮助那些被拐卖的妇女儿童，希望他们能早日回家团圆！
 			</div>
 			<dl class="about-list">
 				<dt>关注我们</dt>
-				<dl>新浪微博： @直击真相</dl>
-				<dl>官方网站： www.zhijizhenxiang.com</dl>
-				<dl>媒体平台： www.zhijizhenxiang.com</dl>
-				<dl>广告合作： www.zhijizhenxiang.com</dl>
-				<dl>微信公众号： zhijizhenxiang</dl>
+				<dl>新浪微博： @池州康有保网络科技有限公司</dl>
+				<dl>官方网站： www.zjzx.xyz</dl>
+				<dl>媒体平台： www.zjzx.xyz</dl>
+				<dl>广告合作： www.kangyoubao.net</dl>
+				<dl>微信公众号：康有保</dl>
 			</dl>
 			<dl class="about-list">
 				<dt>联系我们</dt>
-				<dl>商务合作： bd@yidian-inc.com</dl>
-				<dl>使用反馈： bd@yidian-inc.com</dl>
-				<dl>举报投诉： bd@yidian-inc.com</dl>
-				<dl>本地化合作： bd@yidian-inc.com</dl>
-				<dl>商务合作： bd@yidian-inc.com</dl>
-				<dl>举报电话： 13666666666</dl>
+				<dl>商务合作： www.kangyoubao.net</dl>
+				<dl>使用反馈： www.zjzx.xyz</dl>
+				<dl>举报投诉： www.kangyoubao.net</dl>
+				<dl>举报电话： 400-110-6768</dl>
 			</dl>
 		</div>
 		<div class="about-footer">
@@ -39,7 +37,7 @@
 					隐私条款
 				</router-link>
 			</div>
-			<p class="about-copyright">Copyright @2018 zjzx.com All Rights Reserved</p>
+			<p class="about-copyright">Copyright @2019 zjzx.xyz All Rights Reserved</p>
 		</div>
 	</div>
 </template>
@@ -80,12 +78,12 @@
 			.about-desc{
 				margin-bottom: .2rem;
 				padding-bottom: .1rem;
-
+				text-indent: 2em;
 				border-bottom: .02rem solid @borderColor;
+				font-size: .3rem;
+				line-height: .5rem;
+				color: #4a4a4a;
 				p{
-					font-size: .3rem;
-					line-height: .5rem;
-					color: #4a4a4a;
 				}
 			}
 			.about-list{

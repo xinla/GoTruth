@@ -23,7 +23,7 @@
         <div class="release-title" ref="marginTit">
             <input type="text" v-model="record.title" :placeholder="placeholderTit" maxlength="50">
         </div>
-        <!-- 内容 -->
+        <!--  -->
         <div class="release-content" v-if="record.type==1 || record.type == 3">
             <div class="content">
                 <textarea :placeholder="placeholderDesc" v-model="record.content"></textarea>
@@ -104,6 +104,7 @@
             }
         },
         activated(){
+            this.record_file = [];
             this.record.type = this.$route.query.sort;
             this.record.selectedpublishname = this.selectedPublishName || "不显示";
             this.record.selectedpublishaddress = this.selectedPublishAddress || "不显示";

@@ -22,7 +22,7 @@ export default{
 		return {
 			list:[
 				{
-					title:'1.电访问www.renzheng.zjzx.xyz',
+					title:'1.电访问www.zjzx.xyz/renzheng',
 					desc:'用电脑浏览器打开网址',
 					class:'icon-diannao',
 				},

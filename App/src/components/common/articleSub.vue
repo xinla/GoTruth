@@ -135,7 +135,7 @@ export default {
 			}
 		},
 		goDetail(){
-			if(!this.articleSub.id) { return; } 
+			if(!this.articleSub.id || this.$store.state.isScolling) { return; } 
 			this.$Tool.goPage({ name:'detail',query:{id:this.articleSub.id,detailType:this.detailType,}})
 		}
 	}

@@ -1,3 +1,4 @@
+<!-- 废弃 -->
 <template>
 	<div @scroll="loadMore">
 		<!-- <div class="editor bfc-o">

@@ -29,7 +29,7 @@ export default{
 				// }
 			],	
 			focus:1,
-			currentFocus:0,	
+			currentFocus:-1,	
 		}
 	},
 	props:{
@@ -91,6 +91,7 @@ export default{
 	},
 	watch:{
 		list(){
+			this.currentFocus = -1;
 			this.init();
 			// console.log(this.list)
 		}

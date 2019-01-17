@@ -14,7 +14,8 @@
 				</div>
 				<div class="member-msg-modal">
 					<ul class="member-msg-list">
-						<li class="member-msg-item" @click="(loginUserId == userId) && $Tool.goPage({ name:'release',query:{'title':'发布图文',sort:1}})">
+						 <!-- @click="(loginUserId == userId) && $Tool.goPage({ name:'release',query:{'title':'发布图文',sort:1}})" -->
+						<li class="member-msg-item">
 							<span>{{publidsedNum}}</span>
 							发布
 						</li>
@@ -28,7 +29,7 @@
 						</li>
 					</ul>
 					<div class="member-msg-btn" v-if="loginUserId == userId">
-						<button class="btn btn-edit"  @click="$Tool.goPage({ name:'editInfo',query:{'title':'编辑资料'}})">编辑资料</button>
+						<button class="btn btn-edit"  @click="$Tool.goPage({ name:'editInfo',query:{'title':'账号设置'}})">账号设置</button>
 						<button class="btn btn-apply" @click="$Tool.goPage({ name:'identityIndex',query:{'title':'申请认证'}})">申请认证</button>
 					</div>
 					<div v-else>
@@ -47,21 +48,21 @@
 				<router-link class="member-switch-item active" v-for="(item, index) in switchListPrivate" tag="li" :to="{path:item.path,}" :key="index" >{{item.desc}}
 				</router-link> -->
 			</ul>
-			<tab bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="current" v-show="loginUserId == userId">
+			<tab :line-width="2" v-model="current" v-show="loginUserId == userId">
 		      <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
-		      	<router-link class="block" :to="{path:item.path,query:{userId,}}" replace>
+		      	<router-link class="block" :to="{path:item.path,query:{userId}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
 		      <tab-item v-for="(item, index) in switchListPrivate" :key="item.id">
-		      	<router-link class="block" :to="{path:item.path,query:{userId:item.userId}}" replace>
+		      	<router-link class="block" :to="{path:item.path,query:{userId}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
 		    </tab>
-		    <tab v-show="loginUserId != userId" bar-active-color="#d60139" active-color="#d60139" :line-width="2" v-model="currentSub">
+		    <tab v-show="loginUserId != userId" :line-width="2" v-model="currentSub">
 		      <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
-		      	<router-link class="block" :to="{path:item.path,query:{userId,}}" replace>
+		      	<router-link class="block" :to="{path:item.path,query:{userId}}" replace>
 		      		{{item.desc}}
 				</router-link>
 		      </tab-item>
@@ -74,7 +75,7 @@
 
 		</div>
 		<keep-alive>
-			<router-view class="router-view"></router-view>
+			<router-view class="router-view" :key="$route.name"></router-view>
 		</keep-alive>
 	</div>
 </template>
@@ -178,7 +179,8 @@ export default {
 			this.init();
 		},
 		$route(to,from){
-			to.query.userId ? (this.userId = to.query.userId):this.userId = localStorage.id;
+			// to.query.userId ? (this.userId = to.query.userId):this.userId = localStorage.id;
+			to.query.userId && (this.userId = to.query.userId)
 			if(this.$route.name == 'published'){
 				this.ifSelf?this.current = 0:this.currentSub = 0;
 			}
@@ -308,7 +310,7 @@ export default {
 	    height: calc(100% - 190px);
 	    overflow-y: auto;
 		background: #fff;
-		padding: 0 15px;
+		// padding: 0 15px;
 	}
 	.block{
 		display: block;

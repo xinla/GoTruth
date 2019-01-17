@@ -54,8 +54,8 @@ export default{
 					imgShow:false
 				},
 				{
-					title:'发布过微头条内容',
-					desc:'最少发布1条微头条',
+					title:'发布过真相内容',
+					desc:'最少发布1条真相内容',
 					class:'icon-xinxi',
 					path:{},
 					tip:false,
@@ -121,7 +121,7 @@ export default{
 			if(this.list[3].tip){
 				this.list[3].path = {name:'identityPerson',query:{title:'个人认证'}};
 			}else{
-				this.list[3].path = {name:'release',query:{title:'发布图文'}};
+				this.list[3].path = {name:'release',query:{title:'发布图文',sort:1}};
 			}
 		}
 	}

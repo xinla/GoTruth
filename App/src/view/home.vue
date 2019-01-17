@@ -144,10 +144,10 @@ export default {
 				font-weight: 700;
 			}
 		} */	
-	.main-content{
+	/* .main-content{
 		height: 100%;
 		overflow-y: auto;
-	}
+	} */
 	.vux-tab .vux-tab-item{
 		font-size: 17px !important;
 		font-weight: 500;

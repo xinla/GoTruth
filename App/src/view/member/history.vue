@@ -1,19 +1,21 @@
 <template>
-	<div @scroll="loadMore">
-		<div class="editor bfc-p" v-if="arcList.length">
-			<i class="iconfont icon-delete fr" v-if="!ifDeleteAll" @click="ifDeleteAll = true;"></i>
-			<div v-else>
-				<span @click="deleteAll()" class="deleteAll">删除全部</span>
-				<span class="fr" @click="ifDeleteAll = false;">完成</span>		
+	<downRefresh @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
+		<div>
+			<div class="editor bfc-p" v-if="arcList.length">
+				<i class="iconfont icon-delete fr" v-if="!ifDeleteAll" @click="ifDeleteAll = true;"></i>
+				<div v-else>
+					<span @click="deleteAll()" class="deleteAll">删除全部</span>
+					<span class="fr" @click="ifDeleteAll = false;">完成</span>		
+				</div>
 			</div>
+			<div class="list-wrap">
+				<articleSub v-for="(item,index) in arcList" v-if="!deleteIndex[index]" :article="item" :whi="index" :ifPublisher="true" :ifHistory="true" @delete="deleteArticle" :key="index">
+				</articleSub>			
+			</div>
+			<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
+			<load-more :show-loading="ifLoad"></load-more>
 		</div>
-		<div class="list-wrap">
-			<articleSub v-for="(item,index) in arcList" v-if="!deleteIndex[index]" :article="item" :whi="index" :ifPublisher="true" :ifHistory="true" @delete="deleteArticle" :key="index">
-			</articleSub>			
-		</div>
-		<prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
-		<load-more :show-loading="ifLoad"></load-more>
-	</div>
+	</downRefresh>	
 </template>
 
 <script>
@@ -33,11 +35,11 @@ export default {
 			page:1,
 			lock:false,
 			ifLoad:true,
-			// scrollTop:0,
-			deleteIndex:[]
+			deleteIndex:[],
+			timer:null
 		}
 	},
-	activated(){
+	mounted(){
 		setTimeout(()=>{
 			this.deleteIndex = [];
 			this.ifDeleteAll = false;
@@ -45,6 +47,9 @@ export default {
 			this.arcList = [];
 			this.init();
 		},delay)
+	},
+	activated(){
+		$(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
 	},
 	methods:{
 		init(){
@@ -130,12 +135,39 @@ export default {
 			}
 		},
 		loadMore(e){
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-10) {
-				this.init();
-				// console.log(1)
-			}
+			//防止用户滚动中点击跳转
+            if (!this.isScolling) {
+                this.$store.dispatch('setIsScolling',true);
+            }
+			// 滚动结束200ms后解禁滚动状态
+            clearTimeout(this.timer);
+            this.timer = setTimeout(()=>{
+                this.scrollTop = $(e.target).scrollTop();
+                this.$store.dispatch('setIsScolling',false);
+                if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) >= e.target.scrollHeight) {
+                    this.init();
+                }
+            },200)
 		},
+		doRefresh(){
+			this.deleteIndex = [];
+			this.ifDeleteAll = false;
+            this.page = 1;
+            this.arcList = [];
+            this.init();
+        }
 	},
+	computed:{
+		isScolling(){
+            return this.$store.state.isScrolling;
+        },
+	}
+	/*watch:{
+		$route(){
+            $(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
+        console.log(this.$refs["scroll"])
+        },
+	}*/
 	// beforeRouteEnter (to, from, next) {
 	// 	next(vm=>{
 	// 		vm.init();
@@ -163,7 +195,7 @@ export default {
 		font-size: 18px;
 	}
 	.list-wrap{
-		margin-top: 40px;
+		padding-top: 40px;
 	}
 	.router-view{
 		padding: 0;

@@ -68,7 +68,7 @@ export default {
                 _this.$vux.toast.show({
                   type:"text",
                   time:1000,                
-                  position:"middle",
+                  position:"bottom",
                   text: '再按一次退出直击真相',
                   width:"auto",
                 });
@@ -95,15 +95,15 @@ export default {
                   _this.$vux.confirm.show({
                     title:"升级提示",
                     content:`发现新版本${data.result.versionnum}`,
-                    confirmText:"立即体验",
-                    cancelText:"忍痛放弃",
+                    confirmText:"立即升级",
+                    cancelText:"放弃更新",
                     onConfirm () {
                       setTimeout(()=>{
                         _this.$vux.toast.show({
                           type:"text",
-                          time:1000,
+                          time:2000,
                           position:"middle",
-                          text:"开始拼命为您下载...",
+                          text:"正在后台为您下载...",
                           width:"auto",
                         },1000);                             
                       })
