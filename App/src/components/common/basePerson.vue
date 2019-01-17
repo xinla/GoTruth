@@ -8,8 +8,8 @@
 			    <!-- <div class="member-msg-image">
 					<img  :src="userPhoto" >
 				</div> -->
-				<div class="member-msg-image">
-					 <img  v-for="(img,index) in imgs" v-preview="img.url"  :src="img.url">
+				<div class="member-msg-image" @click='handlePreview'>
+					 <img  v-for="(img,index) in imgs"  :src="img.url">
 					<!--<img :src="userPhoto">-->
 				</div>
 				<div class="member-msg-modal">
@@ -37,6 +37,9 @@
 				</div>
 			</div>
 		</div>
+		<transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+		<preview :imgs="imgs" v-show= "showPreview" @close="handleClosePrev"></preview>
+	</transition>
 		<div class="member-tab">
 			<ul class="member-switch">
 				<!-- <router-link class="member-switch-item active" v-for="(item, index) in switchListPublic" tag="li" :to="{path:item.path,}" :key="index + 'a'" >{{item.desc}}
@@ -81,7 +84,11 @@ import config from '@/lib/config/config'
 import articleService from '@/service/articleService'
 import followService from '@/service/followService'
 import userService from '@/service/userService'
+import preview from "@/components/preview"
 export default {
+	components:{
+		preview
+	},
 	data(){
 		return {
 			loginUserId:localStorage.id || 0,
@@ -89,6 +96,7 @@ export default {
 			current:0,
 			currentSub:0,
 			currentName:"全部",
+			showPreview:false,
 			imgs: [
                 {
                   url: "",
@@ -113,7 +121,25 @@ export default {
 			]
 		}
 	},
+	mounted(){
+	 if (window.history && window.history.pushState) {
+	    history.pushState(null, null, document.URL);
+	    window.addEventListener('popstate', this.fun, false);//false阻止默认事件
+	  }
+	},
+	destroyed(){
+	  window.removeEventListener('popstate', this.fun, false);//false阻止默认事件
+	},
 	methods:{
+		handlePreview(){
+			this.showPreview = true;
+		},
+		handleClosePrev(){
+			this.showPreview = false;
+		},
+		fun(){
+			this.showPreview = false;
+		},
 		init(){
 			if (localStorage.id && localStorage.id == this.userId) {
 	    		this.userPhoto = localStorage.userImg;
