@@ -89,7 +89,7 @@
                         :onpropertychange="onpropertychange"
                         :oninput="oninput"
                         @input="handelInput"
-                        v-model="record.content"></textarea>
+                        v-model="record.content" maxlength="300"></textarea>
                         <div class="popup-img clearfix">
                             <div class="img fl" v-for="(item, index) in record_file">
                                 <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>

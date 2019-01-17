@@ -120,7 +120,7 @@
                     :placeholder="answerPopObj.placeholder"
                     v-model.trim="answerPopObj.desc"
                     @input="handleDescInput"
-                    ref="answerPopFocus"></textarea>
+                    ref="answerPopFocus" maxlength="300"></textarea>
                     </div>
                     <div class="popup-btn clearfix">
                         <button type="button" class="popup-cancel fl" @click="handleCancelInput">取消</button>

@@ -173,7 +173,9 @@
 							v-model.trim="popList.desc"
 							@input="handleDesc"
 							autofocus
-							ref="popFocus"></textarea>
+							ref="popFocus" maxlength="300">
+								
+							</textarea>
 					</div>
 					<div class="popup-btn clearfix">
 						<button type="button" class="popup-cancel fl" @click="handleCancel">取消</button>
