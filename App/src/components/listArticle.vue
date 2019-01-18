@@ -1,6 +1,9 @@
 <template>
     <downRefresh class="main-content" @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
         <div class="article-list">
+            <div class="xunqing ac" v-if="classify == 4">
+                公益寻亲：免费发布寻人寻亲信息，利用网络信息技术帮助失散人群，早日回家团圆。邮箱：2787064791@qq.com
+            </div>
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
             <multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
@@ -214,5 +217,10 @@
     }
     .article-list{
         margin: 0px 0.3rem;
+    }
+    .xunqing{
+        color: @deepMainColor;
+        margin-top: 5px;
+        line-height: 20px;
     }
 </style>
