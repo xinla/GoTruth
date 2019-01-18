@@ -442,13 +442,14 @@
 					})
 					return;
 				}
-				let res = userService.testUserName(temp);				
+				let res = userService.testUserName(temp);
 				if (res && res.status === "success") {
 					if (res.exist === "1") {
 						this.$vux.alert.show({
-						  content:'用户名已存在！',
+						  content:'用户名已存在，请重新输入',
 						})
-						return;						
+						this.popList.desc = "";
+						return;
 					}
 				}
 				this.user.username = temp;

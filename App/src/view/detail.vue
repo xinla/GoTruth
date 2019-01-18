@@ -4,7 +4,7 @@
 			<template slot="title">{{ '文章详情' }}</template>
 		</top>
 		<template v-if="2 === article.type">
-			<i class="iconfont icon-arrow-left" @click="this.$Tool.goBack">
+			<i class="iconfont icon-arrow-left" @click="this.$Tool.goBack" style="color: #f1f1f1; font-size: .42rem;">
 			</i>
 			<video-player class="video-player vjs-custom-skin"
 				ref="videoPlayer"
@@ -44,6 +44,7 @@
 				<div class="content">
 					<div class="article-content" v-if='article.content'>
 		            <p v-html="article.content"></p>
+		            <p style="font-size: .24rem; color: #888;">免责声明：以上内容源自网络，版权归原作者所有，如有侵犯您的原创版权请告知，我们将尽快删除相关内容。</p>
 		          </div>
 		          <div v-if="1 === article.type" class="phone-img clearfix">
 					<div class="tel-img fl" v-for="(item,index) in ArticleFile">
@@ -58,7 +59,7 @@
 					<p class="red">爱心提示：</p>
 					<p>
 	          诈骗在中国已涉及到各行各业，高超的诈骗手段让人防不胜防！
-	          全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康,拐卖妇女儿童现象屡禁不止。
+	          全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康，拐卖妇女儿童现象屡禁不止。
 					</p>
 					<p>我们对此深恶痛绝，鉴于此，遂开创了这个平台！</p>
 					<p>
@@ -1309,8 +1310,8 @@ export default {
 					width: calc(100% - 2.78rem);
 					margin-right: .22rem;
 					.uname{
-						// padding-top: .25rem;
-						font-size: .32rem;
+						padding-top: .1rem;
+						font-size: .28rem;
 					}
 					.utime{
 						overflow: hidden;
@@ -1326,7 +1327,7 @@ export default {
 					width: 1.16rem;
 					height: .56rem;
 					line-height: .56rem;
-					// margin-top: .4rem;
+					margin-top: .1rem;
 					text-align: center;
 					color: #fff;
 					border-radius: .1rem;

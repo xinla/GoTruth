@@ -77,6 +77,7 @@
         <!--回答弹出框-->
         <div v-transfer-dom>
             <popup v-model="answerObj.show" height="100%">
+                <div class="status-bar"></div>
                 <div class="popup-wrap">
                     <div class="popup-header clearfix">
                         <div class="header-cancel" @click="handleCancel">取消</div>
@@ -101,16 +102,16 @@
                                 <input type="file" id="addImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
                             </div>
                         </div>
-                        <div class="popup-footer clearfix">
-                            <!-- <div class="keyboard fl" @click="handelBoard">
-                               <i class="iconfont icon-jianpan-up"></i>
-                             </div>-->
-                            <div class="addImg fr">
-                                <label for="iconImg"></label>
-                                <i class="iconfont icon-album"></i>
-                                <input type="file" id="iconImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
+                       <!--  <div class="popup-footer clearfix">
+                           <div class="keyboard fl" @click="handelBoard">
+                              <i class="iconfont icon-jianpan-up"></i>
                             </div>
-                        </div>
+                           <div class="addImg fr">
+                               <label for="iconImg"></label>
+                               <i class="iconfont icon-album"></i>
+                               <input type="file" id="iconImg" accept="image/*" multiple @change="handleuploadFile" style="display: none;">
+                           </div>
+                       </div> -->
                     </div>
                 </div>
             </popup>
@@ -174,7 +175,7 @@
                 },
                 answerObj:{
                     show:false,
-                    addShow:false
+                    addShow:true
                 },
                 //textarea高度变化
                 onpropertychange:"this.style.height=this.scrollHeight + 'px'",
@@ -337,8 +338,8 @@
                     obj.type =1;
                     this.record_file.push(obj);
                 });
-                if(this.record_file.length >= 0){
-                    this.answerObj.addShow = true;
+                if(this.record_file.length >= 5){
+                    this.answerObj.addShow = false;
                 }
                 this.$vux.loading.hide();
             },
@@ -356,6 +357,9 @@
                             thiz.$vux.toast.show({
                                 text:'删除成功'
                             });
+                            if(thiz.record_file.length <= 5){
+                                thiz.answerObj.addShow = true;
+                            }
                         },600);
                         if(thiz.record_file.length == 1){
                             setTimeout(()=>{
@@ -745,6 +749,9 @@
             }
         }
     }
+    .status-bar{
+        background: @statusBarBg;
+    }
     .popup-wrap{
         .popup-header{
             position: relative;
@@ -778,7 +785,7 @@
         .popup-body{
             width: 100%;
             background-color: #fff;
-            height: calc(100vh - 1.83rem);
+            height: calc(100vh - 2.27rem);
             overflow: hidden;
             overflow-y: auto;
             padding: 0 .3rem;

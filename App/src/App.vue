@@ -181,6 +181,7 @@ export default {
   }
   .router-view-app {
     position: absolute;
+    z-index: 2;
     background: #f4f5f6;
     transition: transform .3s cubic-bezier(.55,0,.1,1);
     /*注：动画时长与其他组件延迟加载时长（450）有关联，需小于，不可随意更改*/

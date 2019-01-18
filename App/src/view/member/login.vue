@@ -233,6 +233,13 @@ export default{
 			if(this.isOpacity == true) {
 				this.$vux.loading.show({text: '登录中...',});
 				userService.loginByMobile(this.$data.mobileDesc,this.$data.codeDesc,(data)=> {
+					if(data && data.status == "error") {
+						this.$vux.alert.show({
+						  content:data.result.tip
+						})
+						this.$vux.loading.hide();
+						return;
+					}
 				    let url =  this.$route.query.returnpage;
                     let name = this.$route.query.name;
 				    let query = this.$route.query.query;
@@ -251,7 +258,7 @@ export default{
 
 
                 });
-				this.mobileDesc = "";
+				// this.mobileDesc = "";
 				this.codeDesc = "";
 			}
 		},
