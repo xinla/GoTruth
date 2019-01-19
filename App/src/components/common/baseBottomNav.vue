@@ -60,6 +60,7 @@ export default{
 		width: 100%;
 		position: fixed;
     	// z-index: 9;
+    	padding: .12rem 0;
 		left: 0;
 		bottom: 0;
 		text-align: center;
