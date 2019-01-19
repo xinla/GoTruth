@@ -22,7 +22,7 @@
                         <img :src="$Tool.headerImgFilter(answerUser.imageurl)">
                         <span>{{ answerUser.username}}</span>
                     </router-link>
-                    <div class="answer-focus fr" @click="handleAnswerFocus(answer.author, 1)">
+                    <div class="answer-focus fr" v-if="userId != answer.author" @click="handleAnswerFocus(answer.author, 1)">
                         {{answerFocusState ? '已关注' : '关注'}}
                     </div>
                 </div>
@@ -134,6 +134,7 @@
         <!--回复框-->
         <div v-transfer-dom>
             <popup v-model="replyShow" position="bottom" height="100%">
+                <div class="status-bar"></div>
                 <div class="reply-wrap" @scroll="loadScroll">
                     <div class="reply-header">
                         <i class="iconfont icon-remove" @click="handleCloseRelpy"></i>
@@ -1391,6 +1392,9 @@
             color: #f85959;
         }
     }
+    .status-bar{
+        background: @statusBarBg;
+    }
     /*举报框*/
     .reply-wrap{
         height: 100vh;
@@ -1418,7 +1422,8 @@
         }
         .reply-body{
             width: 100%;
-            height: calc(100vh - .89rem);
+            height: calc(100vh - 1.3rem);
+            background-color: red;
             // overflow-y: auto;
             // overflow: auto;
             // padding: .32rem .3rem;

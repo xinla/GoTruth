@@ -188,6 +188,7 @@
 		<!-- 回复框 -->
 		<div v-transfer-dom>
 			<popup v-model="replyShow" position="bottom" height="100%">
+				<div class="status-bar"></div>
 				<div class="reply-wrap" @scroll="loadScroll">
 					<div class="reply-header">
 						<i class="iconfont icon-remove" @click="handleCloseRelpy"></i>
@@ -1669,6 +1670,9 @@ export default {
 			}
 		}
 	}
+	.status-bar{
+        background: @statusBarBg;
+    }
 	.reply-wrap{
 		height: 100vh;
 		border-radius: .3rem .3rem 0 0;
@@ -1695,7 +1699,7 @@ export default {
 		}
 		.reply-body{
 			width: 100%;
-			height: calc(100vh - .89rem);
+			height: calc(100vh - 1.3rem);
 			// overflow-y: auto;
 			// overflow: auto;
 			// padding: .32rem .3rem;
