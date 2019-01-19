@@ -1008,7 +1008,6 @@ export default {
 		handleComment(){
 			let dis = $(".detail").scrollTop() + $(".article-change").offset().top -100;
 			$(".detail").animate({scrollTop:dis},100);
-			// console.log(dis);
 		},
 
 		/**
@@ -1888,7 +1887,7 @@ export default {
 		text-indent: 2em;
 		color:#f36767;
 	    overflow: hidden;
-	    height: 8.4rem;
+	    height: 8.9rem;
 	    transition: all .5s;
 	}
 	.loveCiew-unfold{
