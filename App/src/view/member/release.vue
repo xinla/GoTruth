@@ -34,7 +34,7 @@
                     <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
                     <img :src="fileRoot + item.url" v-preview="fileRoot + item.url" class="previewer-demo-img">
                 </div>
-                <div class="release-upload fl">
+                <div class="release-upload fl" v-show="imgShow">
                     <label for="upImg"></label>
                     <i class="iconfont icon-add"></i>
                     <input type="file" id="upImg" accept="image/*" multiple @change="uploadFile" style="display: none;">
@@ -88,6 +88,7 @@
                 fileRoot:config.fileRoot +'/',
                 classifyList:[],
                 push:[],
+                imgShow:true,
                 //实际发布位置
                 position:{},
                 record:{
@@ -161,6 +162,9 @@
                         thiz.$vux.loading.show();
                         setTimeout(()=>{
                             thiz.record_file.splice(item,1);
+                            if(thiz.record_file.length <= 6){
+                                thiz.imgShow = true;
+                            }
                             thiz.$vux.loading.hide();
                             thiz.$vux.toast.show({
                                 text:'删除成功'
@@ -211,6 +215,9 @@
                         obj.filename = data.result.filename;
                         obj.type =1;
                         this.record_file.push(obj);
+                        if(this.record_file.length >=6){
+                            this.imgShow = false;
+                        }
                         this.$vux.loading.hide();
                     })
                 }else if(this.record.type == 2){
@@ -435,14 +442,20 @@
             }
             .release-upload-img{
                 padding: .2rem 0;
+                display: flex;
+                flex-wrap: wrap;
+
                 .release-img{
-                    position: relative;
-                    float: left;
-                    margin-right: .04rem;
-                    margin-bottom: .04rem;
-                    display: inline-block;
-                    width: 1.86rem;
-                    height: 1.86rem;
+                     width: 32.5%;
+                     height: 1.86rem;
+                     margin-right: 1.2%;
+                     margin-bottom: 1.2%;
+                     &:last-child{
+                        margin-right: 0;
+                     }
+                     &:nth-child(3n){
+                        margin-right: 0;
+                     }
                     img{
                         display: block;
                         width: 100%;
@@ -453,18 +466,18 @@
                     .iconfont{
                         position: absolute;
                         z-index: 6;
-                        right: .09rem;
-                        top: .09rem;
+                        right: .06rem;
+                        top: .06rem;
                         color: #fff;
                     }
                 }
                 .release-upload{
                     position: relative;
-                    width: 1.86rem;
+                    width: 32.5%;
                     height: 1.86rem;
                     text-align: center;
                     float: left;
-                    background-color: #f4f5f6;
+                    background-color: #f4f5f6; 
                     label{
                         position:absolute;
                         left: 0;
