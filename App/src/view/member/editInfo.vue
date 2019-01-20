@@ -119,7 +119,7 @@
 				 title="绑定手机号"
 				 :input-attrs="{type:'number'}"
 				 @on-confirm="handleCheckMobile"
-				confirm-text="验证">
+				confirm-text="获取验证码">
 			</confirm>
 		
 		</div>
@@ -563,7 +563,7 @@
 					userService.getCode(val,(data)=>{
 						if(data.status == "success") {
 							this.inputMobile = val;
-							this.inputCode = data.result.code;
+							// this.inputCode = data.result.code;
 							this.showAlert = true;
 							this.alertDesc="发送成功";
 							setTimeout(()=>{
@@ -581,7 +581,8 @@
 				}
 			},
 			handleCheckCode(val){
-				if(val == this.inputCode) {
+				let res = userService.testCode(this.inputMobile,val);
+				if (res && res.result) {
 					this.user.mobile = parseInt(this.inputMobile);
 					let data = userService.updateUser(this.user);
 					if(data && data.status == "success"){

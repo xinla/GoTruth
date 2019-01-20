@@ -59,7 +59,7 @@
 					<p class="red">爱心提示：</p>
 					<p>
 	          诈骗在中国已涉及到各行各业，高超的诈骗手段让人防不胜防！
-	          全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康，拐卖妇女儿童现象屡禁不止。
+	          全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康，拐卖妇女儿童屡禁不止。
 					</p>
 					<p>我们对此深恶痛绝，鉴于此，遂开创了这个平台！</p>
 					<p>
@@ -580,6 +580,7 @@ export default {
 			});
 			//获取评论数量
 			articleCommentService.getArticleCommentCount(this.id,(data)=>{
+				console.log(data)
 				if (data.status == "success") {
 					this.commentNum = this.$Tool.numConvertText(data.result.count);
 					if(this.commentNum == 0) {

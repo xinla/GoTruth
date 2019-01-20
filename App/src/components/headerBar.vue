@@ -23,7 +23,7 @@
 					</ul>
 				</div>
 			</transition>
-			<div class="mask" v-show="maskShow" @click="handleMask"></div>
+			<div class="mask" v-show="releaseShow" @click="handleMask"></div>
 		</div>
 	</div>
 </template>
@@ -39,7 +39,7 @@ export default {
 		return {
 			keywords:[],
 			releaseShow:false,
-			maskShow:false
+			// maskShow:false
 		}
 	},
 	mounted(){
@@ -48,11 +48,11 @@ export default {
 	methods:{
 		handleRelease(){
 			this.releaseShow=!this.releaseShow;
-			this.maskShow=!this.maskShow;
+			// this.maskShow=!this.maskShow;
 		},
 		handleMask(){
 			this.releaseShow = false;
-			this.maskShow=false;
+			// this.maskShow=false;
 		},
 		getHotKeywords(){
 			searchService.getHotKeyword(data=>{

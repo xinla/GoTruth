@@ -168,13 +168,13 @@ export default new Router({
             require(['@/view/member/privacy.vue'],resolve)
           }
         },
-        {
+        /*{
           path:'copyright',
           name:'copyright',
           component: (resolve)=>{
             require(['@/view/member/copyright.vue'],resolve)
           }
-        },
+        },*/
         {
           path:'editInfo',
           name:'editInfo',

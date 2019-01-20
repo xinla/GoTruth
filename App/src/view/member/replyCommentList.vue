@@ -6,7 +6,7 @@
 				<div class="reply-wrap" @scroll="scrollBotLoad" >
 					<div class="reply-li bfc-o">
 						<div class="uphoto-wrap fl">
-							<img class="uphoto" :src="commentUser.imageurl?(fileRoot+commentUser.imageurl):imgurl" alt="">
+							<img class="uphoto" :src="$Tool.headerImgFilter(commentUser.imageurl)" alt="">
 						</div>
 						<div class="comment-detail">				
 							<p>
@@ -37,7 +37,7 @@
 					<ul class="reply-main">
 						<li class="reply-li bfc-o" v-for="(item,index) in replyList">
 							<div class="uphoto-wrap fl">
-								<img class="uphoto" :src="item.imageurl?(fileRoot+item.imageurl):imgurl" alt="">
+								<img class="uphoto" :src="$Tool.headerImgFilter(item.imageurl)" alt="">
 							</div>
 							<div class="comment-detail">				
 								<p>

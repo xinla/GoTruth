@@ -136,13 +136,13 @@ export default {
 
     }
     //获取是否有最新消息
-    if (localStorage.id) {
+    /*if (localStorage.id) {
       messageService.getMessageCount(data=>{
         if (data && data.status == "success") {
           this.$store.commit("setNewMes",data.count);
         }
       })
-    }
+    }*/
   },
   watch: {
   	//监听路由

@@ -4,13 +4,13 @@
             <!-- 未登录 -->
             <div class="member-login-way" v-if="!ifLogin">
                 <h4 class="member-title">一键登录</h4>
-                <ul class="clearfix">
-                    <router-link class="icon-item" :to="{path:loginLink,query:{title:'用户登录'}}" tag="li"><i class="iconfont icon-icon-copy"></i></router-link>
-                    <li class="icon-item" @click="authLogin(2)"><i class="iconfont icon-qq"></i></li>
-                    <li class="icon-item" @click="authLogin(1)"><i class="iconfont icon-weixin1"></i></li>
-                    <li class="icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo"></i></li>
-                </ul>
                 <router-link :to="{path:loginLink,query:{title:'用户登录'}}">
+                    <ul class="clearfix">
+                        <li class="icon-item"><i class="iconfont icon-icon-copy"></i></li>
+                        <li class="icon-item"><i class="iconfont icon-qq"></i></li>
+                        <li class="icon-item"><i class="iconfont icon-weixin1"></i></li>
+                        <li class="icon-item"><i class="iconfont icon-weibo"></i></li>
+                    </ul>
                     <div class="member-btn">
                         <button>登录/注册</button>
                     </div>
@@ -194,8 +194,12 @@
             },
             toPage(type){
                 if (type == 1) {
-                    this.$store.dispatch("setNewMes",0);
-                    this.$Tool.goPage({name:"messages",query:{title:'消息通知'}});
+                    this.$vux.alert.show({
+                        content:'暂无通知！',
+                    })
+                    setTimeout(()=>{this.$vux.alert.hide()},1000);
+                    // this.$store.dispatch("setNewMes",0);
+                    // this.$Tool.goPage({name:"messages",query:{title:'消息通知'}});
                     return;
                 }
                 if (type == 2) {
@@ -204,40 +208,6 @@
                     return;
                 }
             },
-            authLogin(type){
-            const _this = this;
-            switch (type){
-                case 1://微信登录
-                authUtil.loginByWx(function(resMap){
-                    if(resMap.status === "success"){
-                        let params = resMap.result.wx_user;
-                        userService.loginByWx(params,_this.userInfoStore)
-                    }
-
-                });
-                break;
-                case 2://QQ登录
-                authUtil.loginByQQ(function(resMap){
-                    if(resMap.status === "success"){
-                        let params = resMap.result.qq_user;
-                        userService.loginByQQ(params,_this.userInfoStore)
-                    }
-
-                })
-                break;
-                case 3://新浪登录
-                authUtil.loginByXl(function(resMap){
-                    if(resMap.status === "success"){
-                        let params = resMap.result.xl_user;
-                        userService.loginByXl(params,_this.userInfoStore)
-                    }
-
-                })
-                break;
-                default:
-                console.log("授权出错")
-            }
-        },
         }
     }
 

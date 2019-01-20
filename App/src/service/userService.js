@@ -14,7 +14,16 @@ service.getCode = function(mobile,call){
 	
 	commonUtil.ajax(controller+'/getCode',params,call);
 }
+//校验手机验证码
+service.testCode = function(mobile,code){
+	var params = {
+		mobile,//:"手机号",
+		code,//:"校验码"
+	};
+	var res = commonUtil.ajaxAsync(controller+'/testCode',params);
 
+	return res;
+}
 //手机号登录
 service.loginByMobile = function(mobile,code,call){
 	var params = {

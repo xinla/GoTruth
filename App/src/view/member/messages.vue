@@ -1,7 +1,7 @@
 <template>
 	<div class="msg-wrap" @scroll="loadMore">
 		<ul class="msg-list">
-			<li class="msg-item" v-for="(item,index) in list" @click="toDetail(item.itemid,item.id,item.type)">
+			<li class="msg-item" v-for="(item,index) in list" v-if="item.title" @click="toDetail(item.itemid,item.id,item.type)">
 				<span class="msg-title oe bfc-d">{{item.title}}</span>
 				<badge :text="item.newcount" v-if="item.isnew"></badge>
 				<time class="fr">{{ $Tool.publishTimeFormat(item.createtime) }}</time>
@@ -61,6 +61,7 @@ export default {
 				this.proMes = "请求失败，请稍后再试！"
 			}
 			for (let i = 0,len = this.list.length; i < len; i++) {
+				//type 说明：1：文章（点赞，评论，收藏，转发，举报） 2：评论(回复、点赞、举报），3：反馈(官方回复)
 				if (this.list[i].type == 1) {
 					let resActicle = articleService.getArticleById(this.list[i].itemid)
 					if (resActicle && resActicle.status == "success") {
@@ -84,12 +85,13 @@ export default {
 			this.ifLoad = false;
 		},
 		loadMore(e){
-			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-350) {
+			if (!this.lock && ($(e.target).scrollTop() + $(e.target).height()) > e.target.scrollHeight-10) {
 				this.init();
 				// console.log(1)
 			}
 		},
 		toDetail(id,mesId,type){
+			return;
 			if (type == 1) {
 				messageService.readMessage(mesId);
 				this.$Tool.goPage({name:"detail",query:{id,}})
