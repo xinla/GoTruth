@@ -4,7 +4,7 @@
 			<template slot="title">{{ '文章详情' }}</template>
 		</top>
 		<template v-if="2 === article.type">
-			<i class="iconfont icon-arrow-left" @click="this.$Tool.goBack" style="color: #f1f1f1; font-size: .42rem;">
+			<i class="iconfont icon-arrow-left" @click="this.$Tool.goBack">
 			</i>
 			<video-player class="video-player vjs-custom-skin"
 				ref="videoPlayer"
@@ -44,7 +44,7 @@
 				<div class="content">
 					<div class="article-content" v-if='article.content'>
 		            <p v-html="article.content"></p>
-		            <p style="font-size: .24rem; color: #888;">免责声明：以上内容源自网络，版权归原作者所有，如有侵犯您的原创版权请告知，我们将尽快删除相关内容。</p>
+		            <p style="font-size: .24rem; color: #888;">免责声明：直击真相爱心平台，仅为有正能量和社会价值的信息提供其发布与展示，如有侵权，请及时联系我们删除，谢谢您的支持！</p>
 		          </div>
 		          <div v-if="1 === article.type" class="phone-img clearfix">
 					<div class="tel-img fl" v-for="(item,index) in ArticleFile">
@@ -580,7 +580,7 @@ export default {
 			});
 			//获取评论数量
 			articleCommentService.getArticleCommentCount(this.id,(data)=>{
-				console.log(data)
+				// console.log(data)
 				if (data.status == "success") {
 					this.commentNum = this.$Tool.numConvertText(data.result.count);
 					if(this.commentNum == 0) {
@@ -1196,7 +1196,7 @@ export default {
 		},
 		// 页面加载后渲染函数
 		loadScroll(){
-			if (!this.lock && ($(".detail").scrollTop() + $(".detail").height()) > $(".detail")[0].scrollHeight-350) {
+			if (!this.lock && ($(".detail").scrollTop() + $(".detail").height()) > $(".detail")[0].scrollHeight-10) {
 				this.loadComment();
 			}
 		},
@@ -1234,6 +1234,7 @@ export default {
 			// debugger
 			this.ifLoad = true;
 			setTimeout(()=>{
+				this.pageNum1 = 1; 
 				this.init();
 				this.ifLoad = false;
 			},delay)
@@ -1917,7 +1918,8 @@ export default {
 	    z-index: 1;
 	}
 	.icon-arrow-left{
-	    color: #ddd;
+	    color: #f1f1f1; 
+	    font-size: .42rem;
 	    position: absolute;
         top: 22px;
 	    z-index: 2;

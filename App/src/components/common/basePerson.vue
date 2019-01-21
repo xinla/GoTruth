@@ -186,7 +186,7 @@ export default {
 	//   	})
 	// },
 	beforeRouteEnter (to, from, next) {
-		console.log(from);
+		// console.log(from);
     	if (!to.query.userId && !localStorage.id) {
             GoTruth.$vux.alert.show({
 			  content:'您还未登录',

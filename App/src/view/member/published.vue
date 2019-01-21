@@ -58,6 +58,7 @@
                 var res;
                 if (this.$route.name == 'published') {
                     res = articleService.getArticleByUser(this.userId,this.page,10);
+                    // console.log(res)
                 }else if (this.$route.name == 'publishedArticle') {
                     res = articleService.getArticleByUser(this.userId,this.page,10,1);
                 }else if (this.$route.name == 'publishedVideo') {

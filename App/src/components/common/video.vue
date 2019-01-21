@@ -58,7 +58,7 @@ export default {
         imageurl:'',
       },
 			playerOptions : {
-				preload: 'auto',
+				preload: 'none',
 				language: 'zh-CN',
 				sources: [
 					{
