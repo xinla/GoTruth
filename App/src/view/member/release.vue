@@ -265,10 +265,23 @@
                         return;
                     }
                 }else if(this.record.type == 2){
+                    if(this.record.classify ==0){
+                        this.$vux.alert.show({
+                            content:"请选择视频类型"
+                        })
+                        return;
+                    }
                     if(!this.record.title){
                         this.$vux.alert.show({
                             content:"请输入视频标题"
                         })
+                        return;
+                    }
+                    if(this.record_file.length == 0){
+                        this.$vux.alert.show({
+                            content:"请上传视频"
+                        })
+                        return;
                     }
                 }else{
                     if(!this.record.title){
@@ -276,6 +289,9 @@
                             content:"请输入问题标题"
                         });
                         return;
+                    }
+                    if(!this.record.title){
+                        return true;
                     }
                 }
                 if(!this.$Tool.checkInput(this.record.title)){
@@ -304,6 +320,9 @@
                         images.push(this.record_file[i].url);
                     }
                     data = interlocutionService.publishQuestion(this.record,images+"");
+                 /*   if(!this.record.content){
+                        return true;
+                    }*/
                     if(data && data.status == "success"){
                         setTimeout(()=>{
                             this.$Tool.goPage({name:"questionAnswer"});
@@ -322,7 +341,8 @@
                     setTimeout(()=>{
                         this.$vux.alert.hide();
                     },1000)
-                }else{
+                }
+                else{
                     this.$vux.alert.show({
                         content:'发布失败,请重新发布',
                     })

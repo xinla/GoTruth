@@ -10,12 +10,11 @@ window.$ = $;
 import router from './router'
 import store from './store'
 
-
-import animate from 'animate.css'
 //css样式
+import animate from 'animate.css'
 import './assets/styles/reset.css'
 import './assets/styles/iconfont.css'
-
+import 'swiper/dist/css/swiper.css'
 //引用功能函数
 import Tool from './assets/js/methods'
 Vue.use(Tool);
@@ -55,6 +54,9 @@ import VideoPlayer from 'vue-video-player'
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
+
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
 
 //vux
 import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,Popup,InlineLoading,

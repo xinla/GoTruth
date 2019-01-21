@@ -9,7 +9,7 @@
 			</div>
 			<div class="top-back-title">
 				<slot name="title"></slot>
-			</div>		
+			</div>
 			<div class="top-back-nav">
 				<!-- <slot name="nav">
 					<i class="iconfont icon-more">
@@ -27,7 +27,9 @@ export default {
 			default:false,
 		}
 	},
-}	
+	methods:{
+	}
+}
 </script>
 <style lang="less" scoped>
 .status-bar{

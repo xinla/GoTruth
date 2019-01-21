@@ -207,7 +207,7 @@ export default {
     border-radius: 50%;
     /*margin: 0 !important;*/
     transform: translate(-50%,-50%);
-    line-height: 1rem !important;
+    line-height: .9rem !important;
     border: 2px solid #eee;
   }
   /*去除音量按钮*/

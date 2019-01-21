@@ -39,7 +39,6 @@
 			</div>
 		</div>
 		<transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-		<preview :imgs="imgs" v-show= "showPreview" @close="handleClosePrev"></preview>
 	</transition>
 		<div class="member-tab">
 			<ul class="member-switch">
@@ -74,6 +73,7 @@
 		    </tab>
 
 		</div>
+		<gallary :imgs="imgs" v-show="showGallary" @close="handelGallaryClose"></gallary>
 		<keep-alive>
 			<router-view class="router-view" :key="$route.name"></router-view>
 		</keep-alive>
@@ -85,10 +85,10 @@ import config from '@/lib/config/config'
 import articleService from '@/service/articleService'
 import followService from '@/service/followService'
 import userService from '@/service/userService'
-import preview from "@/components/preview"
+import gallary from "@/components/Gallary"
 export default {
 	components:{
-		preview
+		gallary
 	},
 	data(){
 		return {
@@ -97,7 +97,7 @@ export default {
 			current:0,
 			currentSub:0,
 			currentName:"全部",
-			showPreview:false,
+			showGallary:false,
 			imgs: [
                 {
                   url: "",
@@ -122,24 +122,12 @@ export default {
 			]
 		}
 	},
-	mounted(){
-	 if (window.history && window.history.pushState) {
-	    history.pushState(null, null, document.URL);
-	    window.addEventListener('popstate', this.fun, false);//false阻止默认事件
-	  }
-	},
-	destroyed(){
-	  window.removeEventListener('popstate', this.fun, false);//false阻止默认事件
-	},
 	methods:{
 		handlePreview(){
-			this.showPreview = true;
+			this.showGallary = true;
 		},
-		handleClosePrev(){
-			this.showPreview = false;
-		},
-		fun(){
-			this.showPreview = false;
+		handelGallaryClose(){
+			this.showGallary = false;
 		},
 		init(){
 			if (localStorage.id && localStorage.id == this.userId) {
@@ -198,7 +186,8 @@ export default {
 	//   	})
 	// },
 	beforeRouteEnter (to, from, next) {
-    	if (!to.query.userId && !localStorage.id) { 
+		console.log(from);
+    	if (!to.query.userId && !localStorage.id) {
             GoTruth.$vux.alert.show({
 			  content:'您还未登录',
 			})

@@ -1892,7 +1892,7 @@ export default {
 		text-indent: 2em;
 		color:#f36767;
 	    overflow: hidden;
-	    height: 8.9rem;
+	    height: 9.8rem;
 	    transition: all .5s;
 	}
 	.loveCiew-unfold{

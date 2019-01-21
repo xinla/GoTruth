@@ -4,7 +4,7 @@
 		<template v-if="!ifSingle">
 			<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
 			<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">
-		</template>				
+		</template>
 		<img class="float-img a" v-else :src="imgList[0] || ArticleFile.length && (2 == article.type?fileRoot + ArticleFile[0].thumbnail:fileRoot+ArticleFile[0].thumbnail)" >
 		<!-- 公共标题 -->
 		<h2 class="article-title">{{article.title}}</h2>
@@ -106,7 +106,7 @@ export default {
 			articleFileService.getFileByArticle(this.article.id,data=>{
 				if (data && data.status == "success") {
 					this.ArticleFile = data.result.filelist;
-					// console.log(this.ArticleFile)
+					console.log(this.ArticleFile);
 				}
 			});
 			if (this.ifPublisher && this.article.author) {
