@@ -137,7 +137,7 @@
                 this.$refs.marginTit.style.marginTop = "1.2rem";
             }else{
                 this.placeholderTit = "请输入问题标题?";
-                this.placeholderDesc = "请输入问题描述";
+                this.placeholderDesc = "问题描述(可选填)";
                 this.$refs.marginTit.style.marginTop = "0";
             }
 
@@ -283,15 +283,12 @@
                         })
                         return;
                     }
-                }else{
+                }else if(this.record.type == 3){
                     if(!this.record.title){
                         this.$vux.alert.show({
                             content:"请输入问题标题"
                         });
                         return;
-                    }
-                    if(!this.record.title){
-                        return true;
                     }
                 }
                 if(!this.$Tool.checkInput(this.record.title)){
@@ -308,7 +305,6 @@
                 if(this.record.type == 1 || this.record.type == 2){
                     data = articleService.publishArticle(this.record,this.record_file);
                     if(data && data.status == "success"){
-                        console.log(data)
                         setTimeout(()=>{
                             this.$Tool.goPage({name:"home"});
                         },1200);
@@ -320,9 +316,6 @@
                         images.push(this.record_file[i].url);
                     }
                     data = interlocutionService.publishQuestion(this.record,images+"");
-                 /*   if(!this.record.content){
-                        return true;
-                    }*/
                     if(data && data.status == "success"){
                         setTimeout(()=>{
                             this.$Tool.goPage({name:"questionAnswer"});
@@ -342,11 +335,11 @@
                         this.$vux.alert.hide();
                     },1000)
                 }
-                else{
+               /* else{
                     this.$vux.alert.show({
                         content:'发布失败,请重新发布',
                     })
-                }
+                }*/
             },
 
         },

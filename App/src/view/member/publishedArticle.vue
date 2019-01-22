@@ -5,7 +5,7 @@
 			<i class="iconfont icon-delete fr" v-if="!ifDeleteAll" @click="ifDeleteAll = true;"></i>
 			<div v-else>
 				<span @click="deleteAll()" class="deleteAll">删除全部</span>
-				<span class="fr" @click="ifDeleteAll = false;">完成</span>					
+				<span class="fr" @click="ifDeleteAll = false;">完成</span>
 			</div>
 		</div> -->
 		<multIT
@@ -44,7 +44,7 @@ export default {
 			this.userId = this.$route.query.userId;
 			this.page = 1;
 			this.arcList = [];
-			this.init();			
+			this.init();
 		},delay)
 		// 延迟时间必须大于路由切换动画时间
 	},
@@ -56,8 +56,8 @@ export default {
 			if (res&&res.status == "success") {
 				if (res.result.recordPage.list.length) {
 					this.page++;
-					// console.log(this.page)					
-					this.arcList = this.arcList.concat(res.result.recordPage.list);	
+					// console.log(this.page)
+					this.arcList = this.arcList.concat(res.result.recordPage.list);
 				}else if (this.arcList.length == 0) {
 					this.proIf = true;
 					this.proMes = "您想要的真相消失啦~~~";
@@ -112,7 +112,7 @@ export default {
 	}
 	// watch:{
 	// 	arcList(){
-	// 		this.getArticleInfo();	
+	// 		this.getArticleInfo();
 	// 	}
 	// },
 	// beforeRouteEnter (to, from, next) {

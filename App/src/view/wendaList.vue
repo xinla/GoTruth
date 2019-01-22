@@ -26,7 +26,7 @@
                     <span v-show="questionBool.notCollect">暂无人收藏</span>
                 </div>
             </div>
-            <div class="wendaList-other" v-show="hasAnswer" v-for="item in answer" @click="goAnswerDetail(wenda,item)">
+            <div class="wendaList-other" v-show="hasAnswer" v-for="(item,index) in answer" @click="goAnswerDetail(wenda,item)">
                 <div class="header">
                     <div class="header-user">
                         <img :src="$Tool.headerImgFilter(item.imageurl)" class="userPhoto">
@@ -50,7 +50,9 @@
 
                         <span>{{item.publishtime}}</span>
                     </div>
-                    <div class="fr article-remove" @click="$emit('delete',[item.id,whi,$event])" v-if="ifDel">
+                    <!--  -->
+                    <!-- v-if="ifDel" -->
+                    <div class="fr article-remove" v-if="userId == item.author" @click.stop="handleCloseAnswer(item.id, index)">
                         <i class="iconfont icon-remove"></i>
                     </div>
                 </div>
@@ -153,6 +155,7 @@
         data() {
             return {
                 timer:null,
+                userId:localStorage.id,
                 id:0,   //问题Id
                 wenda:{},    //问题对象
                 answer:[],   //问题回答对象
@@ -226,7 +229,9 @@
         },
         methods:{
             //页面初始化渲染
+
             init() {
+
                 if (!this.id) {
                     this.$vux.alert.show({
                         content: '获取出错，请返回！',
@@ -343,7 +348,34 @@
                 }
                 this.$vux.loading.hide();
             },
-
+            handleCloseAnswer(id, index){
+                let thiz = this;
+                this.$vux.confirm.show({
+                    content:"确定要删除么",
+                    onConfirm() {
+                        let data = articleService.deleteArticleById(id);
+                        if(data && data.status == "success") {
+                            thiz.answer.splice(index,1);
+                            thiz.$vux.alert.show({
+                                content:"删除成功",
+                            })
+                            thiz.wendaCount --;
+                            if(thiz.wendaCount == 0){
+                                thiz.questionBool.hasAnswer = false;
+                                thiz.questionBool.notAnswer = true;
+                                thiz.notAnswer = true;
+                            }
+                            setTimeout(()=>{
+                                thiz.$vux.alert.hide();
+                            },1000)
+                        }else{
+                            thiz.$vux.alert.show({
+                              content:'删除失败，请重试！',
+                            })
+                        }
+                    }
+                })
+            },
             //删除上传图片
             handleRemoveImg(item){
                 const thiz = this;
@@ -455,6 +487,7 @@
                     this.record_file = [];
                     this.record.content ="";
                     this.answerObj.addShow=false;
+                    this.answerObj.addShow = true;
                     this.wendaCount++;
                     if(this.wendaCount > 0) {
                         this.questionBool.hasAnswer = true;
@@ -674,6 +707,7 @@
                     margin-top: .125rem;
                     text-align: center;
                     border: .02rem solid @borderColor;
+                    background-color: #f1f1f1;
                     border-radius: .08rem;
                     .iconfont{
                         font-size: .24rem;
