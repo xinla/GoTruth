@@ -31,7 +31,7 @@
 		  },
 		  methods:{
 		  	handelGallaryClick(){
-		  		this.$emit('close')
+		  		this.$emit('close');
 		  	}
 		  }
 	}
@@ -51,7 +51,7 @@
 		right: 0;
 		top: 0;
 		bottom: 0;
-		background-color: rgba(0,0,0,0.8);
+		background-color: #000;
 		.wrapper{
 			height: 0;
 			width: 100%;
