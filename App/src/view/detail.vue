@@ -55,26 +55,28 @@
 				</div>
 				<multIT v-for="(item,index) in aboutArticle" :article="item" :key="index" :ifSingle="true">
 				</multIT>
-				<div :class="['loveCiew',{'loveCiew-unfold':!isUnfold}]">
-					<p class="red">爱心提示：</p>
-					<p>
-	          诈骗在中国已涉及到各行各业，高超的诈骗手段让人防不胜防！
-	          全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康，拐卖妇女儿童屡禁不止。
-					</p>
-					<p>我们对此深恶痛绝，鉴于此，遂开创了这个平台！</p>
-					<p>
-					我们希望你能通过直击真相的平台了解到有关方面的知识和技能，懂得如何更好地保护自己和家人，并能够把这个平台推荐和分享给您身边的亲朋好友，让他们尽早的远离欺骗和伤害。
-					</p>
-					<p>我们相信，你的一次举手之劳，可能就会挽救一个家庭甚至一个美丽的生命！</p>
-					<p class="red">直击真相App：多一个人看到，就少一个人受骗！</p>
-				</div>
-			<div class="unfold-ciew ac" @click="isUnfold = !isUnfold">
-				{{isUnfold ? "收起" : "展开"}}
-			</div>
 				<!-- <div class="keywords">
 					<label>关键词：</label>
 					<span v-for="item in article.keywords">{{ item }}</span>
 				</div> -->
+				 <div class="love-tip">
+                    <p class="red">爱心提示：</p>
+                    <p> 诈骗在中国已涉及到各行各业，高超的诈骗手段让人防不胜防！</p>
+                </div>
+                <collapse-transition>
+                    <div class="love-tip" v-show="isActive">
+                    	<p>全国每年累计被诈骗金额超过3000亿，许多人被骗得倾家荡产，甚至家破人亡！有毒有害食品层出不穷，假冒伪劣产品泛滥成灾，严重伤害了国人的身体健康，拐卖妇女儿童屡禁不止。</p>
+                        <p>我们对此深恶痛绝，鉴于此，遂开创了这个平台！</p>
+                        <p>
+                            我们希望你能通过直击真相的平台了解到有关方面的知识和技能，懂得如何更好地保护自己和家人，并能够把这个平台推荐和分享给您身边的亲朋好友，让他们尽早的远离欺骗和伤害。
+                        </p>
+                        <p>我们相信，你的一次举手之劳，可能就会挽救一个家庭甚至一个美丽的生命！</p>
+                        <p class="red">直击真相：多一个人看到，就少一个人受骗！</p>
+                    </div>
+                </collapse-transition>
+                 <div class="love-toggle" @click="handleToggle">
+                    {{toggleText}}
+                </div>
 			</section>
 			<prompt-blank v-if="proFail1" :mes="failMes1"></prompt-blank>
 			<ul class="article-change clearfix" v-if="!detailType">
@@ -175,7 +177,6 @@
 							@input="handleDesc"
 							autofocus
 							ref="popFocus" maxlength="300">
-								
 							</textarea>
 					</div>
 					<div class="popup-btn clearfix">
@@ -319,14 +320,17 @@ import articleCommentService from '@/service/article_commentService'
 import articleCollectService from '@/service/articleCollectService'
 import messageService from '@/service/messageService'
 import transmitService from '@/service/transmitService'
-
+import collapseTransition from "@/assets/js/elTransition"
 export default {
 	components:{
 		like,
+		collapseTransition,
 		memberList:() => import ('@/components/common/memberList'),
 	},
 	data(){
 		return {
+			isActive:false,
+			toggleText:'展开',
 			badgeShow:false,
 			sourceShow:false,
 			reportToggle:true,
@@ -476,7 +480,6 @@ export default {
 				content:'',
 				thumbs:[]
 			},
-			isUnfold:false,
 			aboutArticle:[]
 		}
 	},
@@ -621,6 +624,16 @@ export default {
 				})
 			}
 		},
+		 handleToggle(){
+	      this.isActive = !this.isActive;
+	      if(this.isActive){
+	          this.toggleText="收起";
+	          this.arrowIcon = true;
+          }else{
+	          this.toggleText = "展开"
+              this.arrowIcon = false;
+          }
+        },
 		handleOpenInput(){
             if(!localStorage.id){
                 this.$Tool.loginGoBack({
@@ -1888,28 +1901,28 @@ export default {
 	.lg-preview-title{
 		display: none !important;
 	}
-	.loveCiew{
-		line-height: 30px;
-		text-indent: 2em;
-		color:#f36767;
-	    overflow: hidden;
-	    height: 9.8rem;
-	    transition: all .5s;
-	}
-	.loveCiew-unfold{
-		height: 52px;
-	}
-	.unfold-ciew{
-	    line-height: 30px;
-	    background: @mainColor;
+	.love-tip{
+        p{
+            line-height: .6rem;
+            text-indent: 2em;
+            color:#f36767;
+        }
+        .red{
+        	color:#f00;
+			font-weight: 600;
+        }
+    }
+    .love-toggle{
+    	 line-height: 30px;
+	    background: linear-gradient(#f7ba15,#f89a1e);
 	    color: #fff;
 	    border-radius: 50px;
 	    margin: 10px;
-	}
-	.red{
-		color:#f00;
-		font-weight: 600;
-	}
+	    letter-spacing: .04rem;
+	    font-size: .32rem;
+	    text-align: center;
+    }
+
 	.video-player{
 	    position: fixed;
 	    width: 100%;
