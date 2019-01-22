@@ -213,6 +213,10 @@
 
 </script>
 <style lang="less" scoped>
+    .member-wrap{
+        overflow-y: auto;
+        height: calc(100vh - 1rem);
+    }
     .member-header {
         padding:@statusBarHeight + 0.3rem .4rem .3rem ;
         background-position: 0 0;

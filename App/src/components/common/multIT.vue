@@ -14,10 +14,10 @@
 				<!-- <div class="multiple-img" v-for="(item, index) in imgList">
 					<img :src="item" >
 				</div> -->
-				<img class="multiple-img" :src="item" v-for="(item,index) in imgList">
+				<img class="multiple-img" :src="item" v-for="(item,index) in imgList" v-if="index < 3">
 			</div>
 			<div class="multiple-img-wrap" v-else-if="1 === article.type && ArticleFile.length > 1">
-				<img class="multiple-img" :src="item.url && (fileRoot + item.url)" v-for="(item,index) in ArticleFile">
+				<img class="multiple-img" :src="item.url && (fileRoot + item.url)" v-for="(item,index) in ArticleFile" v-if="index < 3">
 				<!-- <div class="multiple-img" v-for="(item, index) in ArticleFile" v-if="index < 3">
 					<img :src="fileRoot + item.url" >
 				</div> -->
