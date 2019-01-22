@@ -122,12 +122,24 @@ export default {
 			]
 		}
 	},
+	mounted(){
+		window.history.pushState(null, null, document.URL);
+		window.addEventListener('popstate', this.onBrowserBack, false);
+	},
+	destroyed(){
+		window.removeEventListener("popstate", this.onBrowserBack, false);
+	},
 	methods:{
 		handlePreview(){
 			this.showGallary = true;
 		},
 		handelGallaryClose(){
 			this.showGallary = false;
+		},
+		onBrowserBack(){
+			if(this.showGallary){
+				this.showGallary = false;
+			}
 		},
 		init(){
 			if (localStorage.id && localStorage.id == this.userId) {
@@ -163,6 +175,14 @@ export default {
 		 }
 	},
 	watch:{
+		showGallary:{
+			handler(newVal, oldVal) {
+				if(newVal.Terms == true) {
+					window.history.pushState(null, null, document.URL);
+				}
+			},
+			deep: true
+		},
 		userId(){
 			this.init();
 		},
