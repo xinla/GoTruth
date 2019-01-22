@@ -829,7 +829,7 @@
             padding: 0 .3rem;
             textarea{
                 padding-top: .3rem;
-                padding-bottom: .6rem;
+                min-height: 2.5rem;
                 display: block;
                 width: 100%;
                 font-size: .3rem;
