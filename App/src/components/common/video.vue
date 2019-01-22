@@ -1,9 +1,7 @@
 <template>
   <div class="video-wrap">
     <div class="video-content">
-      <transition  enter-active-class="animated fadeInDown" leave-active-class=" animated fadeOutUp">
-      <h3 class="video-title" v-show="titleShow" style="animation-duration: 800ms" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
-      </transition>
+     <h3 class="video-title" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
       <video-player class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
@@ -52,7 +50,6 @@ export default {
 			fileRoot:config.fileRoot+'/',
 			// publisher:"",
       countShow:false,
-      titleShow:true,
       artUser:{
         username:'',
         imageurl:'',
@@ -132,7 +129,6 @@ export default {
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
 		onPlayerPlay(player){
-      this.titleShow = false;
 			this.$emit("allPause",this.whi);
 			if (!this.$store.state.notWifi) {
 				let _this = this,
@@ -156,7 +152,6 @@ export default {
 			}
 		},
     onPlayerPause(player){
-      this.titleShow = true;
       this.$refs.videoPlayer.player.pause();
     },
 
@@ -169,21 +164,14 @@ export default {
 <style lang="less" scoped>
   .video-wrap{
     position: relative;
+    // margin-bottom: .2rem;
+    border-bottom: .02rem solid @borderColor;
     .video-content{
       .video-title{
         width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        padding: .2rem .3rem 0 .3rem;
-        border-radius: 0 0 .1rem .1rem;
+        padding: .2rem;
         font-size: .32rem;
-        letter-spacing: .04rem;
         line-height: .4rem;
-        background-color: rgba(0,0,0,0.4);
-        box-shadow:0 .3rem .5rem rgba(0,0,0,0.4);
-        color: #fff;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
