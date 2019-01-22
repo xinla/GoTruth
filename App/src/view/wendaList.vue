@@ -52,9 +52,13 @@
                     </div>
                     <!--  -->
                     <!-- v-if="ifDel" -->
+                    <div class="fr article-remove" @click="$emit('delete',[item.id,$event])" v-if="ifDel">
+                        <i class="iconfont icon-remove"></i>
+                    </div>
                     <div class="fr article-remove" v-if="userId == item.author" @click.stop="handleCloseAnswer(item.id, index)">
                         <i class="iconfont icon-remove"></i>
                     </div>
+
                 </div>
             </div>
             <div class="not-wendaList" v-show="notAnswer">
