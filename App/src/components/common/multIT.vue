@@ -33,6 +33,8 @@
 		<!-- 文章评论 -->
 		<div class="article-footer clearfix">
 				<!-- <span class="publisher oe" v-if="ifPublisher">{{publisher}}</span> -->
+				<span class="stick" v-if="stickShow">置顶</span>
+				<span class="stick" v-if="hotShow">热</span>
 				<span class="publisher oe">{{publisher}}</span>
 				<span>{{commentNum}}评论</span>
 				<span class="publish-time">{{publishtime}}</span>
@@ -94,12 +96,20 @@ export default {
 			this.init();
 		// this.$nextTick(()=>{
 		// })
-	},	
+	},
 	watch:{
 		//使用了缓存，父组件传值发生改变，子组件需要监测对应改变的对象值，不然子组件重新渲染还是使用缓存中的值
 		article(){
 			this.init();
 		},
+	},
+	computed:{
+		stickShow(){
+			return this.article.weight == 10;
+		},
+		hotShow(){
+			return this.article.weight <= 9 && this.article.weight >= 8;
+		}
 	},
 	methods:{
 		init(){
@@ -203,7 +213,7 @@ export default {
 		}
 		.article-footer{
 			// height: .6rem;
-			line-height: .6rem;
+			line-height: 1rem;
 			font-size: .24rem;
 			color: #a3a3a3;
 			.publisher{
@@ -211,6 +221,17 @@ export default {
 			}
 			span{
 				margin-right: .1rem;
+			}
+			.stick{
+				display: inline-block;
+				line-height: .4rem;
+				text-align: center;
+				border: .02rem solid #ed4040;
+				transform: scale(.9);
+				color: #ed4040;
+				padding: 0 .06rem;
+				letter-spacing: .02rem;
+				border-radius: .1rem;
 			}
 			.article-remove{
 				width: .45rem;
