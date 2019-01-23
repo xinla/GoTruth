@@ -213,7 +213,7 @@ export default {
 		}
 		.article-footer{
 			// height: .6rem;
-			line-height: 1rem;
+			line-height: .55rem;
 			font-size: .24rem;
 			color: #a3a3a3;
 			.publisher{
