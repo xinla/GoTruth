@@ -484,7 +484,6 @@ export default {
 		}
 	},
 	mounted(){
-			// debugger
 		this.id = this.$route.query.id;
 		this.detailType = this.$route.query.detailType || 0;
         if(!localStorage.id || !localStorage.token){
@@ -493,6 +492,11 @@ export default {
             this.ifLike = false;
             this.likeStatus = false;
         }
+        window.history.pushState(null, null, document.URL);
+		window.addEventListener('popstate', this.onBrowserBack, false);
+	},
+	destroyed(){
+		window.removeEventListener("popstate", this.onBrowserBack, false);
 	},
 	methods:{
 		init(){
@@ -624,16 +628,26 @@ export default {
 				})
 			}
 		},
-		 handleToggle(){
-	      this.isActive = !this.isActive;
-	      if(this.isActive){
-	          this.toggleText="收起";
-	          this.arrowIcon = true;
-          }else{
-	          this.toggleText = "展开"
-              this.arrowIcon = false;
-          }
-        },
+		onBrowserBack(){
+			if(this.popList.show || this.reportShow || this.popMask || this.shareShow || this.replyShow){
+				this.popList.show = false;
+				this.reportShow = false;
+				this.popMask = false;
+				this.shareShow = false;
+				this.replyShow = false;
+			}
+		},
+
+		handleToggle(){
+			this.isActive = !this.isActive;
+			if(this.isActive){
+				this.toggleText="收起";
+				this.arrowIcon = true;
+			}else{
+				this.toggleText = "展开"
+				this.arrowIcon = false;
+			}
+		},
 		handleOpenInput(){
             if(!localStorage.id){
                 this.$Tool.loginGoBack({
@@ -1252,6 +1266,46 @@ export default {
 				this.ifLoad = false;
 			},delay)
 			//注：延迟时长必须在动画大于切换动画（300）
+		},
+		'popList.show':{
+			handler(newVal, oldVal) {
+				if(newVal.Terms == true) {
+					window.history.pushState(null, null, document.URL);
+				}
+			},
+			deep: true
+		},
+		reportShow:{
+			handler(newVal, oldVal) {
+				if(newVal.Terms == true) {
+					window.history.pushState(null, null, document.URL);
+				}
+			},
+			deep: true
+		},
+		popMask:{
+			handler(newVal, oldVal) {
+				if(newVal.Terms == true) {
+					window.history.pushState(null, null, document.URL);
+				}
+			},
+			deep: true
+		},
+		shareShow:{
+			handler(newVal, oldVal) {
+				if(newVal.Terms == true) {
+					window.history.pushState(null, null, document.URL);
+				}
+			},
+			deep: true
+		},
+		reportShow:{
+			handler(newVal, oldVal) {
+				if(newVal.Terms == true) {
+					window.history.pushState(null, null, document.URL);
+				}
+			},
+			deep: true
 		},
 		$route(to,from) {
 			// debugger
