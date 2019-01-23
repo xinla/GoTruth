@@ -21,12 +21,12 @@
         </div>
         <!-- 标题 -->
         <div class="release-title" ref="marginTit">
-            <input type="text" v-model="record.title" :placeholder="placeholderTit" maxlength="50">
+            <input type="text" v-model.trim="record.title" :placeholder="placeholderTit" maxlength="50">
         </div>
         <!--  -->
         <div class="release-content" v-if="record.type==1 || record.type == 3">
             <div class="content">
-                <textarea :placeholder="placeholderDesc" v-model="record.content" maxlength="500"></textarea>
+                <textarea :placeholder="placeholderDesc" v-model.trim="record.content" maxlength="500"></textarea>
             </div>
             <!-- 上传图片 -->
             <div class="release-upload-img clearfix">
@@ -142,7 +142,19 @@
             }
 
         },
+        mounted(){
+            window.addEventListener('popstate', this.onBrowserBack, false);
+        },
         methods:{
+            onBrowserBack(){
+                if(this.record.title || this.record.content || this.record_file || this.defaultType){
+                    this.record.title = "";
+                    this.record.content = "";
+                    this.record_file = [];
+                    this.defaultType = '请选择分类';
+                    this.record.classify = 0;
+                }
+            },
             handleType(){
                 this.optionShow = !this.optionShow;
             },
