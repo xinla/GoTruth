@@ -44,7 +44,7 @@
                 default: false
             }
         },
-        mounted(){
+        activated(){
             this.$nextTick(()=>{
                 this.init();
             });
