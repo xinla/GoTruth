@@ -1,6 +1,6 @@
 <template>
 	<div @scroll="loadMore">
-		<memberList :list="list" :mes="proMes" :ifFocus="true"></memberList>
+		<memberList :list="list" :mes="proMes" :ifFocus="ifFocus"></memberList>
 		<load-more :show-loading="ifLoad"></load-more>
 	</div>
 </template>
@@ -20,6 +20,7 @@ export default{
 			lock:false,
 			scrollTop:0,
 			ifLoad:true,
+			ifFocus:true
 		}
 	},
 	// mounted(){
@@ -42,6 +43,7 @@ export default{
 				res = followService.getUserFollow(this.page,10);
 			}else if (this.$route.name == 'fans') {
 				res = followService.getVermicelliList(this.page,10);
+				this.ifFocus = false;
 			}
 			if (res && res.status == "success") {
 				if (res.recordPage.list.length) {

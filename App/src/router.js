@@ -286,7 +286,7 @@ export default new Router({
           path:'fans',
           name:'fans',
           component: (resolve)=>{
-            require(['@/view/member/fans.vue'],resolve)
+            require(['@/view/member/focus.vue'],resolve)
           }
         },
         {
