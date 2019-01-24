@@ -94,6 +94,13 @@ export default {
 			// }
 		},
 		loadMore(e){
+			// 上滑隐藏自动暂停
+			this.$refs['zjzx-video'].forEach((item,index)=>{
+				if ($(item.$el).offset().top <= -50 ) {
+					item.pause();
+				}
+			})
+			// console.log(this.$refs['zjzx-video'])
 			this.throttle(this._loadMore,this,e);
 		},
 		//函数节流控制
@@ -109,10 +116,11 @@ export default {
 			if (!this.isScolling) {
 				this.$store.dispatch('setIsScolling',true);
 			}
-			this.scrollTop = $(e.target).scrollTop();
 			// 滚动结束200ms后解禁滚动状态
 			clearTimeout(this.timeId);
 			this.timeId = setTimeout(()=>{
+				this.scrollTop = $(e.target).scrollTop();
+				this.$store.dispatch('setIsScolling',false);
 				if (!this.lock && ($(e.target).scrollTop() + $(e.target).height() + 10) > e.target.scrollHeight) {
 						this.getMoreActicle();					
 					// setTimeout(()=>{
@@ -158,6 +166,11 @@ export default {
 		// 	}
 		// }
 	},
+	computed:{
+        isScolling(){
+            return this.$store.state.isScrolling;
+        },
+    },
 	beforeRouteEnter(to,from,next){
 		next(vm=>{
 			$(vm.$refs["srcoll"].$el).scrollTop(vm.scrollTop);

@@ -1,5 +1,5 @@
 <template>
-  <div class="video-wrap">
+  <div class="video-wrap" v-show="playerOptions.sources[0].src">
     <div class="video-content">
      <h3 class="video-title" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
       <video-player class="video-player vjs-custom-skin"
@@ -105,8 +105,9 @@ export default {
 		init(){
 			articleFileService.getFileByArticle(this.article.id,(data)=>{
 				if (data && data.status == "success") {
-					this.playerOptions.sources[0].src = this.fileRoot + data.result.filelist[0].url;
-					this.playerOptions.poster = this.fileRoot + data.result.filelist[0].thumbnail;				
+          let temp = data.result.filelist[0];
+  					temp && (this.playerOptions.sources[0].src = this.fileRoot + temp.url);
+  					temp && (this.playerOptions.poster = this.fileRoot + temp.thumbnail);				
 				}
 			});
 
@@ -129,6 +130,7 @@ export default {
 			this.publishtime = this.$Tool.publishTimeFormat(this.article.publishtime);		
 		},
 		onPlayerPlay(player){
+      if (this.$store.state.isScolling) {return;}
 			this.$emit("allPause",this.whi);
 			if (!this.$store.state.notWifi) {
 				let _this = this,
