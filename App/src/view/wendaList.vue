@@ -75,6 +75,10 @@
                 <i class="iconfont icon-fabu"></i>
                 <span>提问</span>
             </div>-->
+						<div class="item" @click="handleShare">
+							<i class="iconfont icon-share"></i>
+							<span>分享</span>
+						</div>
             <div class="item" @click="handleAnswer">
                 <i class="iconfont icon-comment"></i>
                 <span>回答</span>
@@ -122,6 +126,8 @@
                 </div>
             </popup>
         </div>
+				<!-- 分享 -->
+				<share :content="shareDesc" v-model="shareShow"></share>
     </div>
 </template>
 <script>
@@ -208,9 +214,14 @@
                 ifNet:false,
                 ifLoad: false, //是否加载
                 ifLoading:false,
-                tip:"正在加载"
-
-
+                tip:"正在加载",
+								shareShow:false,
+								shareDesc:{
+									href:'',
+									title:'',
+									description:'',
+									thumbs:[]
+								},
             }
         },
         activated() {
@@ -231,10 +242,18 @@
                 },120);
             });
         },
+				mounted() {
+					window.history.pushState(null, null, document.URL);
+					window.addEventListener('popstate', this.onBrowserBack, false);
+				},
+				destroyed(){
+					window.removeEventListener("popstate", this.onBrowserBack, false);
+				},
         methods:{
             //页面初始化渲染
 
             init() {
+							// console.log(this.wenda)
 
                 if (!this.id) {
                     this.$vux.alert.show({
@@ -333,6 +352,30 @@
                 });
                 this.ifLoad = false;
             },
+						onBrowserBack(){
+							if(this.shareShow || this.answerObj.show){
+								this.shareShow = false;
+								this.answerObj.show = false;
+							}
+						},
+						// 分享问题
+						handleShare(){
+							this.shareShow= true;
+							let reg = /[^\u4e00-\u9fa5]+/g;
+							let tempDesc = this.wenda.description.replace(reg,"");
+							this.shareDesc = {
+								href:config.share + '/#/detail' + location.href.substring(location.href.indexOf('?')),
+								title: this.wenda.title,
+								description: tempDesc.substring(0,80),
+								
+							}
+							if(this.imgArr.length){
+								this.shareDesc['thumbs'] = [this.fileRoot + this.imgArr[0]];
+							}
+							if(!this.shareDesc['thumbs']){
+								this.shareDesc['thumbs'] = require('@/assets/images/logo-icon.png');
+							}
+						},
             // 图片上传
             handleuploadFile(e){
                 let file = e.target.files[0];
@@ -531,16 +574,22 @@
 
         },
         watch:{
-            /* id(){
-                 this.ifLoad = true;
-                 if(this.timer){
-                     clearTimeout(this.timer);
-                 }
-                 this.timer = setTimeout(()=>{
-                     this.init();
-                     this.ifLoad = false;
-                 },120);
-             }*/
+					shareShow:{
+						handler(newVal, oldVal) {
+							if(newVal.Terms == true) {
+								window.history.pushState(null, null, document.URL);
+							}
+						},
+						deep: true
+					},
+					'answerObj.show':{
+						handler(newVal, oldVal) {
+							if(newVal.Terms == true) {
+								window.history.pushState(null, null, document.URL);
+							}
+						},
+						deep: true
+					}
         }
     }
 </script>
@@ -772,6 +821,7 @@
             color: #000 ;
             .iconfont{
                 font-size: .42rem;
+								vertical-align: top;
             }
             .icon-not-collection{
                 color: #000;

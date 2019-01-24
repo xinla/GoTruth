@@ -80,7 +80,7 @@ export default {
 
 <style lang="less" scoped>
 .mask{
-	background: rgba(0,0,0,0.5);
+	background: rgba(0,0,0,0.7) !important;
 }
 .bf{
 	height: auto;

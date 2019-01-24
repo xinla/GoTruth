@@ -368,6 +368,13 @@
             }
             console.log(this.$route)
         },
+				mounted() {
+					window.history.pushState(null, null, document.URL);
+					window.addEventListener('popstate', this.onBrowserBack, false);
+				},
+				destroyed(){
+					window.removeEventListener("popstate", this.onBrowserBack, false);
+				},
         watch:{
             id(){
                 this.ifLoad = true;
@@ -375,7 +382,47 @@
                     this.init();
                     this.ifLoad = false;
                 },delay)
-            }
+            },
+						'answerPopObj.show':{
+							handler(newVal, oldVal) {
+								if(newVal.Terms == true) {
+									window.history.pushState(null, null, document.URL);
+								}
+							},
+							deep: true
+						},
+						shareShow:{
+							handler(newVal, oldVal) {
+								if(newVal.Terms == true) {
+									window.history.pushState(null, null, document.URL);
+								}
+							},
+							deep: true
+						},
+						replyShow:{
+							handler(newVal, oldVal) {
+								if(newVal.Terms == true) {
+									window.history.pushState(null, null, document.URL);
+								}
+							},
+							deep: true
+						},
+						popMask:{
+							handler(newVal, oldVal) {
+								if(newVal.Terms == true) {
+									window.history.pushState(null, null, document.URL);
+								}
+							},
+							deep: true
+						},
+						reportShow:{
+							handler(newVal, oldVal) {
+								if(newVal.Terms == true) {
+									window.history.pushState(null, null, document.URL);
+								}
+							},
+							deep: true
+						}
         },
         methods:{
             // 页面初始渲染
@@ -473,7 +520,15 @@
                 this.loadComment();
                 this.ifLoad = false;
             },
-
+						onBrowserBack(){
+							if(this.answerPopObj.show || this.shareShow || this.replyShow || this.popMask || this.reportShow){
+								this.answerPopObj.show = false;
+								this.shareShow = false;
+								this.replyShow = false;
+								this.popMask = false;
+								this.reportShow = false;
+							}
+						},
             /*关注  | 取消关注   type: 1-回答发布人 || 2-回答评论人*/
             handleAnswerFocus(userid, type){
                 if(!localStorage.id) {
@@ -1423,7 +1478,6 @@
         .reply-body{
             width: 100%;
             height: calc(100vh - 1.3rem);
-            background-color: red;
             // overflow-y: auto;
             // overflow: auto;
             // padding: .32rem .3rem;
