@@ -55,4 +55,10 @@ service.getAnswerCount = function(wdid, call) {
   let params ={wdid};
   commonUtil.ajax(controller+'/getAnswerCount',params,call);
 };
+
+// 获取用户发布问题数量
+service.getUserQuestionCount = function (userid, call) {
+  let params = {userid};
+  commonUtil.ajax(controller+'/getUserQuestionCount',params,call);
+};
 export default service

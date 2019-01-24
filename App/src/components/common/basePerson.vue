@@ -16,7 +16,7 @@
 					<ul class="member-msg-list">
 						 <!-- @click="(loginUserId == userId) && $Tool.goPage({ name:'release',query:{'title':'发布图文',sort:1}})" -->
 						<li class="member-msg-item">
-							<span>{{publidsedNum}}</span>
+							<span>{{articleCount + questionCount}}</span>
 							发布
 						</li>
 						<li class="member-msg-item">
@@ -84,6 +84,7 @@
 import config from '@/lib/config/config'
 import articleService from '@/service/articleService'
 import followService from '@/service/followService'
+import interService from '@/service/interlocutionService'
 import userService from '@/service/userService'
 import gallary from "@/components/Gallary"
 export default {
@@ -107,7 +108,8 @@ export default {
 			userPhoto:'',
 			focusNum:0,
 			fansNum:0,
-			publidsedNum:0,
+      articleCount:0,
+      questionCount:0,
 			switchListPublic:[
 				{id:1, desc:'全部', path:'/personBase/published',},
 				{id:2, desc:'文章', path:'/personBase/publishedArticle',},
@@ -157,9 +159,16 @@ export default {
 			//获取文章数量
 			articleService.getUserArticleCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {
-					this.publidsedNum = data.result.count;
+					this.articleCount = data.result.count;
 				}
 			});
+
+      // 获取用户发布问题数量
+      interService.getUserQuestionCount(this.userId,(data)=>{
+        if(data && data.status == "success") {
+          this.questionCount = data.count;
+        }
+      });
 			//获取粉丝数量
 			followService.getUserVermicelliCount(this.userId,(data)=>{
 				if (data && data.status == "success" ) {
