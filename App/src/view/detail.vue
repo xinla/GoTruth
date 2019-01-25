@@ -563,8 +563,14 @@ export default {
 						if (this.article.type == 1) {
 							this.ArticleFile = data.result.filelist;
 						}else if(this.article.type == 2){
-							this.playerOptions.sources[0].src = this.fileRoot + data.result.filelist[0].url;
-							this.playerOptions.poster = this.fileRoot + data.result.filelist[0].thumbnail;
+							let temp = data.result.filelist[0];
+							if (temp) {
+								this.playerOptions.sources[0].src = this.fileRoot + temp.url;
+								this.playerOptions.poster = this.fileRoot + temp.thumbnail;
+							}else{
+								this.playerOptions.sources[0].src = '';
+								this.playerOptions.poster = '';
+							}
 						}
 					}
 				});

@@ -62,11 +62,11 @@
 			  		</group>
 	</div> -->
 			<ul class="system-list">
-				<li class="system-item clearfix">
+				<li class="system-item clearfix" @click="clearCache">
 					<label class="system-tit fl">清除缓存</label>
 					<div class="system-wrap fr clearfix">
 						<i class="iconfont icon-arrow-right fr"></i>
-						<span class="system-desc fr">10.00MB</span>
+						<span class="system-desc fr">{{cacheSize}}M</span>
 					</div>
 				</li>
 			<!-- 	<li class="system-item clearfix">
@@ -110,6 +110,7 @@ export default{
 			loginClass:true,
 			notlogin:true,
 			logined:true,
+			cacheSize:0
 		}
 	},
 	activated(){
@@ -125,6 +126,13 @@ export default{
 				this.logined = true;
 			}
 		});
+		try{
+			plus.cache.calculate((size) => {
+			    this.cacheSize = parseFloat(size / (1024 * 1024)).toFixed(2);
+			});
+		}catch(e){
+
+		}
 	},
 	methods:{
 		handleExit(){
@@ -161,6 +169,20 @@ export default{
 					})
 				}				
 			}
+		},
+		clearCache(){
+			plus.cache.clear(() => {
+				let _this = this;
+				this.$vux.confirm.show({
+					content:`确定缓存清除吗？`,
+					onConfirm(){
+			            _this.$vux.alert.show({
+			                title:'缓存清除完毕',
+			              });
+			            _this.cacheSize = 0.00;
+					}
+				})
+            });
 		},
 		appUpdate(){
 			this.$vux.loading.show({

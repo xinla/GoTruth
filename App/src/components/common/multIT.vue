@@ -1,5 +1,5 @@
 <template>
-	<div class="article clearfix" @click="goDetail">
+	<div class="article clearfix" @click="goDetail" v-if="article.title">
 		<!-- 浮动单图片 -->
 		<template v-if="!ifSingle">
 			<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >

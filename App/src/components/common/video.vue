@@ -106,8 +106,7 @@ export default {
 			articleFileService.getFileByArticle(this.article.id,(data)=>{
 				if (data && data.status == "success") {
           let temp = data.result.filelist[0];
-  					temp && (this.playerOptions.sources[0].src = this.fileRoot + temp.url);
-  					temp && (this.playerOptions.poster = this.fileRoot + temp.thumbnail);				
+  					temp && (this.playerOptions.sources[0].src = this.fileRoot + temp.url,this.playerOptions.poster = this.fileRoot + temp.thumbnail);			
 				}
 			});
 

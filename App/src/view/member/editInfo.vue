@@ -58,18 +58,18 @@
 
 		<!-- 手机设置 -->
 		<div class="editInfo-setup">
-			<span class="editInfo-setup-tip">开启后可以让你的好友找到你</span>
+			<!-- <span class="editInfo-setup-tip">开启后可以让你的好友找到你</span>
 			<group>
-		    	<x-switch title="允许将我推荐给好友" v-model="value1"></x-switch>
-		  	</group>
-		  	<span class="editInfo-setup-tip">开启后,可以向你推荐好友</span>
+					    	<x-switch title="允许将我推荐给好友" v-model="value1"></x-switch>
+					  	</group>
+					  	<span class="editInfo-setup-tip">开启后,可以向你推荐好友</span>
 			<group>
-		    	<x-switch title="允许将我推荐可能认识的人" v-model="value2"></x-switch>
-		  	</group>
-		  	<span class="editInfo-setup-tip">开启后,分享到微信QQ等平台的页面会展示你的头像</span>
+					    	<x-switch title="允许将我推荐可能认识的人" v-model="value2"></x-switch>
+					  	</group>
+					  	<span class="editInfo-setup-tip">开启后,分享到微信QQ等平台的页面会展示你的头像</span>
 			<group>
-		    	<x-switch title="分享页显示我的头像" v-model="value3"></x-switch>
-		  	</group>
+					    	<x-switch title="分享页显示我的头像" v-model="value3"></x-switch>
+					  	</group> -->
 		  	<span class="editInfo-setup-tip">社交平台账号绑定</span>
 			<group>
 		    	<x-switch title="微信" v-model="value4"></x-switch>
