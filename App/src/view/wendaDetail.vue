@@ -1186,10 +1186,11 @@
                     margin: .4rem 0;
                     .item{
                         display: inline-block;
-                        width: 3.375rem;
-                        height: 3.375rem;
-                        margin-right: .06rem;
-                        margin-bottom: .06rem;
+                        /*width: 3.375rem;*/
+                        width: 49.5%;
+                        height: 2.4rem;
+                        margin-right: .07rem;
+                        margin-bottom: .07rem;
                         &:nth-child(2n){
                             margin-right: 0;
                         }
