@@ -2,10 +2,11 @@
 	<div class="article clearfix" @click="goDetail" v-if="article.title">
 		<!-- 浮动单图片 -->
 		<template v-if="!ifSingle">
-			<img class="float-img a" v-if="3 === article.type && imgList.length === 1" :src="imgList[0]" >
+			<img class="float-img a" v-if="3 === article.type && imgList.length == 1" :src="imgList[0]" >
 			<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">
 		</template>
-		<img class="float-img a" v-else :src="imgList[0] || ArticleFile.length && (2 == article.type?fileRoot + ArticleFile[0].thumbnail:fileRoot+ArticleFile[0].thumbnail)" >
+		<!-- 单图模式 -->
+		<img class="float-img a" v-else-if="singleImg" :src="singleImg" >
 		<!-- 公共标题 -->
 		<h2 class="article-title">{{article.title}}</h2>
 		<!-- 二或三图 -->
@@ -14,7 +15,7 @@
 				<!-- <div class="multiple-img" v-for="(item, index) in imgList">
 					<img :src="item" >
 				</div> -->
-				<img class="multiple-img" :src="item" v-for="(item,index) in imgList" v-if="index < 3">
+				<img class="multiple-img" :src="item" v-for="(item,index) in imgList">
 			</div>
 			<div class="multiple-img-wrap" v-else-if="1 === article.type && ArticleFile.length > 1">
 				<img class="multiple-img" :src="item.url && (fileRoot + item.url)" v-for="(item,index) in ArticleFile" v-if="index < 3">
@@ -62,6 +63,7 @@ export default {
 		fileRoot:config.fileRoot+'/',
 		publisher:"",
 		imgList:[],
+		singleImg:""
 		}
 	},
 	props:{
@@ -134,6 +136,7 @@ export default {
 			if (this.article.type == 3) {
 				this.imgList = this.$Tool.extractImg(this.article.content,3);
 			}
+			this.ifSingle && (this.singleImg = this.imgList[0] || this.ArticleFile.length && this.fileRoot + (2 == this.article.type?this.ArticleFile[0].thumbnail:this.ArticleFile[0].thumbnail))
 		},
 		goDetail(){
 			if (!this.$store.state.isScolling) {
