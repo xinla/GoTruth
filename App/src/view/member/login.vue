@@ -39,6 +39,10 @@
 				<span class="login-tip">{{tip.codeTip}}</span>
 				<button type="button" class="login-btn" @click="handleLogin" :class="{isOpacity: isOpacity}" :disabled="disabled">探寻真相</button>
 			</div>
+			<p class="login-desc">登录即代表您已阅读并同意
+				<span @click="$Tool.goPage({name:'agreement',query:{title:'服务条款'}})">服务条款</span>和
+				<span @click="$Tool.goPage({name:'privacy',query:{title:'隐私政策'}})">隐私政策</span>
+			</p>
 		</div>
 		<div class="login-footer" v-show="footerShow">
 			<div class="login-line">一键登录</div>
@@ -49,10 +53,6 @@
 					<li class="login-icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo"></i></li>
 				</ul>
 			</div>
-			<p class="login-desc">登录即代表您已阅读并同意
-				<span @click="$Tool.goPage({name:'agreement',query:{title:'服务条款'}})">服务条款</span>和
-				<span @click="$Tool.goPage({name:'privacy',query:{title:'隐私政策'}})">隐私政策</span>
-			</p>
 		</div>
 	</div>
 </template>
@@ -124,9 +124,6 @@ export default{
 
 		},
 	},
-    activated(){
-
-    },
 	methods:{
 		show(ev){
 			if(ev.keyCode == 8) {
@@ -632,15 +629,16 @@ export default{
 			      	}
 				}
 			}
-			.login-desc{
-				width: 100%;
-				font-size: .24rem;
-				text-align: center;
-				color: #999;
-				span{
-					text-decoration: underline;
-					letter-spacing: .02rem;
-				}
+		}
+		.login-desc{
+			width: 100%;
+			font-size: .24rem;
+			text-align: center;
+			color: #999;
+			margin-top: .3rem;
+			span{
+				letter-spacing: .02rem;
+				color: #08f;
 			}
 		}
 
