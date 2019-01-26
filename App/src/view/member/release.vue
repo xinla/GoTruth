@@ -36,8 +36,7 @@
                 </div>
                 <div class="release-upload fl" v-show="imgShow">
                     <label for="upImg"></label>
-
-                    <span class="upload-text">上传图片</span>
+                    <i class="iconfont icon-add"></i>
                     <input type="file" id="upImg" accept="image/*" multiple @change="uploadFile" style="display: none;">
                 </div>
             </div>
@@ -50,7 +49,7 @@
             </div>
             <div class="release-upload fl" v-show="addShow">
                 <label for="upvideo"></label>
-                <span class="upload-text">上传视频</span>
+                <i class="iconfont icon-add"></i>
                 <input type="file"  id="upvideo" accept="video/*" @change="uploadFile" style="display: none;">
             </div>
         </div>
@@ -516,7 +515,7 @@
                         display: inline-block;
                         width: 1.04rem;
                         height: 1.04rem;
-                        font-size: 1em;
+                        font-size: 1rem;
                         margin-top: .41rem;
                         // font-weight: 700;
                         color: #dcdcdc;
@@ -565,12 +564,13 @@
                 height: 100%;
                 line-height: 1.86rem;
             }
-            .upload-text{
+            .iconfont{
                 display: inline-block;
-                width: 0.8rem;
-                font-size: 1em;
-                margin-top: 22%;
-                line-height: 1.5em;
+                width: 1.04rem;
+                height: 1.04rem;
+                font-size: 1rem;
+                margin-top: .41rem;
+                // font-weight: 700;
                 color: #dcdcdc;
             }
         }
