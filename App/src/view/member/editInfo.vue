@@ -72,9 +72,9 @@
                           </group> -->
       <span class="editInfo-setup-tip">社交平台账号绑定</span>
       <group>
-        <x-switch title="微信" v-model="value4"></x-switch>
-        <x-switch title="新浪微博" v-model="value5"></x-switch>
-        <x-switch title="腾讯QQ" v-model="value6"></x-switch>
+        <x-switch title="微信" :prevent-default="true" v-model="isWechat" :disabled="isWechat" @on-click="authLogin('wechat')"></x-switch>
+        <x-switch title="新浪微博" :prevent-default="true" v-model="isSina" :disabled="isSina" @on-click="authLogin('sina')"></x-switch>
+        <x-switch title="腾讯QQ" :prevent-default="true" v-model="isQQ" :disabled="isQQ" @on-click="authLogin('qq')"></x-switch>
       </group>
     </div>
     <!-- 用户名弹框 -->
@@ -171,6 +171,7 @@
 
 <script>
   import config from '@/lib/config/config'
+  import authUtil from '@/service/util/authUtil'
   import {VueCropper} from 'vue-cropper'
   import { XSwitch, XButton,Loading,} from 'vux'
   import fileService from '@/service/fileService'
@@ -196,9 +197,9 @@
         value1:false,
         value2:false,
         value3:false,
-        value4:false,
-        value5:false,
-        value6:false,
+        isWechat:false,
+        isSina:false,
+        isQQ:false,
         showAlert:false,
         ifCropper:false,
         upFile:{
@@ -232,7 +233,10 @@
           sex:'',
           province:'',
           city:'',
-          mobile:Number
+          mobile:0,
+          /*wx_unionid:'',
+          qq_unionid:'',
+          xl_openid:''*/
         },
         imgurl:localStorage.userImg,
         popList:{
@@ -265,6 +269,11 @@
     mounted() {
       window.history.pushState(null, null, document.URL);
       window.addEventListener('popstate', this.onBrowserBack, false);
+      try{
+        authUtil.init();
+      }catch(err){
+        
+      }
     },
     destroyed(){
       window.removeEventListener("popstate", this.onBrowserBack, false);
@@ -356,10 +365,14 @@
             this.address = this.user.province + this.user.city;
           }
         }
-        //判断手机号
-        if(this.user.mobile == null) {
-          this.user.mobile='未绑定'
-        }
+        // 判断手机号
+        !this.user.mobile && (this.user.mobile='未绑定')
+        // 判断绑定wechat
+        this.user.wx_unionid && (this.isWechat = true)
+        // 判断绑定qq
+        this.user.qq_unionid && (this.isQQ = true)
+        // 判断绑定sina
+        this.user.xl_openid && (this.isSina = true)
       },
       onBrowserBack(){
         if(this.popList.show || this.showSex || this.showMobile || this.showCode || this.ifCropper){
@@ -652,6 +665,66 @@
           });
         }
         callback (data);
+      },
+      // 授权绑定第三方账号
+      authLogin(type){
+        const _this = this;
+        switch (type){
+          case "wechat":
+          authUtil.loginByWx(function(resMap){
+            if(resMap.status === "success"){
+              let params = resMap.result.wx_user;
+              /*{
+                "sex":"男",
+                "wx_openid":"oRrdQt6Rx5HoGnbKAgG_Wpl0zK44",
+                "wx_nikname":"董春林",
+                "wx_image":"http://thirdwx.qlogo.cn/mmopen/vi_32/KRO0TRAmL5XvPXia9icPstUkNKMlHSYOdhiahX5UBbNuibOhZGcxZcsRxmQtAAqFX2nLL5cwyc4fkLVJnKibiaN1qzJg/132",
+                "wx_unionid":"oU5YytwqdJBWqmL6dNXsjsYAS_MM"
+              }*/
+              _this.user.wx_openid = params.wx_openid;
+              _this.user.wx_nikname = params.wx_nikname;
+              _this.user.wx_image = params.wx_image;
+              _this.user.wx_unionid = params.wx_unionid;
+              userService.updateUser(_this.user);
+              _this.isWechat = true;
+            }
+          })
+          break;
+          case "qq":
+          authUtil.loginByQQ(function(resMap){
+            if(resMap.status === "success"){
+              let params = resMap.result.qq_user;
+              /*{
+                "qq_openid":"F6DC81D7DEA4AA7AC94A2C6E57F96C09",
+                "qq_nikname":"被博士",
+                "qq_image":"http://qzapp.qlogo.cn/qzapp/1104455702/F6DC81D7DEA4AA7AC94A2C6E57F96C09/30",
+                "sex":"男"
+              }*/
+              _this.user.qq_openid = params.qq_openid;
+              _this.user.qq_nikname = params.qq_nikname;
+              _this.user.qq_image = params.qq_image;
+              _this.user.qq_unionid = params.qq_unionid;
+              userService.updateUser(_this.user);
+              _this.isQQ = true;
+            }
+          })
+          break;
+          case "sina":
+          authUtil.loginByXl(function(resMap){
+            if(resMap.status === "success"){
+              let params = resMap.result.xl_user;
+              /*{"xl_user":{"sex":"男","xl_nikname":"用户6311798622","xl_image":"http://tvax3.sinaimg.cn/default/images/default_avatar_male_50.gif"}}*/
+              _this.user.xl_openid = params.xl_openid;
+              _this.user.xl_nikname = params.xl_nikname;
+              _this.user.xl_image = params.xl_image;
+              userService.updateUser(_this.user);
+              _this.isSina = true;
+            }
+          })
+          break;
+          default:
+          console.log("授权出错")
+        }
       }
     },
     beforeRouteEnter (to, from, next) {

@@ -19,7 +19,7 @@
 					</div>
 				</li>
 				<router-link class="system-item clearfix" v-if="setupShow" :to="{path:'editInfo',query:{title:'账号设置'}}" tag="li">
-					<label class="system-tit fl">账户设置</label>
+					<label class="system-tit fl">账号设置</label>
 					<div class="system-wrap fr clearfix">
 						<i class="iconfont icon-arrow-right fr"></i>
 					</div>

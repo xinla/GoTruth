@@ -220,5 +220,6 @@
   .qa-list-wrap{
     padding: 0 .3rem; 
     position: relative;
+    background: #fff;
   }
 </style>

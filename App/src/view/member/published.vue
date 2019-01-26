@@ -1,29 +1,33 @@
 <template>
     <downRefresh @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
         <div class="article-list">
-            <multIT
-                v-for="(item,index) in arcList"
-                :article="item"
-                :whi="index"
-                :detailType='ifSelf'
-                :ifPublisher="false"
-                :ifDel="ifSelf"
-                @delete="deleteArticle"
-                :key="index"
-                v-if="!deleteIndex[index]">
-            </multIT>
-            <question
-                v-for="(item,index) in wendaList"
-                :wenda="item"
-                :whi="index"
-                :ifPublisher="false"
-                :ifDel="ifSelf"
-                @delete="deleteArticle"
-                :key="index"
-                v-if="!deleteIndex[index]">
-            </question>
+            <template v-if="!ifQA">
+                <multIT
+                    v-for="(item,index) in arcList"
+                    :article="item"
+                    :whi="index"
+                    :detailType='ifSelf'
+                    :ifPublisher="false"
+                    :ifDel="ifSelf"
+                    @delete="deleteArticle"
+                    :key="index"
+                    v-if="!deleteIndex[index]">
+                </multIT>
+            </template>
+            <template v-else>
+                <question
+                    v-for="(item,index) in arcList"
+                    :wenda="item"
+                    :whi="index"
+                    :ifPublisher="false"
+                    :ifDel="ifSelf"
+                    @delete="deleteArticle"
+                    :key="index"
+                    v-if="!deleteIndex[index]">
+                </question>
+            </template>
             <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
-            <load-more :show-loading="(arcList.length > 0) && ifLoad"></load-more>
+            <load-more v-if="arcList.length" :show-loading="ifLoad" :tip="tip"></load-more>
         </div>
     </downRefresh>
 </template>
@@ -44,8 +48,8 @@
                 scrollTop:0,
                 deleteIndex:[],
                 timer:null,
-                wendaList:[],
                 ifQA:false,
+                tip:"",
             }
         },
         mounted(){
@@ -79,10 +83,10 @@
                     this.ifQA = true;
                     res = interService.getQuestionPage(this.page,10,null,this.userId);
                 }
-                if (res&&res.status == "success") {
+                if (res && res.status == "success") {
                     let temp = (!this.ifQA ? res.result.recordPage.list:res.recordPage.list);
+                    (temp.length < 10) && (this.ifLoad = false,this.tip = "你看到我的底线啦");
                     if (temp.length) {
-                        (temp.length < 10) && (this.ifLoad = false);
                         this.page++;
                         // console.log(this.page)
                         this.arcList = this.arcList.concat(temp);
@@ -95,11 +99,6 @@
                     this.proMes = "请求失败，请稍后再试！"
                 }
                 this.lock = false;
-                if (this.ifQA) {
-                    this.wendaList = this.arcList;
-                    this.arcList = [];
-                }
-                // this.ifLoad = false;
             },
             deleteArticle([id,whi,event]){
                 let _this = this;
@@ -177,6 +176,7 @@
                     this.deleteIndex = [];
                     this.page = 1;
                     this.arcList = [];
+                    this.tip = "";
                     this.init();
                 },delay)
             }
