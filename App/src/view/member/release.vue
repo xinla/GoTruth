@@ -36,7 +36,8 @@
                 </div>
                 <div class="release-upload fl" v-show="imgShow">
                     <label for="upImg"></label>
-                    <i class="iconfont icon-add"></i>
+
+                    <span class="upload-text">上传图片</span>
                     <input type="file" id="upImg" accept="image/*" multiple @change="uploadFile" style="display: none;">
                 </div>
             </div>
@@ -49,7 +50,7 @@
             </div>
             <div class="release-upload fl" v-show="addShow">
                 <label for="upvideo"></label>
-                <i class="iconfont icon-add"></i>
+                <span class="upload-text">上传视频</span>
                 <input type="file"  id="upvideo" accept="video/*" @change="uploadFile" style="display: none;">
             </div>
         </div>
@@ -107,8 +108,8 @@
         activated(){
             this.record_file = [];
             this.record.type = this.$route.query.sort;
-            this.record.selectedpublishname = this.selectedPublishName || "不显示";
-            this.record.selectedpublishaddress = this.selectedPublishAddress || "不显示";
+            this.record.selectedpublishname = this.selectedPublishName || "选择位置";
+            this.record.selectedpublishaddress = this.selectedPublishAddress || "选择位置";
             if(this.selectedPublishName === '我的位置'){
                 this.record.selectedpublishname = this.selectedPublishAddress;
             }
@@ -503,7 +504,7 @@
                     text-align: center;
                     float: left;
                     background-color: #f4f5f6; 
-                    label{
+                    /* label{
                         position:absolute;
                         left: 0;
                         top: 0;
@@ -515,11 +516,11 @@
                         display: inline-block;
                         width: 1.04rem;
                         height: 1.04rem;
-                        font-size: 1rem;
+                        font-size: 1em;
                         margin-top: .41rem;
                         // font-weight: 700;
                         color: #dcdcdc;
-                    }
+                    } */
                 }
             }
         }
@@ -564,13 +565,12 @@
                 height: 100%;
                 line-height: 1.86rem;
             }
-            .iconfont{
+            .upload-text{
                 display: inline-block;
-                width: 1.04rem;
-                height: 1.04rem;
-                font-size: 1rem;
-                margin-top: .41rem;
-                // font-weight: 700;
+                width: 0.8rem;
+                font-size: 1em;
+                margin-top: 22%;
+                line-height: 1.5em;
                 color: #dcdcdc;
             }
         }
