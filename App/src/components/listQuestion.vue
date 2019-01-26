@@ -8,11 +8,13 @@
       </prompt-blank>
       <loading-main v-if="!ifNet && wendaList.length"></loading-main>
       <wenda-user></wenda-user>
-      <question
-        v-for="(item,index) in wendaList"
-        :wenda="item"
-        :key="item.id">
-      </question>
+      <div class="qa-list-wrap">
+        <question
+          v-for="(item,index) in wendaList"
+          :wenda="item"
+          :key="item.id">
+        </question>
+      </div>
       <div class="nomsg" v-show="wendaShow">
         <i class="iconfont icon-nomsg"></i>
         <span class="text">暂无数据...</span>
@@ -217,5 +219,8 @@
   .animate {
     transition: all .5s;
   }
-
+  .qa-list-wrap{
+    padding: 0 .3rem; 
+    position: relative;
+  }
 </style>

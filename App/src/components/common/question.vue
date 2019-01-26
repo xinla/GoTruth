@@ -1,30 +1,25 @@
 <template>
-  <div class="bfc-o"  @click="handlewendaList(wenda)">
-      <div class="wenda-wrap">
-        <div class="wenda-item clearfix">
-          <!--标题-->
-          <h2 class="wenda-title" >{{wenda.title}}</h2>
-          <!--多图-->
-          <ul class="wenda-img-list">
-            <li class="wenda-img" :class="{bigImg:bigImg}"   v-for="(item,index) in imgList" v-if="index < 3" >
-              <img :src=" fileRoot + item">
-            </li>
-          </ul>
-          <!--问答底部-->
-          <div class="wenda-footer clearfix">
-            <div class="left fl clearfix">
-              <span class="wenda-username" v-if="ifPublisher">{{publisher}}</span>
-              <span class="wenda-num">{{wendaCount}}回答</span>
-              <span class="wenda-time">{{createtime}}</span>
-            </div>
-            <div class="right fr" @click.stop="$emit('delete',[wenda.id,whi])" v-if="ifDel">
-              <i class="iconfont icon-remove"></i>
-            </div>
-          </div>
+  <div class="wenda-item clearfix" @click="handlewendaList(wenda)">
+    <!--标题-->
+    <h2 class="wenda-title" >{{wenda.title}}</h2>
+    <!--多图-->
+    <ul class="wenda-img-list">
+      <li class="wenda-img" :class="{bigImg:bigImg}"   v-for="(item,index) in imgList" v-if="index < 3" >
+        <img :src=" fileRoot + item">
+      </li>
+    </ul>
+    <!--问答底部-->
+    <div class="wenda-footer clearfix">
+      <div class="left fl clearfix">
+        <span class="wenda-username" v-if="ifPublisher">{{publisher}}</span>
+        <span class="wenda-num">{{wendaCount}}回答</span>
+        <span class="wenda-time">{{createtime}}</span>
+      </div>
+      <div class="right fr" @click.stop="$emit('delete',[wenda.id,whi,$event])" v-if="ifDel">
+        <i class="iconfont icon-remove"></i>
       </div>
     </div>
   </div>
-
 </template>
 <script>
 
@@ -105,96 +100,91 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  .wenda-wrap{
-    padding: 0 .3rem .1rem .3rem;
-
-    background-color: #f3f4f5;
-    .wenda-item {
-      /*padding-top: .26rem;*/
-      border-bottom: .02rem solid @borderColor;
-      background-color: #fff;
-      .wenda-title {
-        max-height: 1.4rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        font-size: 0.32rem;
-        line-height: 0.46rem;
-        font-weight: 500;
-        margin-bottom: 0.1rem;
+  .wenda-item {
+    /*padding-top: .26rem;*/
+    border-bottom: .02rem solid @borderColor;
+    background-color: #fff;
+    .wenda-title {
+      max-height: 1.4rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      font-size: 0.32rem;
+      line-height: 0.46rem;
+      font-weight: 500;
+      margin-bottom: 0.1rem;
+    }
+    .float-img{
+      width: 2rem;
+      height: 1.3rem;
+      margin-left: .3rem;
+      float: right;
+      img{
+        display: block;
+        width: 100%;
+        height: 100%;
+        line-height: 100%;
+        color: #999;
+        text-align: center;
+        object-fit: cover;
+        padding: .02rem;
+        border: .02rem solid @borderColor;
       }
-      .float-img{
-        width: 2rem;
-        height: 1.3rem;
-        margin-left: .3rem;
-        float: right;
+    }
+    .wenda-img-list{
+      display: flex;
+      width: 100%;
+      .wenda-img{
+        height: 1.6rem;
+        flex: 1;
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: .02rem;
+          object-fit: cover;
+        }
+      }
+      .bigImg{
+        width: 100%;
+        height: 4rem;
         img{
           display: block;
           width: 100%;
           height: 100%;
-          line-height: 100%;
-          color: #999;
-          text-align: center;
-          object-fit: cover;
-          padding: .02rem;
-          border: .02rem solid @borderColor;
         }
       }
-      .wenda-img-list{
-        display: flex;
-        width: 100%;
-        .wenda-img{
-          height: 1.6rem;
-          flex: 1;
-          img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            padding: .02rem;
-            object-fit: cover;
-          }
+    }
+    .wenda-footer{
+      height: .72rem;
+      line-height: .72rem;
+      font-size: .26rem;
+      color: #999;
+      .left{
+        span{
+          float: left;
+          margin-right: .12rem;
         }
-        .bigImg{
-          width: 100%;
-          height: 4rem;
-          img{
-            display: block;
-            width: 100%;
-            height: 100%;
-          }
+        .wenda-username{
+          max-width: 2.8rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
-      .wenda-footer{
-        height: .72rem;
-        line-height: .72rem;
-        font-size: .26rem;
-        color: #999;
-        .left{
-          span{
-            float: left;
-            margin-right: .12rem;
-          }
-          .wenda-username{
-            max-width: 2.8rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-        }
-        .right{
-          width: .42rem;
-          height: .32rem;
-          line-height: .28rem;
-          margin-top: .2rem;
-          border: .02rem solid #c3c3c3;
-          border-radius: .08rem;
-          text-align: center;
-          .iconfont{
-            font-size: .2rem;
-            color: #c3c3c3;
-          }
+      .right{
+        width: .42rem;
+        height: .32rem;
+        line-height: .28rem;
+        margin-top: .2rem;
+        border: .02rem solid #c3c3c3;
+        border-radius: .08rem;
+        text-align: center;
+        .iconfont{
+          font-size: .2rem;
+          color: #c3c3c3;
         }
       }
     }

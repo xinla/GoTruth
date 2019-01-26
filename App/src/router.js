@@ -272,7 +272,7 @@ export default new Router({
           path:'publishedQA',
           name:'publishedQA',
           component: (resolve)=>{
-            require(['@/view/member/publishedQA.vue'],resolve)
+            require(['@/view/member/published.vue'],resolve)
           },         
         },
         {

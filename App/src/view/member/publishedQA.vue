@@ -1,17 +1,19 @@
 <template>
-    <div @scroll="loadMore">
-        <question
-                v-for="(item,index) in wendaList"
-                :wenda="item"
-                :whi="index"
-                :ifPublisher="false"
-                :ifDel="ifDel"
-                @delete="deleteWenda"
-                :key="index">
-        </question>
-        <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
-        <load-more :show-loading="ifLoad"></load-more>
-    </div>
+    <downRefresh @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
+        <div>
+            <question
+                    v-for="(item,index) in wendaList"
+                    :wenda="item"
+                    :whi="index"
+                    :ifPublisher="false"
+                    :ifDel="ifDel"
+                    @delete="deleteWenda"
+                    :key="index">
+            </question>
+            <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
+            <load-more :show-loading="ifLoad"></load-more>
+        </div>
+    </downRefresh>
 </template>
 
 <script>
@@ -26,16 +28,23 @@
                 page:1,
                 lock:false,
                 ifLoad:false,
+                scrollTop:0,
+                deleteIndex:[],
+                timer:null
             }
         },
-        activated(){
+        mounted(){
             setTimeout(()=>{
+                // this.deleteIndex = [];
                 this.userId = this.$route.query.userId;
-                this.page = 1;
-                this.wendaList = [];
+                // this.page = 1;
+                // this.arcList = [];
                 this.init();
             },delay)
-            // 延迟时间必须大于路由切换动画时间
+        },
+        activated(){
+            this.userId = this.$route.query.userId;
+            $(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
         },
         methods:{
             init(){

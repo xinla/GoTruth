@@ -12,7 +12,16 @@
                 :key="index"
                 v-if="!deleteIndex[index]">
             </multIT>
-            <!-- <bigIVT :article="item" v-else="item.type==2"></bigIVT>	 -->
+            <question
+                v-for="(item,index) in wendaList"
+                :wenda="item"
+                :whi="index"
+                :ifPublisher="false"
+                :ifDel="ifSelf"
+                @delete="deleteArticle"
+                :key="index"
+                v-if="!deleteIndex[index]">
+            </question>
             <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
             <load-more :show-loading="(arcList.length > 0) && ifLoad"></load-more>
         </div>
@@ -21,6 +30,7 @@
 
 <script>
     import articleService from '@/service/articleService'
+    import interService from '@/service/interlocutionService'
     export default {
         data(){
             return {
@@ -33,7 +43,9 @@
                 ifLoad:true,
                 scrollTop:0,
                 deleteIndex:[],
-                timer:null
+                timer:null,
+                wendaList:[],
+                ifQA:false,
             }
         },
         mounted(){
@@ -63,9 +75,12 @@
                     res = articleService.getArticleByUser(this.userId,this.page,10,1);
                 }else if (this.$route.name == 'publishedVideo') {
                     res = articleService.getArticleByUser(this.userId,this.page,10,2);
+                }else if (this.$route.name == 'publishedQA') {
+                    this.ifQA = true;
+                    res = interService.getQuestionPage(this.page,10,null,this.userId);
                 }
                 if (res&&res.status == "success") {
-                    let temp = res.result.recordPage.list;
+                    let temp = (!this.ifQA ? res.result.recordPage.list:res.recordPage.list);
                     if (temp.length) {
                         (temp.length < 10) && (this.ifLoad = false);
                         this.page++;
@@ -80,6 +95,10 @@
                     this.proMes = "请求失败，请稍后再试！"
                 }
                 this.lock = false;
+                if (this.ifQA) {
+                    this.wendaList = this.arcList;
+                    this.arcList = [];
+                }
                 // this.ifLoad = false;
             },
             deleteArticle([id,whi,event]){
@@ -92,7 +111,7 @@
                 })
                 event.stopPropagation();
                 function deleteArt (index) {
-                    let resDelete = articleService.deleteArticleById(id);
+                   let resDelete = (!this.ifQA?articleService.deleteArticleById(id):interService.deleteQuestion(id))
                     // console.log(resDelete)
                     if (resDelete && resDelete.status == "success") {
                         // this.arcList.splice(index,1);
