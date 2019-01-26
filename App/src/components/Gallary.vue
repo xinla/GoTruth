@@ -53,26 +53,28 @@
 	.swiper-container{
 		overflow: inherit;
 	}
+  .swiper-slide{
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+  }
 	.container{
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		z-index: 99;
-		position: fixed;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 99;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #000;
 		.wrapper{
-			// height: 0;
-			width: 100%;
-			// padding-bottom:70%;
+      width: 100%;
 			.gallary-img{
-				display: block;
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
+        width: 100%;
+        object-fit: cover;
 			}
 			.swiper-pagination{
 				color: #fff;
@@ -83,4 +85,5 @@
 	}
 </style>
 <style>
+
 </style>
