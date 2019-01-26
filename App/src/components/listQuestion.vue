@@ -210,12 +210,10 @@
       }
     }
   }
-
   .refresh {
     overflow: hidden;
     background-color: #fafafa;
   }
-
   .animate {
     transition: all .5s;
   }

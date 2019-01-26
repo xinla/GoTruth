@@ -4,7 +4,7 @@
     <h2 class="wenda-title" >{{wenda.title}}</h2>
     <!--多图-->
     <ul class="wenda-img-list">
-      <li class="wenda-img" :class="{bigImg:bigImg}"   v-for="(item,index) in imgList" v-if="index < 3" >
+      <li class="wenda-img" :class="{bigImg:bigImg}" v-for="(item,index) in imgList" v-if="index < 3" >
         <img :src=" fileRoot + item">
       </li>
     </ul>
@@ -101,9 +101,8 @@ export default {
 </script>
 <style lang="less" scoped>
   .wenda-item {
-    /*padding-top: .26rem;*/
     border-bottom: .02rem solid @borderColor;
-    background-color: #fff;
+    padding: 0.15rem 0 0.1rem;
     .wenda-title {
       max-height: 1.4rem;
       overflow: hidden;
