@@ -53,7 +53,7 @@ export default{
 					btnShow:true,
 					imgShow:false
 				},
-				{
+				/*{
 					title:'发布过真相内容',
 					desc:'最少发布1条真相内容',
 					class:'icon-xinxi',
@@ -61,7 +61,7 @@ export default{
 					tip:false,
 					btnShow:true,
 					imgShow:false
-				}
+				}*/
 			],
 			achieved:{
 				ifRelease:false,
@@ -108,7 +108,7 @@ export default{
 				this.list[2].imgShow = false;
 			}
 
-			articleService.getUserArticleCount(localStorage.id, (data)=>{
+/*			articleService.getUserArticleCount(localStorage.id, (data)=>{
 				if(data.result.count > 0) {
 					this.list[3].btnShow = false;
 					this.list[3].imgShow = true;
@@ -122,7 +122,7 @@ export default{
 				this.list[3].path = {name:'identityPerson',query:{title:'个人认证'}};
 			}else{
 				this.list[3].path = {name:'release',query:{title:'发布图文',sort:1}};
-			}
+			}*/
 		}
 	}
 }
