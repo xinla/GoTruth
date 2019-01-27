@@ -14,7 +14,7 @@
         </div>
 
         <ul class="wendaList-img">
-          <li class="item" :class="{bigImg:bigImg}"  v-for="(item,index) in imgArr" v-show="ifImgNull" @click='handlePreview'>
+          <li class="item" :class="{bigImg:bigImg}"  v-for="(item,index) in imgArr" v-show="ifImgNull" @click='handlePreview(1)'>
             <img :src="fileRoot + item">
           </li>
         </ul>
@@ -102,9 +102,10 @@
                       @input="handelInput"
                       v-model="record.content" maxlength="300"></textarea>
             <div class="popup-img clearfix">
-              <div class="img fl" v-for="(item, index) in record_file">
+              <div class="img fl" v-for="(item, index) in record_file" @click="handlePreview(2)">
                 <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
-                <img class="previewer-demo-img" :src="fileRoot + item.url" v-preview="fileRoot + item.url">
+                <img class="previewer-demo-img" :src="fileRoot + item.url">
+                <!--v-preview="fileRoot + item.url"-->
               </div>
               <div class="popup-addimg fl" v-show="answerObj.addShow">
                 <label for="addImg"></label>
@@ -130,7 +131,10 @@
     <share :content="shareDesc" v-model="shareShow"></share>
     <!-- 图片预览 -->
     <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-      <gallary :urlArr="imgArr" v-show="showGallary" @close="handleGallaryClose"></gallary>
+      <gallary :urlArr="imgArr" v-show="showGallary" @close="handleGallaryClose(1)"></gallary>
+    </transition>
+    <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
+      <gallary :obj="record_file" v-show="showGallary1" @close="handleGallaryClose(2)"></gallary>
     </transition>
   </div>
 </template>
@@ -173,6 +177,7 @@
     data() {
       return {
         showGallary:false,
+        showGallary1:false,
         timer:null,
         userId:localStorage.id,
         id:0,   //问题Id
@@ -363,13 +368,27 @@
           this.shareShow = false;
           this.answerObj.show = false;
           this.showGallary = false;
+          if(this.showGallary1){
+            this.showGallary1 = false;
+            this.answerObj.show = true;
+          }
+
         }
       },
-      handlePreview(){
-        this.showGallary = true;
+      handlePreview(val){
+        if(val == 1){
+          this.showGallary = true;
+        }else{
+          this.showGallary1 = true;
+        }
+
       },
-      handleGallaryClose(){
-        this.showGallary = false;
+      handleGallaryClose(val){
+        if(val == 1){
+          this.showGallary = false;
+        }else{
+          this.showGallary1 = false;
+        }
       },
       // 分享问题
       handleShare(){
@@ -599,6 +618,14 @@
         deep: true
       },
       showGallary:{
+        handler(newVal, oldVal) {
+          if(newVal.Terms == true) {
+            window.history.pushState(null, null, document.URL);
+          }
+        },
+        deep: true
+      },
+      showGallary1:{
         handler(newVal, oldVal) {
           if(newVal.Terms == true) {
             window.history.pushState(null, null, document.URL);

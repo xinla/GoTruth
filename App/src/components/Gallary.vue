@@ -8,6 +8,9 @@
 				<swiper-slide v-for="(item, index) in urlArr" :key="index">
 					<img class="gallary-img" :src="fileRoot + item">
 				</swiper-slide>
+         <swiper-slide v-for="(item, index) in obj" :key="index">
+           <img class="gallary-img" :src="fileRoot + item.url">
+         </swiper-slide>
 				<div class="swiper-pagination" slot="pagination"></div>
 			</swiper>
 		</div>
@@ -29,6 +32,12 @@
 					return  []
 				}
 			},
+      obj:{
+			  type:Array,
+        default(){
+			    return []
+        }
+      }
 		},
 		 data () {
 		    return {
@@ -55,7 +64,7 @@
 	}
   .swiper-slide{
     width: 100%;
-    height: 4rem;
+    height: 5rem;
     display: flex;
     justify-content: center;
   }
@@ -63,7 +72,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    z-index: 99;
+    z-index: 999;
     position: fixed;
     left: 0;
     right: 0;
