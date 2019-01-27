@@ -64,7 +64,6 @@
         },
         activated(){
             this.userId = this.$route.query.userId;
-            this.init();
             $(this.$refs["scroll"].$el).scrollTop(this.scrollTop);
         },
         methods:{
