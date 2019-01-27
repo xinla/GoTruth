@@ -226,7 +226,7 @@ const tool = {
      * @num 图片最大数量
      */
     extractImg(str,num = 3){
-        if ( typeof str !== "string" ) {retrun;}
+        if ( typeof str !== "string" ) {return;}
         // 提取含img标签的src 路径
         let reg = /<img[^(img)]*src=[\'\"]?([^\'\"]*)[\'\"]?/gi,
             arr = str.match(reg),
