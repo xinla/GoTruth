@@ -7,7 +7,7 @@
                 <router-link :to="{path:loginLink,query:{title:'用户登录'}}">
                     <ul class="clearfix">
                         <li class="icon-item"><i class="iconfont icon-icon-copy"></i></li>
-                        <li class="icon-item"><i class="iconfont icon-qq"></i></li>
+                        <!--<li class="icon-item"><i class="iconfont icon-qq"></i></li>-->
                         <li class="icon-item"><i class="iconfont icon-weixin1"></i></li>
                         <li class="icon-item"><i class="iconfont icon-weibo"></i></li>
                     </ul>

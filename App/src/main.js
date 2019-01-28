@@ -60,7 +60,7 @@ Vue.use(VueAwesomeSwiper)
 
 //vux
 import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,Popup,InlineLoading,
-  DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom 
+  DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom,CheckIcon
 } from 'vux';
 Vue.component('group', Group);
 Vue.component('cell', Cell);
@@ -68,13 +68,14 @@ Vue.component('msg', Msg);
 Vue.component('datetime',Datetime);
 Vue.component('confirm',Confirm);
 Vue.component('alert',Alert);
-Vue.component('radio', Radio)
-Vue.component('tab', Tab)
-Vue.component('tab-item', TabItem)
-Vue.component('load-more', LoadMore)
-Vue.component('badge', Badge)
-Vue.component('popup', Popup)
-Vue.component('inline-loading', InlineLoading)
+Vue.component('radio', Radio);
+Vue.component('tab', Tab);
+Vue.component('tab-item', TabItem);
+Vue.component('load-more', LoadMore);
+Vue.component('badge', Badge);
+Vue.component('popup', Popup);
+Vue.component('inline-loading', InlineLoading);
+Vue.component('check-icon', CheckIcon);
 // import { DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom } from 'vux'
 Vue.use(DatetimePlugin)
 Vue.use(AlertPlugin)
