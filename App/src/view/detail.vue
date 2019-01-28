@@ -1459,8 +1459,8 @@
             display: inline-block;
             width: 49.5%;
             height: 2.4rem;
-            margin-right: 0.068rem;
-            margin-bottom: 0.068rem;
+            margin-right: .8%;
+            margin-bottom: .8%;
             &:nth-child(2n){
               margin-right: 0;
             }

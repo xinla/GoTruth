@@ -131,6 +131,11 @@
     destroyed(){
       window.removeEventListener("popstate", this.onBrowserBack, false);
     },
+    activated(){
+      this.$nextTick(()=>{
+        this.init();
+      })
+    },
     methods:{
       handlePreview(){
         this.showGallary = true;

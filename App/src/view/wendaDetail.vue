@@ -1211,8 +1211,8 @@
             /*width: 3.375rem;*/
             width: 49.5%;
             height: 2.4rem;
-            margin-right: .07rem;
-            margin-bottom: .07rem;
+            margin-right: .8%;
+            margin-bottom: .8%;
             &:nth-child(2n){
               margin-right: 0;
             }
