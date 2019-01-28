@@ -58,6 +58,7 @@ service.loginByQQ = function(params,call) {
 		qq_openid,//:"qq标识",
 		qq_nikname,//:"qq昵称",
 		qq_image,//:"qq头像地址"
+		qq_unionid:data.unionid,//qq_多应用唯一标识
 	};*/
 	if (call) {
 		commonUtil.ajax(controller+'/loginByQQ',params,call);

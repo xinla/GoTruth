@@ -1,5 +1,6 @@
 <template>
 	<div class="article clearfix" @click="goDetail" v-if="article.title">
+		<!-- 非单图模式 -->
 		<!-- 浮动单图片 -->
 		<template v-if="!ifSingle">
 			<img class="float-img a" v-if="3 === article.type && imgList.length == 1" :src="imgList[0]" >
@@ -9,6 +10,7 @@
 		<img class="float-img a" v-else-if="singleImg" :src="singleImg" >
 		<!-- 公共标题 -->
 		<h2 class="article-title">{{article.title}}</h2>
+		<!-- 非单图模式 -->
 		<!-- 二或三图 -->
 		<template v-if="!ifSingle">
 			<div class="multiple-img-wrap" v-if="3 === article.type && imgList.length > 1">

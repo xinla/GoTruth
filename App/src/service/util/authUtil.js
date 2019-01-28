@@ -123,6 +123,7 @@ authUtil.loginByQQ = function(call){
 			//	plus.nativeUI.alert("欢迎“"+nickname+"”登录！");
 				var userInfo = auth.userInfo; 
 				var qq_user = {};
+				// console.log(JSON.stringify(auth));
 				qq_user.qq_openid = auth.authResult.openid;
 				qq_user.qq_nikname = userInfo.nickname;
 				qq_user.qq_image = userInfo.headimgurl;
