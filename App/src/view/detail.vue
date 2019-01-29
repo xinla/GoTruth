@@ -1356,8 +1356,8 @@
   .mask{
     position: absolute;
     // bottom: initial;
-    background: #fafafa;
-    // background: linear-gradient(transparent 10%,#fafafa 10%);
+    // background: #fafafa;
+    background: linear-gradient(transparent 3%,#fafafa 3%);
   }
   // .playAudio{
   // 	position: absolute;
