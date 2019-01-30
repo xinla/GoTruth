@@ -59,7 +59,6 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-      userId: localStorage.id,
 	    ArticleFile:[],
 		commentNum:0,
 		publishtime:"",
@@ -114,17 +113,8 @@ export default {
 			return this.article.weight <= 9 && this.article.weight >= 8;
 		}
 	},
-  updated(){
-    this.$nextTick(()=>{
-      if(this.wenda.author == this.userId){
-        this.publisher = localStorage.userName;
-      }
-    })
-  },
 	methods:{
-
 		init(){
-      console.log(this.article);
 			articleFileService.getFileByArticle(this.article.id,data=>{
 				if (data && data.status == "success") {
 					this.ArticleFile = data.result.filelist;
