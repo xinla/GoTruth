@@ -1,5 +1,5 @@
 <template>
-	<div class="article clearfix" @click="goDetail" v-if="article.title">
+	<div class="article clearfix" @click="goDetail" v-if="article.title && !isBlacklist">
 		<!-- 非单图模式 -->
 		<!-- 浮动单图片 -->
 		<template v-if="!ifSingle">
@@ -117,7 +117,10 @@ export default {
 		hotShow(){
 			return this.article.weight <= 9 && this.article.weight >= 8;
 		},
-		
+		// 判断是否黑名单
+        isBlacklist(){
+            return  localStorage.blacklist && localStorage.blacklist.includes(this.article.author)
+        }
 	},
 	methods:{
 		init(){

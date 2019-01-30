@@ -1,5 +1,5 @@
 <template>
-  <div class="video-wrap" v-show="playerOptions.sources[0].src">
+  <div class="video-wrap" v-if="playerOptions.sources[0].src && !isBlacklist">
     <div class="video-content">
      <h3 class="video-title" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
       <video-player class="video-player vjs-custom-skin"
@@ -159,7 +159,13 @@ export default {
 		pause(){
     this.$refs.videoPlayer.player.pause();
 		}
-	}
+	},
+  computed:{
+    // 判断是否黑名单
+    isBlacklist(){
+        return  localStorage.blacklist && localStorage.blacklist.includes(this.article.author)
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

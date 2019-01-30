@@ -6,7 +6,7 @@
             </div>
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
-            <multIT v-for="(item,index) in arcList" :article="item" :key="index" v-if="!isBlacklist(item)"></multIT>
+            <multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
             <load-more v-show="!ifNet && arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
         </div>
     </downRefresh>
@@ -194,9 +194,7 @@
                     this.lock = false;
                 }
             },
-            isBlacklist(item){
-                return  localStorage.blacklist && localStorage.blacklist.includes(item.author)
-            }
+            
         },
         watch:{
             $route(){
@@ -217,9 +215,6 @@
             isScolling(){
                 return this.$store.state.isScrolling;
             },
-            // isBlacklist(item){
-            //     return  localStorage.blacklist && localStorage.blacklist.includes(item.author)
-            // }
         }
     }
 </script>
