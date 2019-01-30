@@ -85,10 +85,10 @@
           {{likeNum}}
           <like :likeStatus="likeStatus"></like>
         </li>
-        <!--<li class="item">
-                    <span>不喜欢</span>
-                    <i class="iconfont icon-lajixiang"></i>
-                </li>-->
+        <!-- <li class="item" @click="handleReport(1)">
+            <span>不喜欢</span>
+            <i class="iconfont icon-lajixiang"></i>
+        </li> -->
         <li class="item" @click="handleReport(1)">
           <span>举报</span>
           <i class="iconfont icon-warning-circle"></i>
@@ -106,7 +106,7 @@
         <div class="hot-title">热门评论</div>
         <div class="hot-content">
           <ul class="hot-list">
-            <li class="hot-item clearfix" v-for="(item,index) in commentList">
+            <li class="hot-item clearfix" v-for="(item,index) in commentList" @click="handleFirstReply(item,index)" v-if="!isBlacklist(item.douserid)">
               <div class="hot-userphoto fl">
                 <img :src="$Tool.headerImgFilter(item.imageurl)">
               </div>
@@ -128,7 +128,7 @@
                   <div class="fl">
                     <span class="hot-time">{{$Tool.publishTimeFormat(item.commenttime)}}</span>
                     <span class="hot-point">•</span>
-                    <span class="hot-reply" @click="handleFirstReply(item,index)">
+                    <span class="hot-reply" >
 											<var>{{item.replyCount}}</var>回复
 										</span>
                   </div>
@@ -294,7 +294,7 @@
             </radio>
           </group>
           <div class="report-footer" @click="handleSendReport">
-            提交
+            确定
           </div>
         </div>
       </popup>
@@ -424,7 +424,7 @@
         //举报显隐
         ifReport:false,
         //举报数组
-        reportList:Object.freeze(['淫秽色情','违法信息','营销广告','恶意攻击谩骂'
+        reportList:Object.freeze(['淫秽色情','违法信息','营销广告','恶意攻击谩骂','拉黑该用户并屏蔽其内容'
         ]),
         //显影分享
         ifShare:false,
@@ -1087,41 +1087,73 @@
        * @return {[type]}      [description]
        */
       handleSendReport(){
-        if(this.reportreasion){
-          let reportInfo;
-          if (this.reportType === 1) {
+        if (!this.reportreasion) {return;}
+        let reportInfo;
+        if (this.reportType === 1) {
+          if(this.reportreasion != '拉黑该用户并屏蔽其内容'){
             reportInfo = {
               type:1,
               itemid:this.id,
               reportuserid:this.article.author,
               reportreasion:this.reportreasion
             };
-          }else if (this.reportType === 2){
+          }else{
+            // 拉黑文章作者
+            userService.blacklist(this.article.author,data=>{
+              if (data && data.status === "success") {
+                this.$vux.alert.show({
+                  content:'已将该用户拉黑并为您屏蔽其相关内容',
+                })
+                // this.$router.back();
+              }else{
+                this.$vux.alert.show({
+                  content:'操作失败，请稍后再试！',
+                })
+              }
+            })
+          }
+        }else if (this.reportType === 2){
+          if(this.reportreasion != '拉黑该用户并屏蔽其内容'){
             reportInfo = {
               type:2,
               itemid:this.replyobj.id,
               reportuserid:this.replyobj.douserid,
               reportreasion:this.reportreasion
             };
+          }else{
+            // 拉黑评论者
+            userService.blacklist(this.replyobj.douserid,data=>{
+              if (data && data.status === "success") {
+                this.$vux.alert.show({
+                  content:'已将该用户拉黑并为您屏蔽其相关内容',
+                })
+                // this.$router.back();
+              }else{
+                this.$vux.alert.show({
+                  content:'操作失败，请稍后再试！',
+                })
+              }
+            })
           }
+        }
+        if (this.reportreasion != '拉黑该用户并屏蔽其内容') {
           let res = reportService.doReport(reportInfo);
           if (res && res.status === "success") {
             this.$vux.alert.show({
               content:'感谢您的反馈，我们会着实核查！',
             })
-            this.reportShow = false;
+            /*this.reportShow = false;
             this.popMask = false;
-            this.reportreasion = "";
+            this.reportreasion = "";*/
           }else{
             this.$vux.alert.show({
-              content:'提交失败，请稍后再试！',
+              content:'操作失败，请稍后再试！',
             })
           }
-        } else {
-          this.reportShow = false;
-          this.popMask = false;
         }
-
+        this.reportShow = false;
+        this.popMask = false;
+        this.reportreasion = "";
       },
 
 
@@ -1276,6 +1308,10 @@
       },
       pause(){
         this.$refs.videoPlayer.player.pause();
+      },
+      // 判断是否黑名单
+      isBlacklist(item){
+          return  localStorage.blacklist && localStorage.blacklist.includes(item.author)
       }
     },
     watch:{

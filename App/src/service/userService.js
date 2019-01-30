@@ -200,15 +200,15 @@ service.blacklist = function(targetuserid,call){
 };
 
 // 获取黑名单
-service.getBlacklist = function(call){
+service.getBlacklist = function(userid,call){
   var params = {
     userid,//:"当前用户id",
   };
   if (call) {
-    commonUtil.ajax(controller+'/Hmd',params,call);
+    commonUtil.ajax(controller+'/getHmd',params,call);
     return;
   }
-  var resMap = commonUtil.ajaxAsync(controller+'/Hmd',params);
+  var resMap = commonUtil.ajaxAsync(controller+'/getHmd',params);
 
   return resMap;
 };

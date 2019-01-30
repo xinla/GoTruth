@@ -47,6 +47,11 @@
 				<i class="iconfont icon-remove"></i>
 			</div>
 		</div>
+		<!-- <div class="mask">
+			<div class="report bfc-p cc">
+				ddd
+			</div>
+		</div> -->
 	</div>
 </template>
 <script>
@@ -65,7 +70,7 @@ export default {
 		fileRoot:config.fileRoot+'/',
 		publisher:"",
 		imgList:[],
-		singleImg:""
+		singleImg:"",
 		}
 	},
 	props:{
@@ -111,7 +116,8 @@ export default {
 		},
 		hotShow(){
 			return this.article.weight <= 9 && this.article.weight >= 8;
-		}
+		},
+		
 	},
 	methods:{
 		init(){
@@ -259,5 +265,8 @@ export default {
 	}
 	.multiple-img{
 		flex: 1;
+	}
+	.mask{
+		background: rgba(100,100,100,0.3);
 	}
 </style>

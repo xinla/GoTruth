@@ -415,6 +415,14 @@
               inviteCode:user.invitecode
             };
           Object.assign(localStorage,obj)
+          // debugger
+          userService.getBlacklist(user.id,data=>{
+            if (data && data.status === "success") {
+              localStorage.blacklist = data.recordList;
+              // console.log(JSON.stringify(localStorage.blacklist))
+              // debugger
+            }
+          })
           /*let token = data.result.token,
                       user = data.result.user,
                       id = user.id,
