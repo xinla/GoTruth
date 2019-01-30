@@ -184,5 +184,33 @@ service.getUserPhByUserid = function(userid,call){
   return resMap;
 };
 
+// 拉黑
+service.blacklist = function(targetuserid,call){
+  var params = {
+    userid,//:"当前用户id",
+	targetuserid,//:"目标用户id"
+  };
+  if (call) {
+    commonUtil.ajax(controller+'/Lh',params,call);
+    return;
+  }
+  var resMap = commonUtil.ajaxAsync(controller+'/Lh',params);
+
+  return resMap;
+};
+
+// 获取黑名单
+service.getBlacklist = function(call){
+  var params = {
+    userid,//:"当前用户id",
+  };
+  if (call) {
+    commonUtil.ajax(controller+'/Hmd',params,call);
+    return;
+  }
+  var resMap = commonUtil.ajaxAsync(controller+'/Hmd',params);
+
+  return resMap;
+};
 export default service
 
