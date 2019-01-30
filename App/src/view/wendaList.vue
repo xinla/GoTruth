@@ -18,12 +18,17 @@
             <img :src="fileRoot + item">
           </li>
         </ul>
-        <div class="wendaList-tip">
+        <div class="wendaList-tip clearfix">
           <span v-show="questionBool.hasAnswer">{{wendaCount}}条回答</span>
           <span v-show="questionBool.notAnswer">暂无回答</span>
           <span class="point">•</span>
           <span v-show="questionBool.hasCollect">{{collectCount}}人收藏</span>
           <span v-show="questionBool.notCollect">暂无人收藏</span>
+
+          <div class="question-jubao fr" @click="handleReport">
+           <i class="iconfont icon-warning-circle"></i>
+            举报
+          </div>
         </div>
       </div>
       <div class="wendaList-other" v-show="hasAnswer" v-for="(item,index) in answer" @click="goAnswerDetail(wenda,item)">
@@ -136,6 +141,24 @@
     <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
       <gallary :obj="record_file" v-show="showGallary1" @close="handleGallaryClose(2)"></gallary>
     </transition>
+
+    <!--举报-->
+    <div v-transfer-dom style="z-index: 988;">
+      <popup v-model="reportShow" style="z-index: 999;">
+        <div class="report-wrap">
+          <div class="report-header">
+            <h2>举报</h2>
+          </div>
+          <group>
+            <radio :selected-label-style="{color: '#FF9900'}" fill-mode :options="reportList" v-model="reportreasion">
+            </radio>
+          </group>
+          <div class="report-footer" @click="handleSendReport">
+            提交
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 <script>
@@ -150,6 +173,7 @@
   import articleService from '@/service/articleService'
   import articleFileService from '@/service/article_fileService'
   import articleCommentService from '@/service/article_commentService'
+  import reportService from '@/service/reportService'
   import gallary from "@/components/Gallary"
   export default {
     components:{
@@ -176,6 +200,10 @@
     },
     data() {
       return {
+        reportreasion:'',//"举报原因"
+        reportShow:false,
+        reportList:Object.freeze(['淫秽色情','违法信息','营销广告','恶意攻击谩骂'
+        ]),
         showGallary:false,
         showGallary1:false,
         timer:null,
@@ -265,7 +293,6 @@
     },
     methods:{
       //页面初始化渲染
-
       init() {
         if (!this.id) {
           this.$vux.alert.show({
@@ -292,6 +319,7 @@
           }
           // 循环回答列表
           listUtil.asyncSetListPropty(answerData.recordPage.list,(item)=>{
+
             // 获取发布回答时间
             item.publishtime = this.$Tool.publishTimeFormat(item.publishtime);
             // 获取发布回答用户信息
@@ -364,10 +392,11 @@
         this.ifLoad = false;
       },
       onBrowserBack(){
-        if(this.shareShow || this.answerObj.show || this.showGallary){
+        if(this.shareShow || this.answerObj.show || this.showGallary || this.reportShow){
           this.shareShow = false;
           this.answerObj.show = false;
           this.showGallary = false;
+          this.reportShow = false;
           if(this.showGallary1){
             this.showGallary1 = false;
             this.answerObj.show = true;
@@ -533,9 +562,47 @@
         }
         this.answerObj.show =true;
       },
+      handleSendReport(){
 
+        if(this.reportreasion){
+          let reportInfo = {
+            itemid: this.id,
+            reportuserid:this.wenda.userid,
+            reportreasion:this.reportreasion,
+            type:2
+        };
+          let data =reportService.doReport(reportInfo);
+          if(data && data.status == "success") {
+            this.$vux.alert.show({
+              content:'感谢您的反馈，我们会着实核查！',
+            });
+            this.reportShow = false;
+            this.reportreasion = "";
+          }else{
+            this.$vux.alert.show({
+              content:'提交失败，请稍后再试！',
+            })
+          }
+        }else{
+          this.reportShow =  false;
+        }
+      },
+      handleReport(){
+        if (!localStorage.id ) {
+          this.$Tool.loginGoBack({
+            returnpage: "/wendaList?",
+            query:{id:this.id},
+            name:'wendaList',
+            call:()=>{}
+          });
+          return;
+        }
+        this.reportShow = true;
+      },
       //取消回答框
       handleCancel(){
+        this.reportShow = false;
+        this.reportreasion = "";
         this.answerObj.show = false;
         this.record.content = "";
         this.record_file = [];
@@ -544,7 +611,6 @@
 
       // 发布回答
       handlePublish(){
-
         if(!this.$Tool.checkInput(this.record.content)) {
           this.record.content = this.$Tool.replaceNo(this.record.content);
           this.$vux.alert.show({
@@ -560,7 +626,9 @@
         this.record.author = Number(localStorage.id || 0);
         let pid =this.wenda.id;
         this.record.parentid = pid;
+        this.record.state = 3;
         let data = articleService.publishArticle(this.record, this.record_file);
+
         if(data && data.status == "success") {
           this.$vux.alert.show({
             content:'发布成功'
@@ -626,6 +694,14 @@
         deep: true
       },
       showGallary1:{
+        handler(newVal, oldVal) {
+          if(newVal.Terms == true) {
+            window.history.pushState(null, null, document.URL);
+          }
+        },
+        deep: true
+      },
+      reportShow:{
         handler(newVal, oldVal) {
           if(newVal.Terms == true) {
             window.history.pushState(null, null, document.URL);
@@ -730,6 +806,14 @@
         font-size: .32rem;
         letter-spacing: .02rem;
         color: #707070;
+        .question-jubao{
+          font-size: .24rem;
+          .iconfont{
+            font-size: .28rem;
+            position: relative;
+            left: .06rem;
+          }
+        }
       }
     }
     .wendaList-other{
@@ -1020,6 +1104,28 @@
         font-size: .5rem;
         color: #444;
       }
+    }
+  }
+  .report-wrap{
+    padding-top: .2rem;
+    background-color: #f8f8f8;
+    .report-header{
+      text-align: center;
+      line-height: .75rem;
+      h2{
+        font-weight: 500;
+        font-size: .32rem;
+        letter-spacing: .02rem;
+      }
+    }
+    .report-footer{
+      // padding:  0 .56rem;
+      line-height: .8rem;
+      font-size: .32rem;
+      text-align: center;
+      // color: #222;
+      // border-top: .02rem solid @borderColor;
+      background-color: #fff;
     }
   }
 </style>
