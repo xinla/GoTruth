@@ -36,7 +36,14 @@
               <img :src="fileRoot + item.url">
             </div>
           </div>
-          <span class="content-time">创建时间 {{publishtime}}</span>
+          <div class="content-time clearfix">
+            <span class=" fl">创建时间 {{publishtime}}</span>
+            <div class="jubao fr" @click="handleReport(1)">
+              <i class="iconfont icon-warning-circle"></i>
+              举报
+            </div>
+          </div>
+
         </div>
         <!--问答未获取到内容-->
         <prompt-blank v-if="proFail1" :mes="failMes1"></prompt-blank>
@@ -363,6 +370,7 @@
     activated(){
       this.wenda = JSON.parse(this.$route.query.wenda);
       this.answer = JSON.parse(this.$route.query.item);
+      console.log(this.answer)
       this.detailType = this.$route.query.detailType || 0;
       this.id = this.answer.id;
       if(!localStorage.id || !localStorage.token){
@@ -373,7 +381,7 @@
       }else{
         this.deleteShow = true;
       }
-      console.log(this.$route)
+
     },
     mounted() {
       window.history.pushState(null, null, document.URL);
@@ -960,6 +968,15 @@
 
       // 打开举报框
       handleReport(type){
+        if(!localStorage.id){
+          this.$Tool.loginGoBack({
+            returnpage:"/wendaDetail?",
+            query:{id:this.id},
+            name:"wendaDetail",
+            call:()=>{}
+          });
+          this.popMask = false;
+        }
         this.reportShow = true;
         this.popMask = true;
         this.reportType = type;
@@ -970,7 +987,7 @@
           let reportInfo;
           if (this.reportType === 1) {
             reportInfo = {
-              type:1,
+              type:4,
               itemid:this.id,
               reportuserid:this.answer.author,
               reportreasion:this.reportreasion
@@ -1229,6 +1246,12 @@
           line-height: .5rem;
           font-size: .32rem;
           color: #999;
+          .jubao{
+            font-size: .28rem;
+            .iconfont{
+              font-size: .3rem;
+            }
+          }
         }
       }
       .answer-comment{

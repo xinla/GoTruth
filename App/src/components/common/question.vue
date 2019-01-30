@@ -23,81 +23,91 @@
 </template>
 <script>
 
-import config from '@/lib/config/config'
-import interService from '@/service/interlocutionService'
-import userService from '@/service/userService'
-export default {
-  data(){
-    return {
-      fileRoot:config.fileRoot + '/',   // 服务器路径
-      wendaCount:0,     //回答数
-      createtime:'',   //回答时间
-      imgList:[],       //问题图片
-      publisher:'',     //问题发布人
-      bigImg:false      //判断是否一张图
-    }
-  },
-  props:{
-    wenda:{
-      type: Object,
-      default: {}
+  import config from '@/lib/config/config'
+  import interService from '@/service/interlocutionService'
+  import userService from '@/service/userService'
+  export default {
+    data(){
+      return {
+        userId: localStorage.id,
+        fileRoot:config.fileRoot + '/',   // 服务器路径
+        wendaCount:0,     //回答数
+        createtime:'',   //回答时间
+        imgList:[],       //问题图片
+        publisher:'',     //问题发布人
+        bigImg:false      //判断是否一张图
+      }
     },
-    whi:{
-      type: Number
+    props:{
+      wenda:{
+        type: Object,
+        default: {}
+      },
+      whi:{
+        type: Number
+      },
+      ifPublisher:{
+        type:Boolean,
+        default:true
+      },
+      ifDel:{
+        type: Boolean,
+        default: false
+      }
     },
-    ifPublisher:{
-      type:Boolean,
-      default:true
+    mounted(){
+      this.init();
     },
-    ifDel:{
-      type: Boolean,
-      default: false
-    }
-  },
-  mounted(){
-    this.init();
-  },
-  methods:{
-    init() {
-      // 获取发布人用戶名
-      if (this.ifPublisher && this.wenda.userid) {
-        userService.getUserById(this.wenda.userid,(data)=>{
-          if (data && data.status == "success") {
-            this.publisher = data.result.user.username;
+    updated(){
+      this.$nextTick(()=>{
+        if(this.wenda.userid == this.userId){
+          this.publisher = localStorage.userName;
+        }
+      })
+    },
+    methods:{
+      init() {
+        // 获取发布人用戶名
+        if (this.ifPublisher && this.wenda.userid) {
+          userService.getUserById(this.wenda.userid,(data)=>{
+            if (data && data.status == "success") {
+              this.publisher = data.result.user.username;
+            }
+          });
+        }
+        if(this.wenda.userid == this.userId){
+          this.publisher = localStorage.userName;
+        }
+        //获取问题回答数量
+        interService.getAnswerCount(this.wenda.id, (data)=>{
+          if(data && data.status == "success") {
+            this.wendaCount = this.$Tool.numConvertText(data.count);
+            if(data.count == 0) {
+              this.wendaCount ="暂无";
+            }
           }
         });
-      }
-      //获取问题回答数量
-      interService.getAnswerCount(this.wenda.id, (data)=>{
-        if(data && data.status == "success") {
-          this.wendaCount = this.$Tool.numConvertText(data.count);
-          if(data.count == 0) {
-            this.wendaCount ="暂无";
-          }
+        //获取问题发布的时间
+        this.createtime = this.$Tool.publishTimeFormat(this.wenda.createtime);
+
+        // 获取问题发布的图片
+        if(this.wenda.images == "")return;
+
+        this.imgList = this.wenda.images.split(',');
+        if(this.imgList.length == 1) {
+          this.bigImg = true;
+        }else{
+          this.bigImg = false;
         }
-      });
-      //获取问题发布的时间
-      this.createtime = this.$Tool.publishTimeFormat(this.wenda.createtime);
-
-      // 获取问题发布的图片
-      if(this.wenda.images == "")return;
-
-      this.imgList = this.wenda.images.split(',');
-      if(this.imgList.length == 1) {
-        this.bigImg = true;
-      }else{
-        this.bigImg = false;
+      },
+      //进入问题列表页
+      handlewendaList(item){
+        if(!this.$store.state.isScolling) {
+          this.$Tool.goPage({name:'wendaList', query:{id:this.wenda.id, item:JSON.stringify(item)}});
+        }
       }
     },
-
-   //进入问题列表页
-    handlewendaList(item){
-      if(!this.$store.state.isScolling) {
-        this.$Tool.goPage({name:'wendaList', query:{id:this.wenda.id, item:JSON.stringify(item)}});
-      }
-    }
-  },
-}
+  }
 </script>
 <style lang="less" scoped>
   .wenda-item {
