@@ -1,5 +1,5 @@
 <template>
-  <div class="wenda-item clearfix" @click="handlewendaList(wenda)" v-if="wenda.title && !isBlacklist">
+  <div class="wenda-item clearfix" @click="handlewendaList(wenda)">
     <!--标题-->
     <h2 class="wenda-title" >{{wenda.title}}</h2>
     <!--多图-->
@@ -64,12 +64,6 @@
           this.publisher = localStorage.userName;
         }
       })
-    },
-    computed:{
-      // 判断是否黑名单
-      isBlacklist(){
-        return  localStorage.blacklist && localStorage.blacklist.includes(this.wenda.author)
-      }
     },
     methods:{
       init() {

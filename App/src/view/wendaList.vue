@@ -154,7 +154,7 @@
             </radio>
           </group>
           <div class="report-footer" @click="handleSendReport">
-            确定
+            提交
           </div>
         </div>
       </popup>
@@ -202,12 +202,7 @@
       return {
         reportreasion:'',//"举报原因"
         reportShow:false,
-        reportList:Object.freeze([
-          '淫秽色情',
-          '违法信息',
-          '营销广告',
-          '恶意攻击谩骂',
-          '拉黑该用户并屏蔽其内容'
+        reportList:Object.freeze(['淫秽色情','违法信息','营销广告','恶意攻击谩骂'
         ]),
         showGallary:false,
         showGallary1:false,
@@ -567,61 +562,42 @@
         }
         this.answerObj.show =true;
       },
+      handleSendReport(){
+
+        if(this.reportreasion){
+          let reportInfo = {
+            itemid: this.id,
+            reportuserid:this.wenda.userid,
+            reportreasion:this.reportreasion,
+            type:2
+        };
+          let data =reportService.doReport(reportInfo);
+          if(data && data.status == "success") {
+            this.$vux.alert.show({
+              content:'感谢您的反馈，我们会着实核查！',
+            });
+            this.reportShow = false;
+            this.reportreasion = "";
+          }else{
+            this.$vux.alert.show({
+              content:'提交失败，请稍后再试！',
+            })
+          }
+        }else{
+          this.reportShow =  false;
+        }
+      },
       handleReport(){
-        if(!localStorage.id) {
+        if (!localStorage.id ) {
           this.$Tool.loginGoBack({
-            returnpage: "/wendaList",
-            query:{id:this.id,item:JSON.stringify(this.wenda)},
+            returnpage: "/wendaList?",
+            query:{id:this.id},
             name:'wendaList',
             call:()=>{}
           });
           return;
         }
         this.reportShow = true;
-      },
-      handleSendReport(){
-
-        if(!this.reportreasion){return;}
-        let reportInfo;
-        if(this.reportreasion != "拉黑该用户并屏蔽其内容") {
-          reportInfo = {
-            itemid: this.id,
-            reportuserid:this.wenda.userid,
-            reportreasion:this.reportreasion,
-            type:2
-          };
-        }else{
-          // 拉黑回答作者
-          userService.blacklist(this.wenda.userid,data=>{
-            if(data && data.status == "success") {
-              this.$vux.alert.show({
-                content:'已将该用户拉黑并为您屏蔽其相关内容',
-              });
-            }else{
-              this.$vux.alert.show({
-                content:'操作失败，请稍后再试！',
-              });
-            }
-          });
-        }
-
-        if(this.reportreasion != "拉黑该用户并屏蔽其内容") {
-          let res = reportService.doReport(reportInfo);
-          if (res && res.status === "success") {
-            this.$vux.alert.show({
-              content:'感谢您的反馈，我们会着实核查！',
-            })
-          }else{
-            this.$vux.alert.show({
-              content:'操作失败，请稍后再试！',
-            })
-          }
-        }
-        this.reportShow = false;
-        this.reportreasion = "";
-
-
-
       },
       //取消回答框
       handleCancel(){

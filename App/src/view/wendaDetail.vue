@@ -60,7 +60,7 @@
             <span class="fr" v-show="answerZanBool.hasZan">赞 {{answerZanNum}}</span>
             <span class="fr" v-show="answerZanBool.notZan">抢鲜点赞</span>
           </div>
-          <div class="body" v-for="(item, index) in commentList" >
+          <div class="body" v-for="(item, index) in commentList">
             <div class="comment-item clearfix">
               <img :src="$Tool.headerImgFilter(item.imageurl)" class="comment-userPhoto fl">
               <div class="comment-wrap fl">
@@ -79,7 +79,7 @@
                   <div class="footer-left fl">
                     <span class="comment-time">{{$Tool.publishTimeFormat(item.commenttime)}}</span>
                     <span class="comment-point">•</span>
-                    <span class="comment-reply" @click="handleFirstReply(item,index)" v-if="!isBlacklist(item.douserid)">
+                    <span class="comment-reply" @click="handleFirstReply(item,index)">
                       <var>{{item.replyCount}}</var>回复
                     </span>
                   </div>
@@ -241,7 +241,7 @@
             </radio>
           </group>
           <div class="report-footer" @click="handleSendReport">
-            确定
+            提交
           </div>
         </div>
       </popup>
@@ -355,8 +355,7 @@
           '淫秽色情',
           '违法信息',
           '营销广告',
-          '恶意攻击谩骂',
-          '拉黑该用户并屏蔽其内容'
+          '恶意攻击谩骂'
         ]),
         noZan:false,  //评论有赞状态
         hasZan: false,  //评论无赞状态
@@ -371,6 +370,7 @@
     activated(){
       this.wenda = JSON.parse(this.$route.query.wenda);
       this.answer = JSON.parse(this.$route.query.item);
+      console.log(this.answer)
       this.detailType = this.$route.query.detailType || 0;
       this.id = this.answer.id;
       if(!localStorage.id || !localStorage.token){
@@ -983,69 +983,40 @@
       },
       // 提交举报内容
       handleSendReport(){
-        if(!this.reportreasion){return;}
-        let reportInfo;
-        if(this.reportType == 1) {
-          if(this.reportreasion != "拉黑该用户并屏蔽其内容") {
+        if(this.reportreasion){
+          let reportInfo;
+          if (this.reportType === 1) {
             reportInfo = {
               type:4,
-              itemid: this.id,
+              itemid:this.id,
               reportuserid:this.answer.author,
               reportreasion:this.reportreasion
             };
-          }else{
-            // 拉黑回答作者
-            userService.blacklist(this.answer.author,data=>{
-              if(data && data.status == "success") {
-                this.$vux.alert.show({
-                  content:'已将该用户拉黑并为您屏蔽其相关内容',
-                });
-              }else{
-                this.$vux.alert.show({
-                  content:'操作失败，请稍后再试！',
-                });
-              }
-            });
-          }
-        }else if (this.reportType === 2){
-          if(this.reportreasion != '拉黑该用户并屏蔽其内容'){
+          }else if (this.reportType === 2){
             reportInfo = {
               type:2,
               itemid:this.replyobj.id,
               reportuserid:this.replyobj.douserid,
               reportreasion:this.reportreasion
             };
-          }else{
-            // 拉黑评论者
-            userService.blacklist(this.replyobj.douserid,data=>{
-              if (data && data.status === "success") {
-                this.$vux.alert.show({
-                  content:'已将该用户拉黑并为您屏蔽其相关内容',
-                })
-                // this.$router.back();
-              }else{
-                this.$vux.alert.show({
-                  content:'操作失败，请稍后再试！',
-                })
-              }
-            })
           }
-        }
-        if(this.reportreasion != "拉黑该用户并屏蔽其内容") {
           let res = reportService.doReport(reportInfo);
           if (res && res.status === "success") {
             this.$vux.alert.show({
               content:'感谢您的反馈，我们会着实核查！',
             })
+            this.reportShow = false;
+            this.popMask = false;
+            this.reportreasion = "";
           }else{
             this.$vux.alert.show({
-              content:'操作失败，请稍后再试！',
+              content:'提交失败，请稍后再试！',
             })
           }
+        } else {
+          this.reportShow = false;
+          this.popMask = false;
         }
-        this.reportShow = false;
-        this.popMask = false;
-        this.reportreasion = "";
       },
       //消息图标滚动
       handleToComment(){
@@ -1178,10 +1149,6 @@
         if(!this.loadLock && detailParent > detailChild) {
           this.loadComment();
         }
-      },
-      // 判断是否黑名单
-      isBlacklist(item){
-        return  localStorage.blacklist && localStorage.blacklist.includes(item.author)
       }
     }
   }
