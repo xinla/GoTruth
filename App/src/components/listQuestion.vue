@@ -55,8 +55,7 @@
         default: false
       }
     },
-    // activated
-    activated() {
+    mounted() {
       this.$nextTick(() => {
         this.init();
       });
