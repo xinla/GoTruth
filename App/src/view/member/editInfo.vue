@@ -313,10 +313,10 @@
         if(data && data.status == 'success') {
           this.user = data.result.user;
         }
-        if(localStorage.id && localStorage.id == this.userId){
+        /*if(localStorage.id && localStorage.id == this.userId){
           this.imgurl = localStorage.userImg;
           this.user.username = localStorage.userName;
-        }
+        }*/
         let res = userService.getUserById(this.userId);
         if(res && res.status == "success") {
           this.imgurl = this.$Tool.headerImgFilter(res.result.user.imageurl);

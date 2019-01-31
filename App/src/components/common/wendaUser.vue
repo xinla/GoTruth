@@ -58,10 +58,10 @@
                     return;
                 }
 
-              if(localStorage.id && localStorage.id == this.userId){
+              /*if(localStorage.id && localStorage.id == this.userId){
                 this.userPhoto = localStorage.userImg;
                 this.userName = localStorage.userName;
-              }
+              }*/
               let res = userService.getUserById(this.userId);
               if(res && res.status == "success") {
                 this.userPhoto = this.$Tool.headerImgFilter(res.result.user.imageurl);
