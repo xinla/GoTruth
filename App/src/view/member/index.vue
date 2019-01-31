@@ -91,6 +91,7 @@
 <script>
     import config from '@/lib/config/config'
     import followService from '@/service/followService'
+    import userService from '@/service/userService'
     import authUtil from '@/service/util/authUtil'
     export default {
         data() {
@@ -138,8 +139,16 @@
                     this.ifLogin = false;
                     return;
                 }
-                this.userPhoto = localStorage.userImg;
-                this.userName = localStorage.userName;
+                if(localStorage.id && localStorage.id == this.userId){
+                  this.userPhoto = localStorage.userImg;
+                  this.userName = localStorage.userName;
+                }
+                let res = userService.getUserById(this.userId);
+                if(res && res.status == "success") {
+                  this.userPhoto = this.$Tool.headerImgFilter(res.result.user.imageurl);
+                  this.userName = res.result.user.username;
+                }
+
                 this.inviteCode = localStorage.inviteCode;
                 this.ifLogin = true;
                 //获取粉丝数量

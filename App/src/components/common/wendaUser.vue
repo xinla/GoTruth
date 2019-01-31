@@ -37,6 +37,7 @@
 </template>
 
 <script>
+  import userService from '@/service/userService'
     export default {
         data(){
             return {
@@ -56,8 +57,18 @@
                     this.ifLogin = false;
                     return;
                 }
+
+              if(localStorage.id && localStorage.id == this.userId){
                 this.userPhoto = localStorage.userImg;
                 this.userName = localStorage.userName;
+              }
+              let res = userService.getUserById(this.userId);
+              if(res && res.status == "success") {
+                this.userPhoto = this.$Tool.headerImgFilter(res.result.user.imageurl);
+                this.userName = res.result.user.username;
+              }
+                // this.userPhoto = localStorage.userImg;
+
                 this.ifLogin = true;
             })
         }

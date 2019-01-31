@@ -26,7 +26,7 @@
     <!--  -->
     <div class="release-content" v-if="record.type==1 || record.type == 3">
       <div class="content">
-        <textarea :placeholder="placeholderDesc" v-model.trim="record.content" maxlength="500"></textarea>
+        <textarea :placeholder="placeholderDesc" v-model.trim="record.content"></textarea>
       </div>
       <!-- 上传图片 -->
       <div class="release-upload-img clearfix">

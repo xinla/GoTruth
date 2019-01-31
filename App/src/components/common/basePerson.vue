@@ -149,17 +149,16 @@
         }
       },
       init(){
-        if (localStorage.id && localStorage.id == this.userId) {
+        if(localStorage.id && localStorage.id == this.userId){
           this.userPhoto = localStorage.userImg;
           this.title = localStorage.userName;
           this.imgs[0].url = this.userPhoto;
-        }else{
-          let res = userService.getUserById(this.userId);
-          if (res && res.status == "success") {
-            this.userPhoto =  this.$Tool.headerImgFilter(res.result.user.imageurl);
-            this.title = res.result.user.username;
-            this.imgs[0].url = this.userPhoto;
-          }
+        }
+        let res = userService.getUserById(this.userId);
+        if(res && res.status == "success") {
+          this.userPhoto = this.$Tool.headerImgFilter(res.result.user.imageurl);
+          this.imgs[0].url = this.userPhoto;
+          this.title = res.result.user.username;
         }
         //获取文章数量
         articleService.getUserArticleCount(this.userId,(data)=>{

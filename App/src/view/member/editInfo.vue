@@ -238,7 +238,8 @@
           qq_unionid:'',
           xl_openid:''*/
         },
-        imgurl:localStorage.userImg,
+        imgurl:"",
+        userId:localStorage.id,
         popList:{
           show:false,
           desc:'',
@@ -311,8 +312,17 @@
         let data = userService.getCurentUser();
         if(data && data.status == 'success') {
           this.user = data.result.user;
-          // localStorage.userData = JSON.stringify(data.result.user);
         }
+        if(localStorage.id && localStorage.id == this.userId){
+          this.imgurl = localStorage.userImg;
+          this.user.username = localStorage.userName;
+        }
+        let res = userService.getUserById(this.userId);
+        if(res && res.status == "success") {
+          this.imgurl = this.$Tool.headerImgFilter(res.result.user.imageurl);
+          this.user.username = res.result.user.username;
+        }
+
         //判断用户头像
         // let tempImg = this.user.imageurl;
         // if(tempImg != null) {
@@ -399,6 +409,7 @@
             let res = userService.updateUser(this.user);
             if(res && res.status == "success"){
               this.imgurl = config.fileRoot +'/'+ src;
+
               this.$vux.loading.hide();
               this.$store.dispatch('userImg',this.imgurl);
               this.$vux.toast.show({
