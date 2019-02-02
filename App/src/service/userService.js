@@ -199,6 +199,22 @@ service.blacklist = function(targetuserid,call){
   return resMap;
 };
 
+
+// 取消拉黑
+service.Unblacklist = function(targetuserid,call){
+  var params = {
+    userid,//:"当前用户id",
+    targetuserid,//:"目标用户id"
+  };
+  if (call) {
+    commonUtil.ajax(controller+'/unLh',params,call);
+    return;
+  }
+  var resMap = commonUtil.ajaxAsync(controller+'/unLh',params);
+  return resMap;
+};
+
+
 // 获取黑名单
 service.getBlacklist = function(userid,call){
   var params = {
@@ -212,5 +228,21 @@ service.getBlacklist = function(userid,call){
 
   return resMap;
 };
+
+
+// 判断是否拉黑
+service.testLh = function (targetuserid,call) {
+  let params = {userid, targetuserid};
+  if(call){
+    commonUtil.ajax(controller+'/testLh',params,call);
+    return;
+  }
+  let data = commonUtil.ajaxAsync(controller+'/testLh',params);
+  return data;
+};
+
+
+
+
 export default service
 

@@ -24,6 +24,12 @@
 						<i class="iconfont icon-arrow-right fr"></i>
 					</div>
 				</router-link>
+        <router-link class="system-item clearfix" :to="{path:'blackList',query:{title:'黑名单'}}" tag="li" v-if="logined">
+          <label class="system-tit fl">黑名单</label>
+          <div class="system-wrap fr clearfix">
+            <i class="iconfont icon-arrow-right fr"></i>
+          </div>
+        </router-link>
 			</ul>
 			<!-- <ul class="system-list">
 				<li class="system-item clearfix">

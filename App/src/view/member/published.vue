@@ -88,7 +88,6 @@
                     (temp.length < 10) && (this.ifLoad = false,this.tip = "你看到我的底线啦");
                     if (temp.length) {
                         this.page++;
-                        // console.log(this.page)
                         this.arcList = this.arcList.concat(temp);
                     }else if (this.arcList.length == 0) {
                         this.proIf = true;

@@ -155,6 +155,13 @@ export default new Router({
           }
         },
         {
+          path:'blackList',
+          name:'blackList',
+          component: (resolve)=>{
+            require(['@/view/member/blackList.vue'],resolve)
+          }
+        },
+        {
           path:'agreement',
           name:'agreement',
           component: (resolve)=>{
