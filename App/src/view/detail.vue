@@ -113,7 +113,7 @@
               <div class="hot-wrap fl">
                 <div class="hot-header clearfix">
                   <h5 class="fl">{{item.username}}</h5>
-                  <p class="hot-fabulous fr" :class="{'likeActive':item.ifLike}" @click="handleFabulous(2,item.id,index)">
+                  <p class="hot-fabulous fr" :class="{'likeActive':item.ifLike}" @click.stop="handleFabulous(2,item.id,index)">
                     <var class="hot-count">{{item.likeNum}}</var>
                     <like :likeStatus="index==curLike?ifLike:0"></like>
                   </p>

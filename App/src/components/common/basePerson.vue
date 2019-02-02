@@ -34,6 +34,14 @@
           </div>
           <div v-else>
             <!-- 访客所见 -->
+            <div class="visitor-black" v-if="blackState" @click="handleCloseBlack">解除拉黑</div>
+            <div
+              v-else
+              class="visitor-focus"
+              :class="btnState ? 'default-focus' : 'active-focus'"
+              @click="handleFocus(userId)">
+              {{focusState ? "已关注" : "关注"}}
+            </div>
           </div>
         </div>
       </div>
@@ -99,6 +107,9 @@
         currentSub:0,
         currentName:"全部",
         showGallary:false,
+        focusState:false,
+        btnState:false,
+        blackState:false,
         imgs: [
           {
             url: "",
@@ -185,6 +196,63 @@
             this.focusNum = data.result.count;
           }
         });
+        // 获取关注状态
+        if(localStorage.getItem('token')){
+          followService.testFollow(this.userId, (data)=>{
+            if(data && data.status == "success") {
+              if(data.result == 1) {
+                this.focusState = true;
+                this.btnState = true;
+              }else{
+                this.focusState = false;
+                this.btnState = false;
+              }
+            }
+          });
+        }
+        // 判断是否拉黑
+        let blackData = userService.testLh(this.userId);
+        if(blackData && blackData.status == "success") {
+          console.log(blackData)
+          if(blackData.result == 1){
+            this.blackState = true;
+          }else{
+            this.blackState = false;
+          }
+        }
+      },
+      // 关注用户
+      handleFocus(userid){
+        let data = followService.doFollow(userid);
+        if(data && data.status == "success"){
+          if(data.result == 1){
+            this.$vux.loading.show();
+            setTimeout(()=>{
+              this.focusState = true;
+              this.btnState =true;
+              this.$vux.loading.hide();
+            },500);
+          }else{
+            this.$vux.loading.show();
+            setTimeout(()=>{
+              this.focusState = false;
+              this.btnState = false;
+              this.$vux.loading.hide();
+            },500);
+          }
+        }
+      },
+
+      // 解除拉黑
+      handleCloseBlack() {
+        let data = userService.Unblacklist(this.userId);
+        this.$vux.loading.show();
+        if(data && data.status == "success") {
+          setTimeout(()=>{
+            this.blackState = false;
+            this.$vux.loading.hide();
+          },500);
+        }
       }
     },
     watch:{
@@ -241,6 +309,7 @@
 <style lang="less" scoped>
   .member-msg{
     // margin-top: calc(@topHeigth + .18rem);
+    position: relative;
     padding: .3rem .4rem;
     background-position: 0 0;
     background-size: 100% 100%;
@@ -303,6 +372,28 @@
           background-color: @mainColor;
         }
 
+      }
+      .visitor-focus,.visitor-black{
+        width: 2.8rem;
+        height: .52rem;
+        line-height: .5rem;
+        text-align: center;
+        box-sizing: border-box;
+        letter-spacing: .04rem;
+        border-radius: .1rem;
+        position: absolute;
+        left: 0;
+        bottom: -.8rem;
+        font-size: .3rem;
+      }
+      .default-focus,.visitor-black{
+        background: transparent;
+        border: .02rem solid #ccc;
+        color: #fff;
+      }
+      .active-focus{
+        background: #f85959;
+        border: .02rem solid #f85959;
       }
     }
   }
