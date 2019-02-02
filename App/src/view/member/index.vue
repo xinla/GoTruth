@@ -326,7 +326,7 @@
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     margin-bottom: .3rem;
-                    font-size: .3rem;
+                    font-size: .29rem;
                 }
 
                 .member-user-item {
