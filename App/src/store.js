@@ -22,8 +22,10 @@ function State(){
   this.selectedPublishName = "";
   this.selectedPublishAddress = "";
   this.reportArticle = null;
+  this.blacklist = [];
 }
 let state = new State();
+localStorage.blacklist && (state.blacklist = JSON.parse(localStorage.blacklist))
 //创建改变状态的方法
 const mutations = {
   LOGIN(state,data) {
@@ -78,7 +80,11 @@ const mutations = {
   },
   setMask(state,data){
     state.reportArticle = data;
-  }
+  },
+  setBlacklist(state,data){
+    state.blacklist = data;
+    localStorage.blacklist = JSON.stringify(data);
+  },
 }
 //创建驱动action可以使得mutations得
 const actions = {

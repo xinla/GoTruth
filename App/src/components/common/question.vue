@@ -68,7 +68,7 @@
     computed:{
       // 判断是否黑名单
       isBlacklist(){
-        return  localStorage.blacklist && localStorage.blacklist.includes(this.wenda.author)
+        return this.$store.state.blacklist.includes(this.wenda.userid)
       }
     },
     methods:{

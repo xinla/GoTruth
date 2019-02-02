@@ -165,7 +165,8 @@ export default{
 					this.setupShow= false;
 					setTimeout(()=>{
 						this.$vux.alert.hide();
-					},1000)			
+					},1000)
+					// location.reload();	
 				} else {
 					this.$vux.confirm.show({
 						content:`退出失败

@@ -594,6 +594,14 @@
           // 拉黑回答作者
           userService.blacklist(this.wenda.userid,data=>{
             if(data && data.status == "success") {
+              let temp = [];
+              if (localStorage.blacklist) {
+                temp = JSON.parse(localStorage.blacklist);
+                temp.push(this.wenda.userid);
+              }else{
+                temp = [this.wenda.userid];
+              }
+              this.$store.commit("setBlacklist",temp);
               this.$vux.alert.show({
                 content:'已将该用户拉黑并为您屏蔽其相关内容',
               });

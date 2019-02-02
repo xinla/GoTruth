@@ -418,7 +418,7 @@
           // debugger
           userService.getBlacklist(user.id,data=>{
             if (data && data.status === "success") {
-              localStorage.blacklist = data.recordList;
+              localStorage.blacklist = JSON.stringify(data.recordList);
               // console.log(JSON.stringify(localStorage.blacklist))
               // debugger
             }

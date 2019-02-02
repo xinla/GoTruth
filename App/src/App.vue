@@ -196,6 +196,17 @@ export default {
         // 拉黑文章作者
         userService.blacklist(article.author,data=>{
           if (data && data.status === "success") {
+            let temp = [];
+            // debugger;
+            if (localStorage.blacklist) {
+              temp = JSON.parse(localStorage.blacklist);
+              temp.push(article.author);
+            }else{
+              temp = [article.author];
+            }
+            this.$store.commit("setBlacklist",temp);
+            // localStorage.blacklist = JSON.stringify(temp);
+            // debugger;
             this.$vux.alert.show({
               content:'已将该用户拉黑并为您屏蔽其相关内容',
             })

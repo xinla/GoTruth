@@ -997,6 +997,14 @@
             // 拉黑回答作者
             userService.blacklist(this.answer.author,data=>{
               if(data && data.status == "success") {
+                let temp = [];
+                if (localStorage.blacklist) {
+                  temp = JSON.parse(localStorage.blacklist);
+                  temp.push(this.article.author);
+                }else{
+                  temp = [this.article.author];
+                }
+                this.$store.commit("setBlacklist",temp);
                 this.$vux.alert.show({
                   content:'已将该用户拉黑并为您屏蔽其相关内容',
                 });
@@ -1019,6 +1027,14 @@
             // 拉黑评论者
             userService.blacklist(this.replyobj.douserid,data=>{
               if (data && data.status === "success") {
+                let temp = [];
+                if (localStorage.blacklist) {
+                  temp = JSON.parse(localStorage.blacklist);
+                  temp.push(this.replyobj.douserid);
+                }else{
+                  temp = [this.replyobj.douserid];
+                }
+                this.$store.commit("setBlacklist",temp);
                 this.$vux.alert.show({
                   content:'已将该用户拉黑并为您屏蔽其相关内容',
                 })
@@ -1181,7 +1197,7 @@
       },
       // 判断是否黑名单
       isBlacklist(item){
-        return  localStorage.blacklist && localStorage.blacklist.includes(item.author)
+        return this.$store.state.blacklist.includes(item.author)
       }
     }
   }

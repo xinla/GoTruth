@@ -64,13 +64,13 @@ import articleService from '@/service/articleService'
 export default {
 	data(){
 		return {
-	    ArticleFile:[],
-		commentNum:0,
-		publishtime:"",
-		fileRoot:config.fileRoot+'/',
-		publisher:"",
-		imgList:[],
-		singleImg:"",
+		    ArticleFile:[],
+			commentNum:0,
+			publishtime:"",
+			fileRoot:config.fileRoot+'/',
+			publisher:"",
+			imgList:[],
+			singleImg:"",
 		}
 	},
 	props:{
@@ -106,13 +106,13 @@ export default {
 		}
 	},
 	mounted(){
-			this.init();
+		this.init();
 	},
 	watch:{
 		//使用了缓存，父组件传值发生改变，子组件需要监测对应改变的对象值，不然子组件重新渲染还是使用缓存中的值
 		article(){
 			this.init();
-		}
+		},
 	},
 	computed:{
 		stickShow(){
@@ -123,7 +123,7 @@ export default {
 		},
 		// 判断是否黑名单
         isBlacklist(){
-            return  localStorage.blacklist && localStorage.blacklist.includes(this.article.author)
+            return  this.$store.state.blacklist.includes(this.article.author)
         }
 	},
 	methods:{

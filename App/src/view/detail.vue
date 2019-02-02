@@ -129,8 +129,8 @@
                     <span class="hot-time">{{$Tool.publishTimeFormat(item.commenttime)}}</span>
                     <span class="hot-point">•</span>
                     <span class="hot-reply" >
-											<var>{{item.replyCount}}</var>回复
-										</span>
+                      <var>{{item.replyCount}}</var>回复
+                    </span>
                   </div>
                   <!-- <span class="hot-report fr">举报</span> -->
                   <span class="hot-report fr"  v-if="item.douserid == userId" @click="handleDelete(item.id, index, 1)" >删除</span>
@@ -172,13 +172,13 @@
       <popup v-model="popList.show" style="z-index: 588;">
         <div class="popup-wrap">
           <div class="popup-area">
-						<textarea
+            <textarea
               :placeholder="popList.placeholder"
               v-model.trim="popList.desc"
               @input="handleDesc"
               autofocus
               ref="popFocus" maxlength="300">
-							</textarea>
+              </textarea>
           </div>
           <div class="popup-btn clearfix">
             <button type="button" class="popup-cancel fl" @click="handleCancel">取消</button>
@@ -214,9 +214,9 @@
                   <p>{{replyobj.content}}</p>
                 </div>
                 <div class="reply-time-report clearfix">
-									<span class="reply-time fl">
-										{{$Tool.publishTimeFormat(replyobj.commenttime)}}
-									</span>
+                  <span class="reply-time fl">
+                    {{$Tool.publishTimeFormat(replyobj.commenttime)}}
+                  </span>
                   <span class="reply-report fr" @click="handleReport(2)">举报</span>
                 </div>
                 <div class="reply-footer clearfix">
@@ -1014,7 +1014,7 @@
       handleFirstReply(item,commentIndex){
         this.replyShow = true;
         this.commentType = 2;
-        this.replyUserId = item.douserid;	//回复评论人id
+        this.replyUserId = item.douserid; //回复评论人id
         this.replyCommentId = item.id; //回复评论的id
         this.commentIndex = commentIndex;//指定评论数组中某条评论的索引值
         //展开评论回复是顶部当前索引使用
@@ -1101,6 +1101,14 @@
             // 拉黑文章作者
             userService.blacklist(this.article.author,data=>{
               if (data && data.status === "success") {
+                let temp = [];
+                if (localStorage.blacklist) {
+                  temp = JSON.parse(localStorage.blacklist);
+                  temp.push(this.article.author);
+                }else{
+                  temp = [this.article.author];
+                }
+                this.$store.commit("setBlacklist",temp);
                 this.$vux.alert.show({
                   content:'已将该用户拉黑并为您屏蔽其相关内容',
                 })
@@ -1124,6 +1132,14 @@
             // 拉黑评论者
             userService.blacklist(this.replyobj.douserid,data=>{
               if (data && data.status === "success") {
+                let temp = [];
+                if (localStorage.blacklist) {
+                  temp = JSON.parse(localStorage.blacklist);
+                  temp.push(this.replyobj.douserid);
+                }else{
+                  temp = [this.replyobj.douserid];
+                }
+                this.$store.commit("setBlacklist",temp);
                 this.$vux.alert.show({
                   content:'已将该用户拉黑并为您屏蔽其相关内容',
                 })
@@ -1311,7 +1327,7 @@
       },
       // 判断是否黑名单
       isBlacklist(item){
-          return  localStorage.blacklist && localStorage.blacklist.includes(item.author)
+          return  this.$store.state.blacklist.includes(item.author)
       }
     },
     watch:{
@@ -1380,10 +1396,10 @@
       }
     },
     // beforeRouteEnter(to,from,next){
-    // 	next(vm=>{
-    // 		vm.id = vm.$route.query.id;
-    // 		vm.detailType = vm.$route.query.detailType || 0;
-    // 	})
+    //  next(vm=>{
+    //    vm.id = vm.$route.query.id;
+    //    vm.detailType = vm.$route.query.detailType || 0;
+    //  })
     // }
   }
 </script>
@@ -1396,14 +1412,14 @@
     background: linear-gradient(transparent 3%,#fafafa 3%);
   }
   // .playAudio{
-  // 	position: absolute;
-  // 	display: inline-block;
-  // 	top: .7rem;
-  // 	right: .3rem;
-  // 	.iconfont{
-  // 		font-size: .46rem;
-  // 		font-weight: 500;
-  // 	}
+  //  position: absolute;
+  //  display: inline-block;
+  //  top: .7rem;
+  //  right: .3rem;
+  //  .iconfont{
+  //    font-size: .46rem;
+  //    font-weight: 500;
+  //  }
   // }
   .detail{
     position: relative;
@@ -1872,17 +1888,17 @@
               }
             }
             // .reply-fabulous{
-            // 	color: #979fac;
-            // 	span{
-            // 		font-size: .24rem;
-            // 		margin-right: -.1rem;
-            // 	}
-            // 	.iconfont{
-            // 		font-size: .36rem;
-            // 	}
-            // 	.icon-weizan{
-            // 		color: #979fac;
-            // 	}
+            //  color: #979fac;
+            //  span{
+            //    font-size: .24rem;
+            //    margin-right: -.1rem;
+            //  }
+            //  .iconfont{
+            //    font-size: .36rem;
+            //  }
+            //  .icon-weizan{
+            //    color: #979fac;
+            //  }
             // }
             .header-focus{
               font-weight: 700;
