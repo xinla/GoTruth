@@ -43,15 +43,15 @@
 				<span class="publish-time">{{publishtime}}</span>
 			<!-- <div class="fl">
 			</div> -->
-			<div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">
+			<!-- <div class="fr article-remove" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel">
 				<i class="iconfont icon-remove"></i>
-			</div>
+			</div> -->
+			<i class="iconfont icon-remove fr article-remove" @click="$emit('delete',[article.id,whi,$event])" v-if="ifDel"></i>
+			<i class="iconfont icon-remove fr article-remove" @click.stop="showRemove()" v-if="ifRemove"></i>
+			<!-- <div class="fr article-remove" v-if="ifRemove">
+				<i class="iconfont icon-remove"></i>
+			</div> -->
 		</div>
-		<!-- <div class="mask">
-			<div class="report bfc-p cc">
-				ddd
-			</div>
-		</div> -->
 	</div>
 </template>
 <script>
@@ -99,6 +99,10 @@ export default {
 		ifSingle:{
 			type:Boolean,
 			default:false,
+		},
+		ifRemove:{
+			type:Boolean,
+			default:false,
 		}
 	},
 	mounted(){
@@ -108,7 +112,7 @@ export default {
 		//使用了缓存，父组件传值发生改变，子组件需要监测对应改变的对象值，不然子组件重新渲染还是使用缓存中的值
 		article(){
 			this.init();
-		},
+		}
 	},
 	computed:{
 		stickShow(){
@@ -153,6 +157,9 @@ export default {
 			if (!this.$store.state.isScolling) {
 				!this.ifSingle ? this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType}}) : this.$Tool.goPage({ name:'detail',query:{id:this.article.id,detailType:this.detailType},replace:'true'})
 			}
+		},
+		showRemove(){
+			this.$store.state.reportArticle = this.article;
 		}
 	}
 }
@@ -224,6 +231,7 @@ export default {
 			}
 		}
 		.article-footer{
+			position: relative;
 			// height: .6rem;
 			line-height: .55rem;
 			font-size: .24rem;
@@ -248,14 +256,15 @@ export default {
 			.article-remove{
 				width: .45rem;
 				height: .35rem;
-				line-height: .32rem;
+				line-height: .35rem;
 				margin-top: .125rem;
 				text-align: center;
 				border: .02rem solid @borderColor;
 				border-radius: .08rem;
-				.iconfont{
+				font-size: .24rem;
+				/* .iconfont{
 					font-size: .24rem;
-				}
+				} */
 			}
 		}
 		.publish-time{
@@ -268,8 +277,5 @@ export default {
 	}
 	.multiple-img{
 		flex: 1;
-	}
-	.mask{
-		background: rgba(100,100,100,0.3);
 	}
 </style>

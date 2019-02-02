@@ -10,6 +10,23 @@
       <router-view v-else class="router-view-app"></router-view> -->
     </transition>
     <lg-preview></lg-preview>
+    <!-- 举报框 -->
+    <div v-transfer-dom style="z-index: 988;">
+      <popup v-model="ifReport" style="z-index: 999;">
+        <div class="report-wrap">
+          <div class="report-header">
+            <h2>举报(举报热线：18756686768)</h2>
+          </div>
+          <group>
+            <radio :selected-label-style="{color: '#FF9900'}" fill-mode :options="reportList" v-model="reportReasion">
+            </radio>
+          </group>
+          <div class="report-footer" @click="handleReport">
+            确定
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -17,7 +34,8 @@
 import netUtil from "@/service/util/netUtil"
 import versionService from "@/service/versionService"
 import messageService from '@/service/messageService'
-
+import userService from '@/service/userService'
+import reportService from '@/service/reportService'
 export default {
   name: 'App',
   data() {
@@ -26,6 +44,15 @@ export default {
       // ifLoad:true,
       mainRoute:["member","questionAnswer","video"],
       first:"",
+      report:{
+        id:0,
+        userName:""
+      },
+      //举报数组
+      reportList:Object.freeze(['淫秽色情','违法信息','营销广告','恶意攻击谩骂','拉黑该用户并屏蔽其内容'
+      ]),
+      reportReasion:"",
+      ifReport:false,
   	}
   },
   created(){
@@ -144,6 +171,46 @@ export default {
       })
     }*/
   },
+  methods:{
+    handleReport(){
+      if (!this.reportReasion) {return;}
+      let article = this.$store.state.reportArticle;
+      if(this.reportReasion != '拉黑该用户并屏蔽其内容'){
+        let reportInfo = {
+          type:1,
+          itemid:article.id,
+          reportuserid:article.author,
+          reportreasion:this.reportReasion
+        };
+        let res = reportService.doReport(reportInfo);
+        if (res && res.status === "success") {
+          this.$vux.alert.show({
+            content:'感谢您的反馈，我们会着实核查！',
+          })
+        }else{
+          this.$vux.alert.show({
+            content:'操作失败，请稍后再试！',
+          })
+        }
+      }else{
+        // 拉黑文章作者
+        userService.blacklist(article.author,data=>{
+          if (data && data.status === "success") {
+            this.$vux.alert.show({
+              content:'已将该用户拉黑并为您屏蔽其相关内容',
+            })
+            // this.$router.back();
+          }else{
+            this.$vux.alert.show({
+              content:'操作失败，请稍后再试！',
+            })
+          }
+        })
+      }
+      this.ifReport = false;
+      this.reportReasion = "";
+    }
+  },
   watch: {
   	//监听路由
   	$route(to,from) {
@@ -154,6 +221,12 @@ export default {
       // debugger
       this.$store.state.transitionName = this.$router['isBack'] ? 'slide-right' : 'slide-left';
       this.$router['isBack'] = false;
+    },
+    "$store.state.reportArticle"(){
+      this.$store.state.reportArticle && (this.ifReport = true)
+    },
+    ifReport(){
+      !this.ifReport && (this.$store.state.reportArticle = null);
     }
   },
 }
@@ -217,5 +290,26 @@ export default {
   /*视频高度*/
   .video-js{
     height: 4.2rem;
+  }
+</style>
+<style lang="less" scoped>
+  .report-wrap{
+    padding-top: .2rem;
+    background-color: #f8f8f8;
+    .report-header{
+      text-align: center;
+      line-height: .75rem;
+      h2{
+        font-weight: 500;
+        font-size: .32rem;
+        letter-spacing: .02rem;
+      }
+    }
+    .report-footer{
+      line-height: .8rem;
+      font-size: .32rem;
+      text-align: center;
+      background-color: #fff;
+    }
   }
 </style>

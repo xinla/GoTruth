@@ -21,6 +21,7 @@ function State(){
   this.isNetwork = false; // 是否连网
   this.selectedPublishName = "";
   this.selectedPublishAddress = "";
+  this.reportArticle = null;
 }
 let state = new State();
 //创建改变状态的方法
@@ -74,6 +75,9 @@ const mutations = {
   },
   setSelectedPublishAddress(state,data){
     state.selectedPublishAddress = data;
+  },
+  setMask(state,data){
+    state.reportArticle = data;
   }
 }
 //创建驱动action可以使得mutations得

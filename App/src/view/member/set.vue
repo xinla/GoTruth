@@ -121,7 +121,10 @@ export default{
 				this.setupShow= false;
 				return;
 			}else{
-				this.username = localStorage.userName;
+				let res = userService.getUserById(localStorage.id);
+		        if(res && res.status == "success") {
+		          this.username = res.result.user.username;
+		        }
 				this.notlogin = false;
 				this.logined = true;
 			}

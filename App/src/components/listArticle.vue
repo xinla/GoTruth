@@ -6,7 +6,7 @@
             </div>
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
-            <multIT v-for="(item,index) in arcList" :article="item" :key="index"></multIT>
+            <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true"></multIT>
             <load-more v-show="!ifNet && arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
         </div>
     </downRefresh>
