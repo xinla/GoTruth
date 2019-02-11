@@ -8,6 +8,21 @@
     </div>
     <div class="wendaList">
       <div class="wendaList-current">
+        <div class="user clearfix">
+          <div class="user-bar fl">
+            <img :src=" $Tool.headerImgFilter(wenda.imageurl)">
+            <span>{{wenda.username}}</span>
+            <span>{{wenda.username}}</span>
+          </div>
+          <div
+            class="user-focus fr"
+            :class="focusColor ? 'default-color' : 'active-color'"
+            v-if="userId != wenda.userid"
+            @click="handleFocus(wenda.userid)"
+            >
+            {{focusState ? '已关注' : '关注'}}
+          </div>
+        </div>
         <h2 class="title">{{wenda.title}}</h2>
         <div class="desc" >
           <p class="desc-text">{{wenda.description}}</p>
@@ -168,6 +183,7 @@
   import userService from '@/service/userService'
   import wdcollectService from '@/service/wdcollectService'
   import interService from '@/service/interlocutionService'
+  import followService from '@/service/followService'
   import messageService from '@/service/messageService'
   import fileService from '@/service/fileService'
   import articleService from '@/service/articleService'
@@ -213,6 +229,8 @@
         showGallary1:false,
         timer:null,
         userId:localStorage.id,
+        focusState:false,
+        focusColor:false,
         id:0,   //问题Id
         wenda:{},    //问题对象
         answer:[],   //问题回答对象
@@ -275,6 +293,7 @@
       this.$nextTick(()=>{
         this.id = this.$route.query.id;
         this.wenda = JSON.parse(this.$route.query.item);
+        console.log(this.wenda)
         this.ifLoad = true;
         if(this.timer){
           clearTimeout(this.timer);
@@ -313,6 +332,28 @@
           this.ifImgNull = false;
         }
 
+        // 获取发布问题人的信息
+        userService.getUserById(this.wenda.userid,(data)=>{
+          if(data && data.status == "success"){
+            this.$set(this.wenda,'username',data.result.user.username);
+            this.$set(this.wenda,'imageurl',data.result.user.imageurl);
+          }
+        });
+
+        // 是否关注发布人
+        if(localStorage.getItem('token')) {
+          followService.testFollow(this.wenda.userid, (data)=>{
+            if(data && data.status == "success") {
+              if(data.result == 1) {
+                this.focusState = true;
+                this.focusColor = true;
+              }else{
+                this.focusState = false;
+                this.focusColor = false;
+              }
+            }
+          });
+        }
         // 获取回答列表
         this.page = 1;
         this.answer =[];
@@ -423,6 +464,41 @@
         }else{
           this.showGallary1 = false;
         }
+      },
+      // 关注问题发布人
+      handleFocus(userId){
+        if(!localStorage.id){
+          this.$Tool.loginGoBack({
+            returnpage:"/wendaList",
+            query:{id:this.id},
+            name:"wendaList",
+            call:()=>{
+              this.conFocus(userId);
+            }
+          });
+          return;
+        }
+        this.conFocus(userId);
+      },
+      conFocus(userId){
+        followService.doFollow(userId, (data) =>{
+          if(data && data.status == "success") {
+            if(data.result == 1){
+              this.$vux.toast.show({
+                text:'关注成功'
+              });
+              this.focusState = true;
+              this.focusColor = true;
+              messageService.sendMessage(userId, "focus", this.id, 1);
+            }else{
+              this.$vux.toast.show({
+                text:"取消关注"
+              });
+              this.focusState = false;
+              this.focusColor = false;
+            }
+          }
+        });
       },
       // 分享问题
       handleShare(){
@@ -767,6 +843,32 @@
       padding: 0 .3rem;
       background-color: #fff;
       margin-bottom: .1rem;
+      .user{
+        padding-top: .2rem;
+        line-height: .75rem;
+        font-size: .32rem;
+        letter-spacing: .02rem;
+        .user-bar{
+          img{
+            width: .75rem;
+            height: .75rem;
+            margin-right: .15rem;
+            border-radius: 50%;
+          }
+          span{
+            font-weight: 700;
+          }
+        }
+        .user-focus{
+          font-weight: 600;
+        }
+        .default-color{
+          color:#999;
+        }
+        .active-color{
+          color: #d96363;
+        }
+      }
       .title{
         padding: .15rem 0;
         font-size: .38rem;
