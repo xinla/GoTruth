@@ -8,6 +8,9 @@ window.$ = $;
 // import 'es6-promise/auto'
 
 import 'babel-polyfill'
+import Es6Promise from 'es6-promise'
+
+Es6Promise.polyfill()
 
 import router from './router'
 import store from './store'
@@ -115,8 +118,3 @@ new Vue({
   },*/
   render: h => h(App),
 }).$mount('#app');
-
-
-
-
-
