@@ -7,6 +7,8 @@ window.$ = $;
 //es6 promise兼容
 // import 'es6-promise/auto'
 
+import 'babel-polyfill'
+
 import router from './router'
 import store from './store'
 
