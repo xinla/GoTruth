@@ -338,6 +338,7 @@
           });
           return;
         }
+        this.$vux.loading.show({ text: '' })
         this.record.author = Number(localStorage.id || 0);
         Object.assign(this.record,this.position);
 
@@ -363,6 +364,7 @@
           }
         }
         if(data && data.status == "success"){
+          this.$vux.loading.hide()
           this.$vux.alert.show({
             content:'发布成功',
           });
@@ -374,12 +376,12 @@
           setTimeout(()=>{
             this.$vux.alert.hide();
           },1000)
-        }
-        /* else{
+        } else {
+             this.$vux.loading.hide()
              this.$vux.alert.show({
                  content:'发布失败,请重新发布',
              })
-         }*/
+         }
       },
 
     },

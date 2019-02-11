@@ -516,14 +516,23 @@
           this.$Tool.goBack();
           return;
         }
-        this.ifLoad = true;
-        //添加阅读记录
-        readHistoryService.addReadHistory(this.id,(data)=>{});
-        // if (resAddReadHistory && resAddReadHistory.status == "success") {
-        // }
+        // this.ifLoad = true;
         //获取文章信息
         let resArticleDetail = articleService.getArticleById(this.id);
         if (resArticleDetail&&resArticleDetail.status == "success") {
+          if (!resArticleDetail.record) {
+            this.$vux.confirm.show({
+              content:'找不到该记录或已删除',
+              showCancelButton:false,
+              onConfirm () {
+                GoTruth.ifLoad = false
+                // FIXME:顶部返回待完善，正常应该是返回上级页面,不应直接返回首页
+                // TODO:顶部返回完善后使用 GoTruth.$router.back()
+                GoTruth.$Tool.goPage({name:'home'});
+              }
+            })
+            return
+          }
           this.article = resArticleDetail.record;
           // 获取富文本编辑器内容中的图片
           // console.log(this.article.content)
@@ -547,6 +556,10 @@
         } else {
           this.proFail1 = true;
         }
+        //添加阅读记录
+        readHistoryService.addReadHistory(this.id,(data)=>{});
+        // if (resAddReadHistory && resAddReadHistory.status == "success") {
+        // }
 
         //获取发布人信息
         let resUserInfo = userService.getUserById(this.article.author);
@@ -642,6 +655,7 @@
             }
           })
         }
+        this.ifLoad = false;
       },
       onBrowserBack(){
         if(this.popList.show || this.reportShow || this.popMask || this.shareShow || this.replyShow || this.showGallary){
@@ -1337,7 +1351,8 @@
         setTimeout(()=>{
           this.pageNum1 = 1;
           this.init();
-          this.ifLoad = false;
+          if (true) {}
+          // this.ifLoad = false;
         },delay)
         //注：延迟时长必须在动画大于切换动画（300）
       },
@@ -1410,6 +1425,7 @@
     // bottom: initial;
     // background: #fafafa;
     background: linear-gradient(transparent 3%,#fafafa 3%);
+    z-index: 999;
   }
   // .playAudio{
   //  position: absolute;
