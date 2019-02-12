@@ -133,7 +133,7 @@
                     </span>
                   </div>
                   <!-- <span class="hot-report fr">举报</span> -->
-                  <span class="hot-report fr"  v-if="item.douserid == userId" @click="handleDelete(item.id, index, 1)" >删除</span>
+                  <span class="hot-report fr"  v-if="item.douserid == userId" @click.stop="handleDelete(item.id, index, 1)" >删除</span>
                 </div>
               </div>
             </li>
@@ -208,7 +208,7 @@
                     <h4>{{replyobj.username}}</h4>
                     <!-- <span>旅游媒体人</span> -->
                   </div>
-                  <span class="header-focus fr" @click="handleFocus(replyUserId,2,)">{{replyUserFocusState?'已关注':'关注'}}</span>
+                  <span class="header-focus fr" v-if="userId != replyUserId" @click="handleFocus(replyUserId,2,)">{{replyUserFocusState?'已关注':'关注'}}</span>
                 </div>
                 <div class="reply-desc">
                   <p>{{replyobj.content}}</p>

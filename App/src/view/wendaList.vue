@@ -12,7 +12,6 @@
           <div class="user-bar fl">
             <img :src=" $Tool.headerImgFilter(wenda.imageurl)">
             <span>{{wenda.username}}</span>
-            <span>{{wenda.username}}</span>
           </div>
           <div
             class="user-focus fr"

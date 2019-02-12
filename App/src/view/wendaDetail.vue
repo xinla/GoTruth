@@ -159,7 +159,7 @@
                     <h4>{{replyobj.username}}</h4>
                     <!-- <span>旅游媒体人</span> -->
                   </div>
-                  <span class="header-focus fr"   @click="handleAnswerFocus(replyUserId,2,)">{{replyUserFocusState?'已关注':'关注'}}</span>
+                  <span class="header-focus fr" v-if="userId != replyUserId"   @click="handleAnswerFocus(replyUserId,2,)">{{replyUserFocusState?'已关注':'关注'}}</span>
                 </div>
                 <div class="reply-desc">
                   <p>{{replyobj.content}}</p>
