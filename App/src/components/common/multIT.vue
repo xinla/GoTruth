@@ -36,8 +36,8 @@
 		<!-- 文章评论 -->
 		<div class="article-footer clearfix">
 				<!-- <span class="publisher oe" v-if="ifPublisher">{{publisher}}</span> -->
-				<span class="stick" v-if="ifTop === 10">置顶</span>
-				<span class="stick" v-if="hotShow === 8 || hotShow ===9">热</span>
+				<span class="stick" v-if="ifTop == 10">置顶</span>
+				<!--<span class="stick" v-if="hotShow === 8 || hotShow ===9">热</span>-->
 				<span class="publisher oe">{{publisher}}</span>
 				<span>{{commentNum}}评论</span>
 				<span class="publish-time">{{publishtime}}</span>
@@ -105,8 +105,7 @@ export default {
 			default:false,
 		},
 		ifTop:{
-			type:Boolean,
-			default:false,
+			type:Number
 		}
 	},
 	mounted(){

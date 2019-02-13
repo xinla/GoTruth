@@ -166,13 +166,13 @@
                         // console.log(temp);console.log(this.topList.list)
                         // 置顶与推荐查重
                         for (let i = 0,len = temp.length; i < len; i++) {
-                            for (let j = 0,len1 = this.topList.list.length; j < len1; j++) {
-                                if (temp[i].id == this.topList.list[j].id) {
+                            for (let j = 0,len1 = this.topList.length; j < len1; j++) {
+                                if (temp[i].id == this.topList[j].id) {
                                     same.push(i);
                                     break;
                                 }
                             }
-                            if(same.length == this.topList.list.length) {break;}
+                            if(same.length == this.topList.length) {break;}
                         }
                         // console.log(same)
                         // 删除重复
