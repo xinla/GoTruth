@@ -1,5 +1,5 @@
 <template>
-  <div class="video-wrap" v-if="playerOptions.sources[0].src && !isBlacklist">
+  <div class="video-wrap" v-show="playerOptions.sources[0].src && !isBlacklist">
     <div class="video-content">
      <h3 class="video-title" @click="$Tool.goPage({ name:'detail',query:{id:article.id,} })">{{article.title}}</h3>
       <video-player class="video-player vjs-custom-skin"

@@ -69,14 +69,14 @@ export default {
       docEl.style.fontSize = ( clientWidth / 750 * 100)+"px";
     }
     //night
-    if (localStorage.dayNight && localStorage.dayNight === 'night') {
+    /*if (localStorage.dayNight && localStorage.dayNight === 'night') {
         let head = document.getElementsByTagName("head")[0];
         let link = document.createElement('link');
         link.setAttribute('rel','stylesheet');
         link.setAttribute('id','night');
         link.setAttribute('href','./static/night.css');
         head.appendChild(link);
-    }
+    }*/
   },
   mounted(){
     try{

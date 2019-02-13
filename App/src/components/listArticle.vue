@@ -6,7 +6,7 @@
             </div>
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
-            <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true"></multIT>
+            <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true" :ifTop='item.weight'></multIT>
             <load-more v-show="!ifNet && arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
         </div>
     </downRefresh>
@@ -59,27 +59,28 @@
                 let resArticlePage;
                 try{
                     if(!this.classify || this.classify == 0){
-                        this.topList = articleService.getTodayArticle();
+                        this.topList = articleService.getTodayArticle().list;
+                        console.log(this.topList)
                         resArticlePage = articleService.articlePage(this.page,15);
                         let temp = resArticlePage.recordPage.list,
                             same = [];
-                        // console.log(temp);console.log(this.topList.list)
+                        // console.log(temp);console.log(this.topList)
                         // 置顶与推荐查重
                         for (let i = 0,len = temp.length; i < len; i++) {
-                            for (let j = 0,len1 = this.topList.list.length; j < len1; j++) {
-                                if (temp[i].id == this.topList.list[j].id) {
+                            for (let j = 0,len1 = this.topList.length; j < len1; j++) {
+                                if (temp[i].id == this.topList[j].id) {
                                     same.push(i);
                                     break;
                                 }
                             }
-                            if(same.length == this.topList.list.length) {break;}
+                            if(same.length == this.topList.length) {break;}
                         }
                         // console.log(same)
                         // 删除重复
                         for (let i = 0; i < same.length; i++) {
                             temp.splice(same[i] - i,1)
                         }
-                        resArticlePage.recordPage.list = this.topList.list.concat(temp)
+                        resArticlePage.recordPage.list = this.topList.concat(temp)
                     }else{
                         resArticlePage = articleService.articlePage(this.page,15,this.classify);
                     }

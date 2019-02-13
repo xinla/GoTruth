@@ -36,8 +36,8 @@
 		<!-- 文章评论 -->
 		<div class="article-footer clearfix">
 				<!-- <span class="publisher oe" v-if="ifPublisher">{{publisher}}</span> -->
-				<span class="stick" v-if="stickShow">置顶</span>
-				<span class="stick" v-if="hotShow">热</span>
+				<span class="stick" v-if="ifTop === 10">置顶</span>
+				<span class="stick" v-if="hotShow === 8 || hotShow ===9">热</span>
 				<span class="publisher oe">{{publisher}}</span>
 				<span>{{commentNum}}评论</span>
 				<span class="publish-time">{{publishtime}}</span>
@@ -103,6 +103,10 @@ export default {
 		ifRemove:{
 			type:Boolean,
 			default:false,
+		},
+		ifTop:{
+			type:Boolean,
+			default:false,
 		}
 	},
 	mounted(){
@@ -115,12 +119,12 @@ export default {
 		},
 	},
 	computed:{
-		stickShow(){
+		/*stickShow(){
 			return this.article.weight == 10;
 		},
 		hotShow(){
 			return this.article.weight <= 9 && this.article.weight >= 8;
-		},
+		},*/
 		// 判断是否黑名单
         isBlacklist(){
             return  this.$store.state.blacklist.includes(this.article.author)
