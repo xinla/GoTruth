@@ -60,7 +60,7 @@
             <span class="fr" v-show="answerZanBool.hasZan">赞 {{answerZanNum}}</span>
             <span class="fr" v-show="answerZanBool.notZan">抢鲜点赞</span>
           </div>
-          <div class="body" v-for="(item, index) in commentList" >
+          <div class="body" v-for="(item, index) in commentList" v-if="!isBlacklist(item.douserid)">
             <div class="comment-item clearfix">
               <img :src="$Tool.headerImgFilter(item.imageurl)" class="comment-userPhoto fl">
               <div class="comment-wrap fl">
@@ -79,7 +79,8 @@
                   <div class="footer-left fl">
                     <span class="comment-time">{{$Tool.publishTimeFormat(item.commenttime)}}</span>
                     <span class="comment-point">•</span>
-                    <span class="comment-reply" @click="handleFirstReply(item,index)" v-if="!isBlacklist(item.douserid)">
+                    <span class="comment-reply" @click="handleFirstReply(item,index)">
+                      <!--v-if="!isBlacklist(item.douserid)"-->
                       <var>{{item.replyCount}}</var>回复
                     </span>
                   </div>
@@ -445,6 +446,14 @@
           }
         },
         deep: true
+      }
+    },
+    computed:{
+      // 判断是否黑名单
+      isBlacklist(){
+        return function (item) {
+          return this.$store.state.blacklist.includes(item);
+        }
       }
     },
     methods:{
@@ -997,6 +1006,7 @@
             // 拉黑回答作者
             userService.blacklist(this.answer.author,data=>{
               if(data && data.status == "success") {
+                console.log(data)
                 let temp = [];
                 if (localStorage.blacklist) {
                   temp = JSON.parse(localStorage.blacklist);
@@ -1195,10 +1205,6 @@
           this.loadComment();
         }
       },
-      // 判断是否黑名单
-      isBlacklist(item){
-        return this.$store.state.blacklist.includes(item.author)
-      }
     }
   }
 </script>

@@ -45,7 +45,11 @@
           </div>
         </div>
       </div>
-      <div class="wendaList-other" v-show="hasAnswer" v-for="(item,index) in answer" @click="goAnswerDetail(wenda,item)">
+      <div class="wendaList-other"
+           v-show="hasAnswer"
+           v-for="(item,index) in answer"
+           @click="goAnswerDetail(wenda,item)"
+           v-if="!isBlacklist(item.author)">
         <div class="header">
           <div class="header-user">
             <img :src="$Tool.headerImgFilter(item.imageurl)" class="userPhoto">
@@ -292,7 +296,6 @@
       this.$nextTick(()=>{
         this.id = this.$route.query.id;
         this.wenda = JSON.parse(this.$route.query.item);
-        console.log(this.wenda)
         this.ifLoad = true;
         if(this.timer){
           clearTimeout(this.timer);
@@ -358,6 +361,7 @@
         this.answer =[];
         let answerData = interService.getAnswers(this.page, 15, this.id);
         if(answerData && answerData.status == "success") {
+          console.log(answerData.recordPage.list)
           listUtil.appendList(this.answer,answerData.recordPage.list);
           if(answerData.recordPage.list.length){
             this.page++;
@@ -822,6 +826,13 @@
           }
         },
         deep: true
+      }
+    },
+    computed:{
+      isBlacklist(){
+        return function (item) {
+          return this.$store.state.blacklist.includes(item);
+        }
       }
     }
   }

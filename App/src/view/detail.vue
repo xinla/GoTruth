@@ -1339,9 +1339,13 @@
       pause(){
         this.$refs.videoPlayer.player.pause();
       },
+    },
+    computed:{
       // 判断是否黑名单
-      isBlacklist(item){
-          return  this.$store.state.blacklist.includes(item.author)
+      isBlacklist(){
+        return function (item) {
+          return this.$store.state.blacklist.includes(item);
+        }
       }
     },
     watch:{
