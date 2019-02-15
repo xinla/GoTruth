@@ -5,13 +5,7 @@
     </top>
     <div class="member-msg">
       <div class="member-msg-header">
-        <!-- <div class="member-msg-image">
-                  <img  :src="userPhoto" >
-              </div> -->
-        <div class="member-msg-image" @click='handlePreview'>
-          <img  v-for="(img,index) in imgs"  :src="img.url">
-          <!--<img :src="userPhoto">-->
-        </div>
+        <vue-picture-swipe :items="items"></vue-picture-swipe>
         <div class="member-msg-modal">
           <ul class="member-msg-list">
             <!-- @click="(loginUserId == userId) && $Tool.goPage({ name:'release',query:{'title':'发布图文',sort:1}})" -->
@@ -79,9 +73,6 @@
       </tab>
 
     </div>
-    <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-      <gallary :imgs="imgs" v-show="showGallary" @close="handelGallaryClose"></gallary>
-    </transition>
     <keep-alive>
       <router-view class="router-view" :key="$route.name"></router-view>
     </keep-alive>
@@ -94,11 +85,7 @@
   import followService from '@/service/followService'
   import interService from '@/service/interlocutionService'
   import userService from '@/service/userService'
-  import gallary from "@/components/Gallary"
   export default {
-    components:{
-      gallary
-    },
     data(){
       return {
         loginUserId:localStorage.id || 0,
@@ -110,11 +97,12 @@
         focusState:false,
         btnState:false,
         blackState:false,
-        imgs: [
-          {
-            url: "",
-          }
-        ],
+        items: [{
+          src: '',
+          thumbnail: '',
+          w: 600,
+          h: 520,
+        }],
         title:'',
         userPhoto:'',
         focusNum:0,
@@ -135,41 +123,24 @@
         ])
       }
     },
-    mounted(){
-      window.history.pushState(null, null, document.URL);
-      window.addEventListener('popstate', this.onBrowserBack, false);
-    },
-    destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack, false);
-    },
     activated(){
       this.$nextTick(()=>{
         this.init();
       })
     },
     methods:{
-      handlePreview(){
-        this.showGallary = true;
-      },
-      handelGallaryClose(){
-        this.showGallary = false;
-      },
-      onBrowserBack(){
-        if(this.showGallary){
-          this.showGallary = false;
-        }
-      },
       init(){
-        /*if(localStorage.id && localStorage.id == this.userId){
-          this.userPhoto = localStorage.userImg;
+        // 头像预览
+        if(localStorage.id && localStorage.id == this.userId){
           this.title = localStorage.userName;
-          this.imgs[0].url = this.userPhoto;
-        }*/
-        let res = userService.getUserById(this.userId);
-        if(res && res.status == "success") {
-          this.userPhoto = this.$Tool.headerImgFilter(res.result.user.imageurl);
-          this.imgs[0].url = this.userPhoto;
-          this.title = res.result.user.username;
+          this.items[0].src = localStorage.userImg;
+          this.items[0].thumbnail = localStorage.userImg;
+        }
+        let userInfoData = userService.getUserById(this.userId);
+        if(userInfoData && userInfoData.status == "success"){
+          this.items[0].src = this.$Tool.headerImgFilter(userInfoData.result.user.imageurl);
+          this.items[0].thumbnail = this.$Tool.headerImgFilter(userInfoData.result.user.imageurl);
+          this.title = userInfoData.result.user.username;
         }
         //获取文章数量
         articleService.getUserArticleCount(this.userId,(data)=>{
@@ -319,7 +290,7 @@
     .member-msg-header{
       display: flex;
       overflow: hidden;
-      .member-msg-image{
+/*      .member-msg-image{
         width: 1.4rem;
         height: 1.4rem;
         border-radius: 50%;
@@ -332,7 +303,7 @@
           border-radius: 50%;
           border: .04rem solid @borderColor;
         }
-      }
+      }*/
       .member-msg-modal {
         position: absolute;
         right: .4rem;
@@ -429,9 +400,16 @@
     display: block;
   }
 </style>
-
-<style>
-  .lg-preview-nav-right,.lg-preview-nav-left{
+<style lang="less">
+  .my-gallery{
+    img{
+      width: 1.6rem !important;
+      height: 1.6rem !important;
+      border-radius: 50% !important;
+      border: .04rem solid @borderColor !important;
+    }
+  }
+  .pswp__button--share{
     display: none !important;
   }
 </style>

@@ -27,6 +27,9 @@ Vue.use(Tool);
 // 预览大图
 import vuePicturePreview from 'vue-picture-preview'
 Vue.use(vuePicturePreview)
+
+import VuePictureSwipe from 'vue-picture-swipe';
+Vue.component('vue-picture-swipe', VuePictureSwipe);
 // 主屏header
 import homeHeader from '@/components/headerBar'
 Vue.component('home-header',homeHeader)
