@@ -60,7 +60,6 @@
                 try{
                     if(!this.classify || this.classify == 0){
                         this.topList = articleService.getTodayArticle().list;
-                        console.log(this.topList)
                         resArticlePage = articleService.articlePage(this.page,15);
                         let temp = resArticlePage.recordPage.list,
                             same = [];

@@ -27,7 +27,7 @@
       <section class="content-wrap" v-if="!proFail1">
         <h1 class="article-title">{{ article.title }}</h1>
         <div class="publisher bfc-o">
-          <router-link :to="{name:'published',query:{userId:article.author}}">
+          <router-link :to="{name:'publishedArticle',query:{userId:article.author}}">
             <img :src="$Tool.headerImgFilter(artUser.imageurl)" alt="" class="uphoto uphoto-big">
             <div class="article-time-name bfc-d">
               <div class="uname">
@@ -82,7 +82,7 @@
       <prompt-blank v-if="proFail1" :mes="failMes1"></prompt-blank>
       <ul class="article-change clearfix" v-if="!detailType">
         <li class="item" @click="handleFabulous(1)" :class="{'likeActive':likeStatus}">
-          {{likeNum}}
+          {{$Tool.numConvertText(likeNum)}}
           <like :likeStatus="likeStatus"></like>
         </li>
         <!-- <li class="item" @click="handleReport(1)">
@@ -600,7 +600,7 @@
         //获取文章点赞量
         praiseService.getPraiseCount(this.id,1,(data)=>{
           if (data && data.status == "success") {
-            this.likeNum = this.$Tool.numConvertText(data.result.count);
+            this.likeNum = data.result.count;;
           }
         });
         //用户是否给文章点赞

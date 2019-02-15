@@ -53,8 +53,8 @@
                 <router-link class="member-switch-item active" v-for="(item, index) in switchListPrivate" tag="li" :to="{path:item.path,}" :key="index" >{{item.desc}}
                 </router-link> -->
       </ul>
-      <tab :line-width="2" v-model="current" v-show="loginUserId == userId">
-        <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
+      <tab :line-width="2" v-model="current" v-show="loginUserId == userId" key='1'>
+        <tab-item v-for="(item, index) in switchListPublic" :key="item.id">
           <router-link class="block" :to="{path:item.path,query:{userId}}" replace>
             {{item.desc}}
           </router-link>
@@ -65,8 +65,8 @@
           </router-link>
         </tab-item>
       </tab>
-      <tab v-show="loginUserId != userId" :line-width="2" v-model="currentSub">
-        <tab-item v-for="(item, index) in switchListPublic" :key="item.id+1">
+      <tab v-show="loginUserId != userId" :line-width="2" v-model="currentSub" key='2'>
+        <tab-item v-for="(item, index) in switchListPublic" :key="item.id+10">
           <router-link class="block" :to="{path:item.path,query:{userId}}" replace>
             {{item.desc}}
           </router-link>
@@ -121,18 +121,18 @@
         fansNum:0,
         articleCount:0,
         questionCount:0,
-        switchListPublic:[
-          {id:1, desc:'全部', path:'/personBase/published',},
+        switchListPublic:Object.freeze([
+          // {id:1, desc:'全部', path:'/personBase/published',},
           {id:2, desc:'文章', path:'/personBase/publishedArticle',},
           {id:3, desc:'视频', path:'/personBase/publishedVideo',},
           {id:4, desc:'问答', path:'/personBase/publishedQA',},
-        ],
-        switchListPrivate:[
+        ]),
+        switchListPrivate:Object.freeze([
           {id:6, desc:'粉丝', path:'/personBase/fans',},
           {id:7, desc:'关注', path:'/personBase/focus',},
           {id:8, desc:'收藏', path:'/personBase/collect',},
           {id:9, desc:'历史', path:'/personBase/history',},
-        ]
+        ])
       }
     },
     mounted(){
@@ -213,7 +213,7 @@
         // 判断是否拉黑
         let blackData = userService.testLh(this.userId);
         if(blackData && blackData.status == "success") {
-          console.log(blackData)
+          // console.log(blackData)
           if(blackData.result == 1){
             this.blackState = true;
           }else{
@@ -270,7 +270,7 @@
       $route(to,from){
         // to.query.userId ? (this.userId = to.query.userId):this.userId = localStorage.id;
         to.query.userId && (this.userId = to.query.userId)
-        if(this.$route.name == 'published'){
+        if(this.$route.name === 'publishedArticle'){
           this.ifSelf?this.current = 0:this.currentSub = 0;
         }
         // console.log(this.current)

@@ -244,12 +244,12 @@ export default new Router({
     {
       path:'/personBase',
       name:'personBase',
-      redirect:'/personBase/published',
+      redirect:'/personBase/publishedArticle',
       component: (resolve)=>{
         require(['@/components/common/basePerson.vue'],resolve)
       },
       children:[
-        {
+        /*{
           path:'published',
           name:'published',
           component: (resolve)=>{
@@ -258,14 +258,14 @@ export default new Router({
           // meta: {
           //   keepAlive: true,// 去缓存
           // },
-        },
+        },*/
         {
           path:'publishedArticle',
           name:'publishedArticle',
           component: (resolve)=>{
             require(['@/view/member/published.vue'],resolve)
             // require(['@/view/member/publishedArticle.vue'],resolve)
-          },         
+          }         
         },
         {
           path:'publishedVideo',
