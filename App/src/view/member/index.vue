@@ -17,7 +17,7 @@
                 </router-link>
             </div>
             <!-- 已登录 -->
-            <div class="member-login-in"  v-if="ifLogin" @click="$Tool.goPage({ name:'published',query:{userId,current:0} })">
+            <div class="member-login-in"  v-if="ifLogin" @click="$Tool.goPage({ name:'publishedArticle',query:{userId,current:0} })">
                 <div class="member-user">
                     <div class="member-user-image">
                         <img :src="userPhoto">
@@ -89,10 +89,10 @@
     </div>
 </template>
 <script>
-    import config from '@/lib/config/config'
-    import followService from '@/service/followService'
-    import userService from '@/service/userService'
-    import authUtil from '@/service/util/authUtil'
+  import config from '@/lib/config/config'
+  import followService from '@/service/followService'
+  import userService from '@/service/userService'
+  import authUtil from '@/service/util/authUtil'
     export default {
         data() {
             return {
@@ -103,8 +103,8 @@
                     { id: 4, class: 'icon-weibo' },
                 ]),
                 tabArr: Object.freeze([
-                    { id: 1, desc: '收藏', class: 'icon-not-collection', path: '/personBase/collect', query: 6 },
-                    { id: 2, desc: '历史', class: 'icon-history', path: '/personBase/history', query: 7 },
+                    { id: 1, desc: '收藏', class: 'icon-not-collection', path: '/personBase/collect', query: 5 },
+                    { id: 2, desc: '历史', class: 'icon-history', path: '/personBase/history', query: 6 },
                 ]),
                 menuArr: Object.freeze([
                     { id: 1, desc: '我的关注', class: 'icon-zuji', path: '/personBase/focus' ,current:5},
