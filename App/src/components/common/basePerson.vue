@@ -399,9 +399,7 @@
   .block{
     display: block;
   }
-</style>
-<style lang="less">
-  .my-gallery{
+  .member-msg-header /deep/ .my-gallery{
     img{
       width: 1.6rem !important;
       height: 1.6rem !important;
@@ -409,6 +407,9 @@
       border: .04rem solid @borderColor !important;
     }
   }
+</style>
+<style lang="less">
+
   .pswp__button--share{
     display: none !important;
   }

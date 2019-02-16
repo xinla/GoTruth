@@ -31,11 +31,8 @@
           <p class="content-text">
             {{answer.content}}
           </p>
-          <div class="content-img">
-            <div class="item" v-for="item in answerFile" :key="item.id" @click="handlePreview">
-              <img :src="fileRoot + item.url">
-            </div>
-          </div>
+          <vue-picture-swipe :items="items" :options="{shareEl: false}"></vue-picture-swipe>
+
           <div class="content-time clearfix">
             <span class=" fl">创建时间 {{publishtime}}</span>
             <div class="jubao fr" @click="handleReport(1)">
@@ -247,10 +244,6 @@
         </div>
       </popup>
     </div>
-    <!-- 图片预览 -->
-    <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-      <gallary :obj="answerFile" v-show="showGallary" @close="handleGallaryClose"></gallary>
-    </transition>
   </div>
 </template>
 
@@ -269,17 +262,14 @@
   import reportService from '@/service/reportService'
   import listUtil from '@/service/util/listUtil'
   import transmitService from '@/service/transmitService'
-  import gallary from "@/components/Gallary"
   export default {
     name: "wendaDetail",
     components:{
       like,
-      gallary,
       memberList:() => import ('@/components/common/memberList'),
     },
     data(){
       return{
-        showGallary:false,
         id:0, //回答id
         detailType: 0,//视图类型
         userId:localStorage.id,    //当前登录用户
@@ -297,6 +287,7 @@
         answerFocusState: false,  //回答人关注状态
         commentFocusState: false,    //评论人关注状态
         answerFile:[],  //回答内容中图片数组
+        items:[],
         publishtime:'',   //回答时间
         answerCommentNum: 0,  //回答评论总数
         ifComment:false,    //是否有评论
@@ -439,14 +430,6 @@
         },
         deep: true
       },
-      showGallary:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      }
     },
     computed:{
       // 判断是否黑名单
@@ -496,6 +479,17 @@
         let answerSrcData = articleFileService.getFileByArticle(this.answer.id);
         if(answerSrcData && answerSrcData.status == "success") {
           this.answerFile = answerSrcData.result.filelist;
+          let arr = answerSrcData.result.filelist;
+          this.items = [];
+          for(let i =0; i < arr.length; i++){
+            let obj = {
+              src:this.fileRoot + arr[i].url,
+              thumbnail:this.fileRoot + arr[i].url,
+              w: 600,
+              h: 450,
+            };
+            this.items.push(obj);
+          }
         }
 
         // 获取发布回答时间
@@ -552,20 +546,13 @@
         this.loadComment();
         this.ifLoad = false;
       },
-      handlePreview(){
-        this.showGallary = true;
-      },
-      handleGallaryClose(){
-        this.showGallary = false;
-      },
       onBrowserBack(){
-        if(this.answerPopObj.show || this.shareShow || this.replyShow || this.popMask || this.reportShow || this.showGallary){
+        if(this.answerPopObj.show || this.shareShow || this.replyShow || this.popMask || this.reportShow){
           this.answerPopObj.show = false;
           this.shareShow = false;
           this.replyShow = false;
           this.popMask = false;
           this.reportShow = false;
-          this.showGallary = false;
         }
       },
       /*关注  | 取消关注   type: 1-回答发布人 || 2-回答评论人*/
@@ -1006,7 +993,6 @@
             // 拉黑回答作者
             userService.blacklist(this.answer.author,data=>{
               if(data && data.status == "success") {
-                console.log(data)
                 let temp = [];
                 if (localStorage.blacklist) {
                   temp = JSON.parse(localStorage.blacklist);
@@ -1130,7 +1116,6 @@
             let answerZanCount = praiseService.getPraiseCount(item.id, 2);
             if(answerZanCount && answerZanCount.status == "success") {
               this.$set(item,"likeNum",answerZanCount.result.count);
-              console.log(answerZanCount)
               if(answerZanCount.result.count == 0) {
                 this.hasZan = true;
                 this.noZan = false;
@@ -1274,28 +1259,6 @@
         .content-text{
           line-height: .65rem;
           font-size: .34rem;
-        }
-
-        .content-img{
-          margin: .4rem 0;
-          .item{
-            display: inline-block;
-            /*width: 3.375rem;*/
-            width: 49.5%;
-            height: 2.4rem;
-            margin-right: .8%;
-            margin-bottom: .8%;
-            &:nth-child(2n){
-              margin-right: 0;
-            }
-            img{
-              display: block;
-              width: 100%;
-              height: 100%;
-              border: .02rem solid @borderColor;
-              object-fit: cover;
-            }
-          }
         }
         .content-time{
           line-height: .5rem;
@@ -1700,6 +1663,25 @@
       .isDiscuss{
         line-height: .8rem;
         padding-left: .89rem;
+      }
+    }
+  }
+  .answer-detail /deep/ .my-gallery{
+    figure{
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+      margin-inline-start: 0 !important;
+      margin-inline-end: 0 !important;
+      img{
+        display: inline-block !important;
+        width: 49% !important;
+        height: 2.5rem !important;
+        margin-bottom: .12rem !important;
+        margin-right: 2% !important;
+        object-fit: cover !important;
+      }
+      &:nth-child(2n) img{
+        margin-right: 0 !important;
       }
     }
   }

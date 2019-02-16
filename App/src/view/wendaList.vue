@@ -27,11 +27,13 @@
           <p class="desc-text">{{wenda.description}}</p>
         </div>
 
-        <ul class="wendaList-img">
+       <!-- <ul class="wendaList-img">
           <li class="item" :class="{bigImg:bigImg}"  v-for="(item,index) in imgArr" v-show="ifImgNull" @click='handlePreview(1)'>
             <img :src="fileRoot + item">
           </li>
-        </ul>
+        </ul>-->
+        <vue-picture-swipe :items="items" :options="{shareEl: false}" v-show="ifImgNull"></vue-picture-swipe>
+
         <div class="wendaList-tip clearfix">
           <span v-show="questionBool.hasAnswer">{{wendaCount}}条回答</span>
           <span v-show="questionBool.notAnswer">暂无回答</span>
@@ -154,10 +156,7 @@
     <share :content="shareDesc" v-model="shareShow"></share>
     <!-- 图片预览 -->
     <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-      <gallary :urlArr="imgArr" v-show="showGallary" @close="handleGallaryClose(1)"></gallary>
-    </transition>
-    <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-      <gallary :obj="record_file" v-show="showGallary1" @close="handleGallaryClose(2)"></gallary>
+      <gallary :obj="record_file" v-show="showGallary" @close="handleGallaryClose"></gallary>
     </transition>
 
     <!--举报-->
@@ -228,8 +227,9 @@
           '恶意攻击谩骂',
           '拉黑该用户并屏蔽其内容'
         ]),
+        ifImgNull:true,
         showGallary:false,
-        showGallary1:false,
+        showGallary:false,
         timer:null,
         userId:localStorage.id,
         focusState:false,
@@ -239,9 +239,9 @@
         answer:[],   //问题回答对象
         fileRoot:config.fileRoot + '/',   //服务路径
         imgArr:[],  //问题图片
+        items:[],
         answerFile:[],    //回答附件图片列表
         bigImg:false,      //判断是否一张图
-        ifImgNull:false,   //判断问题是否有图片
         wendaCount:0,     //回答数
         collectCount:0,   //问题收藏数
         collectIcon:false,   //监听收藏图标变化
@@ -300,6 +300,9 @@
         if(this.timer){
           clearTimeout(this.timer);
         }
+        if(this.timer){
+          clearTimeout(this.timer);
+        }
         this.timer = setTimeout(()=>{
           this.init();
           if(!localStorage.id || !localStorage.token){
@@ -312,12 +315,18 @@
     },
     mounted() {
       window.history.pushState(null, null, document.URL);
-      window.addEventListener('popstate', this.onBrowserBack, false);
+      window.addEventListener('popstate', this.onBrowserBack);
     },
     destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack, false);
+      window.removeEventListener("popstate", this.onBrowserBack);
     },
     methods:{
+      handle(items){
+        for(let i =0; i<items.length;i++){
+          console.log(items[i])
+        }
+      },
+
       //页面初始化渲染
       init() {
         if (!this.id) {
@@ -328,10 +337,22 @@
           return;
         }
         this.ifLoad = true;
-        this.ifImgNull = true;
+        this.items = [];
         this.imgArr = this.wenda.images.split(',');
-        if(!this.wenda.images){
-          this.ifImgNull = false;
+        for(let i =0; i<this.imgArr.length;i++){
+          let obj = {
+            src:this.fileRoot + this.imgArr[i],
+            thumbnail:this.fileRoot + this.imgArr[i],
+            w: 600,
+            h: 450,
+          };
+          this.items.push(obj);
+          let indexOf = this.items[i].src.indexOf('pic');
+          if(indexOf == -1){
+            this.ifImgNull = false;
+          }else{
+            this.ifImgNull = true;
+          }
         }
 
         // 获取发布问题人的信息
@@ -361,7 +382,6 @@
         this.answer =[];
         let answerData = interService.getAnswers(this.page, 15, this.id);
         if(answerData && answerData.status == "success") {
-          console.log(answerData.recordPage.list)
           listUtil.appendList(this.answer,answerData.recordPage.list);
           if(answerData.recordPage.list.length){
             this.page++;
@@ -446,27 +466,16 @@
           this.answerObj.show = false;
           this.showGallary = false;
           this.reportShow = false;
-          if(this.showGallary1){
-            this.showGallary1 = false;
+          if(this.showGallary){
             this.answerObj.show = true;
           }
-
         }
       },
-      handlePreview(val){
-        if(val == 1){
-          this.showGallary = true;
-        }else{
-          this.showGallary1 = true;
-        }
-
+      handlePreview(){
+        this.showGallary = true;
       },
-      handleGallaryClose(val){
-        if(val == 1){
-          this.showGallary = false;
-        }else{
-          this.showGallary1 = false;
-        }
+      handleGallaryClose(){
+        this.showGallary = false;
       },
       // 关注问题发布人
       handleFocus(userId){
@@ -803,14 +812,6 @@
         },
         deep: true
       },
-      showGallary1:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
       reportShow:{
         handler(newVal, oldVal) {
           if(newVal.Terms == true) {
@@ -833,7 +834,7 @@
         return function (item) {
           return this.$store.state.blacklist.includes(item);
         }
-      }
+      },
     }
   }
 </script>
@@ -1271,9 +1272,29 @@
       background-color: #fff;
     }
   }
+
+  .wendaList-wrap /deep/ .my-gallery{
+    figure{
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+      margin-inline-start: 0 !important;
+      margin-inline-end: 0 !important;
+      img{
+        display: inline-block !important;
+        width: 49% !important;
+        height: 2.5rem !important;
+        margin-bottom: .12rem !important;
+        margin-right: 2% !important;
+        object-fit: cover !important;
+      }
+      &:nth-child(2n) img{
+        margin-right: 0 !important;
+      }
+    }
+  }
 </style>
 
-<style>
+<style lang="less">
   .vux-popup-dialog{
     background-color: #fff !important;
   }
