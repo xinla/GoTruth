@@ -1,7 +1,6 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-Vue.use(Vuex);
-
+// import Vue from 'vue';
+// import Vuex from 'vuex';
+// Vue.use(Vuex);
 
 //初始化变量
 function State(){

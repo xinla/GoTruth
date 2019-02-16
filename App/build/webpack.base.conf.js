@@ -14,8 +14,8 @@ function resolve (dir) {
 let webpackConfig  = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    // app: './src/main.js'
-    app: ["babel-polyfill", "./src/main.js"]
+    app: './src/main.js'
+    // app: ["babel-polyfill", "./src/main.js"]
   },
   output: {
     path: config.build.assetsRoot,
@@ -84,7 +84,12 @@ let webpackConfig  = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  externals: {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter',
+    'vuex': 'Vuex',
+   },
 }
 module.exports = vuxLoader.merge(webpackConfig, {
   plugins: ['vux-ui']

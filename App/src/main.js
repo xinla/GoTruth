@@ -1,15 +1,12 @@
-import Vue from 'vue'
+import 'babel-polyfill'
+// import Vue from 'vue'
 import App from './App'
 
 import $ from 'jquery'
 window.$ = $;
 
-//es6 promise兼容
-// import 'es6-promise/auto'
-
-import 'babel-polyfill'
 import Es6Promise from 'es6-promise'
-
+require('es6-promise').polyfill()
 Es6Promise.polyfill()
 
 import router from './router'

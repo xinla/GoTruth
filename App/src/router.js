@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-Router.prototype.go = function () {
+// import Vue from 'vue'
+// import Router from 'vue-router'
+VueRouter.prototype.go = function () {
   this.isBack = true;
   window.history.go(-1);
 }
-Vue.use(Router)
+// Vue.use(Router)
 
-export default new Router({
+export default new VueRouter({
   // mode:'history',
   routes: [
     //首页
