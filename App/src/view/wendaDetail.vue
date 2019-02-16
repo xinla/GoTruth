@@ -478,7 +478,7 @@
         // 获取回答内容中图片
         let answerSrcData = articleFileService.getFileByArticle(this.answer.id);
         if(answerSrcData && answerSrcData.status == "success") {
-          this.answerFile = answerSrcData.result.filelist;
+          // this.answerFile = answerSrcData.result.filelist;
           let arr = answerSrcData.result.filelist;
           this.items = [];
           for(let i =0; i < arr.length; i++){
@@ -1077,8 +1077,8 @@
         };
         let temp = this.$Tool.extractImg(this.answer.content,1);
         this.shareDesc['thumbs'] = temp[0];
-        if(this.answerFile.length) {
-          this.shareDesc['thumbs'] = [this.fileRoot + this.answerFile[0]['url']];
+        if(this.items.length) {
+          this.shareDesc['thumbs'] = [this.fileRoot + this.items[0]['url']];
         }
 
       },

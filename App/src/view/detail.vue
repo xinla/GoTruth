@@ -45,9 +45,11 @@
           <div class="article-content" v-if='article.content'>
             <p v-html="article.content"></p>
             <div v-if="1 === article.type" class="phone-img clearfix">
-              <div class="tel-img fl" v-for="(item,index) in ArticleFile" @click="handlePreview">
+              <!--<div class="tel-img fl" v-for="(item,index) in ArticleFile" @click="handlePreview">
                 <img  :src="fileRoot + item.url">
-              </div>
+              </div>-->
+              <vue-picture-swipe :items="items" :options="{shareEl: false}"></vue-picture-swipe>
+
             </div>
             <p style="font-size: .24rem; color: #888;">免责声明：直击真相爱心平台，仅为有正能量和社会价值的信息提供其发布与展示，如有侵权，请及时联系我们删除，谢谢您的支持！举报热线：18756686768</p>
           </div>
@@ -301,9 +303,6 @@
     </div>
     <!-- 分享 -->
     <share :content="shareDesc" v-model="shareShow"></share>
-    <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
-      <gallary :obj="ArticleFile" v-show="showGallary" @close="handleGallaryClose"></gallary>
-    </transition>
   </div>
 </template>
 
@@ -329,13 +328,11 @@
   export default {
     components:{
       like,
-      gallary,
       collapseTransition,
       memberList:() => import ('@/components/common/memberList'),
     },
     data(){
       return {
-        showGallary:false,
         isActive:false,
         toggleText:'展开',
         badgeShow:false,
@@ -384,6 +381,7 @@
           imageurl:'',
         },
         ArticleFile:[],
+        items:[],
         commentList:[],
         replyList:[],
         proFail1:false,
@@ -583,7 +581,17 @@
           articleFileService.getFileByArticle(this.article.id,(data)=>{
             if (data && data.status == "success") {
               if (this.article.type == 1) {
-                this.ArticleFile = data.result.filelist;
+                let arr = data.result.filelist;
+                this.items = [];
+                for(let i = 0; i < arr.length; i++) {
+                  let obj = {
+                    src:this.fileRoot + arr[i].url,
+                    thumbnail:this.fileRoot + arr[i].url,
+                    w: 600,
+                    h: 460,
+                  };
+                  this.items.push(obj);
+                }
               }else if(this.article.type == 2){
                 let temp = data.result.filelist[0];
                 if (temp) {
@@ -658,21 +666,16 @@
         this.ifLoad = false;
       },
       onBrowserBack(){
-        if(this.popList.show || this.reportShow || this.popMask || this.shareShow || this.replyShow || this.showGallary){
+        if(this.popList.show || this.reportShow || this.popMask || this.shareShow || this.replyShow){
           this.popList.show = false;
           this.reportShow = false;
           this.popMask = false;
           this.shareShow = false;
           this.replyShow = false;
-          this.showGallary = false;
         }
       },
-      handlePreview(){
-        this.showGallary = true;
-      },
-      handleGallaryClose(){
-        this.showGallary = false;
-      },
+
+
 
       handleToggle(){
         this.isActive = !this.isActive;
@@ -1002,6 +1005,7 @@
       handleShare(){
         this.shareShow= true;
         if(this.replyShow){
+          this.popMask = true;
           this.popMask = true;
         }
         //分享内容对象
@@ -2091,6 +2095,25 @@
     width: 40px;
     line-height: 30px;
     text-align: center;
+  }
+  .phone-img /deep/ .my-gallery{
+    figure{
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+      margin-inline-start: 0 !important;
+      margin-inline-end: 0 !important;
+      img{
+        display: inline-block !important;
+        width: 49% !important;
+        height: 2.5rem !important;
+        margin-bottom: .12rem !important;
+        margin-right: 2% !important;
+        object-fit: cover !important;
+      }
+      &:nth-child(2n) img{
+        margin-right: 0 !important;
+      }
+    }
   }
 </style>
 
