@@ -51,9 +51,9 @@ a,button,input,textarea{ -webkit-tap-highlight-color:rgba(0,0,0,0);}
 img,a{-webkit-touch-callout:none;}
 
 /* other */
- /* iconfont*/
-@font-face {
-  font-family: 'iconfont';  /* project id 773620 */
+ /* iconfont unicode引用*/
+/* @font-face {
+  font-family: 'iconfont';  project id 773620
   src: url('//at.alicdn.com/t/font_773620_tl97ro8053.eot');
   src: url('//at.alicdn.com/t/font_773620_tl97ro8053.eot?#iefix') format('embedded-opentype'),
   url('//at.alicdn.com/t/font_773620_tl97ro8053.woff') format('woff'),
@@ -61,13 +61,13 @@ img,a{-webkit-touch-callout:none;}
   url('//at.alicdn.com/t/font_773620_tl97ro8053.svg#iconfont') format('svg');
 }
 .iconfont {
-	font-family:"iconfont" !important;
-	font-size:inherit;
-	font-style:normal;
-	-webkit-font-smoothing: antialiased;
-	-webkit-text-stroke-width: 0.2px;
-	-moz-osx-font-smoothing: grayscale;
-}
+  font-family:"iconfont" !important;
+  font-size:inherit;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+} */
 
 /* common class */
 /*bfc model*/
