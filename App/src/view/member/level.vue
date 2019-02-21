@@ -28,7 +28,7 @@
                             </div>
                             <div class="level-desc">
                                 <h5>{{userList.username}}</h5>
-                                <span>爱心值：{{userList.integration}}</span>
+                                <span>爱心值：{{userList.integration + 3}}</span>
                             </div>
                         </div>
                     </td>
@@ -105,6 +105,7 @@
                 //获取排行信息
                 userService.getUserPh((data)=>{
                     if(data && data.status == "success") {
+                      console.log(data)
                         this.record = data.recordList;
                         this.$set(this.record[0],'levelImg',require('@/assets/images/no-1.png'));
                         this.$set(this.record[1],'levelImg',require('@/assets/images/no-2.png'));
