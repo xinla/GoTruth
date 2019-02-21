@@ -85,7 +85,7 @@ export default{
 			})
 		},
 		goPerson(userId){
-			this.$Tool.goPage({name:'published',query:{userId,}})
+			this.$Tool.goPage({name:'publishedArticle',query:{userId,}})
 			// location.reload();
 		}
 	},

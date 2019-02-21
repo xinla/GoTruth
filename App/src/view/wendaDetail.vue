@@ -18,7 +18,7 @@
         </div>
         <!--回答人的信息-->
         <div class="answer-info clearfix">
-          <router-link class="answer-user fl" :to="{name:'published',query:{userId:answer.author}}" tag="div">
+          <router-link class="answer-user fl" :to="{name:'publishedArticle',query:{userId:answer.author}}" tag="div">
             <img :src="$Tool.headerImgFilter(answerUser.imageurl)">
             <span>{{ answerUser.username}}</span>
           </router-link>

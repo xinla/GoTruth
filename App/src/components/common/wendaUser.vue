@@ -12,7 +12,7 @@
                     <span class="username">{{userName}}</span>
                 </div>
                 <div class="right fr">
-                    <router-link :to="{path:'/personBase/publishedQA',query:{current:3}}">
+                    <router-link :to="{path:'/personBase/publishedQA',query:{current:2}}">
                         我的问答
                         <i class="iconfont icon-arrow-right"></i>
                     </router-link>
@@ -27,7 +27,7 @@
                     <i class="iconfont icon-tiwen"></i>
                     <span>提问</span>
                 </li>
-                <li class="item" @click="$Tool.goPage({ name:'published',query:{userId,current:0} })">
+                <li class="item" @click="$Tool.goPage({ name:'publishedArticle',query:{userId,current:0} })">
                     <i class="iconfont icon-morentouxiang"></i>
                     <span>个人中心</span>
                 </li>
