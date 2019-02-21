@@ -22,7 +22,7 @@ import Tool from './assets/js/methods'
 Vue.use(Tool);
 
 // 预览大图
-import vuePicturePreview from 'vue-picture-preview'
+import vuePicturePreview from 'babel-loader!vue-picture-preview'
 Vue.use(vuePicturePreview)
 
 import VuePictureSwipe from 'vue-picture-swipe';
