@@ -321,12 +321,6 @@
       window.removeEventListener("popstate", this.onBrowserBack);
     },
     methods:{
-      handle(items){
-        for(let i =0; i<items.length;i++){
-          console.log(items[i])
-        }
-      },
-
       //页面初始化渲染
       init() {
         if (!this.id) {
@@ -792,7 +786,7 @@
             },
           })
         }
-      }
+      },
 
     },
     watch:{
@@ -835,7 +829,8 @@
           return this.$store.state.blacklist.includes(item);
         }
       },
-    }
+    },
+
   }
 </script>
 
