@@ -117,7 +117,8 @@
                   <h5 class="fl">{{item.username}}</h5>
                   <p class="hot-fabulous fr" :class="{'likeActive':item.ifLike}" @click.stop="handleFabulous(2,item.id,index)">
                     <var class="hot-count">{{item.likeNum}}</var>
-                    <like :likeStatus="index==curLike?ifLike:0"></like>
+                    <!-- <like :likeStatus="index==curLike?ifLike:false" :key='index'></like> -->
+                    <like :likeStatus="item.ifLike" :key='index'></like>
                   </p>
                 </div>
                 <div class="hot-body clearfix">
@@ -831,7 +832,8 @@
               this.commentList[index].ifLike = false;
             }
 
-            if(resDoPraise.result.count <= 0){
+            // if(resDoPraise.result.count <= 0){
+            if(this.commentList[index].likeNum <= 0){
               this.noZan = false;
               this.hasZan = true;
             }else{
@@ -1231,10 +1233,10 @@
         // 获取文章一级评论列表
         this.ifLoadMore = true;
         let resArticleCommentList = articleCommentService.getArticleCommentPage(this.id, this.pageNum1, 10);
+        if(this.pageNum1 == 1) {
+          this.commentList = [];
+        }
         if(resArticleCommentList && resArticleCommentList.status == "success") {
-          if(this.pageNum1 == 1) {
-            this.commentList = [];
-          }
           listUtil.appendList(this.commentList,resArticleCommentList.list.list);
           listUtil.asyncSetListPropty(resArticleCommentList.list.list,(item)=>{
             // 获取文章一级评论人信息
@@ -1415,9 +1417,9 @@
           if(!localStorage.id || !localStorage.token){
             this.focusState = false;
             this.collectIcon = false;
-            this.ifLike = false;
             this.likeStatus = false;
           }
+          this.ifLike = false;
         }
       }
     },
