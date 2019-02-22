@@ -172,6 +172,7 @@
                 }
             },*/
             userId(){
+                $(this.$refs["scroll"].$el).scrollTop(0)
                 setTimeout(()=>{
                     this.deleteIndex = [];
                     this.page = 1;

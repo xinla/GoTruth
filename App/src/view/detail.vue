@@ -486,6 +486,7 @@
           thumbs:[]
         },
         aboutArticle:[],
+        scrollTop:0
       }
     },
     mounted(){
@@ -1310,7 +1311,8 @@
         }
       },
       // 页面加载后渲染函数
-      loadScroll(){
+      loadScroll(e){
+        this.scrollTop = $(e.target).scrollTop();
         if (!this.lock && ($(".detail").scrollTop() + $(".detail").height()) > $(".detail")[0].scrollHeight-10) {
           this.loadComment();
         }
@@ -1356,10 +1358,10 @@
       id(){
         // debugger
         this.ifLoad = true;
+        $(".detail").scrollTop(0)
         setTimeout(()=>{
           this.pageNum1 = 1;
           this.init();
-          if (true) {}
           // this.ifLoad = false;
         },delay)
         //注：延迟时长必须在动画大于切换动画（300）
@@ -1408,6 +1410,7 @@
         // debugger
         if (to.query.id) {
           this.id = to.query.id;
+          $(".detail").scrollTop(this.scrollTop)
           this.detailType = this.$route.query.detailType || 0;
           if(!localStorage.id || !localStorage.token){
             this.focusState = false;
