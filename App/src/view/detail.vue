@@ -230,7 +230,7 @@
                     </ul>
                     <div class="reply-footer-desc fl">
                       <span class="num">{{replyobj.likeNum}}</span>人赞过
-                      <i class="iconfont icon-arrow-right"></i>
+                      <!-- <i class="iconfont icon-arrow-right"></i> -->
                     </div>
                   </div>
                   <div class="reply-list fl" v-show="hasZan">
