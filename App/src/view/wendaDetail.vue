@@ -64,7 +64,8 @@
                 <div class="comment-header clearfix">
                   <span class="username fl">{{item.username}}</span>
                   <div class="comment-zan fr" :class="{'likeActive': item.ifLike}" @click="handleFabulous(2, item.id, index)">
-                    <like :likeStatus="index == curLike ? ifLike: 0"></like>
+                    <!-- <like :likeStatus="index == curLike ? ifLike: 0"></like> -->
+                    <like :likeStatus="item.ifLike" :key='index'></like>
                     <span class="zan-count">{{item.likeNum}}</span>
                   </div>
                 </div>
@@ -167,8 +168,12 @@
 										{{$Tool.publishTimeFormat(replyobj.commenttime)}}
 									</span>
                   <span class="reply-report fr" @click="handleReport(2)">举报</span>
+                  <div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,commentIndex)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
+                    {{replyobj.likeNum}}
+                    <like :likeStatus="commentIndex >= 0 && commentList[commentIndex].ifLike"></like>
+                  </div>
                 </div>
-                <div class="reply-footer clearfix">
+                <!-- <div class="reply-footer clearfix">
                   <div class="reply-footer-wrap fl clearfix" v-show="noZan">
                     <ul class="reply-list clearfix fl">
                       <li class="reply-item">
@@ -183,11 +188,7 @@
                   <div class="reply-list fl" v-show="hasZan">
                     暂无人赞过
                   </div>
-                  <div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,commentIndex)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
-                    {{replyobj.likeNum}}
-                    <like :likeStatus="commentIndex >= 0 && commentList[commentIndex].ifLike"></like>
-                  </div>
-                </div>
+                </div> -->
 
               </div>
             </div>
@@ -358,9 +359,11 @@
         current:1,  //当前
         listMember: [], //转发点赞列表
         proMes:"",    	//转发，点赞提示
+        scrollTop:0
       }
     },
     activated(){
+      $(".answer-detail").scrollTop(this.scrollTop)
       this.wenda = JSON.parse(this.$route.query.wenda);
       this.answer = JSON.parse(this.$route.query.item);
       this.detailType = this.$route.query.detailType || 0;
@@ -385,9 +388,11 @@
     watch:{
       id(){
         this.ifLoad = true;
+        $(".answer-detail").scrollTop(0)
         setTimeout(()=>{
+          this.commentPage == 1
           this.init();
-          this.ifLoad = false;
+          // this.ifLoad = false;
         },delay)
       },
       'answerPopObj.show':{
@@ -449,7 +454,7 @@
           this.$Tool.goBack();
           return;
         }
-        this.ifLoad = true;
+        // this.ifLoad = true;
         // 获取问题回答数量
         interService.getAnswerCount(this.wenda.id, (data) =>{
           if(data && data.status == "success") {
@@ -687,7 +692,8 @@
               this.commentList[index].likeNum --;
               this.commentList[index].ifLike = false;
             }
-            if(zanData.result.count <= 0) {
+            // if(zanData.result.count <= 0) {
+            if(this.commentList[index].likeNum <= 0) {
               this.noZan = false;
               this.hasZan = true;
             }else{
@@ -1092,11 +1098,11 @@
       loadComment(){
         // 获取回答一级评论列表
         this.ifLoadMore = true;
-        let answerCommentList = articleCommentService.getArticleCommentPage(this.answer.id,this.commentPage,10);
-        if(answerCommentList && answerCommentList.status == "success") {
           if(this.commentPage == 1) {
             this.commentList = [];
           }
+        let answerCommentList = articleCommentService.getArticleCommentPage(this.answer.id,this.commentPage,10);
+        if(answerCommentList && answerCommentList.status == "success") {
           listUtil.appendList(this.commentList, answerCommentList.list.list);
           listUtil.asyncSetListPropty(answerCommentList.list.list,(item) =>{
             // 获取问答一级评论人信息
@@ -1183,7 +1189,8 @@
         }
       },
       // 页面加载渲染函数
-      loadScroll(){
+      loadScroll(e){
+         this.scrollTop = $(e.target).scrollTop();
         let detailParent = $(".answer-detail").scrollTop() + $(".answer-detail").height();
         let detailChild = $(".answer-detail")[0].scrollHeight-350;
         if(!this.loadLock && detailParent > detailChild) {
@@ -1550,6 +1557,7 @@
         width: 100%;
         &:first-child{
           border-bottom: .02rem solid @borderColor;
+          padding-bottom: 10px;
         }
         .reply-box{
           margin-bottom: .5rem;

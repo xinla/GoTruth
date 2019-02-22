@@ -221,8 +221,12 @@
                     {{$Tool.publishTimeFormat(replyobj.commenttime)}}
                   </span>
                   <span class="reply-report fr" @click="handleReport(2)">举报</span>
+                  <div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,commentIndex)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
+                    {{replyobj.likeNum}}
+                    <like :likeStatus="commentIndex >= 0 && commentList[commentIndex].ifLike"></like>
+                  </div>
                 </div>
-                <div class="reply-footer clearfix">
+                <!-- <div class="reply-footer clearfix">
                   <div class="reply-footer-wrap fl clearfix" v-show="noZan">
                     <ul class="reply-list clearfix fl">
                       <li class="reply-item">
@@ -231,17 +235,13 @@
                     </ul>
                     <div class="reply-footer-desc fl">
                       <span class="num">{{replyobj.likeNum}}</span>人赞过
-                      <!-- <i class="iconfont icon-arrow-right"></i> -->
+                      <i class="iconfont icon-arrow-right"></i>
                     </div>
                   </div>
                   <div class="reply-list fl" v-show="hasZan">
                     暂无人赞过
                   </div>
-                  <div class="reply-fabulous fr"  @click="handleFabulous(2,replyobj.id,commentIndex)" :class="{'likeActive':commentIndex >=0 && commentList[commentIndex].ifLike}">
-                    {{replyobj.likeNum}}
-                    <like :likeStatus="commentIndex >= 0 && commentList[commentIndex].ifLike"></like>
-                  </div>
-                </div>
+                </div> -->
 
               </div>
             </div>
@@ -648,7 +648,6 @@
         });
         //评论滚动近底部，自动加载 一屏1080
         this.loadComment();
-        this.ifLoad = false;
         // 获取文章相关推荐
         if (this.article.type != 2) {
           articleService.getTjwz(this.article.classify,data=>{
@@ -1884,6 +1883,7 @@
         width: 100%;
         &:first-child{
           border-bottom: .02rem solid @borderColor;
+          padding-bottom: 10px;
         }
         .reply-box{
           margin-bottom: .5rem;
