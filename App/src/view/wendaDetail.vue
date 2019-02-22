@@ -141,13 +141,13 @@
     <div v-transfer-dom>
       <popup v-model="replyShow" position="bottom" height="100%">
         <div class="status-bar"></div>
-        <div class="reply-wrap" @scroll="loadScroll">
+        <div class="reply-wrap"">
           <div class="reply-header">
             <i class="iconfont icon-remove" @click="handleCloseRelpy"></i>
             <span v-show="noReply">暂无回复</span>
             <span v-show="hasReply">{{replyobj.replyCount}}条回复</span>
           </div>
-          <div class="reply-body">
+          <div class="reply-body" ref='replyScroll' @scroll="scrollLoadReply">
             <div class="reply-container reply-first clearfix">
               <div class="reply-img fl">
                 <img :src="$Tool.headerImgFilter(replyobj.imageurl)">
@@ -310,6 +310,8 @@
         /*类型：评论(1) | 回复(1)*/
         commentType: 1,
         commentPage:1,  //加载评论分页
+        //回复加载分页
+        pageNumReply:1,
         proFail1:false,
         proFail2:false,
         failMes1:"获取内容失败",
@@ -390,7 +392,8 @@
         this.ifLoad = true;
         $(".answer-detail").scrollTop(0)
         setTimeout(()=>{
-          this.commentPage == 1
+          this.commentPage = 1
+          this.pageNumReply = 1
           this.init();
           // this.ifLoad = false;
         },delay)
@@ -864,8 +867,9 @@
               this.commentList[this.commentIndex].replyCount ++;
               // 给评论人发送消息
               messageService.sendMessage(this.replyUserId,'reply',this.replyCommentId,2);
+              this.pageNumReply = 1;
               this.loadReply();
-              $(".reply-wrap").animate({scrollTop:0},100);
+              $(this.$refs.replyScroll).animate({scrollTop:0},100);
             }else{
               this.$vux.alert.show({
                 content:'评论失败，请重试'
@@ -1098,9 +1102,9 @@
       loadComment(){
         // 获取回答一级评论列表
         this.ifLoadMore = true;
-          if(this.commentPage == 1) {
-            this.commentList = [];
-          }
+        if(this.commentPage == 1) {
+          this.commentList = [];
+        }
         let answerCommentList = articleCommentService.getArticleCommentPage(this.answer.id,this.commentPage,10);
         if(answerCommentList && answerCommentList.status == "success") {
           listUtil.appendList(this.commentList, answerCommentList.list.list);
@@ -1164,9 +1168,10 @@
       // 加载回复
       loadReply() {
         // 获取回答评论回复列表
-        let resReplyList = articleCommentService.getReplyList(this.replyCommentId,1,10);
+        let resReplyList = articleCommentService.getReplyList(this.replyCommentId,this.pageNumReply,10);
+        this.pageNumReply === 1 && (this.replyList = [])
         if (resReplyList && resReplyList.status == "success") {
-          this.replyList = resReplyList.recordPage.list;
+           this.replyList = this.replyList.concat(resReplyList.recordPage.list);
           // 获取回复人信息
           for (let i = 0,len = this.replyList.length; i < len; i++) {
             let resUserInfo = userService.getUserById(this.replyList[i].douserid);
@@ -1176,7 +1181,8 @@
             }
           }
         }
-        if(resReplyList.recordPage.list.length <= 0){
+        this.pageNumReply ++;
+        if(this.replyList.length <= 0){
           this.noReply = true;
           this.hasReply = false;
           this.noComment = true;
@@ -1191,10 +1197,17 @@
       // 页面加载渲染函数
       loadScroll(e){
          this.scrollTop = $(e.target).scrollTop();
-        let detailParent = $(".answer-detail").scrollTop() + $(".answer-detail").height();
-        let detailChild = $(".answer-detail")[0].scrollHeight-350;
+        let detailParent = $(".answer-detail").scrollTop() + $(".answer-detail").innerHeight();
+        let detailChild = $(".answer-detail")[0].scrollHeight - 10;
         if(!this.loadLock && detailParent > detailChild) {
           this.loadComment();
+        }
+      },
+      // 滚动加载评论的回复列表
+      scrollLoadReply(){
+        let $element = $(this.$refs.replyScroll)
+        if (($element.scrollTop() + $element.innerHeight()) > $element[0].scrollHeight - 10) {
+          this.loadReply();
         }
       },
     }
@@ -1523,7 +1536,7 @@
   }
   /*举报框*/
   .reply-wrap{
-    height: 100vh;
+    height: calc(100vh - 50px);
     border-radius: .3rem .3rem 0 0;
     background-color: #fff;
     .reply-header{
@@ -1548,8 +1561,8 @@
     }
     .reply-body{
       width: 100%;
-      height: calc(100vh - 1.3rem);
-      // overflow-y: auto;
+      height: calc(100vh - 1.4rem);
+      overflow-y: auto;
       // overflow: auto;
       // padding: .32rem .3rem;
       padding: .32rem .3rem 1rem .3rem;

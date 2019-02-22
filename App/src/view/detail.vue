@@ -194,13 +194,13 @@
     <div v-transfer-dom>
       <popup v-model="replyShow" position="bottom" height="100%">
         <div class="status-bar"></div>
-        <div class="reply-wrap" @scroll="loadScroll">
+        <div class="reply-wrap">
           <div class="reply-header">
             <i class="iconfont icon-remove" @click="handleCloseRelpy"></i>
             <span v-show="noReply">暂无回复</span>
             <span v-show="hasReply">{{replyobj.replyCount}}条回复</span>
           </div>
-          <div class="reply-body">
+          <div class="reply-body" ref='replyScroll' @scroll="scrollLoadReply">
             <div class="reply-container reply-first clearfix">
               <div class="reply-img fl">
                 <img :src="$Tool.headerImgFilter(replyobj.imageurl)">
@@ -428,9 +428,9 @@
         //显影分享
         ifShare:false,
         //评论加载分页
-        pageNum1:1,
+        pageNumComment:1,
         //回复加载分页
-        pageNum2:1,
+        pageNumReply:1,
         audioSrc:[],
         index:0,
         articleImg:[],
@@ -858,7 +858,7 @@
             let resArticleComment = articleCommentService.articleComment(this.id,this.popList.desc,userId,this.article.author,1);
             if(resArticleComment && resArticleComment.status == "success") {
               this.lock = false;
-              this.pageNum1 = 1;
+              this.pageNumComment = 1;
               this.loadComment();
               setTimeout(()=>{
                 this.$vux.toast.show({
@@ -903,8 +903,9 @@
 
               // 给评论人发送消息
               messageService.sendMessage(this.replyUserId,'reply',this.replyCommentId,2);
+              this.pageNumReply = 1;
               this.loadReply();
-              $(".reply-wrap").animate({scrollTop:0},100);
+              $(this.$refs.replyScroll).animate({scrollTop:0},100);
             }else{
               this.$vux.alert.show({
                 content:'评论失败，请重试'
@@ -1231,8 +1232,8 @@
       loadComment(){
         // 获取文章一级评论列表
         this.ifLoadMore = true;
-        let resArticleCommentList = articleCommentService.getArticleCommentPage(this.id, this.pageNum1, 10);
-        if(this.pageNum1 == 1) {
+        let resArticleCommentList = articleCommentService.getArticleCommentPage(this.id, this.pageNumComment, 10);
+        if(this.pageNumComment == 1) {
           this.commentList = [];
         }
         if(resArticleCommentList && resArticleCommentList.status == "success") {
@@ -1276,7 +1277,7 @@
             this.proFail2 = false;
             this.loadText = "已加载全部";
           } else {
-            this.pageNum1 ++;
+            this.pageNumComment ++;
           }
         } else {
           this.proFail2 = true;
@@ -1286,9 +1287,10 @@
       // 加载回复
       loadReply() {
         // 获取文章评论回复列表
-        let resReplyList = articleCommentService.getReplyList(this.replyCommentId,1,10)
+        let resReplyList = articleCommentService.getReplyList(this.replyCommentId,this.pageNumReply,10)
+        this.pageNumReply === 1 && (this.replyList = [])
         if (resReplyList && resReplyList.status == "success") {
-          this.replyList = resReplyList.recordPage.list;
+          this.replyList = this.replyList.concat(resReplyList.recordPage.list);
           //获取回复人信息
           for (var i = 0,len = this.replyList.length; i < len; i++) {
             let resUserInfo = userService.getUserById(this.replyList[i].douserid);
@@ -1298,8 +1300,8 @@
             }
           }
         }
-
-        if(resReplyList.recordPage.list.length <= 0){
+        this.pageNumReply ++;
+        if(this.replyList.length <= 0){
           this.noReply = true;
           this.hasReply = false;
           this.noComment = true;
@@ -1314,8 +1316,14 @@
       // 页面加载后渲染函数
       loadScroll(e){
         this.scrollTop = $(e.target).scrollTop();
-        if (!this.lock && ($(".detail").scrollTop() + $(".detail").height()) > $(".detail")[0].scrollHeight-10) {
+        if (!this.lock && ($(".detail").scrollTop() + $(".detail").innerHeight()) > $(".detail")[0].scrollHeight-10) {
           this.loadComment();
+        }
+      },
+      scrollLoadReply(){
+        let $element = $(this.$refs.replyScroll)
+        if (($element.scrollTop() + $element.innerHeight()) > $element[0].scrollHeight-10) {
+          this.loadReply();
         }
       },
       textShow(){
@@ -1361,7 +1369,8 @@
         this.ifLoad = true;
         $(".detail").scrollTop(0)
         setTimeout(()=>{
-          this.pageNum1 = 1;
+          this.pageNumComment = 1;
+          this.pageNumReply = 1
           this.init();
           // this.ifLoad = false;
         },delay)
@@ -1849,7 +1858,7 @@
     background: @statusBarBg;
   }
   .reply-wrap{
-    height: 100vh;
+    height: calc(100vh - 50px);
     border-radius: .3rem .3rem 0 0;
     background-color: #fff;
     .reply-header{
@@ -1874,8 +1883,8 @@
     }
     .reply-body{
       width: 100%;
-      height: calc(100vh - 1.3rem);
-      // overflow-y: auto;
+      height: calc(100vh - 1.4rem);
+      overflow-y: auto;
       // overflow: auto;
       // padding: .32rem .3rem;
       padding: .32rem .3rem 1rem .3rem;
