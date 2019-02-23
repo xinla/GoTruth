@@ -1316,13 +1316,14 @@
       // 页面加载后渲染函数
       loadScroll(e){
         this.scrollTop = $(e.target).scrollTop();
-        if (!this.lock && ($(".detail").scrollTop() + $(".detail").innerHeight()) > $(".detail")[0].scrollHeight-10) {
+        if (!this.lock && ($(".detail").scrollTop() + $(".detail").innerHeight()) > $(".detail")[0].scrollHeight - 10) {
           this.loadComment();
         }
       },
+      // 滚动加载评论的回复列表
       scrollLoadReply(){
         let $element = $(this.$refs.replyScroll)
-        if (($element.scrollTop() + $element.innerHeight()) > $element[0].scrollHeight-10) {
+        if (($element.scrollTop() + $element.innerHeight()) > $element[0].scrollHeight - 10) {
           this.loadReply();
         }
       },

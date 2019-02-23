@@ -235,7 +235,7 @@ export default{
 		},
 	},
 	beforeRouteEnter (to, from, next) {
-	    console.log(to)
+	    // console.log(to)
         if (!localStorage.id) {
             GoTruth.$Tool.loginGoBack({
                 returnpage:"/topBase/feedback",

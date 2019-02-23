@@ -107,7 +107,7 @@
                     { id: 2, desc: '历史', class: 'icon-history', path: '/personBase/history', query: 6 },
                 ]),
                 menuArr: Object.freeze([
-                    { id: 1, desc: '我的关注', class: 'icon-zuji', path: '/personBase/focus' ,current:5},
+                    { id: 1, desc: '我的关注', class: 'icon-zuji', path: '/personBase/focus' ,current:4},
                     { id: 2, desc: '爱心邀请', class: 'icon-love-k', path: '/topBase/invite' },
                     { id: 3, desc: '爱心榜单', class: 'icon-paihangbang', path: '/topBase/level' },
                     { id: 4, desc: '意见反馈', class: 'icon-dfabu', path: '/topBase/feedback' },
