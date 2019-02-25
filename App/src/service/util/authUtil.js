@@ -219,5 +219,18 @@ authUtil.loginByXl = function(call){
 	
 }
 
+// 注销授权登录
+authUtil.logoutAll = function () {
+	for (var i in auths) {
+    logout(auths[i]);
+  }
+}
 
+function logout(auth) {
+	auth.logout(function () {
+		// console.log("注销\""+auth.description+"\"成功")
+	}, function (e) {
+		plus.nativeUI.alert("注销\""+auth.description+"\"失败："+e.message);
+	})
+}
 export default authUtil

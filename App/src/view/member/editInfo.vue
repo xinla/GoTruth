@@ -73,8 +73,8 @@
       <span class="editInfo-setup-tip">社交平台账号绑定</span>
       <group>
         <x-switch title="微信" :prevent-default="true" v-model="isWechat" :disabled="isWechat" @on-click="authLogin('wechat')"></x-switch>
+        <x-switch title="腾讯QQ" :prevent-default="true" v-model="isQQ" :disabled="isQQ" @on-click="authLogin('qq')"></x-switch>
         <x-switch title="新浪微博" :prevent-default="true" v-model="isSina" :disabled="isSina" @on-click="authLogin('sina')"></x-switch>
-        <!-- <x-switch title="腾讯QQ" :prevent-default="true" v-model="isQQ" :disabled="isQQ" @on-click="authLogin('qq')"></x-switch> -->
       </group>
     </div>
     <!-- 用户名弹框 -->

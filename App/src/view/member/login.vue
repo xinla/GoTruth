@@ -51,7 +51,7 @@
       <div class="login-line">一键登录</div>
       <div class="login-way">
         <ul class="login-way-list">
-          <!--<li class="login-icon-item" @click="authLogin(2)"><i class="iconfont icon-qq"></i></li>-->
+          <li class="login-icon-item" @click="authLogin(2)"><i class="iconfont icon-qq"></i></li>
           <li class="login-icon-item" @click="authLogin(1)"><i class="iconfont icon-weixin1"></i></li>
           <li class="login-icon-item" @click="authLogin(3)"><i class="iconfont icon-weibo"></i></li>
         </ul>

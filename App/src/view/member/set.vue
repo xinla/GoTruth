@@ -102,6 +102,7 @@
 
 <script>
 import userService from '@/service/userService'
+import authUtil from '@/service/util/authUtil'
 import versionService from "@/service/versionService"
 import { XSwitch,} from 'vux'
 export default{
@@ -136,6 +137,7 @@ export default{
 			}
 		});
 		try{
+			authUtil.init();
 			plus.cache.calculate((size) => {
 			    this.cacheSize = parseFloat(size / (1024 * 1024)).toFixed(2);
 			});
@@ -163,6 +165,8 @@ export default{
 					this.notlogin = true;
 					this.logined = false;
 					this.setupShow= false;
+					// 注销第三方授权登录
+					authUtil.logoutAll();
 					setTimeout(()=>{
 						this.$vux.alert.hide();
 					},1000)
@@ -175,6 +179,7 @@ export default{
 	                    cancelText:"以后再说",
 						onConfirm(){
 							_this.$store.dispatch("userLogout")
+							location.reload();
 						}
 					})
 				}				
