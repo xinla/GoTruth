@@ -227,10 +227,11 @@ authUtil.logoutAll = function () {
 }
 
 function logout(auth) {
-	auth.logout(function () {
+	auth.logout()
+	/*auth.logout(function () {
 		// console.log("注销\""+auth.description+"\"成功")
 	}, function (e) {
 		plus.nativeUI.alert("注销\""+auth.description+"\"失败："+e.message);
-	})
+	})*/
 }
 export default authUtil
