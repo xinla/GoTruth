@@ -28,7 +28,7 @@
                             </div>
                             <div class="level-desc">
                                 <h5>{{userList.username}}</h5>
-                                <span>爱心值：{{userList.integration + 3}}</span>
+                                <span>爱心值：{{userList.integration}}</span>
                             </div>
                         </div>
                     </td>
@@ -90,7 +90,6 @@
                 levelDesc:'',
                 userList:{},
                 userId:localStorage.id,
-                // fileRoot:config.fileRoot+'/',     //可删除
             }
         },
         activated(){
@@ -101,45 +100,45 @@
         watch:{
         },
         methods:{
-            init(){
-                //获取排行信息
-                userService.getUserPh((data)=>{
-                    if(data && data.status == "success") {
-                      console.log(data)
-                        this.record = data.recordList;
-                        this.$set(this.record[0],'levelImg',require('@/assets/images/no-1.png'));
-                        this.$set(this.record[1],'levelImg',require('@/assets/images/no-2.png'));
-                        this.$set(this.record[2],'levelImg',require('@/assets/images/no-3.png'));
-                        this.$set(this.record[0],'levelDesc','爱心天使');
-                        this.$set(this.record[1],'levelDesc','爱心楷模');
-                        this.$set(this.record[2],'levelDesc','爱心达人');
-                        for(let i = 3,len = this.record.length; i < len; i++){
-                            this.$set(this.record[i],'levelDesc','爱心人士');
-                        }
-                    }
-                });
-                //获取当前用户信息
-                let userData = userService.getUserById(this.userId);
-                let record = userData.result.user;
-                this.userList = record;
-                userService.getUserPhByUserid(this.userId,(data)=>{
-                    if(data && data.status == 'success'){
-                        this.mySelf.userPh = data.ph;
-                        if(this.mySelf.userPh == 1){
-                            this.mySelf.userCh = '爱心天使';
-                            this.mySelf.userTp = require('@/assets/images/no-1.png');
-                        }else if(this.mySelf.userPh == 2){
-                            this.mySelf.userCh = '爱心楷模';
-                            this.mySelf.userTp = require('@/assets/images/no-2.png');
-                        }else if(this.mySelf.userPh == 3) {
-                            this.mySelf.userCh = '爱心达人';
-                            this.mySelf.userTp = require('@/assets/images/no-3.png');
-                        }else{
-                            this.mySelf.userCh = '爱心人士';
-                        }
-                    }
-                })
-            },
+          init(){
+            // 获取用户排行信息
+            let phData = userService.getUserPh();
+            if(phData && phData.status == "success"){
+              this.record = phData.recordList;
+              this.$set(this.record[0],'levelImg',require('@/assets/images/no-1.png'));
+              this.$set(this.record[1],'levelImg',require('@/assets/images/no-2.png'));
+              this.$set(this.record[2],'levelImg',require('@/assets/images/no-3.png'));
+              this.$set(this.record[0],'levelDesc','爱心天使');
+              this.$set(this.record[1],'levelDesc','爱心楷模');
+              this.$set(this.record[2],'levelDesc','爱心达人');
+              for(let i = 3,len = this.record.length; i < len; i++){
+                this.$set(this.record[i],'levelDesc','爱心人士');
+              }
+            }
+
+            // 获取当前用户信息
+            let userData = userService.getUserById(this.userId);
+            if(userData && userData.status == "success"){
+              this.userList = userData.result.user;
+              userService.getUserPhByUserid(this.userId,(data)=>{
+                if(data && data.status == 'success'){
+                  this.mySelf.userPh = data.ph;
+                  if(this.mySelf.userPh == 1){
+                    this.mySelf.userCh = '爱心天使';
+                    this.mySelf.userTp = require('@/assets/images/no-1.png');
+                  }else if(this.mySelf.userPh == 2){
+                    this.mySelf.userCh = '爱心楷模';
+                    this.mySelf.userTp = require('@/assets/images/no-2.png');
+                  }else if(this.mySelf.userPh == 3) {
+                    this.mySelf.userCh = '爱心达人';
+                    this.mySelf.userTp = require('@/assets/images/no-3.png');
+                  }else{
+                    this.mySelf.userCh = '爱心人士';
+                  }
+                }
+              })
+            }
+          }
         },
         beforeRouteEnter (to, from, next) {
             if (!localStorage.id ) {
