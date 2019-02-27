@@ -51,7 +51,7 @@
               <vue-picture-swipe :items="items" :options="{shareEl: false}"></vue-picture-swipe>
 
             </div>
-            <p style="font-size: .24rem; color: #888;">免责声明：直击真相爱心平台，仅为有正能量和社会价值的信息提供其发布与展示，如有侵权，请及时联系我们删除，谢谢您的支持！举报热线：18756686768</p>
+            <p style="font-size: .24rem; color: #888;">免责声明：直击真相爱心平台，仅为有正能量和社会价值的信息提供其发布与展示，如有侵权，请及时联系我们删除，谢谢您的支持！举报热线：400-1106768</p>
           </div>
 
           <a :href="article.sourceurl" class="see-text" v-if="sourceShow">查看原文</a>
@@ -290,7 +290,7 @@
       <popup v-model="reportShow" style="z-index: 999;">
         <div class="report-wrap">
           <div class="report-header">
-            <h2>举报(举报热线：18756686768)</h2>
+            <h2>举报(举报热线：400-1106768)</h2>
           </div>
           <group>
             <radio :selected-label-style="{color: '#FF9900'}" fill-mode :options="reportList" v-model="reportreasion">

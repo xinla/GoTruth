@@ -15,7 +15,7 @@
       <popup v-model="ifReport" style="z-index: 999;">
         <div class="report-wrap">
           <div class="report-header">
-            <h2>举报(举报热线：18756686768)</h2>
+            <h2>举报(举报热线：400-1106768)</h2>
           </div>
           <group>
             <radio :selected-label-style="{color: '#FF9900'}" fill-mode :options="reportList" v-model="reportReasion">
