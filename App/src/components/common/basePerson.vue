@@ -101,7 +101,7 @@
           src: '',
           thumbnail: '',
           w: 600,
-          h: 520,
+          h: 580,
         }],
         title:'',
         userPhoto:'',
