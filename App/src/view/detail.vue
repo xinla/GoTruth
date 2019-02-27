@@ -590,7 +590,7 @@
                     src:this.fileRoot + arr[i].url,
                     thumbnail:this.fileRoot + arr[i].url,
                     w: 600,
-                    h: 460,
+                    h: 420,
                   };
                   this.items.push(obj);
                 }

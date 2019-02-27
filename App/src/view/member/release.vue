@@ -348,6 +348,9 @@
           if(data && data.status == "success"){
             setTimeout(()=>{
               this.$Tool.goPage({name:"home"});
+              this.$vux.toast.show({
+                text:'爱心值 +3'
+              });
             },1200);
           }
         }else{
@@ -360,14 +363,19 @@
           if(data && data.status == "success"){
             setTimeout(()=>{
               this.$Tool.goPage({name:"questionAnswer"});
+              this.$vux.toast.show({
+                text:'爱心值 +3',
+              });
             },1200);
           }
         }
         if(data && data.status == "success"){
           this.$vux.loading.hide()
-          this.$vux.alert.show({
-            content:'发布成功',
+          this.$vux.toast.show({
+            text:'发布成功'
           });
+
+
           this.record_file=[];
           this.record.title = "";
           this.record.content = "";
