@@ -389,6 +389,7 @@
     },
     watch:{
       id(){
+        this.proFail1 = false;
         this.ifLoad = true;
         $(".answer-detail").scrollTop(0)
         setTimeout(()=>{

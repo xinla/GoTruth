@@ -1367,6 +1367,7 @@
     watch:{
       id(){
         // debugger
+        this.proFail1 = false;
         this.ifLoad = true;
         $(".detail").scrollTop(0)
         setTimeout(()=>{

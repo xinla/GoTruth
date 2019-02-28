@@ -7,7 +7,7 @@
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
             <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true" :ifTop='item.weight'></multIT>
-            <load-more v-show="!ifNet && arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
+            <load-more v-show="arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
         </div>
     </downRefresh>
 </template>
@@ -111,7 +111,7 @@
                         text:"网络竟然崩潰了",
                         width:"50%",
                     });
-                    this.ifNet = true;
+                    this.ifNet = true; // 似乎没有存在的意义，待定
                     return;
                 }else{
                     this.ifNet = false;
@@ -190,7 +190,23 @@
                             this.tip = "你看到我的底线啦";
                         }
                     }
-                }finally{
+                } catch(err) {
+                    let net = {};
+                    try {
+                        net = netUtil.getNetInfo();
+                    } catch(err) {
+
+                    } finally {
+                        if (net.network === "未连接网络") {
+                            this.$vux.toast.show({
+                                type:"text",
+                                time:800,
+                                text:"网络竟然崩潰了",
+                                width:"50%",
+                            });
+                        } 
+                    }
+                } finally {
                     this.lock = false;
                 }
             },
