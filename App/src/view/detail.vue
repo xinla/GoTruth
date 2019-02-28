@@ -1108,6 +1108,12 @@
        * @return {[type]}      [description]
        */
       handleSendReport(){
+        if (this.article.author == localStorage.id) {
+          this.$vux.alert.show({
+              content:'无法对自己进行操作！',
+            })
+          return
+        }
         if (!this.reportreasion) {return;}
         let reportInfo;
         if (this.reportType === 1) {

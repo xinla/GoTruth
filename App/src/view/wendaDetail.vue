@@ -990,6 +990,12 @@
       },
       // 提交举报内容
       handleSendReport(){
+        if (this.answer.author == localStorage.id) {
+          this.$vux.alert.show({
+              content:'无法对自己进行操作！',
+            })
+          return
+        }
         if(!this.reportreasion){return;}
         let reportInfo;
         if(this.reportType == 1) {

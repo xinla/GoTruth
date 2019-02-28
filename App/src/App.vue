@@ -175,6 +175,12 @@ export default {
     handleReport(){
       if (!this.reportReasion) {return;}
       let article = this.$store.state.reportArticle;
+      if (article.author == localStorage.id) {
+        this.$vux.alert.show({
+            content:'无法对自己进行操作！',
+          })
+        return
+      }
       if(this.reportReasion != '拉黑该用户并屏蔽其内容'){
         let reportInfo = {
           type:1,

@@ -6,7 +6,8 @@
             </div>
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
-            <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true" :ifTop='item.weight'></multIT>
+            <multIT v-for="(item,index) in topList" :article="item" :key="index" :ifRemove="true" ifTop=true></multIT>
+            <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true"></multIT>
             <load-more v-show="arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
         </div>
     </downRefresh>
@@ -79,7 +80,7 @@
                         for (let i = 0; i < same.length; i++) {
                             temp.splice(same[i] - i,1)
                         }
-                        resArticlePage.recordPage.list = this.topList.concat(temp)
+                        // resArticlePage.recordPage.list = this.topList.concat(temp)
                     }else{
                         resArticlePage = articleService.articlePage(this.page,15,this.classify);
                     }

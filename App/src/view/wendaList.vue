@@ -662,7 +662,12 @@
         this.reportShow = true;
       },
       handleSendReport(){
-
+        if (this.wenda.userid == localStorage.id) {
+          this.$vux.alert.show({
+              content:'无法对自己进行操作！',
+            })
+          return
+        }
         if(!this.reportreasion){return;}
         let reportInfo;
         if(this.reportreasion != "拉黑该用户并屏蔽其内容") {
