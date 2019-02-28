@@ -36,12 +36,8 @@ Vue.component('share', () => import('@/components/common/share'))
 import Top from '@/components/common/top'
 Vue.component('Top',Top);
 Vue.component('LoadingMain',() => import('@/components/common/loadingMain'));
-// import LoadingMain from '@/components/common/loadingMain'
-// Vue.component('LoadingMain',LoadingMain);
 //通用空白页提示
 Vue.component('PromptBlank',() => import('@/components/common/promptBlank'));
-// import PromptBlank from '@/components/common/promptBlank'
-// Vue.component('PromptBlank',PromptBlank);
 // 下拉刷新组件
 import downRefresh from '@/components/common/downRefresh'
 Vue.component('downRefresh',downRefresh);

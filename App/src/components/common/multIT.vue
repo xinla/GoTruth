@@ -3,34 +3,41 @@
 		<!-- 非单图模式 -->
 		<!-- 浮动单图片 -->
 		<template v-if="!ifSingle">
-			<img class="float-img a" v-if="3 === article.type && imgList.length == 1" :src="imgList[0]" >
-			<img class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1" :src="fileRoot+ArticleFile[0].url">
+      <div class="float-img" v-if="3 === article.type && imgList.length == 1">
+        <img :src="imgList[0]" width="100%">
+      </div>
+			<div class="float-img" v-else-if="1 === article.type && ArticleFile.length === 1">
+        <img :src="fileRoot+ArticleFile[0].url" width="100%">
+      </div>
+
 		</template>
 		<!-- 单图模式 -->
-		<img class="float-img a" v-else-if="singleImg" :src="singleImg" >
+    <div class="float-img a" v-else-if="singleImg">
+      <img :src="singleImg"  width="100%">
+    </div>
 		<!-- 公共标题 -->
 		<h2 class="article-title">{{article.title}}</h2>
 		<!-- 非单图模式 -->
 		<!-- 二或三图 -->
 		<template v-if="!ifSingle">
 			<div class="multiple-img-wrap" v-if="3 === article.type && imgList.length > 1">
-				<!-- <div class="multiple-img" v-for="(item, index) in imgList">
-					<img :src="item" >
-				</div> -->
-				<img class="multiple-img" :src="item" v-for="(item,index) in imgList">
+	      <div class="multiple-img-container" v-for="(item,index) in imgList">
+          <img class="multiple-img" :src="item" width="100%">
+        </div>
+
 			</div>
 			<div class="multiple-img-wrap" v-else-if="1 === article.type && ArticleFile.length > 1">
-				<img class="multiple-img" :src="item.url && (fileRoot + item.url)" v-for="(item,index) in ArticleFile" v-if="index < 3">
-				<!-- <div class="multiple-img" v-for="(item, index) in ArticleFile" v-if="index < 3">
-					<img :src="fileRoot + item.url" >
-				</div> -->
+        <div class="multiple-img-container" v-for="(item,index) in ArticleFile" v-if="index < 3">
+          <img class="multiple-img" :src="item.url && (fileRoot + item.url)" width="100%">
+        </div>
+
 			</div>
 			<!-- 视频大图 -->
 			<div class="article-video" v-else-if="2 === article.type && ArticleFile.length">
 				<div class="article-play cc">
 					<i class="iconfont icon-bofang1"></i>
 				</div>
-				<img :src="fileRoot + ArticleFile[0].thumbnail">
+				<img :src="fileRoot + ArticleFile[0].thumbnail" width="100%">
 			</div>
 		</template>
 		<!-- 文章评论 -->
@@ -185,32 +192,46 @@ export default {
 			margin-bottom: 0.06rem;
 		}
 		.float-img{
-			display: block;
 			width: 2rem;
 			height: 1.3rem;
 			margin-left: .3rem;
-			object-fit: cover;
 			padding: .02rem;
 			float: right;
+      img{
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 		}
 		.multiple-img-wrap{
 			display: flex;
 			width: 100%;
-			height: 1.6rem;
+			height: 1.65rem;
 			overflow: hidden;
-			img{
-				/* display: block;
+      .multiple-img-container{
+        flex: 1;
+        img{
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: .04rem;
+          object-fit: fill;
+        }
+      }
+	/*		img{
+		!*		 display: block;
 				width: 100%;
-				height: 100%; */
-				width: 0px;
-				padding: .02rem;
+				height: 100%;*!
+				width: 0;
+				padding: .04rem;
 				object-fit: cover;
-			}
+			}*/
 		}
 		.article-video{
 			position: relative;
 			width: 100%;
-			height: 4rem;
+			height: 4.1rem;
 			.article-play{
 				width: .88rem;
 				height: .88rem;
@@ -229,8 +250,7 @@ export default {
 				display: block;
 				width: 100%;
 				height: 100%;
-				padding: .02rem;
-				object-fit: cover;
+				object-fit: fill;
 			}
 		}
 		.article-footer{

@@ -888,28 +888,14 @@
       }
       .desc{
         position: relative;
+        margin-bottom: .15rem;
         .desc-text{
           width: 100%;
           line-height: .48rem;
           font-size: .34rem;
-          /*  overflow: hidden;
-            text-overflow:ellipsis;
-            display:-webkit-box;
-            -webkit-box-orient:vertical;
-            -webkit-line-clamp:1;*/
           letter-spacing: .02rem;
           color: #707070;
         }
-        /*.open{
-          position: absolute;
-          top: .08rem;
-          right: 0;
-          font-size: .34rem;
-          color: #406599;
-          .iconfont{
-            font-size: .28rem;
-          }
-          }*/
       }
       .wendaList-img{
         width: 100%;
