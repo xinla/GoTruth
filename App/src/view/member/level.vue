@@ -38,7 +38,7 @@
             </table>
         </div>
 
-        <div class="level-list">
+        <div class="level-list level-other" ref="wrapper">
             <table class="level-tab">
                 <thead>
                 <tr>
@@ -74,8 +74,8 @@
     </div>
 </template>
 <script>
-    import config from '@/lib/config/config'
     import userService from '@/service/userService'
+    import BScroll from 'better-scroll'
     export default{
         data(){
             return {
@@ -97,6 +97,9 @@
                 this.init();
             },delay)
         },
+      mounted(){
+        this.scroll = new BScroll(this.$refs.wrapper);
+      },
         watch:{
         },
         methods:{
@@ -159,6 +162,7 @@
         height: calc(100vh - .87rem);
         overflow: hidden;
         overflow-y: auto;
+      position: relative;
         // background-color: #fff;
         .level-header{
             width: 100%;
@@ -329,6 +333,18 @@
                     }
                 }
             }
+        }
+        .level-mine{
+          position: relative;
+          overflow: hidden;
+        }
+        .level-other{
+          position: absolute;
+          overflow: hidden;
+          top: 4rem;
+          bottom: 0;
+          right: 0;
+          left: 0;
         }
     }
 
