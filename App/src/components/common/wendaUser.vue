@@ -12,7 +12,7 @@
                     <span class="username">{{userName}}</span>
                 </div>
                 <div class="right fr">
-                    <router-link :to="{path:'/personBase/publishedQA',query:{current:2}}">
+                    <router-link :to="{path:'/personBase/publishedQA',query:{userId,current:2}}">
                         我的问答
                         <i class="iconfont icon-arrow-right"></i>
                     </router-link>
