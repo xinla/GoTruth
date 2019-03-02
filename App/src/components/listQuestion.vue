@@ -152,7 +152,7 @@
               this.page++;
             }else{
               this.ifLoading = false;
-              this.tip = "你已经看到我的底线啦"
+              this.tip = "已加载全部"
             }
           }
         } catch(err) {

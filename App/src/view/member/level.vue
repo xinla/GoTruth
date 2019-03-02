@@ -14,7 +14,7 @@
         <div class="level-mine level-list" style="margin-top: 0; padding-bottom: 0;">
             <table class="level-tab">
                 <tbody>
-                <tr>
+                <tr @click="goPerson(userList.id)">
                     <td>
                         <div class="level-num-img">
                             <span class="level-num" v-if="mySelf.userPh > 3">{{mySelf.userPh}}</span>
@@ -48,7 +48,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item, index) in record" :key="item.id">
+                <tr v-for="(item, index) in record" :key="item.id" @click="goPerson(item.id)">
                     <td>
                         <div class="level-num-img">
                             <span class="level-num" v-if="index > 2">{{index + 1}}</span>
@@ -141,6 +141,9 @@
                 }
               })
             }
+          },
+          goPerson(userId){
+            this.$Tool.goPage({name:'publishedArticle',query:{userId,}})
           }
         },
         beforeRouteEnter (to, from, next) {

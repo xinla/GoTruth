@@ -806,15 +806,23 @@
           font-size: .32rem;
         }
         .editInfo-img {
+          position: relative;
           width: .7rem;
           height: .7rem;
-          border-radius: 50%;
-          border: .02rem solid @borderColor;
+          line-height: .7rem;
           margin-top: .1rem;
+          border-radius: 50%;
           margin-right: .1rem;
           img{
-            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: .02rem solid @borderColor;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
+            object-fit: fill;
           }
         }
         .editInfo-desc{

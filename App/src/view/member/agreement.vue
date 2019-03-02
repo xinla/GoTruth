@@ -1,5 +1,5 @@
 <template>
-  <div class="agrenment" ref="wrap">
+  <div class="agrenment" ref="wrapper">
     <div>
       <h3 class="agrenment-title">直击真相用户协议</h3>
       <div class="agrenment-content">
@@ -150,7 +150,7 @@
   import BScroll from 'better-scroll'
   export default {
     mounted(){
-      this.scroll = new BScroll(this.$refs.wrap);
+      this.scroll = new BScroll(this.$refs.wrapper);
     }
   }
 </script>
