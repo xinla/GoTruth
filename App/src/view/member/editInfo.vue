@@ -383,6 +383,7 @@
         this.user.qq_unionid && (this.isQQ = true)
         // 判断绑定sina
         this.user.xl_openid && (this.isSina = true)
+        // console.log(this.user)
       },
       onBrowserBack(){
         if(this.popList.show || this.showSex || this.showMobile || this.showCode || this.ifCropper){
@@ -675,13 +676,19 @@
             text: '修改成功'
           });
         }
-        callback (data);
+        callback(data);
       },
       // 授权绑定第三方账号
       authLogin(type){
         const _this = this;
         switch (type){
           case "wechat":
+          if (this.isWechat) {
+            this.$vux.alert.show({
+              content:'已经成功绑定！',
+            })
+            return
+          }
           authUtil.loginByWx(function(resMap){
             if(resMap.status === "success"){
               let params = resMap.result.wx_user;
@@ -697,11 +704,17 @@
               _this.user.wx_image = params.wx_image;
               _this.user.wx_unionid = params.wx_unionid;
               userService.updateUser(_this.user);
-              _this.isWechat = true;
+              params.wx_unionid && (_this.isWechat = true);
             }
           })
           break;
           case "qq":
+          if (this.isQQ) {
+            this.$vux.alert.show({
+              content:'已经成功绑定！',
+            })
+            return
+          }
           authUtil.loginByQQ(function(resMap){
             if(resMap.status === "success"){
               let params = resMap.result.qq_user;
@@ -716,11 +729,17 @@
               _this.user.qq_image = params.qq_image;
               _this.user.qq_unionid = params.qq_unionid;
               userService.updateUser(_this.user);
-              _this.isQQ = true;
+              params.qq_unionid && (_this.isQQ = true);
             }
           })
           break;
           case "sina":
+          if (this.isSina) {
+            this.$vux.alert.show({
+              content:'已经成功绑定！',
+            })
+            return
+          }
           authUtil.loginByXl(function(resMap){
             if(resMap.status === "success"){
               let params = resMap.result.xl_user;
@@ -729,12 +748,14 @@
               _this.user.xl_nikname = params.xl_nikname;
               _this.user.xl_image = params.xl_image;
               userService.updateUser(_this.user);
-              _this.isSina = true;
+              params.xl_openid && (_this.isSina = true);
             }
           })
           break;
           default:
-          console.log("授权出错")
+          this.$vux.alert.show({
+            content:'无效操作！',
+          })
         }
       }
     },

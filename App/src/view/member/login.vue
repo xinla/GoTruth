@@ -282,6 +282,7 @@
           case 1://微信登录
             authUtil.loginByWx(function(resMap){
               if(resMap.status === "success"){
+                _this.$vux.loading.show({text: '登录中...',})
                 let params = resMap.result.wx_user;
                 /*{
                                 "sex":"男",
@@ -298,18 +299,23 @@
           case 2://QQ登录
             authUtil.loginByQQ(function(resMap){
               if(resMap.status === "success"){
+                _this.$vux.loading.show({text: '登录中...',})
                 let params = resMap.result.qq_user;
                 userService.loginByQQ(params,_this.userInfoStore)
+              } else {
+                _this.$vux.alert.show({
+                  content: '登录授权失败'
+                })
               }
               // console.log("resMap.result" + JSON.stringify(resMap.result));
               /*{
-                            "qq_user":{
-                                "qq_openid":"F6DC81D7DEA4AA7AC94A2C6E57F96C09",
-                                "qq_nikname":"被博士",
-                                "qq_image":"http://qzapp.qlogo.cn/qzapp/1104455702/F6DC81D7DEA4AA7AC94A2C6E57F96C09/30",
-                                "sex":"男"
-                            }
-                        }*/
+                  "qq_user":{
+                      "qq_openid":"F6DC81D7DEA4AA7AC94A2C6E57F96C09",
+                      "qq_nikname":"被博士",
+                      "qq_image":"http://qzapp.qlogo.cn/qzapp/1104455702/F6DC81D7DEA4AA7AC94A2C6E57F96C09/30",
+                      "sex":"男"
+                  }
+              }*/
 
             })
             break;
@@ -318,6 +324,7 @@
               // console.log(JSON.stringify(resMap.result));
               // {"xl_user":{"sex":"男","xl_nikname":"用户6311798622","xl_image":"http://tvax3.sinaimg.cn/default/images/default_avatar_male_50.gif"}}
               if(resMap.status === "success"){
+                _this.$vux.loading.show({text: '登录中...',})
                 let params = resMap.result.xl_user;
                 userService.loginByXl(params,_this.userInfoStore)
               }
