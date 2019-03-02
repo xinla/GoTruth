@@ -46,7 +46,7 @@
 				<span class="stick" v-if="ifTop">置顶</span>
 				<!--<span class="stick" v-if="hotShow === 8 || hotShow ===9">热</span>-->
 				<span class="publisher oe">{{publisher}}</span>
-				<span>{{commentNum}}评论</span>
+				<!--<span>{{commentNum}}评论</span>-->
 				<span class="publish-time">{{publishtime}}</span>
 			<!-- <div class="fl">
 			</div> -->
