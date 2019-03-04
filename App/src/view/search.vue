@@ -5,8 +5,8 @@
 			<i class="iconfont icon-left fl" @click="this.$Tool.goBack"></i>
 			<div class="search-input fl clearfix">
 				<i class="iconfont icon-search fl"></i>
-				<input type="search" class="fl" v-model.trim="keywords"  ref="searchInput" maxlength="25"  @keyup="getMatchkeywords" placeholder="请输入关键词">
-				<i class="iconfont icon-close-circle fr" @click="reset()"></i>
+				<input type="text" class="fl" v-model.trim="keywords"  ref="searchInput" maxlength="25"  @keyup="getMatchkeywords" placeholder="请输入关键词">
+				<i class="iconfont icon-close-circle fr" @click="reset()" v-show="removeShow"></i>
 			</div>
 			<div class="search-btn fr" @click="search">搜索</div>
 		</div>
@@ -83,6 +83,7 @@ export default {
 			resultTip:"",
 			// historyNum:4,
 			ifDeleteAll:false,
+      removeShow:false
 		}
 	},
 	mounted(){
@@ -192,8 +193,10 @@ export default {
 				this.ifMatch = false;
 				this.searchResult = [];
 				this.resultTip = '';
+				this.removeShow = false;
 				return;
 			}
+			this.removeShow = true;
 		},
 		historyKeywords(val){
 			let temp = JSON.stringify(val);
