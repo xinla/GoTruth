@@ -208,7 +208,7 @@ export default {
 		.multiple-img-wrap{
 			display: flex;
 			width: 100%;
-			height: 1.65rem;
+			height: 1.58rem;
 			overflow: hidden;
       .multiple-img-container{
         flex: 1;
@@ -216,8 +216,8 @@ export default {
           display: block;
           width: 100%;
           height: 100%;
-          padding: .04rem;
-          object-fit: fill;
+          padding: .02rem;
+          object-fit: cover;
         }
       }
 	/*		img{
@@ -232,7 +232,7 @@ export default {
 		.article-video{
 			position: relative;
 			width: 100%;
-			height: 4.1rem;
+			height: 4rem;
 			.article-play{
 				width: .88rem;
 				height: .88rem;
