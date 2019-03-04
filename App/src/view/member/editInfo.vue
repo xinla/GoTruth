@@ -271,45 +271,13 @@
       },delay)
     },
     mounted() {
-      window.history.pushState(null, null, document.URL);
-      window.addEventListener('popstate', this.onBrowserBack, false);
       try{
         authUtil.init();
       }catch(err){
         
       }
     },
-    destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack, false);
-    },
-    watch:{
-      "popList.show":{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      showSex:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      ifCropper:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-    },
     methods: {
-
       init(){
         if (!localStorage.id) {return;}
         let data = userService.getCurentUser();
@@ -388,17 +356,6 @@
         this.user.xl_openid && (this.isSina = true)
         // console.log(this.user)
       },
-      onBrowserBack(){
-        if(this.popList.show || this.showSex || this.showMobile || this.showCode || this.ifCropper){
-          this.popList.show = false;
-          this.showSex = false;
-          this.showMobile = false;
-          this.showCode = false;
-          this.ifCropper = false;
-        }
-      },
-
-
       //上传头像
       commitUpload(){
         this.$vux.loading.show({
@@ -796,7 +753,19 @@
       }else{
         next();
       }
-    }
+    },
+    beforeRouteLeave(to, from , next){
+      if(this.popList.show == true || this.showSex == true || this.showMobile == true || this.showCode == true || this.ifCropper == true){
+        this.popList.show = false;
+        this.showSex = false;
+        this.showMobile = false;
+        this.showCode = false;
+        this.ifCropper = false;
+        next(false);
+      } else{
+        next()
+      }
+    },
   }
 
 </script>

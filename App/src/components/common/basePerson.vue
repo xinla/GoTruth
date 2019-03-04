@@ -93,7 +93,6 @@
         current:0,
         currentSub:0,
         currentName:"全部",
-        showGallary:false,
         focusState:false,
         btnState:false,
         blackState:false,
@@ -227,14 +226,6 @@
       }
     },
     watch:{
-      showGallary:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
       userId(){
         this.init();
       },

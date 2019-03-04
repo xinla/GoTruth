@@ -313,13 +313,7 @@
         },120);
       });
     },
-    mounted() {
-      window.history.pushState(null, null, document.URL);
-      window.addEventListener('popstate', this.onBrowserBack);
-    },
-    destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack);
-    },
+
     methods:{
       //页面初始化渲染
       init() {
@@ -453,17 +447,6 @@
           }
         });
         this.ifLoad = false;
-      },
-      onBrowserBack(){
-        if(this.shareShow || this.answerObj.show || this.showGallary || this.reportShow){
-          this.shareShow = false;
-          this.answerObj.show = false;
-          this.showGallary = false;
-          this.reportShow = false;
-          if(this.showGallary){
-            this.answerObj.show = true;
-          }
-        }
       },
       handlePreview(){
         this.showGallary = true;
@@ -794,46 +777,26 @@
       },
 
     },
-    watch:{
-      shareShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      showGallary:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      reportShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      'answerObj.show':{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      }
-    },
     computed:{
       isBlacklist(){
         return function (item) {
           return this.$store.state.blacklist.includes(item);
         }
       },
+    },
+    beforeRouteLeave(to, from , next){
+      if(this.shareShow == true || this.answerObj.show == true || this.reportShow == true){
+        this.shareShow = false;
+        this.answerObj.show = false;
+        this.reportShow = false;
+        if(this.showGallary == true){
+          this.showGallary = false;
+          this.answerObj.show = true;
+        }
+        next(false);
+      } else{
+        next()
+      }
     },
 
   }

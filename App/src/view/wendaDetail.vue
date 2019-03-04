@@ -380,15 +380,6 @@
       }
 
     },
-    mounted() {
-      if(window.history && window.history.pushState){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', this.onBrowserBack, false);
-      }
-    },
-    destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack, false);
-    },
     watch:{
       id(){
         this.proFail1 = false;
@@ -400,47 +391,7 @@
           this.init();
           // this.ifLoad = false;
         },delay)
-      },
-      'answerPopObj.show':{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      shareShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      replyShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      popMask:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      reportShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
+      }
     },
     computed:{
       // 判断是否黑名单
@@ -557,15 +508,7 @@
         this.loadComment();
         this.ifLoad = false;
       },
-      onBrowserBack(){
-        if(this.answerPopObj.show || this.shareShow || this.replyShow || this.popMask || this.reportShow){
-          this.answerPopObj.show = false;
-          this.shareShow = false;
-          this.replyShow = false;
-          this.popMask = false;
-          this.reportShow = false;
-        }
-      },
+
       /*关注  | 取消关注   type: 1-回答发布人 || 2-回答评论人*/
       handleAnswerFocus(userid, type){
         if(!localStorage.id) {
@@ -1219,6 +1162,18 @@
           this.loadReply();
         }
       },
+    },
+    beforeRouteLeave(to, from, next) {
+      if(this.answerPopObj.show == true || this.shareShow == true || this.replyShow == true || this.popMask == true || this.reportShow == true){
+        this.answerPopObj.show = false;
+        this.shareShow = false;
+        this.replyShow = false;
+        this.popMask = false;
+        this.reportShow = false;
+        next(false);
+      }else{
+        next();
+      }
     }
   }
 </script>

@@ -500,14 +500,8 @@
         this.ifLike = false;
         this.likeStatus = false;
       }
-      if(window.history && window.history.pushState){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', this.onBrowserBack, false);
-      }
     },
-    destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack, false);
-    },
+
     methods:{
       init(){
         if (!this.id) {
@@ -667,18 +661,6 @@
         }
         this.ifLoad = false;
       },
-      onBrowserBack(){
-        if(this.popList.show || this.reportShow || this.popMask || this.shareShow || this.replyShow){
-          this.popList.show = false;
-          this.reportShow = false;
-          this.popMask = false;
-          this.shareShow = false;
-          this.replyShow = false;
-        }
-      },
-
-
-
       handleToggle(){
         this.isActive = !this.isActive;
         if(this.isActive){
@@ -1371,9 +1353,20 @@
         }
       }
     },
+    beforeRouteLeave(to, from , next){
+      if(this.popList.show == true || this.reportShow == true || this.popMask == true || this.shareShow == true || this.replyShow == true){
+        this.popList.show =false;
+        this.reportShow = false;
+        this.popMask = false;
+        this.shareShow =false;
+        this.replyShow = false;
+        next(false);
+      } else{
+        next()
+      }
+    },
     watch:{
       id(){
-        // debugger
         this.proFail1 = false;
         this.ifLoad = true;
         $(".detail").scrollTop(0)
@@ -1385,48 +1378,7 @@
         },delay)
         //注：延迟时长必须在动画大于切换动画（300）
       },
-      'popList.show':{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      reportShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      popMask:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      shareShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-      reportShow:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
       $route(to,from) {
-        // debugger
         if (to.query.id) {
           this.id = to.query.id;
           $(".detail").scrollTop(this.scrollTop)

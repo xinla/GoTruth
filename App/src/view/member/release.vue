@@ -149,23 +149,8 @@
       }
 
     },
-    mounted(){
-      window.history.pushState(null, null, document.URL);
-      window.addEventListener('popstate', this.onBrowserBack, false);
-    },
-    destroyed(){
-      window.removeEventListener("popstate", this.onBrowserBack, false);
-    },
-    watch:{
-      showGallary:{
-        handler(newVal, oldVal) {
-          if(newVal.Terms == true) {
-            window.history.pushState(null, null, document.URL);
-          }
-        },
-        deep: true
-      },
-    },
+
+
     methods:{
       handlePreview(){
         this.showGallary = true;
@@ -173,7 +158,7 @@
       handleGallaryClose(){
         this.showGallary = false;
       },
-      onBrowserBack(){
+      /*onBrowserBack(){
         if(this.record.title || this.record.content || this.record_file || this.defaultType || this.showGallary){
           this.record.title = "";
           this.record.content = "";
@@ -182,7 +167,7 @@
           this.record.classify = 0;
           this.showGallary = false;
         }
-      },
+      },*/
       handleType(){
         this.optionShow = !this.optionShow;
       },
@@ -414,7 +399,16 @@
         next();
 
       }
-    }
+    },
+    beforeRouteLeave(to, from , next){
+      if(this.showGallary == true || this.optionShow == true){
+        this.showGallary=false;
+        this.optionShow = false;
+        next(false);
+      } else{
+        next()
+      }
+    },
   }
 </script>
 
