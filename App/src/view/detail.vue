@@ -1513,15 +1513,13 @@
           }
         }
         .focus{
-          width: 1.16rem;
-          height: .56rem;
-          line-height: .56rem;
+          padding: .1rem .2rem;
           margin-top: .1rem;
+          vertical-align: middle;
           text-align: center;
           color: #fff;
           border-radius: .1rem;
           background-color: @mainColor;
-          border: .02rem solid transparent;
         }
         .btnActive{
           background-color: #fafafa;
