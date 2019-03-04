@@ -290,20 +290,20 @@
     .member-msg-header{
       display: flex;
       overflow: hidden;
-/*      .member-msg-image{
-        width: 1.4rem;
-        height: 1.4rem;
-        border-radius: 50%;
-        overflow: hidden;
-        // margin-right: .6rem;
-        img {
-          display: block;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          border: .04rem solid @borderColor;
-        }
-      }*/
+      /*      .member-msg-image{
+              width: 1.4rem;
+              height: 1.4rem;
+              border-radius: 50%;
+              overflow: hidden;
+              // margin-right: .6rem;
+              img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                border: .04rem solid @borderColor;
+              }
+            }*/
       .member-msg-modal {
         position: absolute;
         right: .4rem;
@@ -318,7 +318,6 @@
             span{
               display: block;
               margin-bottom: .1rem;
-
             }
           }
         }
@@ -387,7 +386,6 @@
         color: @mainColor;
         border-bottom: .04rem solid @mainColor;
       }
-
     }
   }
   .router-view{
@@ -404,6 +402,7 @@
       width: 1.6rem !important;
       height: 1.6rem !important;
       border-radius: 50% !important;
+      object-fit: cover !important;
       border: .04rem solid @borderColor !important;
     }
   }
