@@ -47,7 +47,7 @@
                 <router-link class="member-switch-item active" v-for="(item, index) in switchListPrivate" tag="li" :to="{path:item.path,}" :key="index" >{{item.desc}}
                 </router-link> -->
       </ul>
-      <tab :line-width="2" v-model="current" v-show="loginUserId == userId" key='1'>
+      <tab :line-width="2" v-model="current" active-color='#faaf0c' v-show="loginUserId == userId" key='1'>
         <tab-item v-for="(item, index) in switchListPublic" :key="item.id">
           <router-link class="block" :to="{path:item.path,query:{userId}}" replace>
             {{item.desc}}
@@ -59,7 +59,7 @@
           </router-link>
         </tab-item>
       </tab>
-      <tab v-show="loginUserId != userId" :line-width="2" v-model="currentSub" key='2'>
+      <tab v-show="loginUserId != userId" :line-width="2" active-color='#faaf0c'  v-model="currentSub" key='2'>
         <tab-item v-for="(item, index) in switchListPublic" :key="item.id+10">
           <router-link class="block" :to="{path:item.path,query:{userId}}" replace>
             {{item.desc}}
@@ -93,6 +93,7 @@
         current:0,
         currentSub:0,
         currentName:"全部",
+        showGallary:false,
         focusState:false,
         btnState:false,
         blackState:false,
@@ -226,6 +227,14 @@
       }
     },
     watch:{
+      showGallary:{
+        handler(newVal, oldVal) {
+          if(newVal.Terms == true) {
+            window.history.pushState(null, null, document.URL);
+          }
+        },
+        deep: true
+      },
       userId(){
         this.init();
       },
@@ -281,20 +290,20 @@
     .member-msg-header{
       display: flex;
       overflow: hidden;
-      /*      .member-msg-image{
-              width: 1.4rem;
-              height: 1.4rem;
-              border-radius: 50%;
-              overflow: hidden;
-              // margin-right: .6rem;
-              img {
-                display: block;
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                border: .04rem solid @borderColor;
-              }
-            }*/
+/*      .member-msg-image{
+        width: 1.4rem;
+        height: 1.4rem;
+        border-radius: 50%;
+        overflow: hidden;
+        // margin-right: .6rem;
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: .04rem solid @borderColor;
+        }
+      }*/
       .member-msg-modal {
         position: absolute;
         right: .4rem;
@@ -309,6 +318,7 @@
             span{
               display: block;
               margin-bottom: .1rem;
+
             }
           }
         }
@@ -377,6 +387,7 @@
         color: @mainColor;
         border-bottom: .04rem solid @mainColor;
       }
+
     }
   }
   .router-view{
@@ -393,7 +404,6 @@
       width: 1.6rem !important;
       height: 1.6rem !important;
       border-radius: 50% !important;
-      object-fit: cover !important;
       border: .04rem solid @borderColor !important;
     }
   }
