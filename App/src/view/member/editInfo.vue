@@ -76,6 +76,9 @@
         <x-switch title="腾讯QQ" :prevent-default="true" v-model="isQQ" :disabled="isQQ" @on-click="authLogin('qq')"></x-switch>
         <x-switch title="新浪微博" :prevent-default="true" v-model="isSina" :disabled="isSina" @on-click="authLogin('sina')"></x-switch>
       </group>
+      <!-- <div ref="test" style="word-wrap: break-word;word-break:break-all; ">
+        
+      </div> -->
     </div>
     <!-- 用户名弹框 -->
     <div v-transfer-dom class="transdom">
@@ -692,6 +695,16 @@
           authUtil.loginByWx(function(resMap){
             if(resMap.status === "success"){
               let params = resMap.result.wx_user;
+              // 根据微信unionid判断用户师傅绑定微信号
+              let resBind = userService.getUserByWxUid(params.wx_unionid)
+              // _this.$refs.test.innerHTML = JSON.stringify(resBind)
+              if (resBind.user) {
+                _this.$vux.alert.show({
+                  content:'该微信号已被使用！',
+                })
+                return
+              }
+              // _this.$refs.test.innerHTML = JSON.stringify(resBind) + '--wechat'
               /*{
                 "sex":"男",
                 "wx_openid":"oRrdQt6Rx5HoGnbKAgG_Wpl0zK44",
@@ -718,6 +731,16 @@
           authUtil.loginByQQ(function(resMap){
             if(resMap.status === "success"){
               let params = resMap.result.qq_user;
+              // 根据QQ unionid判断用户师傅绑定微信号
+              let resBind = userService.getUserByQQUid(params.qq_unionid)
+              // _this.$refs.test.innerHTML = JSON.stringify(resBind)
+              if (resBind.user) {
+                _this.$vux.alert.show({
+                  content:'该QQ号已被使用！',
+                })
+                return
+              }
+              // _this.$refs.test.innerHTML = JSON.stringify(resBind) + '--QQ'
               /*{
                 "qq_openid":"F6DC81D7DEA4AA7AC94A2C6E57F96C09",
                 "qq_nikname":"被博士",
@@ -743,6 +766,14 @@
           authUtil.loginByXl(function(resMap){
             if(resMap.status === "success"){
               let params = resMap.result.xl_user;
+              // 根据 sina openid 判断用户师傅绑定微信号
+              let resBind = userService.getUserByXlopenid(params.xl_openid)
+              if (resBind.user) {
+                _this.$vux.alert.show({
+                  content:'该新浪号已被使用！',
+                })
+                return
+              }
               /*{"xl_user":{"sex":"男","xl_nikname":"用户6311798622","xl_image":"http://tvax3.sinaimg.cn/default/images/default_avatar_male_50.gif"}}*/
               _this.user.xl_openid = params.xl_openid;
               _this.user.xl_nikname = params.xl_nikname;
