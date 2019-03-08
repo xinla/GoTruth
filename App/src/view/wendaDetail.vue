@@ -1033,10 +1033,11 @@
         let reg = /[^\u4e00-\u9fa5]+/g;
         let tempContent = this.answer.content.replace(reg,"");
         this.shareDesc = {
-          href:config.share + '/#/detail' + location.href.substring(location.href.indexOf('?')),
+          href:config.share + '/#/wendaDetail' + location.href.substring(location.href.indexOf('?')),
           title: this.answer.title,
           content: tempContent.substring(0,80)
         };
+        console.log(this.shareDesc)
         let temp = this.$Tool.extractImg(this.answer.content,1);
         this.shareDesc['thumbs'] = temp[0];
         if(this.items.length) {

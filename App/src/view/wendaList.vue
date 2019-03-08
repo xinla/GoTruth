@@ -100,10 +100,6 @@
            <i class="iconfont icon-fabu"></i>
            <span>提问</span>
        </div>-->
-      <div class="item" @click="handleShare">
-        <i class="iconfont icon-share"></i>
-        <span>分享</span>
-      </div>
       <div class="item" @click="handleAnswer">
         <i class="iconfont icon-comment"></i>
         <span>回答</span>
@@ -152,8 +148,6 @@
         </div>
       </popup>
     </div>
-    <!-- 分享 -->
-    <share :content="shareDesc" v-model="shareShow"></share>
     <!-- 图片预览 -->
     <transition enter-active-class="animated fadeIn" leave-active-class=" animated fadeOut">
       <gallary :obj="record_file" v-show="showGallary" @close="handleGallaryClose"></gallary>
@@ -282,14 +276,7 @@
         ifNet:false,
         ifLoad: false, //是否加载
         ifLoading:false,
-        tip:"正在加载",
-        shareShow:false,
-        shareDesc:{
-          href:'',
-          title:'',
-          description:'',
-          thumbs:[]
-        },
+        tip:"正在加载"
       }
     },
     activated() {
@@ -488,23 +475,6 @@
             }
           }
         });
-      },
-      // 分享问题
-      handleShare(){
-        this.shareShow= true;
-        let reg = /[^\u4e00-\u9fa5]+/g;
-        let tempDesc = this.wenda.description.replace(reg,"");
-        this.shareDesc = {
-          href:config.share + '/#/detail' + location.href.substring(location.href.indexOf('?')),
-          title: this.wenda.title,
-          description: tempDesc.substring(0,80),
-        }
-        if(this.imgArr.length){
-          this.shareDesc['thumbs'] = [this.fileRoot + this.imgArr[0]];
-        }
-        if(!this.shareDesc['thumbs']){
-          this.shareDesc['thumbs'] = require('@/assets/images/logo-icon.png');
-        }
       },
       // 图片上传
       handleuploadFile(e){
@@ -785,8 +755,7 @@
       },
     },
     beforeRouteLeave(to, from , next){
-      if(this.shareShow == true || this.answerObj.show == true || this.reportShow == true){
-        this.shareShow = false;
+      if(this.answerObj.show == true || this.reportShow == true){
         this.answerObj.show = false;
         this.reportShow = false;
         if(this.showGallary == true){
