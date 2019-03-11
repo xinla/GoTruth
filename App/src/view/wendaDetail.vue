@@ -32,7 +32,6 @@
             {{answer.content}}
           </p>
           <vue-picture-swipe :items="items" :options="{shareEl: false}"></vue-picture-swipe>
-
           <div class="content-time clearfix">
             <span class=" fl">创建时间 {{publishtime}}</span>
             <div class="jubao fr" @click="handleReport(1)">
@@ -247,7 +246,6 @@
     </div>
   </div>
 </template>
-
 <script>
   import config from '@/lib/config/config'
   import like from '@/components/common/like'
@@ -1019,18 +1017,18 @@
         let tempContent = this.answer.content.replace(reg,"");
         this.shareDesc = {
           href:config.share + '/#/wendaDetail' + location.href.substring(location.href.indexOf('?')),
-          title: this.answer.title,
+          title: this.qtitle,
           content: tempContent.substring(0,80)
         };
-        console.log(this.shareDesc)
         let temp = this.$Tool.extractImg(this.answer.content,1);
         this.shareDesc['thumbs'] = temp[0];
         if(this.items.length) {
           this.shareDesc['thumbs'] = [this.fileRoot + this.items[0]['url']];
         }
-
+        if (!this.shareDesc['thumbs']) {
+          this.shareDesc['thumbs'] = require('@/assets/images/logo-icon.png');
+        }
       },
-
       /*评论框  显示---获取焦点*/
       inputShow(){
         this.answerPopObj.show = true;

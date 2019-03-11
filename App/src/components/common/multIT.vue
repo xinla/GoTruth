@@ -142,7 +142,6 @@ export default {
 			articleFileService.getFileByArticle(this.article.id,data=>{
 				if (data && data.status == "success") {
 					this.ArticleFile = data.result.filelist;
-					// console.log(this.ArticleFile);
 				}
 			});
 			if (this.ifPublisher && this.article.author) {

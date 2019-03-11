@@ -169,8 +169,7 @@
         </div>
       </div>
     </div>
-    <div class="pop-mask" v-show="popMask" @click="handleCancel">
-    </div>
+    <div class="pop-mask" v-show="popMask" @click="handleCancel"></div>
     <div v-transfer-dom class="transdom">
       <popup v-model="popList.show" style="z-index: 588;">
         <div class="popup-wrap">
