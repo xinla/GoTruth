@@ -11,7 +11,7 @@
       <div class="answer-wrap">
         <!-- 问题标题-&#45;&#45;回答数-->
         <div class="answer-header">
-          <h1 class="question-title">{{wenda.title}}</h1>
+          <h1 class="question-title">{{qtitle}}</h1>
           <div class="answer-count">
             <span>{{answerCount}}条回答 <i class="iconfont icon-arrow-right"></i></span>
           </div>
@@ -54,8 +54,8 @@
           <div class="header clearfix">
             <span class="fl" v-if="ifComment">评论 {{answerCommentNum}}</span>
             <span class="fl" v-else style="color: #406599; font-weight: 700;">抢鲜评论</span>
-            <span class="fr" v-show="answerZanBool.hasZan">赞 {{answerZanNum}}</span>
-            <span class="fr" v-show="answerZanBool.notZan">抢鲜点赞</span>
+            <span class="fr" v-if="ifZan">赞 {{answerZanNum}}</span>
+            <span class="fr" v-else>抢鲜点赞</span>
           </div>
           <div class="body" v-for="(item, index) in commentList" v-if="!isBlacklist(item.douserid)">
             <div class="comment-item clearfix">
@@ -102,9 +102,9 @@
       <div class="answer-icon fr">
         <div class="item-icon msg-icon" @click="handleToComment">
           <i class="iconfont icon-xiaoxi1"></i>
-          <span class="answer-badge" v-show="badgeShow">{{answerCommentNum}}</span>
+          <span class="answer-badge" v-if="badgeShow">{{answerCommentNum}}</span>
         </div>
-        <div class="item-icon" @click="handleAnswerCollect(id)">
+        <div class="item-icon" @click="handleAnswerCollect(aid)">
           <i class="iconfont" :class="collectIcon ? 'icon-collected' : 'icon-not-collection'"></i>
         </div>
         <div class="item-icon" @click="handleFabulous(1)">
@@ -141,7 +141,7 @@
     <div v-transfer-dom>
       <popup v-model="replyShow" position="bottom" height="100%">
         <div class="status-bar"></div>
-        <div class="reply-wrap"">
+        <div class="reply-wrap">
           <div class="reply-header">
             <i class="iconfont icon-remove" @click="handleCloseRelpy"></i>
             <span v-show="noReply">暂无回复</span>
@@ -192,7 +192,7 @@
 
               </div>
             </div>
-            <div class="isDiscuss" v-show="noComment">抢鲜评论</div>
+
             <!-- 评论的内容 -->
             <div class="reply-container" v-show="hasComment">
               <div class="reply-discuss">全部评论</div>
@@ -223,9 +223,9 @@
                 </div>
               </div>
             </div>
-
+            <div class="isDiscuss" v-show="noComment">抢鲜评论</div>
           </div>
-        </div>
+          </div>
       </popup>
     </div>
     <!--举报框-->
@@ -271,12 +271,13 @@
     },
     data(){
       return{
-        id:0, //回答id
+        aid:null, //回答id
+        qid:null, //问题
         detailType: 0,//视图类型
         userId:localStorage.id,    //当前登录用户
         loadLock: false,  //加载锁
         fileRoot:config.fileRoot + '/',   //服务路径
-        wenda:{}, //问题的对象
+        qtitle:"",  //问题标题
         answer:{},  //回答对象
         /* 回答人的姓名-头像*/
         answerUser:{
@@ -291,7 +292,6 @@
         items:[],
         publishtime:'',   //回答时间
         answerCommentNum: 0,  //回答评论总数
-        ifComment:false,    //是否有评论
         answerZanNum: 0,    //回答点赞总数
         deleteShow:false,
         /*回答的点赞状态*/
@@ -329,7 +329,6 @@
         zanIcon: false,   //伪评论框回答点赞状态
         collectIcon:false,   //监听收藏图标变化
         curLike:Number,   //点赞数字变化
-        badgeShow: false, //伪评论框消息是否显示badge
         /*回答分享对象*/
         shareDesc:{
           href:'',
@@ -365,11 +364,12 @@
       }
     },
     activated(){
-      $(".answer-detail").scrollTop(this.scrollTop)
-      this.wenda = JSON.parse(this.$route.query.wenda);
-      this.answer = JSON.parse(this.$route.query.item);
+      $(".answer-detail").scrollTop(this.scrollTop);
+      this.qid = this.$route.query.qid;
+      this.aid = this.$route.query.aid;
       this.detailType = this.$route.query.detailType || 0;
-      this.id = this.answer.id;
+
+
       if(!localStorage.id || !localStorage.token){
         this.answerFocusState=false;
         this.collectIcon = false;
@@ -381,15 +381,14 @@
 
     },
     watch:{
-      id(){
+      aid(){
         this.proFail1 = false;
         this.ifLoad = true;
-        $(".answer-detail").scrollTop(0)
+        $(".answer-detail").scrollTop(0);
         setTimeout(()=>{
-          this.commentPage = 1
-          this.pageNumReply = 1
+          this.commentPage = 1;
+          this.pageNumReply = 1;
           this.init();
-          // this.ifLoad = false;
         },delay)
       }
     },
@@ -399,12 +398,22 @@
         return function (item) {
           return this.$store.state.blacklist.includes(item);
         }
+      },
+      ifComment(){
+        return this.answerCommentNum > 0;
+      },
+      badgeShow(){
+        return this.answerCommentNum > 0;
+      },
+      ifZan(){
+        return this.answerZanNum > 0;
       }
     },
     methods:{
       // 页面初始渲染
       init(){
-        if (!this.id) {
+        //如果无回答id，return
+        if(!this.aid){
           this.$vux.alert.show({
             content: '获取出错，请返回！',
           });
@@ -412,19 +421,32 @@
           return;
         }
         // this.ifLoad = true;
+        // 获取问题标题
+        let questionData = interService.getQuestionById(this.qid);
+        if(questionData && questionData.status == "success"){
+          this.qtitle = questionData.record.title;
+        }
+
         // 获取问题回答数量
-        interService.getAnswerCount(this.wenda.id, (data) =>{
-          if(data && data.status == "success") {
+        interService.getAnswerCount(this.qid, (data) =>{
+          if(data && data.status == "success"){
             this.answerCount = this.$Tool.numConvertText(data.count);
           }
         });
 
-        // 获取回答人的信息
-        let answerInfo = userService.getUserById(this.answer.author);
-        if(answerInfo && answerInfo.status == "success") {
-          this.answerUser = answerInfo.result.user;
+        // 获取回答详情
+        let answerData = articleService.getArticleById(this.aid);
+        if(answerData && answerData.status == "success"){
+          this.answer = answerData.record;
         }
-
+        // 获取回答人信息
+        let answerInfo = userService.getUserById(this.answer.author);
+        if(answerInfo && answerInfo.status == "success"){
+          this.answerUser = answerInfo.result.user;
+          console.log(this.answerUser)
+        }
+        // 获取发布回答时间
+        this.publishtime = this.$Tool.publishTimeFormat(this.answer.publishtime);
         // 获取关注的状态
         if(localStorage.getItem('token')) {
           followService.testFollow(this.answer.author, (data)=>{
@@ -438,9 +460,8 @@
           })
         }
         // 获取回答内容中图片
-        let answerSrcData = articleFileService.getFileByArticle(this.answer.id);
+        let answerSrcData = articleFileService.getFileByArticle(this.aid);
         if(answerSrcData && answerSrcData.status == "success") {
-          // this.answerFile = answerSrcData.result.filelist;
           let arr = answerSrcData.result.filelist;
           this.items = [];
           for(let i =0; i < arr.length; i++){
@@ -454,25 +475,14 @@
           }
         }
 
-        // 获取发布回答时间
-        this.publishtime = this.$Tool.publishTimeFormat(this.answer.publishtime);
-
         // 获取评论回答总数
-        articleCommentService.getArticleCommentCount(this.answer.id, (data)=>{
+        articleCommentService.getArticleCommentCount(this.aid, (data)=>{
           if(data && data.status == "success") {
             this.answerCommentNum = this.$Tool.numConvertText(data.result.count);
-            if(this.answerCommentNum == 0){
-              this.ifComment = false;
-              this.badgeShow = false;
-            }else{
-              this.ifComment = true;
-              this.badgeShow = true;
-            }
           }
         });
-
         // 获取回答的收藏状态
-        articleCollectService.testCollect(this.answer.id, (data)=>{
+        articleCollectService.testCollect(this.aid, (data)=>{
           if(data && data.status == "success") {
             if(data.result == 1) {
               this.collectIcon = true;
@@ -482,7 +492,7 @@
           }
         });
         // 获取回答点赞状态
-        praiseService.testPraise(this.answer.id, 1, (data)=>{
+        praiseService.testPraise(this.aid, 1, (data)=>{
           if(data && data.status == "success") {
             if (data.result == 1){
               this.zanIcon = true;
@@ -492,16 +502,9 @@
           }
         });
         // 获取回答点赞总数
-        praiseService.getPraiseCount(this.answer.id,1,(data)=>{
+        praiseService.getPraiseCount(this.aid,1,(data)=>{
           if(data && data.status == "success") {
             this.answerZanNum = this.$Tool.numConvertText(data.result.count);
-            if(data.count <= 0) {
-              this.answerZanBool.notZan = true;
-              this.answerZanBool.hasZan = false;
-            }else{
-              this.answerZanBool.notZan = false;
-              this.answerZanBool.hasZan = true;
-            }
           }
         });
         //评论滚动近底部，自动加载 一屏1080
@@ -509,12 +512,13 @@
         this.ifLoad = false;
       },
 
+
       /*关注  | 取消关注   type: 1-回答发布人 || 2-回答评论人*/
       handleAnswerFocus(userid, type){
         if(!localStorage.id) {
           this.$Tool.loginGoBack({
             returnpage:"/wendaDetail",
-            query:{item:JSON.stringify(this.answer),wenda:JSON.stringify(this.wenda)},
+            query:{qid:this.qid,aid:this.aid},
             name:"wendaDetail",
             call:()=>{
               let data =  followService.doFollow(userid);
@@ -526,7 +530,7 @@
                     });
                     this.answerFocusState = true;
                     // 向回答人发送消息
-                    messageService.sendMessage(userid, "focus", this.answer.id, 1);
+                    messageService.sendMessage(userid, "focus", this.aid, 1);
                   }
                 }else{
                   if(data.result == 1) {
@@ -552,7 +556,7 @@
                 });
                 this.answerFocusState = true;
                 // 向回答人发送消息
-                messageService.sendMessage(userid, "focus", this.answer.id, 1);
+                messageService.sendMessage(userid, "focus", this.aid, 1);
               }else{
                 this.$vux.toast.show({
                   text:'取消关注'
@@ -588,7 +592,7 @@
         if(!localStorage.id) {
           this.$Tool.loginGoBack({
             returnpage:"/wendaDetail",
-            query:{item:JSON.stringify(this.answer),wenda:JSON.stringify(this.wenda)},
+            query:{qid:this.qid,aid:this.aid},
             name:"wendaDetail",
             call:()=>{
               this.conFabulous(type,itemid,index);
@@ -597,32 +601,19 @@
           return;
         }
         this.conFabulous(type,itemid,index);
-
       },
-
       conFabulous(type,itemid,index){
         if(type == 1) {
-          let zanData = praiseService.doPraise(this.answer.id,1);
+          let zanData = praiseService.doPraise(this.aid,1);
           if(zanData && zanData.status == "success") {
             if(zanData.result.code == 1) {
               this.zanIcon = true;
               this.answerZanNum ++;
-              if(this.answerZanNum > 0) {
-                this.answerZanBool.hasZan = true;
-                this.answerZanBool.notZan = false;
-              }
-
               // 给发布人发送消息
-              messageService.sendMessage(this.answer.author, "like", this.answer.id, 1);
+              messageService.sendMessage(this.answer.author, "like", this.aid, 1);
             }else{
               this.zanIcon = false;
               this.answerZanNum --;
-              if(this.answerZanNum <= 0) {
-                this.answerZanBool.hasZan = false;
-                this.answerZanBool.notZan = true;
-              }
-
-
             }
           }
         }else{
@@ -667,7 +658,7 @@
               type:'success'
             });
             //给发布人发送消息
-            messageService.sendMessage(this.answer.author,"collect",this.answer.id,1);
+            messageService.sendMessage(this.answer.author,"collect",this.aid,1);
             setTimeout(()=>{
               this.$vux.alert.hide();
             },1000);
@@ -691,7 +682,7 @@
         else if(v == 2) {
           this.ifSwitchB = false;
           this.current = 2;
-          let res = transmitService.getTransmitList(this.answer.id,1,10);
+          let res = transmitService.getTransmitList(this.aid,1,10);
           if (res && res.status == "success") {
             this.listMember = res.recordPage.list;
           }
@@ -703,7 +694,7 @@
         else if(v == 3) {
           this.ifSwitchB = false;
           this.current = 3;
-          let res = praiseService.getPraiseList(this.answer.id,1,1,10);
+          let res = praiseService.getPraiseList(this.aid,1,1,10);
           if (res && res.status == "success") {
             this.listMember = res.recordPage.list;
           }
@@ -719,7 +710,7 @@
         if(!localStorage.id) {
           this.$Tool.loginGoBack({
             returnpage:"/wendaDetail",
-            query:{item:JSON.stringify(this.answer),wenda:JSON.stringify(this.wenda)},
+            query:{qid:this.qid,aid:this.aid},
             name:"wendaDetail",
             call:()=>{
             }
@@ -752,7 +743,6 @@
 
       // 发布评论
       handleSendComment(){
-        this.badgeShow = true;
         if(!this.answerPopObj.desc) {
           this.answerPopObj.show = false;
           this.popMask = false;
@@ -762,7 +752,7 @@
         if(this.answerPopObj.desc && this.$Tool.checkInput(this.answerPopObj.desc)) {
           if(this.commentType == 1) {
             //发送评论
-            let commentData = articleCommentService.articleComment(this.answer.id,this.answerPopObj.desc,currentUserid,this.answer.author,1);
+            let commentData = articleCommentService.articleComment(this.aid,this.answerPopObj.desc,currentUserid,this.answer.author,1);
 
             if(commentData && commentData.status == "success") {
               this.loadLock = false;
@@ -772,9 +762,6 @@
               this.answerPopObj.desc = "";
               this.answerPopObj.active = false;
               this.answerCommentNum ++;
-              if(this.answerCommentNum >= 0){
-                this.ifComment = true;
-              }
               setTimeout(()=>{
                 this.$vux.toast.show({
                   type:'success',
@@ -782,7 +769,7 @@
                 });
               },500);
               // 给发布人发送消息
-              messageService.sendMessage(this.answer.author,"reply", this.answer.id, 1);
+              messageService.sendMessage(this.answer.author,"reply", this.aid, 1);
               let dis = $('.answer-detail').scrollTop() + $('.content-time').offset().top - 100;
               $('.answer-detail').animate({scrollTop:dis},100);
 
@@ -797,7 +784,7 @@
           }else{
             let comment = this.commentConAdd?(this.answerPopObj.desc + this.commentConAdd):this.answerPopObj.desc;
             // 执行发送评论回复
-            let resACommentReply = articleCommentService.articleComment(this.answer.id,comment,currentUserid,this.replyUserId,2,this.replyCommentId);
+            let resACommentReply = articleCommentService.articleComment(this.aid,comment,currentUserid,this.replyUserId,2,this.replyCommentId);
             if(resACommentReply && resACommentReply.status == "success") {
               setTimeout(()=>{
                 this.$vux.toast.show({
@@ -855,8 +842,6 @@
                   if(thiz.commentList.length == 0) {
                     thiz.proFail2 = true;
                     thiz.ifLoadMore = false;
-                    thiz.ifComment = false;
-                    thiz.badgeShow = false;
                   }
 
                 }else{
@@ -923,7 +908,7 @@
         if(!localStorage.id){
           this.$Tool.loginGoBack({
             returnpage:"/wendaDetail?",
-            query:{id:this.id},
+            query:{id:this.aid},
             name:"wendaDetail",
             call:()=>{}
           });
@@ -947,7 +932,7 @@
           if(this.reportreasion != "拉黑该用户并屏蔽其内容") {
             reportInfo = {
               type:4,
-              itemid: this.id,
+              itemid: this.aid,
               reportuserid:this.answer.author,
               reportreasion:this.reportreasion
             };
@@ -1058,7 +1043,7 @@
         if(this.commentPage == 1) {
           this.commentList = [];
         }
-        let answerCommentList = articleCommentService.getArticleCommentPage(this.answer.id,this.commentPage,10);
+        let answerCommentList = articleCommentService.getArticleCommentPage(this.aid,this.commentPage,10);
         if(answerCommentList && answerCommentList.status == "success") {
           listUtil.appendList(this.commentList, answerCommentList.list.list);
           listUtil.asyncSetListPropty(answerCommentList.list.list,(item) =>{

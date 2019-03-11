@@ -31,6 +31,17 @@ service.getQuestionPage = function(page,size,classify,userid){
   return resMap;
 };
 
+// 获取问题详情
+service.getQuestionById = function(itemid){
+  let params = {
+    itemid:parseInt(itemid),
+  };
+
+  let res = commonUtil.ajaxAsync(controller+'/getQuestionById',params);
+
+  return res;
+};
+
 // 获取回答
 service.getAnswers = function (page,size,parentid) {
   let params = {page, size, parentid};

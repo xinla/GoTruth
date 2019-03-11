@@ -70,13 +70,9 @@
         </div>
         <div class="footer clearfix">
           <div class="fl">
-
             <span>{{item.answerCommentNum}}评论</span>
-
             <span>{{item.publishtime}}</span>
           </div>
-          <!--  -->
-          <!-- v-if="ifDel" -->
           <div class="fr article-remove" @click="$emit('delete',[item.id,$event])" v-if="ifDel">
             <i class="iconfont icon-remove"></i>
           </div>
@@ -123,7 +119,7 @@
                       @input="handelInput"
                       v-model="record.content" maxlength="300"></textarea>
             <div class="popup-img clearfix">
-              <div class="img fl" v-for="(item, index) in record_file" @click="handlePreview(2)">
+              <div class="img fl" v-for="(item, index) in record_file" @click="handlePreview">
                 <i class="iconfont icon-remove" @click.stop="handleRemoveImg(index)"></i>
                 <img class="previewer-demo-img" :src="fileRoot + item.url">
                 <!--v-preview="fileRoot + item.url"-->
@@ -175,7 +171,6 @@
 <script>
   import config from '@/lib/config/config'
   import listUtil from '@/service/util/listUtil'
-  import netUtil from "@/service/util/netUtil"
   import userService from '@/service/userService'
   import wdcollectService from '@/service/wdcollectService'
   import interService from '@/service/interlocutionService'
@@ -212,6 +207,7 @@
     },
     data() {
       return {
+        showGallary:false,
         reportreasion:'',//"举报原因"
         reportShow:false,
         reportList:Object.freeze([
@@ -222,13 +218,11 @@
           '拉黑该用户并屏蔽其内容'
         ]),
         ifImgNull:true,
-        showGallary:false,
-        showGallary:false,
         timer:null,
         userId:localStorage.id,
         focusState:false,
         focusColor:false,
-        id:0,   //问题Id
+        id:null,   //问题Id
         wenda:{},    //问题对象
         answer:[],   //问题回答对象
         fileRoot:config.fileRoot + '/',   //服务路径
@@ -282,11 +276,7 @@
     activated() {
       this.$nextTick(()=>{
         this.id = this.$route.query.id;
-        this.wenda = JSON.parse(this.$route.query.item);
         this.ifLoad = true;
-        if(this.timer){
-          clearTimeout(this.timer);
-        }
         if(this.timer){
           clearTimeout(this.timer);
         }
@@ -300,7 +290,6 @@
         },120);
       });
     },
-
     methods:{
       //页面初始化渲染
       init() {
@@ -311,8 +300,13 @@
           this.$Tool.goBack();
           return;
         }
-        this.ifLoad = true;
-        this.items = [];
+       this.ifLoad = true;
+        // 获取问题详情信息
+        let questionDetail = interService.getQuestionById(this.id);
+        if(questionDetail && questionDetail.status == "success"){
+          this.wenda = questionDetail.record;
+        }
+         this.items = [];
         this.imgArr = this.wenda.images.split(',');
         for(let i =0; i<this.imgArr.length;i++){
           let obj = {
@@ -363,7 +357,7 @@
           }
           // 循环回答列表
           listUtil.asyncSetListPropty(answerData.recordPage.list,(item)=>{
-
+            console.log(item)
             // 获取发布回答时间
             item.publishtime = this.$Tool.publishTimeFormat(item.publishtime);
             // 获取发布回答用户信息
@@ -606,7 +600,7 @@
         if(!localStorage.id) {
           this.$Tool.loginGoBack({
             returnpage: "/wendaList",
-            query:{id:this.id,item:JSON.stringify(this.wenda)},
+            query:{id:this.id},
             name:'wendaList',
             call:()=>{}
           });
@@ -632,7 +626,7 @@
           };
         }else{
           // 拉黑回答作者
-          userService.blacklist(this.wenda.userid,data=>{
+          userService.blacklist(this.wenda.userid,(data)=>{
             if(data && data.status == "success") {
               let temp = [];
               if (localStorage.blacklist) {
@@ -667,9 +661,6 @@
         }
         this.reportShow = false;
         this.reportreasion = "";
-
-
-
       },
       //取消回答框
       handleCancel(){
@@ -738,8 +729,8 @@
           this.$Tool.goPage({
             name:'wendaDetail',
             query:{
-              wenda:JSON.stringify(wenda),
-              item:JSON.stringify(item),
+              qid:wenda.id,
+              aid:item.id,
               detailType:this.detailType
             },
           })
