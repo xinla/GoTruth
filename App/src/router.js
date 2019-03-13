@@ -60,6 +60,14 @@ export default new VueRouter({
         require(['@/view/detail.vue'],resolve)
       },
     },
+    // 广告详情
+    {
+      path:'/advertiseDetail',
+      name:'advertiseDetail',
+      component:(resolve)=>{
+        require(['@/view/advertiseDetail.vue'],resolve)
+      }
+    },
     // 问答列表页面
     {
       path:'/wendaList',

@@ -7,6 +7,7 @@
             <prompt-blank style="margin-top:100px;" v-if="ifNet && !arcList.length" mes="断网啦..."></prompt-blank>
             <loading-main v-if="!ifNet && !arcList.length"></loading-main>
             <multIT v-for="(item,index) in topList" :article="item" :key="index" :ifRemove="true" ifTop=true></multIT>
+            <base-advertise :article="advertise"></base-advertise>
             <multIT v-for="(item,index) in arcList" :article="item" :key="index" :ifRemove="true"></multIT>
             <load-more v-show="arcList.length" :show-loading="ifLoading" :tip="tip"></load-more>
         </div>
@@ -15,13 +16,13 @@
 
 <script>
     import netUtil from "@/service/util/netUtil"
-    // import downRefresh from '@/components/common/downRefresh'
     import articleService from '@/service/articleService'
+    import advertService from '@/service/advertService'
+    import BaseAdvertise from '@/components/common/BaseAdvertise'
+
     export default {
-        /*components:{
-            downRefresh,
-        },*/
-        data(){
+        components: { BaseAdvertise },
+        data() {
             return {
                 arcList:[],
                 page:1,
@@ -34,7 +35,10 @@
                 ifLoading:true,
                 tip:"正在加载",
                 timer:null,
-                topList:[]
+                topList:[],
+                advertise:{
+                    id: 0
+                }
             }
         },
         props:{
@@ -95,8 +99,12 @@
                         }
                         this.page++;
                     }
-                }finally{
+                } catch(err) {
                 }
+                let resAd = advertService.getNextAdvert(18)
+                // console.log(resAd)
+                // return
+                this.advertise = resAd.record
             },
             doRefresh(){
                 let net = {};

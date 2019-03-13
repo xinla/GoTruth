@@ -193,7 +193,7 @@ export default {
           this.$vux.alert.show({
             content:'感谢您的反馈，我们会着实核查！',
           })
-        }else{
+        } else {
           this.$vux.alert.show({
             content:'操作失败，请稍后再试！',
           })

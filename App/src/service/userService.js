@@ -88,8 +88,6 @@ service.loginByXl = function(params,call) {
 service.getUserById = function(targetuserid,call) {
 	
 	var params = {
-		token:token || 13,
-		userid:userid || 13,
 		targetuserid,
 	};
 	if (call) {
@@ -172,7 +170,7 @@ service.logOut = function(){
 	let params = {
 		logid,
 		token,
-		userid,
+		userid
 	}
 	let resLogOut = commonUtil.ajaxAsync(controller+'/logOut',params);
 
