@@ -108,13 +108,13 @@
         <div class="hot-title">热门评论</div>
         <div class="hot-content">
           <ul class="hot-list">
-            <li class="hot-item clearfix" v-for="(item,index) in commentList" @click="handleFirstReply(item,index)" v-if="!isBlacklist(item.douserid)">
-              <div class="hot-userphoto fl">
+            <li class="hot-item clearfix" v-for="(item,index) in commentList"  v-if="!isBlacklist(item.douserid)">
+              <div class="hot-userphoto fl"  @click="goPerson(item.douserid)">
                 <img :src="$Tool.headerImgFilter(item.imageurl)">
               </div>
               <div class="hot-wrap fl">
                 <div class="hot-header clearfix">
-                  <h5 class="fl">{{item.username}}</h5>
+                  <h5 class="fl"  @click="goPerson(item.douserid)">{{item.username}}</h5>
                   <p class="hot-fabulous fr" :class="{'likeActive':item.ifLike}" @click.stop="handleFabulous(2,item.id,index)">
                     <var class="hot-count">{{item.likeNum}}</var>
                     <!-- <like :likeStatus="index==curLike?ifLike:false" :key='index'></like> -->
@@ -131,7 +131,7 @@
                   <div class="fl">
                     <span class="hot-time">{{$Tool.publishTimeFormat(item.commenttime)}}</span>
                     <span class="hot-point">•</span>
-                    <span class="hot-reply" >
+                    <span class="hot-reply" @click="handleFirstReply(item,index)">
                       <var>{{item.replyCount}}</var>回复
                     </span>
                   </div>
@@ -761,8 +761,9 @@
           }
         });
       },
-
-
+      goPerson(userId){
+        this.$Tool.goPage({name:'publishedArticle',query:{userId}})
+      },
 
       // 点赞--取消点赞
       handleFabulous(type, itemid, index) {
@@ -1575,7 +1576,7 @@
     }
   }
   .likeActive{
-    color: #f40;
+    color: #f40 !important;
   }
   .article-menu{
     line-height: .8rem;

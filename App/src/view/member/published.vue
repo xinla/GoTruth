@@ -1,35 +1,40 @@
 <template>
-  <downRefresh @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
-    <div class="article-list">
-      <template v-if="!ifQA">
-        <multIT
-          v-for="(item,index) in arcList"
-          :article="item"
-          :whi="index"
-          :detailType='ifSelf'
-          :ifPublisher="false"
-          :ifDel="ifSelf"
-          @delete="deleteArticle"
-          :key="index"
-          v-if="!deleteIndex[index]">
-        </multIT>
-      </template>
-      <template v-else>
-        <question
-          v-for="(item,index) in arcList"
-          :wenda="item"
-          :whi="index"
-          :ifPublisher="false"
-          :ifDel="ifSelf"
-          @delete="deleteArticle"
-          :key="index"
-          v-if="!deleteIndex[index]">
-        </question>
-      </template>
-      <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
-      <load-more v-if="arcList.length" :show-loading="ifLoad" :tip="tip"></load-more>
+  <div>
+    <div class="mask" v-show="ifLoading">
+      <loading-main></loading-main>
     </div>
-  </downRefresh>
+    <downRefresh @refresh="doRefresh()" @scrolling="loadMore" ref="scroll">
+      <div class="article-list">
+        <template v-if="!ifQA">
+          <multIT
+            v-for="(item,index) in arcList"
+            :article="item"
+            :whi="index"
+            :detailType='ifSelf'
+            :ifPublisher="false"
+            :ifDel="ifSelf"
+            @delete="deleteArticle"
+            :key="index"
+            v-if="!deleteIndex[index]">
+          </multIT>
+        </template>
+        <template v-else>
+          <question
+            v-for="(item,index) in arcList"
+            :wenda="item"
+            :whi="index"
+            :ifPublisher="false"
+            :ifDel="ifSelf"
+            @delete="deleteArticle"
+            :key="index"
+            v-if="!deleteIndex[index]">
+          </question>
+        </template>
+        <prompt-blank v-if="proIf" :mes="proMes"></prompt-blank>
+        <load-more v-if="arcList.length" :show-loading="ifLoad" :tip="tip"></load-more>
+      </div>
+    </downRefresh>
+  </div>
 </template>
 
 <script>
@@ -50,6 +55,7 @@
         timer:null,
         ifQA:false,
         tip:"",
+        ifLoading: false,
       }
     },
     mounted(){
@@ -71,6 +77,7 @@
         this.proIf = false;
         this.lock = true;
         this.ifLoad = true;
+        this.ifLoading = true;
         var res;
         /*if (this.$route.name == 'published') {
             res = articleService.getArticleByUser(this.userId,this.page,10);
@@ -99,6 +106,7 @@
           this.proMes = "请求失败，请稍后再试！"
         }
         this.lock = false;
+        this.ifLoading = false;
       },
       deleteArticle([id,whi,event]){
         let _this = this;
@@ -173,6 +181,7 @@
       },*/
       userId(){
         $(this.$refs["scroll"].$el).scrollTop(0)
+        this.ifLoading = true;
         setTimeout(()=>{
           this.deleteIndex = [];
           this.page = 1;
@@ -191,6 +200,11 @@
 </script>
 
 <style rel="stylesheet" scoped>
+  /*加载遮层罩*/
+  .mask{
+    position: absolute;
+    background-color: #fafafa;
+  }
   .editor{
     color: #aaa;
     line-height: 40px;

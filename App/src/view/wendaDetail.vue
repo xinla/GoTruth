@@ -58,10 +58,10 @@
           </div>
           <div class="body" v-for="(item, index) in commentList" v-if="!isBlacklist(item.douserid)">
             <div class="comment-item clearfix">
-              <img :src="$Tool.headerImgFilter(item.imageurl)" class="comment-userPhoto fl">
+              <img :src="$Tool.headerImgFilter(item.imageurl)" class="comment-userPhoto fl" @click="goPerson(item.douserid)">
               <div class="comment-wrap fl">
                 <div class="comment-header clearfix">
-                  <span class="username fl">{{item.username}}</span>
+                  <span class="username fl" @click="goPerson(item.douserid)">{{item.username}}</span>
                   <div class="comment-zan fr" :class="{'likeActive': item.ifLike}" @click="handleFabulous(2, item.id, index)">
                     <!-- <like :likeStatus="index == curLike ? ifLike: 0"></like> -->
                     <like :likeStatus="item.ifLike" :key='index'></like>
@@ -509,8 +509,9 @@
         this.loadComment();
         this.ifLoad = false;
       },
-
-
+      goPerson(userId){
+        this.$Tool.goPage({name:'publishedArticle',query:{userId}})
+      },
       /*关注  | 取消关注   type: 1-回答发布人 || 2-回答评论人*/
       handleAnswerFocus(userid, type){
         if(!localStorage.id) {
@@ -1163,11 +1164,11 @@
 </script>
 
 <style lang="less" scoped>
-  /*加载遮层罩*/
-  .mask{
-    position: absolute;
-    background-color: #fafafa;
-  }
+    /*加载遮层罩*/
+    .mask{
+      position: absolute;
+      background-color: #fafafa;
+    }
   /*回答内容*/
   .answer-detail{
     position: relative;

@@ -254,7 +254,15 @@
         next();
 
       }
-    }
+    },
+    beforeRouteLeave(to, from , next){
+      if(this.imgShow == true){
+        this.imgShow = false;
+        next(false);
+      } else{
+        next()
+      }
+    },
   }
 
 </script>
@@ -410,16 +418,14 @@
       // padding-top: 1rem;
     }
     .feedback-question{
-      // margin-top: 1.65rem;
       position: relative;
       top: 0;
-      bottom: 0;
-      right: 0;
       left: 0;
+      /*padding: .4rem .3rem;*/
       overflow: hidden;
-      padding: .4rem .3rem;
+      overflow-y: auto;
       background-color: #f7f7f7;
-      max-height: calc( 100vh - 1.65rem);
+     height: calc( 100vh - 2.3rem) !important;
       .question-tit {
         text-align: center;
         letter-spacing: .02rem;

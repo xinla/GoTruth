@@ -9,10 +9,10 @@
     <div class="wendaList">
       <div class="wendaList-current">
         <div class="user clearfix">
-          <div class="user-bar fl">
+          <router-link class="user-bar fl" :to="{name:'publishedArticle',query:{userId:wenda.userid}}" tag="div">
             <img :src=" $Tool.headerImgFilter(wenda.imageurl)">
             <span>{{wenda.username}}</span>
-          </div>
+          </router-link>
           <div
             class="user-focus fr"
             :class="focusColor ? 'default-color' : 'active-color'"
@@ -305,6 +305,7 @@
         let questionDetail = interService.getQuestionById(this.id);
         if(questionDetail && questionDetail.status == "success"){
           this.wenda = questionDetail.record;
+          console.log(this.wenda)
         }
          this.items = [];
         this.imgArr = this.wenda.images.split(',');
