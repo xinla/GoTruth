@@ -573,33 +573,33 @@
           });
         }
         // 文章附件 图片
-        if (this.article.type != 3) {
-          articleFileService.getFileByArticle(this.article.id,(data)=>{
-            if (data && data.status == "success") {
-              if (this.article.type == 1) {
-                let arr = data.result.filelist;
-                this.items = [];
-                for(let i = 0; i < arr.length; i++) {
-                  let obj = {
-                    src:this.fileRoot + arr[i].url,
-                    thumbnail:this.fileRoot + arr[i].url,
-                    w: 600,
-                    h: 420,
-                  };
-                  this.items.push(obj);
-                }
-              }else if(this.article.type == 2){
-                let temp = data.result.filelist[0];
-                if (temp) {
-                  this.playerOptions.sources[0].src = this.fileRoot + temp.url;
-                  this.playerOptions.poster = this.fileRoot + temp.thumbnail;
-                }else{
-                  this.playerOptions.sources[0].src = '';
-                  this.playerOptions.poster = '';
-                }
-              }
+        let fileData = articleFileService.getFileByArticle(this.article.id);
+        if (fileData && fileData.status == "success") {
+          if (this.article.type == 1) {
+            let arr = fileData.result.filelist;
+            let items = [];
+            for(let i = 0; i < arr.length; i++) {
+              let obj = {
+                src:this.fileRoot + arr[i].url,
+                thumbnail:this.fileRoot + arr[i].url,
+                w: 600,
+                h: 420,
+              };
+              items.push(obj);
+              this.items = items;
             }
-          });
+
+          }else if(this.article.type == 2){
+            this.isHide = false;
+            let temp = fileData.result.filelist[0];
+            if (temp) {
+              this.playerOptions.sources[0].src = this.fileRoot + temp.url;
+              this.playerOptions.poster = this.fileRoot + temp.thumbnail;
+            }else{
+              this.playerOptions.sources[0].src = '';
+              this.playerOptions.poster = '';
+            }
+          }
         }
         //获取文章点赞量
         praiseService.getPraiseCount(this.id,1,(data)=>{
@@ -1002,16 +1002,16 @@
           title: this.article.title,
           content: tempContent.substring(0,80)
         };
-        if (this.article.type == 3) {
-          let temp = this.$Tool.extractImg(this.article.content,1);
-          this.shareDesc['thumbs'] = temp[0];
-        }else if(this.ArticleFile.length) {
-          this.shareDesc['thumbs'] = [this.fileRoot + this.ArticleFile[0]['url']];
+
+        if(this.article.type == 1){
+          this.shareDesc['thumbs'] = this.items[0].src;
+        }else if(this.article.type == 2){
+          this.shareDesc['thumbs'] = this.playerOptions.poster;
         }else{
-          this.shareDesc['thumbs'] = [this.fileRoot + this.playerOptions.poster];
+          this.shareDesc['thumbs'] = this.$Tool.extractImg(this.article.content,1)[0];
         }
-        if (!this.shareDesc['thumbs']) {
-          this.shareDesc['thumbs'] = require('@/assets/images/logo-icon.png');
+        if(! this.shareDesc['thumbs']){
+          this.shareDesc['thumbs'] = "http://www.zjzx.xyz/img/index-logo.481a2ae3.png";
         }
       },
       //首次回复

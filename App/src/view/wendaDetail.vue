@@ -1021,14 +1021,13 @@
           title: this.qtitle,
           content: tempContent.substring(0,80)
         };
-        let temp = this.$Tool.extractImg(this.answer.content,1);
-        this.shareDesc['thumbs'] = temp[0];
-        if(this.items.length) {
-          this.shareDesc['thumbs'] = [this.fileRoot + this.items[0]['url']];
+        if(this.items.length){
+          this.shareDesc['thumbs'] = this.items[0].src;
         }
-        if (!this.shareDesc['thumbs']) {
-          this.shareDesc['thumbs'] = require('@/assets/images/logo-icon.png');
+        if(!this.shareDesc['thumbs']){
+          this.shareDesc['thumbs'] = "http://www.zjzx.xyz/img/index-logo.481a2ae3.png";
         }
+        console.log(this.shareDesc['thumbs'])
       },
       /*评论框  显示---获取焦点*/
       inputShow(){
