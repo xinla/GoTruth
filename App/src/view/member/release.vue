@@ -233,7 +233,7 @@
         this.$vux.loading.show({text: ''});
         let param = new FormData(); //创建form对象
         param.append('file',file,file.name);//通过append向form对象添加数据
-        if(this.record.type != 2){
+        if (this.record.type != 2){
           fileService.uploadPic(param,(data)=>{
             let obj = {};
             obj.url = data.result.url;
@@ -245,7 +245,7 @@
             }
             this.$vux.loading.hide();
           })
-        }else if(this.record.type == 2){
+        } else if(this.record.type == 2){
           fileService.uploadVideo(param,(data)=>{
             let obj = {};
             obj.url = data.result.url;
@@ -256,7 +256,7 @@
             this.record_file.push(obj);
             this.$vux.loading.hide();
           })
-        }else{
+        } else {
           this.$vux.loading.hide();
           this.$vux.alert.show({
             content:'出现意外错误',

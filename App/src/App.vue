@@ -248,7 +248,7 @@ export default {
   },
 }
 </script>
-<style>
+<style lang="less">
   html,body{
     background-color: #f4f5f6;
     width: 100%;
@@ -266,7 +266,7 @@ export default {
     overflow: hidden;
   }
   .status-bar{
-    padding-top: 22px;
+    padding-top: @statusBarHeight;
     background: #aaa;
   }
   .router-view-app {
