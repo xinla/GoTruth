@@ -1022,12 +1022,12 @@
           content: tempContent.substring(0,80)
         };
         if(this.items.length){
-          this.shareDesc['thumbs'] = this.items[0].src;
+          this.shareDesc['thumbs'] = [this.items[0].src];
         }
-        if(!this.shareDesc['thumbs']){
-          this.shareDesc['thumbs'] = "http://www.zjzx.xyz/img/index-logo.481a2ae3.png";
+        if(!this.shareDesc['thumbs'].length){
+          this.shareDesc['thumbs'] = ['http://zjzx.xyz/logo.jpg'];
         }
-        console.log(this.shareDesc['thumbs'])
+        // console.log(this.shareDesc['thumbs'])
       },
       /*评论框  显示---获取焦点*/
       inputShow(){

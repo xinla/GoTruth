@@ -50,7 +50,7 @@
           href:this.url,
           title: '邀你进入直击真相',
           content: '进入直击真相，为好友助力，为大爱助力',
-          thumbs:'@/assets/images/logo.png'
+          thumbs:['http://zjzx.xyz/logo.jpg']
         };
       }
     },

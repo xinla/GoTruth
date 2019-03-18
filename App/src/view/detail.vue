@@ -1004,14 +1004,14 @@
         };
 
         if(this.article.type == 1){
-          this.shareDesc['thumbs'] = this.items[0].src;
+          this.shareDesc['thumbs'] = [this.items[0].src];
         }else if(this.article.type == 2){
-          this.shareDesc['thumbs'] = this.playerOptions.poster;
+          this.shareDesc['thumbs'] = [this.playerOptions.poster];
         }else{
-          this.shareDesc['thumbs'] = this.$Tool.extractImg(this.article.content,1)[0];
+          this.shareDesc['thumbs'] = [this.$Tool.extractImg(this.article.content,1)[0]];
         }
-        if(! this.shareDesc['thumbs']){
-          this.shareDesc['thumbs'] = "http://www.zjzx.xyz/img/index-logo.481a2ae3.png";
+        if(!this.shareDesc['thumbs'].length){
+          this.shareDesc['thumbs'] = ['http://zjzx.xyz/logo.jpg'];
         }
       },
       //首次回复
