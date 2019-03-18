@@ -1000,17 +1000,19 @@
         this.shareDesc = {
           href:config.share + '/#/detail' + location.href.substring(location.href.indexOf('?')),
           title: this.article.title,
-          content: tempContent.substring(0,80)
+          content: tempContent.substring(0,80),
+          thumbs:[]
         };
 
         if(this.article.type == 1){
-          this.shareDesc['thumbs'] = [this.items[0].src];
+          this.items.length && (this.shareDesc['thumbs'] = [this.items[0].src]);
         }else if(this.article.type == 2){
           this.shareDesc['thumbs'] = [this.playerOptions.poster];
         }else{
           this.shareDesc['thumbs'] = [this.$Tool.extractImg(this.article.content,1)[0]];
         }
-        if(!this.shareDesc['thumbs'].length){
+
+        if(!(typeof this.shareDesc['thumbs'][0] === 'string')){
           this.shareDesc['thumbs'] = ['http://zjzx.xyz/logo.jpg'];
         }
       },
@@ -2056,6 +2058,7 @@
     position: fixed;
     width: 100%;
     top: 22px;
+    // top: 0; // web端
     left: 0;
     z-index: 1;
   }

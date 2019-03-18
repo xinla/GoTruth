@@ -1019,12 +1019,11 @@
         this.shareDesc = {
           href:config.share + '/#/wendaDetail' + location.href.substring(location.href.indexOf('?')),
           title: this.qtitle,
-          content: tempContent.substring(0,80)
+          content: tempContent.substring(0,80),
+          thumbs:[]
         };
-        if(this.items.length){
-          this.shareDesc['thumbs'] = [this.items[0].src];
-        }
-        if(!this.shareDesc['thumbs'].length){
+        this.items.length && (this.shareDesc['thumbs'] = [this.items[0].src]);
+        if(!(typeof this.shareDesc['thumbs'][0] === 'string')){
           this.shareDesc['thumbs'] = ['http://zjzx.xyz/logo.jpg'];
         }
         // console.log(this.shareDesc['thumbs'])
