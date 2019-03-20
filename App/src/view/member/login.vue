@@ -1,13 +1,61 @@
 <template>
   <div class="login-wrap">
     <div class="login-header">
+      <img src="@/assets/images/logo-icon.png">
+      <span>此刻开始直击真相</span>
+    </div>
+    <div class="login-body">
+      <div class="group-input">
+        <group>
+          <x-input
+            placeholder="请输入手机号码"
+            type="tel"
+            v-model.trim="mobileValue"
+            ref="mobileFocus"
+            :max="11">
+            <i slot="label" class="iconfont label-icon icon-shouji"></i>
+            <span slot="right" class="getCode" :class="{codeColor: codeColor}" @click="handleGetCode">{{codeDesc}}</span>
+          </x-input>
+        </group>
+      </div>
+      <div class="group-input">
+        <group>
+          <x-input placeholder="请输入手机验证码" type="number"  v-model.trim="codeValue" ref="codeFocus"  :max="4">
+            <i slot="label" class="iconfont label-icon icon-yanzhengma"></i>
+          </x-input>
+        </group>
+      </div>
+      <button type="button" class="login-button" @click="handleLogin" :class="{isOpacity:isOpacity}" :disabled="disabled">探寻真相</button>
+    </div>
+    <!--用户协议-->
+    <div class="login-desc">
+      <check-icon :value.sync="loginStop"></check-icon>
+      我已阅读并同意
+      <span @click="$Tool.goPage({name:'agreement',query:{title:'用户协议'}})">"用户协议"</span>和
+      <span @click="$Tool.goPage({name:'privacy',query:{title:'隐私政策'}})">"隐私政策"</span>
+    </div>
+    <div class="login-footer">
+      <div class="login-other">其他登录方式</div>
+      <div class="login-way">
+        <i class="iconfont icon-weixin1" @click="handleAuthLogin(1)"></i>
+        <i class="iconfont icon-qq"  @click="handleAuthLogin(2)"></i>
+        <i class="iconfont icon-weibo"  @click="handleAuthLogin(3)"></i>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<!--<template>
+  <div class="login-wrap">
+    <div class="login-header">
       <div class="login-img">
         <img src="@/assets/images/logo-icon.png">
       </div>
       <span>此刻开始直击真相</span>
     </div>
     <div class="login-body">
-      <!-- <h3>手机号登录注册</h3>-->
+      &lt;!&ndash; <h3>手机号登录注册</h3>&ndash;&gt;
       <div class="login-form">
         <div class="login-item" :class="{loginActive1:tip.active1}">
           <i class="iconfont icon-wode"></i>
@@ -58,9 +106,230 @@
       </div>
     </div>
   </div>
-</template>
-
+</template>-->
 <script>
+  import config from "@/lib/config/config"
+  import authUtil from "@/service/util/authUtil"
+  import userService from "@/service/userService"
+  export default {
+    data(){
+      return{
+        mobileValue: '',
+        codeValue: '',
+        codeDesc: '获取验证码',
+        codeColor: false,   //验证码颜色
+        timer: null,
+        disabled: true,
+        loginStop: false, //用户协议
+
+      }
+    },
+    computed:{
+      // 检测手机号是否错误
+      mobileError(){
+        return !this.$Tool.isPhoneNumber(this.mobileValue);
+      },
+      isOpacity(){
+        if(!this.mobileValue) return;
+        if(this.mobileValue.length != 11 || this.codeValue.length < 4) {
+          this.disabled = true;
+          return false;
+        }else{
+          this.disabled = false;
+          return true;
+        }
+      }
+    },
+    methods:{
+      // 获取验证码
+      handleGetCode(){
+        if(this.timer) return;
+        if(!this.mobileValue){
+          this.$vux.toast.text('手机号码不能为空', 'middle');
+          return;
+        }
+        if(this.mobileError){
+          this.$vux.toast.text('手机号码格式有误', 'middle');
+          this.mobileValue = "";
+          this.$refs.mobileFocus.focus();
+          return;
+        }
+        this.$vux.loading.show({text: 'Loading'});
+        userService.getCode(this.mobileValue, (data)=>{
+          if(data && data.status == "success") {
+            this.$vux.loading.hide();
+            this.$vux.toast.show({text:'验证码已发送'});
+            this.codeColor = true;
+            this.codeDesc = "60s后重发";
+            let i = 60;
+            this.timer = setInterval(()=>{
+              if(i > 0) {
+                i--;
+                this.codeDesc = i + 's后重发';
+              }else{
+                clearInterval(this.timer);
+                this.timer = null;
+                this.codeDesc = "获取验证码";
+                this.codeColor = false;
+              }
+            }, 1000);
+            this.$refs.codeFocus.focus();
+          }else {
+            this.$vux.loading.hide();
+            this.$vux.toast.text(data.result.tip, 'middle');
+          }
+        })
+      },
+      // 登录
+      handleLogin(){
+        if(this.isOpacity) {
+          if(!this.loginStop){
+            this.$vux.toast.show({
+              type:"cancel",
+              width:'70%',
+              text:'您尚未同意"用户协议"和"隐私条款"'
+            });
+          }else{
+            this.$vux.loading.show({text: "正在登录中"});
+            userService.loginByMobile(this.mobileValue, this.codeValue, (data)=>{
+              if(data && data.status == "error"){
+                this.$vux.loading.hide();
+                this.$vux.toast.text(data.result.tip, 'middle');
+                return;
+              }
+              let url = this.$route.query.returnpage;
+              let name = this.$route.query.name;
+              let query = this.$route.query.query;
+              let call = this.$route.query.call;
+              if(!url){
+                this.userInfoStore(data);
+                return;
+              }else{
+                this.userInfoPage(data);
+                this.$Tool.goPage({name:name, path:url, query: query});
+                if(call){
+                  call();
+                }
+              }
+            });
+          }
+
+        }
+      },
+      // 第三方登录
+      handleAuthLogin(type){
+        switch (type) {
+          case 1:
+            authUtil.loginByWx((data) =>{
+              if(data && data.status == "success") {
+                this.$vux.loading.show({text: '登录中...'});
+                let params = data.result.wx_user;
+                userService.loginByWx(params,this.userInfoStore);
+              }
+            });
+            break;
+          case 2:
+            authUtil.loginByQQ((data)=>{
+              if(data && data.status == "success") {
+                this.$vux.loading.show({text: '登录中...'});
+                let params = data.result.qq_user;
+                userService.loginByQQ(params, this.userInfoStore);
+              }else{
+                this.$vux.alert.show({content: '登录授权失败'});
+              }
+            });
+            break;
+          case 3:
+            authUtil.loginByXl((data)=>{
+              if(data && data.status == "success"){
+                this.$vux.loading.show({text: '登录中...'});
+                let params = data.result.xl_user;
+                userService.loginByXl(params, this.userInfoStore);
+              }
+            });
+            break;
+          default:
+            console.log('授权失败');
+        }
+      },
+      userInfoPage(data){
+        if(data && data.status == "success"){
+          let user = data.result.user,
+            obj = {
+              token:data.result.token,
+              id:user.id,
+              logid:user.logid,
+              userImg:this.$Tool.headerImgFilter(user.imageurl),
+              userName:user.username,
+              userMobile:user.mobile,
+              inviteCode:user.invitecode
+            };
+          Object.assign(localStorage,obj);
+          location.reload();
+        }else{
+          this.$vux.toast.text(data.result.tip, 'middle');
+          this.codeValue = "";
+          setTimeout(()=>{
+            this.$vux.alert.show({
+              content: '系统繁忙，请稍后重试！',
+            });
+          },100);
+        }
+        this.$vux.loading.hide();
+      },
+      /**
+       * login callback 存储登录用户信息
+       * @param  {[Object]} data [服务器返回的登录结果]
+       */
+      userInfoStore(data){
+        if(data && data.status == "success"){
+          let user = data.result.user,
+            obj = {
+              token:data.result.token,
+              id:user.id,
+              logid:user.logid,
+              userImg:this.$Tool.headerImgFilter(user.imageurl),
+              userName:user.username,
+              userMobile:user.mobile,
+              inviteCode:user.invitecode
+            };
+          Object.assign(localStorage,obj);
+          userService.getBlacklist(user.id,(data)=>{
+            if (data && data.status === "success") {
+              localStorage.blacklist = JSON.stringify(data.recordList);
+            }
+          });
+          this.$Tool.goPage({name: 'home',replace:true});
+          location.reload();
+        }else{
+          this.$vux.toast.text(data.result.tip, 'middle');
+          this.codeValue = "";
+          setTimeout(()=>{
+            this.$vux.alert.show({
+              content: '系统繁忙，请稍后重试！',
+            });
+          },100);
+        }
+        this.$vux.loading.hide();
+      }
+    },
+    mounted(){
+      this.$nextTick(()=>{
+        this.$refs.mobileFocus.focus();
+      });
+      try{
+        authUtil.init();
+      }catch(err){
+
+      }
+    },
+    beforeRouteEnter(to, from, next){
+      !localStorage.id ? next() : GoTruth.$Tool.goPage({name:"home",replace:"replace"})
+
+    }
+  }
+</script>
+<!--<script>
   import config from '@/lib/config/config'
   import authUtil from '@/service/util/authUtil'
   import userService from '@/service/userService'
@@ -208,7 +477,7 @@
             let i =60;
             this.tip.codeTimer = setInterval(()=>{
               if(i>0) {
-                i--;
+                i&#45;&#45;;
                 this.tip.getCodeDesc = i + '秒后重发';
                 this.tip.close1 = false;
               }else {
@@ -471,7 +740,178 @@
       // }
     }
   }
-</script>
+</script>-->
+<style lang="less" scoped>
+  .login-wrap{
+    position: relative;
+    height: calc(100vh - @topHeigth);
+    padding: .3rem .4rem;
+    overflow: hidden;
+    background-color: #fff;
+    .login-header{
+      text-align: center;
+      margin-bottom: .4rem;
+      img{
+        display: block;
+        width: 1.2rem;
+        height: 1.2rem;
+        margin: 0 auto;
+      }
+      span{
+        display: inline-block;
+        letter-spacing: .04rem;
+        padding-top: .3rem;
+        font-size: .24rem;
+        color: #aaa;
+
+      }
+    }
+    .login-body{
+      .group-input{
+        margin-top: .4rem;
+      }
+      .login-button{
+        width: 100%;
+        height: .8rem;
+        line-height: .8rem;
+        text-align: center;
+        font-size: .32rem;
+        margin-top: .4rem;
+        letter-spacing: .04rem;
+        border-radius: .4rem;
+        opacity: .5;
+        background-color: @mainColor;
+        color: #fff;
+      }
+      .isOpacity{
+        opacity: 1;
+      }
+    }
+    .login-desc{
+      width: 100%;
+      line-height: .46rem;
+      font-size: .24rem;
+      text-align: center;
+      color: #999;
+      margin-top: .3rem;
+      span{
+        letter-spacing: .02rem;
+        color: #d03022;
+        text-decoration: underline;
+      }
+    }
+    .login-footer{
+      width: 100%;
+      position: absolute;
+      padding: 0 .7rem;
+      left: 0;
+      bottom: 0;
+      .login-other{
+        position: relative;
+        text-align: center;
+        font-size: .3rem;
+        letter-spacing: .02rem;
+        color: #999999;
+        &::after,&::before{
+          position: absolute;
+          display: block;
+          content: '';
+          top: .15rem;
+          width: 30%;
+          background-color: #999;
+          height: .02rem;
+        }
+        &::after{
+          right: 0;
+        }
+        &::before{
+          left: 0;
+        }
+      }
+      .login-way{
+        display: flex;
+        padding: .3rem .8rem;
+        text-align: center;
+        .iconfont{
+          flex: 1;
+        }
+
+        .icon-weixin1{
+          color: #05cb02;
+          font-size: .6rem;
+        }
+        .icon-qq{
+          color: #1c85cf;
+          font-size: .56rem;
+        }
+        .icon-weibo{
+          color: #d03022;
+          font-size: .62rem;
+        }
+      }
+    }
+  }
+
+
+  /*穿透代码*/
+  .login-body /deep/ .weui-cells{
+    margin-top: 0;
+    &:before,&:after{
+      border: none;
+    }
+  }
+
+  .login-body /deep/ .weui-cell{
+    border: .02rem solid #999;
+    border-radius: .45rem;
+    padding: .12rem .3rem;
+    .label-icon{
+      font-size: .4rem;
+      padding-right: .1rem;
+    }
+    .weui-cell__bd{
+      font-size: .3rem;
+    }
+    .getCode{
+      display: inline-block;
+      height: .48rem;
+      line-height: .48rem;
+      padding-left: .25rem;
+      border-left: .02rem solid #ccc;
+    }
+    .codeColor{
+      color: #999;
+    }
+    .weui-cell__ft{
+      font-size: .3rem;
+      color: #555;
+    }
+  }
+
+  .login-desc /deep/ .weui-icon{
+    position: relative;
+    top: -.03rem;
+    font-size: .38rem !important;
+  }
+  .login-desc /deep/ .weui-icon-success{
+    color: @mainColor;
+  }
+  .login-desc /deep/ .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
+    color: @mainColor;
+  }
+
+</style>
+
+<style lang="less">
+  .weui-toast__content{
+    font-size: .3rem !important;
+  }
+  .weui-toast_cancel{
+    min-height: 8em !important;
+  }
+</style>
+
+<!--
 
 <style lang="less" scoped>
   .login-wrap{
@@ -689,3 +1129,4 @@
     color: #ffbe00 !important;
   }
 </style>
+-->

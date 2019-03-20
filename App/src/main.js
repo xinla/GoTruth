@@ -61,7 +61,7 @@ Vue.use(VueAwesomeSwiper)
 
 //vux
 import{ Cell,Group,Msg,Datetime,Confirm,Alert,Radio,Tab,TabItem,LoadMore,Badge,Popup,InlineLoading,
-  DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom,CheckIcon
+  DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom,CheckIcon,XInput
 } from 'vux';
 Vue.component('group', Group);
 Vue.component('cell', Cell);
@@ -77,6 +77,7 @@ Vue.component('badge', Badge);
 Vue.component('popup', Popup);
 Vue.component('inline-loading', InlineLoading);
 Vue.component('check-icon', CheckIcon);
+Vue.component('x-input', XInput)
 // import { DatetimePlugin,AlertPlugin,ConfirmPlugin,LoadingPlugin,ToastPlugin,TransferDom } from 'vux'
 Vue.use(DatetimePlugin)
 Vue.use(AlertPlugin)
