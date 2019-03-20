@@ -34,7 +34,7 @@
       <span @click="$Tool.goPage({name:'agreement',query:{title:'用户协议'}})">"用户协议"</span>和
       <span @click="$Tool.goPage({name:'privacy',query:{title:'隐私政策'}})">"隐私政策"</span>
     </div>
-    <div class="login-footer">
+    <div class="login-footer" v-show="footerShow">
       <div class="login-other">其他登录方式</div>
       <div class="login-way">
         <i class="iconfont icon-weixin1" @click="handleAuthLogin(1)"></i>
@@ -121,7 +121,19 @@
         timer: null,
         disabled: true,
         loginStop: false, //用户协议
+        documentHeight: document.documentElement.clientHeight,  //默认屏幕高度
+        showHeight: document.documentElement.clientHeight,  //实时屏幕高度
+        footerShow: true
 
+      }
+    },
+    watch:{
+      showHeight(){
+        if(this.documentHeight > this.showHeight){
+          this.footerShow = false;
+        }else{
+          this.footerShow = true;
+        }
       }
     },
     computed:{
@@ -314,9 +326,11 @@
       }
     },
     mounted(){
-      this.$nextTick(()=>{
-        this.$refs.mobileFocus.focus();
-      });
+      window.onresize=()=>{
+        return(()=>{
+          this.showHeight = document.body.clientHeight;
+        })
+      };
       try{
         authUtil.init();
       }catch(err){
@@ -851,8 +865,6 @@
       }
     }
   }
-
-
   /*穿透代码*/
   .login-body /deep/ .weui-cells{
     margin-top: 0;
@@ -864,13 +876,17 @@
   .login-body /deep/ .weui-cell{
     border: .02rem solid #999;
     border-radius: .45rem;
-    padding: .12rem .3rem;
+    padding: .1rem .3rem;
     .label-icon{
       font-size: .4rem;
       padding-right: .1rem;
     }
     .weui-cell__bd{
       font-size: .3rem;
+      .weui-input{
+        height: .6rem;
+        line-height: .6rem\9;
+      }
     }
     .getCode{
       display: inline-block;
