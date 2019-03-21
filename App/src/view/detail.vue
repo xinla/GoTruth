@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top>
+    <top v-if="1 === article.type || 3 === article.type">
       <template slot="title">{{ '文章详情' }}</template>
     </top>
     <template v-if="2 === article.type">
@@ -23,7 +23,7 @@
             <i class="iconfont" :class="icon"></i>
         </div> -->
     <!-- <div id="audioBox"></div> -->
-    <div class="detail" @scroll="loadScroll" :style="{paddingTop:[(2 === article.type)?'3rem':0]}">
+    <div class="detail" @scroll="loadScroll" :style="{paddingTop:[(2 === article.type)?'4rem':0]}">
       <section class="content-wrap" v-if="!proFail1">
         <h1 class="article-title">{{ article.title }}</h1>
         <div class="publisher bfc-o">
@@ -1063,8 +1063,8 @@
 
       // 点击消息滚动
       handleComment(){
-        let dis = $(".detail").scrollTop() + $(".article-change").offset().top -100;
-        $(".detail").animate({scrollTop:dis},100);
+        let dis = $(".detail").scrollTop() + $(".article-change").offset().top  + 50;
+        $(".detail").animate({scrollTop:dis},50);
       },
 
       /**
@@ -1371,7 +1371,7 @@
       id(){
         this.proFail1 = false;
         this.ifLoad = true;
-        $(".detail").scrollTop(0)
+        $(".detail").scrollTop(0);
         setTimeout(()=>{
           this.pageNumComment = 1;
           this.pageNumReply = 1
@@ -1406,9 +1406,9 @@
 <style lang="less" scoped>
   .mask{
     position: absolute;
-    // bottom: initial;
-    // background: #fafafa;
-    background: linear-gradient(transparent 3%,#fafafa 3%);
+    left: 0;
+    top: 0;
+    background: #fafafa;
     z-index: 999;
   }
   // .playAudio{
@@ -1423,10 +1423,11 @@
   // }
   .detail{
     position: relative;
-    height: calc(100% - 1.5rem);
+    /*height: calc(100% - 1.5rem);*/
+    height: 100vh;
     overflow: hidden;
     overflow-y: auto;
-    padding: 0 .3rem .88rem .3rem;
+    padding: 0 .3rem 1.3rem .3rem;
     background-color: #fff;
     .content-wrap{
       .article-title{
@@ -1845,6 +1846,7 @@
     .reply-body{
       width: 100%;
       height: calc(100vh - 1.4rem);
+      background-color: #fff;
       overflow-y: auto;
       // overflow: auto;
       // padding: .32rem .3rem;
@@ -2057,19 +2059,19 @@
   .video-player{
     position: fixed;
     width: 100%;
-    top: 22px;
+    top: 0;
     // top: 0; // web端
     left: 0;
     z-index: 1;
   }
   .icon-arrow-left{
     color: #f1f1f1;
-    font-size: .42rem;
+    font-size: .48rem;
     position: absolute;
-    top: 22px;
+    top: 0;
     z-index: 2;
-    width: 40px;
-    line-height: 30px;
+    width: .8rem;
+    line-height: .8rem;
     text-align: center;
   }
   .phone-img /deep/ .my-gallery{

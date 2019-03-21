@@ -158,6 +158,7 @@
         if(this.timer) return;
         if(!this.mobileValue){
           this.$vux.toast.text('手机号码不能为空', 'middle');
+          this.$refs.mobileFocus.focus();
           return;
         }
         if(this.mobileError){
